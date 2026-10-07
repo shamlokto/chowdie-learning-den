@@ -2,7 +2,7 @@
 
 Interactive, clickable lesson decks for young learners, narrated by Chowdie the otter (Chris + Claudie).
 
-**Live site:** https://shamlokto.github.io/ollies-learning-den/
+**Live site:** https://shamlokto.github.io/chowdie-learning-den/
 
 - **P2 Maths**: 15 decks following the Singapore MOE 2021 Primary 2 syllabus, plus Word Problem Detective and Challenge Quest
 - **P2 English**: 9 decks on grammar, punctuation, vocabulary, reading, writing and Show and Tell
