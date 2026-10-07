@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
-/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
    Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
 :root{
   color-scheme:light;
@@ -221,7 +221,7 @@ function pvChart(x,y,n,w=70,showVals=true,d=0){const h=Math.floor(n/100),t=Math.
 const digitTiles=(x,y,n,gap=64,size=56)=>String(n).split('').map((ch,k)=>box(x+k*gap,y,size,size,'#fff',10)+T(x+k*gap+size/2,y+size*.72,ch,'big mid')).join('');
 /* Deck 1: Numbers to 1000 */
 const S=[
-{part:'learn',title:'Bigger numbers!',say:'Hi, I\'m <b>Ollie</b>! In Primary 1 we counted to <b>100</b>. This year we go all the way to <b>1000</b>. That\'s ten times more! Let\'s meet the blocks that help us: a <b>one</b>, a <b>ten</b>, and a <b>hundred</b>.',
+{part:'learn',title:'Bigger numbers!',say:'Hi, I\'m <b>Chowdie</b>! In Primary 1 we counted to <b>100</b>. This year we go all the way to <b>1000</b>. That\'s ten times more! Let\'s meet the blocks that help us: a <b>one</b>, a <b>ten</b>, and a <b>hundred</b>.',
  draw:()=>otter(100,380,1.4,{wave:true})+G(cube(250,250,30)+T(265,310,'1','h mid')+T(265,336,'one','lab mid'),'a-pop',.3)+G(rod(330,120,16)+T(338,310,'10','h mid')+T(338,336,'ten','lab mid'),'a-pop',.7)+G(flat(420,90,17)+T(505,310,'100','h mid')+T(505,336,'hundred','lab mid'),'a-pop',1.1)+
   G(T(320,50,'10 ones = 1 ten · 10 tens = 1 hundred','lab mid acc'),'a-fade',1.6)},
 

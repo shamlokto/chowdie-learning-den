@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
-/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
    Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
 :root{
   color-scheme:light;
@@ -243,12 +243,12 @@ const bag=(x,y,n)=>`<g transform="translate(${x} ${y})"><path d="M-26 10 q-4 -36
 const factFam=(x,y,a,b,hi=-1)=>{const L=[`${a} × ${b} = ${a*b}`,`${b} × ${a} = ${a*b}`,`${a*b} ÷ ${a} = ${b}`,`${a*b} ÷ ${b} = ${a}`];return box(x,y,230,160,'#fff',16)+L.map((t,k)=>(k===hi?`<rect x="${x+10}" y="${y+16+k*36}" width="210" height="30" rx="8" fill="${C.sun}"/>`:'')+T(x+115,y+38+k*36,t,'lab mid')).join('')};
 
 const S=[
-{part:'learn',title:'Sharing fairly',say:'Hi! Ollie has <b>12 cookies</b> to share with <b>3 friends</b> equally. One for you, one for you, one for you... Each friend gets <b>4</b>. We write <b>12 ÷ 3 = 4</b>. The ÷ sign means "divided by" or "shared into".',
+{part:'learn',title:'Sharing fairly',say:'Hi! Chowdie has <b>12 cookies</b> to share with <b>3 friends</b> equally. One for you, one for you, one for you... Each friend gets <b>4</b>. We write <b>12 ÷ 3 = 4</b>. The ÷ sign means "divided by" or "shared into".',
  draw:()=>G([...Array(12)].map((_,k)=>cookieI(60+(k%6)*30,60+Math.floor(k/6)*30)).join(''),'a-fade',.1)+G(T(135,140,'12 cookies','lab mid mut'),'a-fade',.3)+
   [0,1,2].map(k=>G(kid(330+k*110,200,[C.sky,C.berry,C.leaf][k])+plate(330+k*110,250,4,cookieI,80),'a-pop',.8+k*.4)).join('')+
   G(box(100,300,440,70,C.sun,35)+T(320,346,'12 ÷ 3 = 4 each','big mid'),'a-pop',2.2)},
 
-{part:'learn',title:'Making groups',say:'Division can also mean <b>grouping</b>. Ollie has <b>12 cookies</b> and puts <b>4 in each bag</b>. How many bags? Count: 4, 8, 12. That is <b>3 bags</b>. So <b>12 ÷ 4 = 3</b>. Same cookies, different question!',
+{part:'learn',title:'Making groups',say:'Division can also mean <b>grouping</b>. Chowdie has <b>12 cookies</b> and puts <b>4 in each bag</b>. How many bags? Count: 4, 8, 12. That is <b>3 bags</b>. So <b>12 ÷ 4 = 3</b>. Same cookies, different question!',
  draw:()=>G([...Array(12)].map((_,k)=>cookieI(60+(k%6)*30,60+Math.floor(k/6)*30)).join(''),'a-fade',.1)+G(T(135,140,'12 cookies, 4 in a bag','lab mid mut'),'a-fade',.3)+
   [0,1,2].map(k=>G(bag(330+k*110,240,'4')+T(330+k*110,275,(k+1)*4,'sm mid acc'),'a-pop',.8+k*.4)).join('')+
   G(box(100,300,440,70,C.sun,35)+T(320,346,'12 ÷ 4 = 3 bags','big mid'),'a-pop',2.2)},

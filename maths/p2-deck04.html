@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
-/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
    Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
 :root{
   color-scheme:light;
@@ -217,7 +217,7 @@ function jumps(x,y,w,max,step,n,col=C.accent,anim=true,d0=0){let s=`<line x1="${
 function tableCard(x,y,n,upto=10,hi=-1,cols=1){let s=box(x,y,cols===1?170:340,(cols===1?upto:Math.ceil(upto/2))*26+24,'#fff',14);for(let k=1;k<=upto;k++){const col=cols===1?0:(k>5?1:0),row=cols===1?k-1:(k-1)%5;const yy=y+28+row*26,xx=x+14+col*170;if(k===hi)s+=`<rect x="${xx-6}" y="${yy-19}" width="160" height="26" rx="6" fill="${C.sun}"/>`;s+=T(xx,yy,`${k} × ${n} = ${k*n}`,'lab',k===hi?'style="font-weight:800"':'')}return s}
 /* Deck 4: Times tables 2, 5 and 10 */
 const S=[
-{part:'learn',title:'Groups of the same size',say:'Hi! Ollie here with <b>fish</b>. I have <b>3 plates</b> with <b>2 fish</b> on each. Instead of adding 2 + 2 + 2, we can say <b>3 groups of 2</b>, or <b>3 × 2 = 6</b>. The × sign means "groups of".',
+{part:'learn',title:'Groups of the same size',say:'Hi! Chowdie here with <b>fish</b>. I have <b>3 plates</b> with <b>2 fish</b> on each. Instead of adding 2 + 2 + 2, we can say <b>3 groups of 2</b>, or <b>3 × 2 = 6</b>. The × sign means "groups of".',
  draw:()=>groups(60,60,3,2,fishI,100,170,true,.2)+G(T(320,200,'2 + 2 + 2 = 6','h mid mut'),'a-fade',.9)+G(arrow(320,215,320,245,C.accent),'a-fade',1.2)+G(box(170,260,300,70,C.sun,35)+T(320,306,'3 × 2 = 6','big mid'),'a-pop',1.5)+G(T(320,365,'3 groups of 2','lab mid acc'),'a-fade',1.8)+otter(570,395,.55)},
 
 {part:'learn',title:'Arrays: rows and columns',say:'We can also arrange things in <b>rows</b>. Here are <b>4 rows</b> with <b>5</b> in each row. That is <b>4 × 5 = 20</b>. Turn your head: it is also <b>5 columns of 4</b>, so 5 × 4 = 20 too! The order does not matter.',

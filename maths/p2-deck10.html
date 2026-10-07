@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
-/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
    Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
 :root{
   color-scheme:light;
@@ -248,7 +248,7 @@ const bottle=(x,y,s=1,lab='1 ℓ')=>`<g transform="translate(${x} ${y}) scale(${
 const clip=(x,y)=>`<path d="M${x} ${y} v-34 a8 8 0 0 1 16 0 v28 a5 5 0 0 1 -10 0 v-22" stroke="#8A9AA4" stroke-width="4" fill="none" stroke-linecap="round"/>`;
 
 const S=[
-{part:'learn',title:'Hello, measuring!',say:'Hi, I\'m <b>Ollie the otter</b>! Today we measure three things: <b>how long</b>, <b>how heavy</b>, and <b>how much water</b>. Each one has its own tool.',
+{part:'learn',title:'Hello, measuring!',say:'Hi, I\'m <b>Chowdie the otter</b>! Today we measure three things: <b>how long</b>, <b>how heavy</b>, and <b>how much water</b>. Each one has its own tool.',
  draw:()=>otter(110,370,1.5,{wave:true})+
   G(`${ruler(250,70,330,10,false)}${T(415,145,'How long?','h mid')}`,'a-pop',.2)+
   G(`${dial(320,250,60,5,0,'')}${T(320,382,'How heavy?','lab mid')}`,'a-pop',.5)+
@@ -259,7 +259,7 @@ const S=[
   s+=G(`<rect x="50" y="110" width="540" height="40" rx="6" fill="#FFE7A3" stroke="${C.ink}" stroke-width="3" class="a-grow"/>`);
   for(let k=0;k<=10;k++) s+=G(`<line x1="${50+k*54}" y1="110" x2="${50+k*54}" y2="${k%5?126:136}" stroke="${C.ink}" stroke-width="2"/>${T(50+k*54,172,k*10,'sm mid mut')}`,'a-fade',.1+k*.06);
   s+=G(`${T(320,210,'1 metre stick','lab mid')}`,'a-fade',.9);
-  s+=G(otter(160,380,.9)+T(250,312,'Ollie is about','lab')+T(250,340,'1 m tall!','h acc'),'a-fade',1.2);
+  s+=G(otter(160,380,.9)+T(250,312,'Chowdie is about','lab')+T(250,340,'1 m tall!','h acc'),'a-fade',1.2);
   s+=G(`<path d="M86 270 v108" stroke="${C.accent}" stroke-width="4" stroke-dasharray="6 6"/>${T(80,330,'1 m','lab end acc')}`,'a-fade',1.5);
   s+=G(`<rect x="430" y="240" width="130" height="140" rx="6" fill="#C9A27A" stroke="${C.ink}" stroke-width="3"/><circle cx="545" cy="315" r="6" fill="${C.ink}"/>${T(495,234,'A door is','sm mid')}${T(495,256,'about 1 m wide','sm mid')}`,'a-fade',1.8);
   return s;}},

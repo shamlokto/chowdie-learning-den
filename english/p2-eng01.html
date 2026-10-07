@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
-/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
    Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
 :root{
   color-scheme:light;
@@ -227,7 +227,7 @@ const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r
 function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
 /* English 1: Nouns and articles */
 const S=[
-{part:'learn',title:'Naming words',say:'Hi, I\'m <b>Ollie</b>! A <b>noun</b> is a naming word. It names a <b>person</b>, a <b>place</b>, an <b>animal</b> or a <b>thing</b>. Look around you: teacher, school, cat, book. All nouns!',
+{part:'learn',title:'Naming words',say:'Hi, I\'m <b>Chowdie</b>! A <b>noun</b> is a naming word. It names a <b>person</b>, a <b>place</b>, an <b>animal</b> or a <b>thing</b>. Look around you: teacher, school, cat, book. All nouns!',
  draw:()=>[['person',girlI(100,160),'teacher'],['place',`<rect x="230" y="110" width="80" height="60" fill="#FCE6CF" stroke="${C.ink}" stroke-width="3"/><path d="M222 112 l48 -28 l48 28" fill="${C.accent}" stroke="${C.ink}" stroke-width="3"/>`,'school'],['animal',catI(410,150,1.1),'cat'],['thing',`<rect x="530" y="110" width="60" height="70" rx="4" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><line x1="545" y1="110" x2="545" y2="180" stroke="${C.ink}" stroke-width="2"/>`,'book']]
   .map(([t,ic,n],k)=>G(tagPill(60+k*150-measure(t,15)/2+30,60,t,[C.berry,C.accent,C.leaf,C.sky][k])+ic+T(100+k*150+(k===3?10:0),220,n,'h mid'),'a-pop',.2+k*.3)).join('')+
   G(box(120,270,400,70,C.sun,35)+T(320,315,'noun = naming word','h mid'),'a-pop',1.6)+otter(570,395,.5)},

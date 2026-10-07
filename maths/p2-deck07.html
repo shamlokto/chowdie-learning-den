@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
-/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
    Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
 :root{
   color-scheme:light;
@@ -215,7 +215,7 @@ const crust=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy}" r="${r+9}" fill="#E8B36A" 
 
 /* Deck 7: Fraction of a whole */
 const S=[
-{part:'learn',title:'Equal parts',say:'Ollie wants to share a cake fairly with 3 friends. He cuts it into <b>4 equal parts</b>. Every piece is the <b>same size</b>. Fractions only work with <b>equal</b> parts!',
+{part:'learn',title:'Equal parts',say:'Chowdie wants to share a cake fairly with 3 friends. He cuts it into <b>4 equal parts</b>. Every piece is the <b>same size</b>. Fractions only work with <b>equal</b> parts!',
  draw:()=>G(pie(190,200,120,4,0,C.sun),'a-pop',.1)+G(`<g>${pie(190,200,120,4,4,'#FFE7A3')}</g>`,'a-fade',.6)+
   G(T(190,360,'4 equal parts ✓','lab mid acc'),'a-fade',1)+
   G(`<path d="M380 80 h200 v240 h-200z" fill="#FFE7A3" stroke="${C.ink}" stroke-width="3"/><path d="M450 80 v240 M450 160 h130" stroke="${C.ink}" stroke-width="3"/>`+T(480,360,'not equal ✗','lab mid'),'a-fade',1.4)},

@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
-/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
    Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
 :root{
   color-scheme:light;
@@ -252,7 +252,7 @@ const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circl
 const kidI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
 /* Life Science 1: What is alive? */
 const S=[
-{part:'learn',title:'What is alive?',say:'Hi, I\'m <b>Ollie</b>, and I love living things! Look around: a cat, a tree, a rock, a bicycle. Some of these are <b>alive</b> and some are not. How can we tell? Scientists have a checklist. Let\'s find out what it is!',
+{part:'learn',title:'What is alive?',say:'Hi, I\'m <b>Chowdie</b>, and I love living things! Look around: a cat, a tree, a rock, a bicycle. Some of these are <b>alive</b> and some are not. How can we tell? Scientists have a checklist. Let\'s find out what it is!',
  draw:()=>[['cat',catI(0,0,1.4),true],['tree',treeI(0,-10,1.3),true],['rock',rockI(0,10,1.3),false],['bike',`<circle cx="-22" cy="10" r="16" fill="none" stroke="${C.ink}" stroke-width="3"/><circle cx="22" cy="10" r="16" fill="none" stroke="${C.ink}" stroke-width="3"/><path d="M-22 10 l14 -24 h18 l12 24 M-8 -14 l4 24" stroke="${C.sky}" stroke-width="4" fill="none"/>`,false]]
   .map(([n,ic,alive],k)=>G(box(30+k*150,60,130,180,'#fff',16)+`<g transform="translate(${95+k*150} 140)">${ic}</g>`+T(95+k*150,220,n,'h mid'),'a-pop',.2+k*.2)).join('')+G(T(320,300,'Which ones are alive? How do you know?','h mid acc'),'a-fade',1.2)+otter(560,395,.5)},
 

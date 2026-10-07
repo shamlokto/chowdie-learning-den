@@ -1,6 +1,6 @@
-# Ollie's Learning Den
+# Chowdie's Learning Den
 
-Interactive, clickable lesson decks for young learners, narrated by Ollie the otter.
+Interactive, clickable lesson decks for young learners, narrated by Chowdie the otter (Chris + Claudie).
 
 **Live site:** https://shamlokto.github.io/ollies-learning-den/
 
