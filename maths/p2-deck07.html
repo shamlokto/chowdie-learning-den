@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Fractions of a Whole</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 Maths · Deck 7</p>
+      <h1>Fractions of a whole</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Mathematics, following the MOE 2021 syllabus. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared fraction helpers */
+function frac(x,y,n,d,size=40,col=C.ink){ // stacked fraction centred at x, line at y
+  return `<g>${T(x,y-size*.18,n,'mid',`style="font-size:${size}px;font-weight:800;fill:${col}"`)}<line x1="${x-size*.42}" y1="${y}" x2="${x+size*.42}" y2="${y}" stroke="${col}" stroke-width="${Math.max(3,size/12)}" stroke-linecap="round"/>${T(x,y+size*.82,d,'mid',`style="font-size:${size}px;font-weight:800;fill:${col}"`)}</g>`;
+}
+const FR=(n,d)=>`<span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-size:20px"><span>${n}</span><span style="border-top:3px solid currentColor;padding-top:2px;margin-top:2px;min-width:1.2em;text-align:center">${d}</span></span>`;
+const fr=(n,d)=>`<b>${n}/${d}</b>`;
+function pie(cx,cy,r,d,k,col=C.berry,cls=''){ // d equal slices, first k shaded
+  if(d===1) return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${k?col:'#fff'}" stroke="${C.ink}" stroke-width="3"/>`;
+  let s='';for(let i=0;i<d;i++){const a1=(i/d)*2*Math.PI-Math.PI/2,a2=((i+1)/d)*2*Math.PI-Math.PI/2;
+    s+=`<path class="${cls}" data-i="${i}" d="M${cx} ${cy} L${(cx+r*Math.cos(a1)).toFixed(1)} ${(cy+r*Math.sin(a1)).toFixed(1)} A${r} ${r} 0 0 1 ${(cx+r*Math.cos(a2)).toFixed(1)} ${(cy+r*Math.sin(a2)).toFixed(1)}z" fill="${i<k?col:'#fff'}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`}
+  return s;
+}
+function fbar(x,y,w,h,d,k,col=C.sky,cls=''){let s='';for(let i=0;i<d;i++) s+=`<rect class="${cls}" data-i="${i}" x="${x+i*w/d}" y="${y}" width="${w/d}" height="${h}" fill="${i<k?col:'#fff'}" stroke="${C.ink}" stroke-width="3"/>`;return s}
+const crust=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy}" r="${r+9}" fill="#E8B36A" stroke="${C.ink}" stroke-width="3"/>`;
+
+/* Deck 7: Fraction of a whole */
+const S=[
+{part:'learn',title:'Equal parts',say:'Ollie wants to share a cake fairly with 3 friends. He cuts it into <b>4 equal parts</b>. Every piece is the <b>same size</b>. Fractions only work with <b>equal</b> parts!',
+ draw:()=>G(pie(190,200,120,4,0,C.sun),'a-pop',.1)+G(`<g>${pie(190,200,120,4,4,'#FFE7A3')}</g>`,'a-fade',.6)+
+  G(T(190,360,'4 equal parts ✓','lab mid acc'),'a-fade',1)+
+  G(`<path d="M380 80 h200 v240 h-200z" fill="#FFE7A3" stroke="${C.ink}" stroke-width="3"/><path d="M450 80 v240 M450 160 h130" stroke="${C.ink}" stroke-width="3"/>`+T(480,360,'not equal ✗','lab mid'),'a-fade',1.4)},
+
+{part:'learn',title:'Half and quarter',say:'Cut a whole into <b>2 equal parts</b>. Each part is <b>one half</b>, written <b>1/2</b>. Cut it into <b>4 equal parts</b>, and each part is <b>one quarter</b>, written <b>1/4</b>.',
+ draw:()=>crust(170,180,110)+pie(170,180,110,2,1,C.berry)+G(frac(170,355,1,2,40),'a-pop',.5)+T(170,322,'one half','lab mid','style="display:none"')+
+  G(crust(470,180,110)+pie(470,180,110,4,1,C.sky),'a-pop',.9)+G(frac(470,355,1,4,40),'a-pop',1.3)},
+
+{part:'learn',title:'Reading a fraction',say:'This bar has <b>5 equal parts</b>. <b>3</b> parts are shaded. We write <b>3/5</b>, three fifths. The <b>bottom</b> number tells how many equal parts in all. The <b>top</b> number tells how many parts we take.',
+ draw:()=>G(fbar(40,70,330,70,5,3,C.leaf),'a-fade',.1)+G(frac(560,140,3,5,64),'a-pop',.6)+
+  G(T(500,112,'parts we take','sm end acc')+arrow(504,106,528,106,C.accent),'a-fade',1.2)+G(T(500,190,'equal parts in all','sm end acc')+arrow(504,184,528,184,C.accent),'a-fade',1.6)+
+  G(T(240,250,'3 shaded out of 5','h mid'),'a-fade',.9)+G(otter(140,395,.75),'a-fade',.3)},
+
+{part:'learn',title:'Same fraction, different shapes',say:'Each shape shows <b>2/3</b>. The shapes look different, but each is cut into <b>3 equal parts</b> with <b>2 shaded</b>.',
+ draw:()=>G(pie(120,170,90,3,2,C.grape),'a-pop',.1)+G(fbar(240,130,160,80,3,2,C.grape),'a-pop',.5)+
+  G(`<g>${[0,1,2].map(i=>`<rect x="470" y="${80+i*60}" width="120" height="60" fill="${i<2?C.grape:'#fff'}" stroke="${C.ink}" stroke-width="3"/>`).join('')}</g>`,'a-pop',.9)+
+  [120,320,530].map((x,k)=>G(frac(x,320,2,3,38),'a-fade',1.3+k*.2)).join('')},
+
+{part:'learn',title:'Comparing unit fractions',say:'Here are four bars the <b>same size</b>. The more parts we cut, the <b>smaller</b> each part is. So <b>1/2</b> is bigger than <b>1/4</b>, and <b>1/6</b> is the smallest!',
+ draw:()=>[2,3,4,6].map((d,k)=>G(fbar(140,40+k*82,420,54,d,1,[C.berry,C.sky,C.leaf,C.sun][k])+frac(80,72+k*82,1,d,28),'a-grow',.2+k*.4)).join('')+
+  G(T(320,388,'more parts → smaller parts','lab mid acc'),'a-fade',2)},
+
+{part:'learn',title:'Comparing like fractions',say:'<b>2/7</b> and <b>5/7</b> have the same bottom number, so the parts are the <b>same size</b>. 5 parts is more than 2 parts, so <b>5/7 is bigger</b>.',
+ draw:()=>G(fbar(140,90,420,64,7,2,C.berry)+frac(80,128,2,7,32),'a-grow',.2)+G(fbar(140,210,420,64,7,5,C.sky)+frac(80,248,5,7,32),'a-grow',.6)+
+  G(box(170,310,300,64,C.sun,32)+T(260,352,'5/7  >  2/7','h','style="font-size:30px"'),'a-pop',1.3)},
+
+{part:'learn',title:'Ordering fractions',say:'Let\'s order <b>1/3</b>, <b>1/8</b> and <b>1/5</b> from smallest to largest. The <b>more</b> equal parts, the <b>smaller</b> each one. Smallest to largest: <b>1/8, 1/5, 1/3</b>.',
+ draw:()=>[[8,C.sun],[5,C.leaf],[3,C.berry]].map(([d,c],k)=>G(pie(130+k*190,170,80,d,1,c)+frac(130+k*190,310,1,d,36),'a-pop',.3+k*.5)).join('')+
+  G(arrow(130,380,510,380,C.accent)+T(320,372,'smallest → largest','sm mid acc'),'a-fade',1.8)},
+
+{part:'learn',title:'One whole',say:'If we shade <b>all</b> the parts, we have the whole thing! <b>4/4</b> is one whole. <b>8/8</b> is one whole too. When the top and bottom numbers are the same, it is <b>1 whole</b>.',
+ draw:()=>G(crust(160,180,100)+pie(160,180,100,4,4,C.sky),'a-pop',.2)+G(frac(160,330,4,4,40),'a-fade',.6)+
+  G(crust(470,180,100)+pie(470,180,100,8,8,C.leaf),'a-pop',.8)+G(frac(470,330,8,8,40),'a-fade',1.2)+G(T(315,195,'= 1','big mid acc'),'a-pop',1.6)},
+
+{part:'try',title:'Shade the fraction',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const R=[['pie',8,3,C.berry],['bar',5,2,C.sky],['pie',6,5,C.leaf],['bar',10,7,C.grape]];let r=0,on=new Set();
+  const show=()=>{on=new Set();const [t,d,n,c]=R[r];
+   a.q('.play').innerHTML=T(320,40,`Shade ${''}`,'lab mid mut','style="display:none"')+(t==='pie'?crust(230,210,140)+pie(230,210,140,d,0,c,'tap sl'):fbar(40,160,420,90,d,0,c,'tap sl'))+
+    box(486,120,130,170,'#fff',18)+T(551,160,'Shade','lab mid mut')+frac(551,225,n,d,52);
+   a.qa('.sl').forEach(p=>p.onclick=()=>{const i=p.dataset.i;on.has(i)?on.delete(i):on.add(i);p.setAttribute('fill',on.has(i)?c:'#fff');a.say(`You shaded <b>${on.size}</b> out of <b>${d}</b> parts.`)});
+   a.say(`Tap the parts to shade <b>${n}/${d}</b>. Tap again to unshade.`)};
+  show();a.btn('Check',()=>{const [,d,n]=R[r];if(on.size===n){r++;if(r<R.length){a.confetti();a.say(`<b>Yes!</b> ${n} out of ${d} equal parts is <b>${n}/${d}</b>.`);a.later(show,1800)}else a.win(`<b>Fraction artist!</b> You shaded all four fractions.`)}
+   else a.say(on.size<n?`You need <b>${n}</b> shaded parts. Shade ${n-on.size} more.`:`That's too many! You need only <b>${n}</b> parts shaded.`)},'go');}},
+
+{part:'try',title:'Which is bigger?',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const R=[[[1,2],[1,5]],[[3,9],[7,9]],[[1,10],[1,4]],[[6,12],[5,12]]];let r=0,busy=false;
+  const show=()=>{busy=false;const [[a1,b1],[a2,b2]]=R[r];
+   a.q('.play').innerHTML=T(320,40,`Round ${r+1} of 4: tap the bigger fraction`,'lab mid mut')+
+    [[a1,b1,90,C.berry],[a2,b2,370,C.sky]].map(([n,d,x,c],k)=>`<g class="tap pick" data-k="${k}">${box(x-20,70,220,300,'#fff',22)}${pie(x+90,180,80,d,n,c)}${frac(x+90,310,n,d,40)}</g>`).join('');
+   a.qa('.pick').forEach(g=>g.onclick=()=>{if(busy)return;const k=+g.dataset.k,v=R[r].map(([n,d])=>n/d),best=v[0]>v[1]?0:1;
+    if(k===best){busy=true;g.querySelector('rect').setAttribute('fill','#E6F6EA');const [n,d]=R[r][k],[n2,d2]=R[r][1-k];r++;
+     const why=d===d2?`Same size parts, and ${n} parts is more than ${n2}.`:`Fewer equal parts means bigger parts.`;
+     if(r<R.length){a.confetti();a.say(`<b>Yes!</b> ${fr(n,d)} is bigger than ${fr(n2,d2)}. ${why}`);a.later(show,2400)}else a.win(`<b>Brilliant!</b> ${fr(n,d)} is bigger than ${fr(n2,d2)}. ${why}`)}
+    else a.say('Look at the pictures. Which one has more shaded?')});
+   a.say('Which fraction is <b>bigger</b>? Tap it!')};show();}},
+
+{part:'check',title:'Star check 1',say:'What fraction of the pizza is shaded?',
+ draw:()=>crust(320,200,140)+pie(320,200,140,4,3,C.berry),
+ quiz:{options:[FR(1,4),FR(3,4),FR(4,3)],answer:FR(3,4),why:'There are 4 equal parts and 3 are shaded. That is <b>3/4</b>.',hint:'The bottom number is how many equal parts in all.'}},
+
+{part:'check',title:'Star check 2',say:'Which shape is cut into <b>equal</b> parts?',
+ draw:()=>G(`<rect x="40" y="110" width="160" height="160" fill="#FFE7A3" stroke="${C.ink}" stroke-width="3"/><path d="M90 110 v160 M90 190 h110" stroke="${C.ink}" stroke-width="3"/>`+T(120,320,'A','h mid'),'a-pop',.1)+
+  G(pie(320,190,80,4,0,C.sky)+T(320,320,'B','h mid'),'a-pop',.3)+
+  G(`<circle cx="520" cy="190" r="80" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M450 150 L590 150 M520 110 v80" stroke="${C.ink}" stroke-width="3"/>`+T(520,320,'C','h mid'),'a-pop',.5),
+ quiz:{options:['A','B','C'],answer:'B',why:'Shape B has <b>4 equal parts</b>. The parts of A and C are different sizes.',hint:'Are all the pieces the same size?'}},
+
+{part:'check',title:'Star check 3',say:'Which is <b>bigger</b>?',
+ draw:()=>G(fbar(140,110,400,60,3,1,C.berry)+frac(80,145,1,3,32),'a-grow',.2)+G(fbar(140,220,400,60,5,1,C.sky)+frac(80,255,1,5,32),'a-grow',.5),
+ quiz:{options:[FR(1,3),FR(1,5)],answer:FR(1,3),why:'A whole cut into 3 parts has bigger parts than one cut into 5. <b>1/3 is bigger</b>.',hint:'Look at the bars. Which shaded part is longer?'}},
+
+{part:'check',title:'Star check 4',say:'Which fraction is the <b>smallest</b>?',
+ draw:()=>[[4,9],[7,9],[2,9]].map(([n,d],k)=>G(frac(150+k*170,190,n,d,64),'a-pop',.2+k*.2)).join('')+otter(560,395,.6),
+ quiz:{options:[FR(4,9),FR(7,9),FR(2,9)],answer:FR(2,9),why:'All the parts are ninths, the same size. 2 parts is the fewest, so <b>2/9</b> is smallest.',hint:'The bottom numbers are the same. Compare the top numbers.'}},
+
+{part:'check',title:'Star check 5',say:'Order these from <b>smallest</b> to <b>largest</b>: 1/2, 1/10, 1/6.',
+ draw:()=>[[1,2],[1,10],[1,6]].map(([n,d],k)=>G(pie(150+k*170,180,70,d,1,[C.berry,C.leaf,C.sun][k])+frac(150+k*170,310,n,d,36),'a-pop',.2+k*.2)).join(''),
+ quiz:{options:['1/2, 1/6, 1/10','1/10, 1/6, 1/2','1/6, 1/10, 1/2'],answer:'1/10, 1/6, 1/2',why:'The more parts, the smaller each part. Smallest to largest: <b>1/10, 1/6, 1/2</b>.',hint:'Which one has the most equal parts? That one has the smallest pieces.'}},
+
+{part:'check',title:'You did it!',say:'Fantastic! You know a fraction needs <b>equal parts</b>, how to read the top and bottom numbers, and how to compare fractions.',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(crust(130,140,46)+pie(130,140,46,4,3,C.berry)+crust(510,140,46)+pie(510,140,46,8,5,C.sky),'a-pop',.3)+T(320,60,'Fraction superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

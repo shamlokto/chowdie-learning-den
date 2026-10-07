@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Reading Detective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 English · Deck 7</p>
+      <h1>Reading comprehension</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 English, following the MOE English Language Syllabus (STELLAR). Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* English 7: Reading Detective */
+const STORY=['Last Saturday, Mei and her brother Zack went to East Coast Park.','First, they rode their bikes along the path.','Then Zack fell and scraped his knee.','Mei quickly cleaned the cut and put on a plaster.','After that, they shared a cold coconut.','Finally, they watched the sunset and went home tired but happy.'];
+const page=(x,y,w,h,lines,start=0,hi=-1,size=15,lh=26)=>box(x,y,w,h,'#FFFDF6',14)+lines.map((l,k)=>(k===hi?`<rect x="${x+10}" y="${y+22+k*lh*2-16}" width="${w-20}" height="${lh*2-6}" rx="8" fill="${C.sun}" opacity=".6"/>`:'')+prose(x+18,y+36+k*lh*2,l,Math.floor((w-36)/(size*.52)),'sm',lh,`style="font-size:${size}px"`)).join('');
+const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="24" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M18 18 l20 20" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/><path d="M-10 -8 q6 -10 16 -6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
+
+const S=[
+{part:'learn',title:'Be a reading detective',say:'Hi! Good readers are <b>detectives</b>. They look for the <b>big idea</b>, follow the <b>order of events</b>, ask <b>5W1H</b> questions, and find <b>clues</b> to work out what the writer did not say. Here is our story for today. Let\'s read it together.',
+ draw:()=>page(30,30,380,350,STORY,0,-1,14,22)+G(magnify(500,120,1.4),'a-pop',.5)+G(otter(520,392,.8),'a-fade',.3)+G(T(520,210,'read it twice!','lab mid acc'),'a-fade',1)},
+
+{part:'learn',title:'The big idea',say:'The <b>big idea</b> is what the whole story is mostly about, in one sentence. Not a tiny detail like "they ate a coconut", but the whole picture: <b>Mei and Zack had a fun day at East Coast Park, even though Zack hurt his knee.</b> Ask: what is this MOSTLY about?',
+ draw:()=>G(box(40,40,560,70,'#FDE7E5',16)+T(320,70,'tiny detail','sm mid mut')+T(320,96,'"They shared a coconut."','lab mid'),'a-fade',.1)+G(box(40,130,560,70,'#FDE7E5',16)+T(320,160,'tiny detail','sm mid mut')+T(320,186,'"Zack scraped his knee."','lab mid'),'a-fade',.4)+
+  G(arrow(320,210,320,240,C.accent),'a-fade',.8)+G(box(40,250,560,110,'#E6F6EA',18)+T(320,282,'BIG IDEA','lab mid acc')+prose(320,314,'Mei and Zack had a fun day at the park, even though Zack hurt his knee.',48,'lab mid',24),'a-pop',1.1)},
+
+{part:'learn',title:'What happened first?',say:'Stories happen in <b>order</b>. Look for <b>time words</b>: first, then, next, after that, finally. They are like signposts. In our story: first they rode bikes, then Zack fell, after that they shared a coconut, and finally they watched the sunset.',
+ draw:()=>[['First','rode bikes',C.sky],['Then','Zack fell',C.berry],['After that','shared a coconut',C.leaf],['Finally','watched the sunset',C.grape]].map(([t,e,c],k)=>G(`<circle cx="${90+k*155}" cy="140" r="34" fill="${c}" stroke="${C.ink}" stroke-width="3"/>`+T(90+k*155,146,k+1,'h mid','style="fill:#fff"')+T(90+k*155,205,t,'lab mid acc')+prose(90+k*155,232,e,12,'sm mid',18),'a-pop',.2+k*.3)).join('')+[0,1,2].map(k=>G(arrow(130+k*155,140,205+k*155,140,C.ink),'a-fade',.5+k*.3)).join('')+
+  G(box(80,300,480,60,C.sun,30)+T(320,338,'time words = signposts for the order','lab mid'),'a-pop',1.5)},
+
+{part:'learn',title:'Ask 5W1H',say:'Detectives ask six questions: <b>Who</b>? <b>What</b>? <b>Where</b>? <b>When</b>? <b>Why</b>? <b>How</b>? Who: Mei and Zack. Where: East Coast Park. When: last Saturday. What: a bike ride. Why did Mei put on a plaster? Because Zack scraped his knee. How did they feel? Tired but happy.',
+ draw:()=>[['Who?','Mei and Zack',C.berry],['What?','a bike ride',C.accent],['Where?','East Coast Park',C.leaf],['When?','last Saturday',C.sky],['Why?','Zack scraped his knee',C.grape],['How?','tired but happy',C.sun]].map(([q,a,c],k)=>{const x=24+(k%3)*200,y=40+Math.floor(k/3)*150;return G(box(x,y,190,130,'#fff',16)+`<rect x="${x}" y="${y}" width="190" height="44" rx="16" fill="${c}"/>`+T(x+95,y+30,q,'h mid',c===C.sun?'':'style="fill:#fff"')+prose(x+95,y+85,a,16,'lab mid',24),'a-pop',.1+k*.15)}).join('')},
+
+{part:'learn',title:'Read between the lines',say:'Sometimes the writer gives <b>clues</b> instead of saying things straight out. "Zack went home tired but happy." The story never says the sun was hot, but "a <b>cold</b> coconut" and "<b>sunset</b>" are clues it was a warm, long day. Using clues to work things out is called <b>inferring</b>.',
+ draw:()=>G(box(40,40,560,90,'#fff',16)+T(60,80,'Clue 1:','lab acc')+T(140,80,'"they shared a cold coconut"','lab')+T(60,112,'Clue 2:','lab acc')+T(140,112,'"watched the sunset... tired"','lab'),'a-fade',.1)+G(arrow(320,140,320,175,C.accent)+T(360,165,'put the clues together','sm acc'),'a-fade',.8)+
+  G(box(100,185,440,90,C.sun,18)+T(320,218,'I can tell that...','sm mid mut')+T(320,252,'it was a hot day, and they stayed a long time.','lab mid'),'a-pop',1.2)+G(magnify(80,330,1)+T(320,340,'The writer did not say it. The clues did!','lab mid acc'),'a-fade',1.6)},
+
+{part:'learn',title:'How do they feel?',say:'Writers often show feelings through <b>actions</b>. "Mei <b>quickly</b> cleaned the cut" shows she was <b>worried</b> and <b>caring</b>. "Tired but <b>happy</b>" shows the day ended well. Look at what characters <b>do</b> and <b>say</b> to understand how they feel.',
+ draw:()=>[['Mei quickly cleaned the cut.','caring, worried',girlI(0,0,C.berry)],['Zack fell and scraped his knee.','hurt, upset',boyI(0,0)],['They went home tired but happy.','content, pleased',girlI(-18,0,C.berry)+boyI(18,0)]].map(([act,feel,ic],k)=>G(box(40,40+k*110,560,96,'#fff',16)+`<g transform="translate(90 ${90+k*110})">${ic}</g>`+T(150,78+k*110,act,'lab')+T(150,110+k*110,'→ feels: '+feel,'lab acc'),'a-fade',.2+k*.3)).join('')},
+
+{part:'try',title:'Put the story in order',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const ev=['They rode their bikes.','Zack scraped his knee.','Mei put on a plaster.','They shared a coconut.','They watched the sunset.'];const shuffled=[2,4,0,3,1];let next=0;const placed=[];
+  const draw=()=>{a.q('.play').innerHTML=T(320,36,'Tap the events in the order they happened','lab mid acc')+shuffled.map((i,k)=>`<g class="tap ev" data-i="${i}">${box(40,60+k*52,330,44,placed.includes(i)?'#E6F6EA':'#fff',12)}${T(56,88+k*52,ev[i],'sm','style="font-size:15px"')}</g>`).join('')+T(500,70,'Order','lab mid mut')+placed.map((i,k)=>G(`<circle cx="430" cy="${106+k*52}" r="16" fill="${C.accent}"/>`+T(430,112+k*52,k+1,'lab mid','style="fill:#fff"')+prose(458,112+k*52,ev[i],18,'sm',16),'a-pop')).join('');
+   a.qa('.ev').forEach(g=>g.onclick=()=>{const i=+g.dataset.i;if(placed.includes(i))return;if(i===next){placed.push(i);next++;draw();if(next===ev.length)a.win('<b>Perfect order!</b> Time words like first, then and finally helped you.');else a.say(`Yes! What happened <b>next</b>?`)}else a.say('Not yet. Think about the time words in the story. What came before this?')})};
+  draw();a.say('Tap the events in the order they happened. What happened <b>first</b>?');}},
+
+{part:'try',title:'5W1H quiz',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['Who went to the park?','Mei and Zack',['Mei and Hana','Zack and Dad']],['Where did they go?','East Coast Park',['the zoo','the beach at Sentosa']],['When did this happen?','last Saturday',['yesterday','last Sunday']],['What did Zack hurt?','his knee',['his arm','his head']],['Why did Mei put on a plaster?','Zack scraped his knee',['Zack was thirsty','it was raining']],['How did they feel at the end?','tired but happy',['angry','scared']]];let r=0,busy=false;
+  const show=()=>{busy=false;const [q,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 6`,'sm mid mut')+page(30,56,300,330,STORY,0,-1,12,19)+box(350,80,270,110,'#fff',16)+prose(485,120,q,22,'lab mid',26)+magnify(485,290,1.2);
+   a.ui.innerHTML='';[ans,...Q[r][2]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>${ans}</b>. Found it in the story!`);a.later(show,1400)}else a.win(`<b>${ans}</b>. Super detective!`)}else{b.classList.add('no');a.say('Look back at the story. The answer is hiding there.')}},'go'));
+   a.say('Read the question. Find the answer in the story.')};show();}},
+
+{part:'try',title:'Clue detective',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['Hana put on her raincoat and grabbed an umbrella.','It was raining.',['It was sunny.','It was night time.']],['Arjun yawned and rubbed his eyes.','He was sleepy.',['He was hungry.','He was angry.']],['The ice cream dripped down Zack\'s hand.','It was a hot day.',['It was cold.','Zack dropped it.']],['Mei jumped up and down and hugged her mum.','She was very happy.',['She was bored.','She was scared.']],['Everyone wore party hats and sang loudly.','It was a birthday party.',['It was a lesson.','It was bedtime.']]];let r=0,busy=false;
+  const show=()=>{busy=false;const [c,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`Clue ${r+1} of 5`,'sm mid mut')+box(40,70,560,90,'#fff',16)+prose(320,110,c,44,'lab mid',26)+arrow(320,175,320,205,C.accent)+T(320,240,'What can you tell?','h mid acc')+magnify(560,330,1);
+   a.ui.innerHTML='';[ans,...Q[r][2]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>${ans}</b> The clues told you, even though the sentence did not say it.`);a.later(show,1600)}else a.win(`<b>${ans}</b> You read between the lines!`)}else{b.classList.add('no');a.say('Look at the clue words again. What do people usually do in that situation?')}},'go'));
+   a.say('The sentence gives you <b>clues</b>. What can you work out?')};show();}},
+
+{part:'check',title:'Star check 1',say:'What is the <b>big idea</b> of the story?',
+ draw:()=>page(30,40,380,330,STORY,0,-1,13,21)+magnify(520,200,1.3),
+ quiz:{options:['Zack scraped his knee.','Mei and Zack had a fun day at the park.','Coconuts are cold.'],answer:'Mei and Zack had a fun day at the park.',why:'The big idea covers the <b>whole</b> story, not one small detail.',hint:'Which answer is about the whole story?'}},
+
+{part:'check',title:'Star check 2',say:'What happened <b>right after</b> Zack fell?',
+ draw:()=>page(30,40,380,330,STORY,0,3,13,21)+magnify(520,200,1.3),
+ quiz:{options:['They rode bikes.','Mei cleaned the cut.','They watched the sunset.'],answer:'Mei cleaned the cut.',why:'"Then Zack fell... Mei <b>quickly cleaned the cut</b>." That came next.',hint:'Find "Zack fell" in the story and read the next sentence.'}},
+
+{part:'check',title:'Star check 3',say:'<b>Where</b> did the story happen?',
+ draw:()=>T(320,120,'Where?','h mid acc')+treeI(200,260,1.2)+`<path d="M0 330 q40 -16 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 V400 H0z" fill="${C.sky}"/>`+sunI(500,120,1),
+ quiz:{options:['the zoo','East Coast Park','school'],answer:'East Coast Park',why:'The first sentence tells us: "went to <b>East Coast Park</b>".',hint:'The place is named in the very first sentence.'}},
+
+{part:'check',title:'Star check 4',say:'"Mei <b>quickly</b> cleaned the cut." What does this tell us about Mei?',
+ draw:()=>girlI(320,220,C.berry)+T(320,290,'Mei','lab mid mut'),
+ quiz:{options:['She was lazy.','She was caring and quick to help.','She was angry at Zack.'],answer:'She was caring and quick to help.',why:'Her <b>action</b> (cleaning it quickly) shows she cared about her brother.',hint:'What kind of person helps quickly when someone is hurt?'}},
+
+{part:'check',title:'Star check 5',say:'"The puppy wagged its tail and licked Arjun\'s face." How does the puppy feel?',
+ draw:()=>dogI(300,220,1.5)+boyI(420,240)+T(320,320,'wag wag!','lab mid acc'),
+ quiz:{options:['happy','scared','sleepy'],answer:'happy',why:'Wagging its tail and licking are <b>clues</b> that a dog is happy. The sentence never says "happy", but you worked it out!',hint:'What does a dog do when it is pleased to see you?'}},
+
+{part:'check',title:'You did it!',say:'Case closed, detective! You can find the <b>big idea</b>, follow the <b>order</b>, answer <b>5W1H</b>, and read <b>between the lines</b> using clues.',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+magnify(120,230,1.2)+T(520,230,'Who? Why?','h mid acc'),'a-pop',.3)+T(320,60,'Reading superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

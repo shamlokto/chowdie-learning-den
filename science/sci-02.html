@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cells: Tiny Building Blocks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Life Science for Kids · 2</p>
+      <h1>Cells: tiny building blocks</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Life Science for Kids, ages 6 to 12. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* shared life-science helpers */
+const wr=(x,y,str,max=40,cls='sm',lh=19,ex='')=>prose(x,y,str,max,cls,lh,ex);
+PARTS.learn='Discover';PARTS.try='Experiment';PARTS.check='Quiz';
+document.querySelectorAll('.parts button').forEach(b=>b.textContent={learn:'Discover',try:'Experiment',check:'Quiz'}[b.dataset.part]);
+const card=(x,y,w,h,title,body,{fill='#fff',d=0,icon=''}={})=>G(box(x,y,w,h,fill,16)+icon+T(x+w/2,y+(icon?96:34),title,'lab mid')+wr(x+w/2,y+(icon?120:58),body,Math.floor((w-24)/7.4),'sm mid',18),'a-pop',d);
+const funfact=(x,y,w,txt)=>G(box(x,y,w,64,C.sun,16)+T(x+14,y+26,'Fun fact!','sm','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.4);
+const tryhome=(x,y,w,txt)=>G(box(x,y,w,70,'#E6F6EA',16)+T(x+14,y+26,'Try at home','sm acc','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.6);
+/* icons */
+const leafI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 C26 -22 26 14 0 30 C-26 14 -26 -22 0 -30z" fill="${col}" stroke="${C.ink}" stroke-width="2.5" transform="rotate(30)"/><path d="M0 -24 v50 M0 -6 l10 -8 M0 6 l-10 -8" stroke="${C.ink}" stroke-width="1.5" fill="none" transform="rotate(30)"/></g>`;
+const flowerI=(x,y,s=1,col=C.berry)=>`<g transform="translate(${x} ${y}) scale(${s})"><line x1="0" y1="10" x2="0" y2="60" stroke="${C.leaf}" stroke-width="5"/><path d="M0 40 q18 -6 22 8 q-14 6 -22 -8z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/>${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-16" rx="9" ry="14" fill="${col}" stroke="${C.ink}" stroke-width="2" transform="rotate(${a})"/>`).join('')}<circle r="8" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/></g>`;
+const seedI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="10" ry="14" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2.5" transform="rotate(-20)"/></g>`;
+const rockI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-28 14 q-6 -24 12 -30 q14 -12 30 -4 q18 10 10 30 q-26 10 -52 4z" fill="#9AA3AB" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const bugI=(x,y,s=1,col=C.bad)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="18" ry="22" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-22" r="9" fill="${C.ink}"/><line x1="0" y1="-14" x2="0" y2="22" stroke="${C.ink}" stroke-width="2"/><circle cx="-8" cy="-6" r="3.5" fill="${C.ink}"/><circle cx="8" cy="2" r="3.5" fill="${C.ink}"/><circle cx="-6" cy="10" r="3" fill="${C.ink}"/><circle cx="9" cy="-12" r="3" fill="${C.ink}"/></g>`;
+const fishI2=(x,y,s=1,col=C.sky)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-24 0 q20 -22 44 0 q-24 22 -44 0z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><path d="M18 0 l14 -12 v24z" fill="${col}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="-12" cy="-3" r="3" fill="${C.ink}"/><path d="M-4 -12 q6 -8 12 -2" fill="none" stroke="${C.ink}" stroke-width="2"/></g>`;
+const birdI=(x,y,s=1,col=C.sky)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="20" ry="14" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="18" cy="-10" r="10" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><path d="M27 -10 l10 3 l-10 3z" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/><circle cx="20" cy="-12" r="2" fill="${C.ink}"/><path d="M-6 -4 q-10 -14 6 -16 q6 8 -6 16z" fill="${C.ink}" opacity=".3"/><path d="M-18 10 l-6 10 M-12 12 l-2 12" stroke="${C.sun}" stroke-width="3"/></g>`;
+const frogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cy="6" rx="24" ry="16" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-12" cy="-10" r="8" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="12" cy="-10" r="8" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-12" cy="-10" r="3" fill="${C.ink}"/><circle cx="12" cy="-10" r="3" fill="${C.ink}"/><path d="M-8 8 q8 6 16 0" stroke="${C.ink}" stroke-width="2" fill="none"/><path d="M-24 14 l-10 10 M24 14 l10 10" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/></g>`;
+const butterflyI=(x,y,s=1,col=C.accent)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0 q-30 -30 -30 -6 q0 20 30 6z M0 0 q30 -30 30 -6 q0 20 -30 6z M0 0 q-24 24 -22 8 q4 -10 22 -8z M0 0 q24 24 22 8 q-4 -10 -22 -8z" fill="${col}" stroke="${C.ink}" stroke-width="2"/><ellipse rx="4" ry="16" fill="${C.ink}"/><path d="M-3 -14 l-5 -8 M3 -14 l5 -8" stroke="${C.ink}" stroke-width="2"/></g>`;
+const heartI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 22 q-30 -20 -30 -38 q0 -14 14 -14 q10 0 16 10 q6 -10 16 -10 q14 0 14 14 q0 18 -30 38z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const germI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="20" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/>${[0,60,120,180,240,300].map(a=>`<line x1="0" y1="-20" x2="0" y2="-28" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}<circle cx="-6" cy="-4" r="3" fill="${C.ink}"/><circle cx="6" cy="-4" r="3" fill="${C.ink}"/><path d="M-6 6 q6 5 12 0" stroke="${C.ink}" stroke-width="2" fill="none"/></g>`;
+const virusI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="16" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<g transform="rotate(${a})"><line x1="0" y1="-16" x2="0" y2="-24" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-26" r="3.5" fill="${C.grape}" stroke="${C.ink}" stroke-width="2"/></g>`).join('')}</g>`;
+const mushroomI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-8" y="0" width="16" height="22" rx="4" fill="#F2E6D0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 4 q0 -30 26 -30 q26 0 26 30z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-10" cy="-10" r="4" fill="#fff"/><circle cx="8" cy="-14" r="3" fill="#fff"/></g>`;
+const sunI2=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="20" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-26" x2="0" y2="-34" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+const dropI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -24 q18 24 18 36 a18 18 0 0 1 -36 0 q0 -12 18 -36z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="24" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M18 18 l20 20" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/></g>`;
+const kidI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+/* Life Science 2: Cells */
+function cellA(cx,cy,r,o={}){ // animal cell
+  return `<g>${o.anim?'<g class="a-pop">':''}<path d="M${cx-r} ${cy} q${r*.1} ${-r*1.1} ${r} ${-r} q${r*1.1} ${r*.1} ${r} ${r} q${-r*.1} ${r*1.1} ${-r} ${r} q${-r*1.1} ${-r*.1} ${-r} ${-r}z" fill="#FBE4EA" stroke="${C.ink}" stroke-width="3"/>${o.anim?'</g>':''}
+  ${o.nuc!==false?`<circle class="part" data-p="nucleus" cx="${cx+r*.1}" cy="${cy-r*.05}" r="${r*.32}" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>`:''}
+  ${o.mito!==false?[[-.5,.35],[.45,.45],[-.45,-.45]].map(([a,b])=>`<ellipse class="part" data-p="mitochondria" cx="${cx+a*r}" cy="${cy+b*r}" rx="${r*.16}" ry="${r*.09}" fill="${C.accent}" stroke="${C.ink}" stroke-width="2" transform="rotate(${a*40} ${cx+a*r} ${cy+b*r})"/>`).join(''):''}
+  </g>`}
+function cellP(cx,cy,w,h,o={}){ // plant cell
+  return `<g><rect x="${cx-w/2}" y="${cy-h/2}" width="${w}" height="${h}" rx="8" fill="#D9EBD3" stroke="${C.ink}" stroke-width="5"/><rect x="${cx-w/2+8}" y="${cy-h/2+8}" width="${w-16}" height="${h-16}" rx="6" fill="none" stroke="${C.leaf}" stroke-width="2"/>
+  ${o.vac!==false?`<rect class="part" data-p="vacuole" x="${cx-w*.26}" y="${cy-h*.3}" width="${w*.52}" height="${h*.6}" rx="12" fill="#DDF1FA" stroke="${C.ink}" stroke-width="2"/>`:''}
+  ${o.nuc!==false?`<circle class="part" data-p="nucleus" cx="${cx-w*.3}" cy="${cy+h*.28}" r="${h*.14}" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>`:''}
+  ${o.chl!==false?[[.36,-.3],[.38,.1],[.34,.34],[-.36,-.3]].map(([a,b])=>`<ellipse class="part" data-p="chloroplast" cx="${cx+a*w}" cy="${cy+b*h}" rx="${w*.07}" ry="${h*.06}" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/>`).join(''):''}
+  </g>`}
+const brickwall=(x,y,cols,rows,bw=56,bh=26,col=C.bad)=>{let s='';for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const off=r%2?bw/2:0;s+=`<rect x="${x+c*bw+off}" y="${y+r*bh}" width="${bw-3}" height="${bh-3}" rx="3" fill="${col}" stroke="${C.ink}" stroke-width="1.5"/>`}return s};
+const S=[
+{part:'learn',title:'Tiny building blocks',say:'Hi! A house is built from bricks. Every living thing is built from tiny bricks too, called <b>cells</b>. They are so small you need a <b>microscope</b> to see them. Your body has about <b>37 trillion</b> cells. That is a 37 with twelve zeros!',
+ draw:()=>G(brickwall(40,80,5,7,50,24),'a-fade',.1)+G(`<path d="M30 80 l140 -50 l140 50z" fill="${C.accent}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`,'a-fade',.4)+T(170,290,'a house is made of bricks','lab mid')+
+  G(kidI(470,230,C.sky),'a-pop',.6)+G([[420,120],[450,100],[500,105],[530,130],[440,160],[510,165]].map(([x,y],k)=>cellA(x,y,16,{mito:false})).join(''),'a-pop',.9)+T(470,290,'a body is made of cells','lab mid')+
+  funfact(40,320,560,'You have about 37,000,000,000,000 cells. A drop of blood holds millions!')},
+
+{part:'learn',title:'How small is a cell?',say:'Most cells are about <b>one hundredth of a millimetre</b> wide. If you lined up <b>100 cells</b>, they would stretch across just one millimetre: the thickness of a fingernail! The first person to see cells was <b>Robert Hooke</b> in 1665. He looked at cork through a microscope and thought the little boxes looked like monks\' rooms, called "cells".',
+ draw:()=>G(`<rect x="60" y="100" width="520" height="40" fill="#FFE7A3" stroke="${C.ink}" stroke-width="3"/>`+[...Array(11)].map((_,k)=>`<line x1="${60+k*52}" y1="100" x2="${60+k*52}" y2="${k%5?112:120}" stroke="${C.ink}" stroke-width="2"/>`).join('')+T(60,160,'0','sm mid')+T(320,160,'5 mm','sm mid')+T(580,160,'10 mm','sm mid'),'a-fade',.1)+
+  G(`<rect x="60" y="100" width="52" height="40" fill="none" stroke="${C.accent}" stroke-width="4"/>`+arrow(86,190,86,150,C.accent)+T(86,215,'1 mm','lab mid acc'),'a-pop',.8)+
+  G(arrow(130,230,200,230,C.ink)+[...Array(20)].map((_,k)=>`<circle cx="${220+k*19}" cy="230" r="8" fill="#FBE4EA" stroke="${C.ink}" stroke-width="1.5"/>`).join('')+T(410,262,'about 100 cells side by side = 1 mm','lab mid'),'a-fade',1.2)+
+  funfact(40,300,560,'Robert Hooke saw cells first in 1665, looking at a thin slice of cork.')},
+
+{part:'learn',title:'Inside an animal cell',say:'Let\'s zoom into an animal cell. The thin skin is the <b>cell membrane</b>: it lets good things in and keeps bad things out. The jelly inside is <b>cytoplasm</b>. The big purple ball is the <b>nucleus</b>, the boss that holds the instructions. The orange beans are <b>mitochondria</b>, tiny power stations that make energy!',
+ draw:()=>cellA(230,200,120,{anim:true})+[['cell membrane','the skin: lets things in and out',380,80,C.berry],['cytoplasm','jelly where things float',380,150,'#D98EA3'],['nucleus','the boss with the instructions',380,220,C.grape],['mitochondria','power stations for energy',380,290,C.accent]].map(([n,d,x,y,c],k)=>G(`<circle cx="${x}" cy="${y-6}" r="8" fill="${c}" stroke="${C.ink}" stroke-width="2"/>`+T(x+18,y,n,'lab')+T(x+18,y+22,d,'sm mut'),'a-fade',.5+k*.3)).join('')+
+  G(arrow(360,74,330,110,C.ink)+arrow(360,214,275,200,C.ink)+arrow(360,284,290,250,C.ink),'a-fade',1.6)},
+
+{part:'learn',title:'Plant cells are different',say:'Plant cells have everything animal cells have, plus <b>three extras</b>. A stiff <b>cell wall</b> outside the membrane, like a box, so plants stand up straight. A big water bag called a <b>vacuole</b>. And green <b>chloroplasts</b>, which catch sunlight to make food. That is why leaves are green!',
+ draw:()=>cellP(220,200,240,200)+[['cell wall','stiff box that gives shape',380,80,'#A7C79B'],['vacuole','big bag of water',380,150,'#DDF1FA'],['chloroplasts','green: make food from light',380,220,C.leaf],['nucleus','the boss (plants have one too!)',380,290,C.grape]].map(([n,d,x,y,c],k)=>G(`<circle cx="${x}" cy="${y-6}" r="8" fill="${c}" stroke="${C.ink}" stroke-width="2"/>`+T(x+18,y,n,'lab')+T(x+18,y+22,d,'sm mut'),'a-fade',.5+k*.3)).join('')+
+  G(T(320,370,'Only plant cells have a wall, a big vacuole and chloroplasts.','lab mid acc'),'a-fade',1.8)},
+
+{part:'learn',title:'Many kinds of cells',say:'Not all cells look the same. They have different <b>jobs</b>, so they have different <b>shapes</b>. <b>Red blood cells</b> are round discs that carry oxygen. <b>Nerve cells</b> are long and thin to send messages fast. <b>Muscle cells</b> are stretchy to pull. <b>Skin cells</b> are flat to cover you like tiles.',
+ draw:()=>[['red blood cell','carries oxygen',`<ellipse rx="26" ry="18" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><ellipse rx="12" ry="7" fill="#B2423A" opacity=".6"/>`],['nerve cell','sends messages',`<circle r="12" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M12 0 h40 M-8 -9 l-14 -16 M8 -9 l12 -18 M-8 9 l-14 16 M52 0 l8 -8 M52 0 l8 8" stroke="${C.ink}" stroke-width="2.5" fill="none"/>`],['muscle cell','pulls and stretches',`<path d="M-34 0 q0 -14 34 -14 q34 0 34 14 q0 14 -34 14 q-34 0 -34 -14z" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-20 -6 h40 M-24 0 h48 M-20 6 h40" stroke="#fff" stroke-width="1.5" opacity=".6"/>`],['skin cell','covers like tiles',`<path d="M-30 -14 h60 l-6 28 h-48z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><circle r="5" fill="${C.grape}"/>`]]
+  .map(([n,d,ic],k)=>G(box(24+k*150,60,140,200,'#fff',16)+`<g transform="translate(${94+k*150} 130)">${ic}</g>`+T(94+k*150,200,n,'sm mid','style="font-weight:800"')+T(94+k*150,225,d,'sm mid mut'),'a-pop',.1+k*.2)).join('')+G(T(320,320,'Shape matches the job!','h mid acc'),'a-fade',1.2)},
+
+{part:'learn',title:'From cells to you',say:'Cells team up! Lots of similar cells make a <b>tissue</b> (like muscle tissue). Different tissues make an <b>organ</b> (like your heart). Organs work together as a <b>system</b> (like your blood system). And all the systems together make <b>you</b>, an organism!',
+ draw:()=>[['cell',cellA(0,0,22,{mito:false})],['tissue',[[-20,-12],[0,-12],[20,-12],[-10,8],[10,8]].map(([x,y])=>cellA(x,y,11,{mito:false})).join('')],['organ',heartI(0,0,.9)],['system',`<path d="M0 -30 q-20 10 -20 30 q0 20 20 30 q20 -10 20 -30 q0 -20 -20 -30z" fill="none" stroke="${C.bad}" stroke-width="4"/>${heartI(0,0,.5)}`],['organism',kidI(0,20,C.leaf)]]
+  .map(([n,ic],k)=>G(`<circle cx="${80+k*120}" cy="170" r="46" fill="#fff" stroke="${C.ink}" stroke-width="3"/><g transform="translate(${80+k*120} 170)">${ic}</g>`+T(80+k*120,240,n,'lab mid'),'a-pop',.1+k*.3)).join('')+[0,1,2,3].map(k=>G(arrow(130+k*120,170,150+k*120,170,C.accent),'a-fade',.4+k*.3)).join('')+G(T(320,320,'small → bigger → bigger → YOU','lab mid acc'),'a-fade',1.6)},
+
+{part:'try',title:'Label the cell',say:'',draw:()=>cellA(230,200,120)+`<g class="hint"></g>`,
+ mount:a=>{const parts=['nucleus','mitochondria'];let target=0;const found=new Set();
+  const ask=()=>{a.say(`Tap the <b>${parts[target]}</b> in the cell.`)};ask();
+  a.qa('.part').forEach(p=>{p.classList.add('tap');p.onclick=()=>{const n=p.dataset.p;if(n===parts[target]){found.add(n);a.qa(`.part[data-p="${n}"]`).forEach(x=>x.setAttribute('stroke',C.sun));a.qa(`.part[data-p="${n}"]`).forEach(x=>x.setAttribute('stroke-width','5'));target++;if(target<parts.length){a.confetti();a.say(`Yes! The <b>${n}</b>. Now tap the <b>${parts[target]}</b>.`)}else{a.q('.hint').innerHTML=T(470,200,'nucleus = boss','lab mid')+T(470,230,'mitochondria = power','lab mid');a.win('<b>Labelled!</b> Nucleus: the boss. Mitochondria: the power stations.')}}else a.say(`That is the ${n}. Look for the <b>${parts[target]}</b>.`)}});}},
+
+{part:'try',title:'Plant or animal cell?',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['It has a stiff cell wall.','plant'],['It has no chloroplasts and is round and squishy.','animal'],['It is green because of chloroplasts.','plant'],['It has a nucleus and mitochondria but no cell wall.','animal'],['It has a big vacuole full of water.','plant'],['It is a red blood cell.','animal']];let r=0,busy=false;
+  const show=()=>{busy=false;const [s,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 6`,'sm mid mut')+box(40,60,560,80,'#fff',16)+wr(320,100,s,46,'lab mid',24)+`<g opacity=".6">${cellP(170,260,160,130)}${cellA(470,260,70)}</g>`+T(170,350,'plant cell','sm mid mut')+T(470,350,'animal cell','sm mid mut');
+   a.ui.innerHTML='';[['Plant cell','plant'],['Animal cell','animal']].forEach(([l,v])=>a.btn(l,b=>{if(busy)return;if(v===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>${l}!</b>`);a.later(show,1300)}else a.win(`<b>${l}!</b> You can tell plant and animal cells apart.`)}else{b.classList.add('no');a.say('Remember: only plant cells have a wall, a big vacuole and chloroplasts.')}},'go'));
+   a.say('Read the clue. Is it a <b>plant</b> cell or an <b>animal</b> cell?')};show();}},
+
+{part:'try',title:'Zoom in!',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const levels=[['organism','a whole frog',frogI(0,0,1.6)],['organ','its heart',heartI(0,0,1.4)],['tissue','heart muscle tissue',[[-30,-16],[0,-16],[30,-16],[-15,8],[15,8],[-30,30],[0,30],[30,30]].map(([x,y])=>cellA(x,y,14,{mito:false})).join('')],['cell','one muscle cell',cellA(0,0,60)],['nucleus','inside: the nucleus',`<circle r="50" fill="${C.grape}" stroke="${C.ink}" stroke-width="3"/><path d="M-20 -10 q10 -14 20 0 t20 0 M-24 10 q12 -14 24 0 t24 0" stroke="#fff" stroke-width="3" fill="none" opacity=".7"/>`]];let lv=0;
+  const draw=()=>{const [n,d,ic]=levels[lv];a.q('.play').innerHTML=T(320,36,'Zoom level '+(lv+1)+' of 5','sm mid mut')+`<circle cx="320" cy="190" r="110" fill="#fff" stroke="${C.ink}" stroke-width="4"/><g transform="translate(320 190)">${ic}</g>`+magnify(470,300,1)+T(320,340,n,'h mid acc')+T(320,368,d,'lab mid mut')};
+  draw();a.say('Tap <b>Zoom in</b> to go deeper and deeper, from a whole frog down to one nucleus!');
+  a.btn('Zoom in',()=>{if(lv<4){lv++;draw();a.say(`<b>${levels[lv][0]}</b>: ${levels[lv][1]}.`);if(lv===4)a.win('<b>Maximum zoom!</b> Organism → organ → tissue → cell → nucleus.')}},'go');a.btn('Zoom out',()=>{if(lv>0){lv--;draw();a.say(`Back out to the <b>${levels[lv][0]}</b>.`)}});}},
+
+{part:'check',title:'Quiz 1',say:'What do we call the tiny building blocks of all living things?',
+ draw:()=>brickwall(200,120,4,5,60,28,C.sky)+otter(560,392,.5),
+ quiz:{options:['bricks','cells','atoms'],answer:'cells',why:'All living things are made of <b>cells</b>. You have trillions!',hint:'You need a microscope to see them.'}},
+
+{part:'check',title:'Quiz 2',say:'Which part of the cell is the "boss" that holds the instructions?',
+ draw:()=>cellA(320,200,110),
+ quiz:{options:['cell membrane','nucleus','cytoplasm'],answer:'nucleus',why:'The <b>nucleus</b> holds the instructions that tell the cell what to do.',hint:'It is the big round part in the middle.'}},
+
+{part:'check',title:'Quiz 3',say:'Which part makes <b>energy</b> for the cell?',
+ draw:()=>cellA(320,200,110)+G(`<circle cx="260" cy="242" r="30" fill="none" stroke="${C.accent}" stroke-width="4" stroke-dasharray="6 5"/>`,'a-pop',.5),
+ quiz:{options:['mitochondria','nucleus','cell wall'],answer:'mitochondria',why:'<b>Mitochondria</b> are the power stations of the cell.',hint:'They look like little orange beans.'}},
+
+{part:'check',title:'Quiz 4',say:'Which of these is found ONLY in <b>plant</b> cells?',
+ draw:()=>cellP(320,200,220,180),
+ quiz:{options:['nucleus','chloroplasts','cell membrane'],answer:'chloroplasts',why:'<b>Chloroplasts</b> catch sunlight to make food. Animal cells do not have them.',hint:'It is green!'}},
+
+{part:'check',title:'Quiz 5',say:'Put these in order from smallest to biggest.',
+ draw:()=>[['organ',heartI(0,0,.8)],['cell',cellA(0,0,20,{mito:false})],['organism',kidI(0,16,C.leaf)]].map(([n,ic],k)=>G(`<circle cx="${160+k*160}" cy="190" r="44" fill="#fff" stroke="${C.ink}" stroke-width="3"/><g transform="translate(${160+k*160} 190)">${ic}</g>`+T(160+k*160,260,n,'lab mid'),'a-pop',k*.15)).join(''),
+ quiz:{options:['cell → organ → organism','organ → cell → organism','organism → organ → cell'],answer:'cell → organ → organism',why:'Cells make tissues, tissues make <b>organs</b>, organs make systems, and systems make an <b>organism</b>.',hint:'Start with the tiniest thing.'}},
+
+{part:'check',title:'You did it!',say:'Amazing! You know that all living things are made of <b>cells</b>, what is <b>inside</b> them, how <b>plant</b> and <b>animal</b> cells differ, and how cells build up to make <b>you</b>. Next: plants!',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+cellA(120,230,40,{mito:false})+cellP(520,230,80,70),'a-pop',.3)+T(320,60,'Cell superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

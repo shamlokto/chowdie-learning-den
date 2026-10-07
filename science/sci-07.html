@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ecosystems for Kids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Life Science for Kids · 7</p>
+      <h1>Ecosystems</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Life Science for Kids, ages 6 to 12. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* shared life-science helpers */
+const wr=(x,y,str,max=40,cls='sm',lh=19,ex='')=>prose(x,y,str,max,cls,lh,ex);
+PARTS.learn='Discover';PARTS.try='Experiment';PARTS.check='Quiz';
+document.querySelectorAll('.parts button').forEach(b=>b.textContent={learn:'Discover',try:'Experiment',check:'Quiz'}[b.dataset.part]);
+const card=(x,y,w,h,title,body,{fill='#fff',d=0,icon=''}={})=>G(box(x,y,w,h,fill,16)+icon+T(x+w/2,y+(icon?96:34),title,'lab mid')+wr(x+w/2,y+(icon?120:58),body,Math.floor((w-24)/7.4),'sm mid',18),'a-pop',d);
+const funfact=(x,y,w,txt)=>G(box(x,y,w,64,C.sun,16)+T(x+14,y+26,'Fun fact!','sm','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.4);
+const tryhome=(x,y,w,txt)=>G(box(x,y,w,70,'#E6F6EA',16)+T(x+14,y+26,'Try at home','sm acc','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.6);
+/* icons */
+const leafI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 C26 -22 26 14 0 30 C-26 14 -26 -22 0 -30z" fill="${col}" stroke="${C.ink}" stroke-width="2.5" transform="rotate(30)"/><path d="M0 -24 v50 M0 -6 l10 -8 M0 6 l-10 -8" stroke="${C.ink}" stroke-width="1.5" fill="none" transform="rotate(30)"/></g>`;
+const flowerI=(x,y,s=1,col=C.berry)=>`<g transform="translate(${x} ${y}) scale(${s})"><line x1="0" y1="10" x2="0" y2="60" stroke="${C.leaf}" stroke-width="5"/><path d="M0 40 q18 -6 22 8 q-14 6 -22 -8z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/>${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-16" rx="9" ry="14" fill="${col}" stroke="${C.ink}" stroke-width="2" transform="rotate(${a})"/>`).join('')}<circle r="8" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/></g>`;
+const seedI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="10" ry="14" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2.5" transform="rotate(-20)"/></g>`;
+const rockI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-28 14 q-6 -24 12 -30 q14 -12 30 -4 q18 10 10 30 q-26 10 -52 4z" fill="#9AA3AB" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const bugI=(x,y,s=1,col=C.bad)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="18" ry="22" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-22" r="9" fill="${C.ink}"/><line x1="0" y1="-14" x2="0" y2="22" stroke="${C.ink}" stroke-width="2"/><circle cx="-8" cy="-6" r="3.5" fill="${C.ink}"/><circle cx="8" cy="2" r="3.5" fill="${C.ink}"/><circle cx="-6" cy="10" r="3" fill="${C.ink}"/><circle cx="9" cy="-12" r="3" fill="${C.ink}"/></g>`;
+const fishI2=(x,y,s=1,col=C.sky)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-24 0 q20 -22 44 0 q-24 22 -44 0z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><path d="M18 0 l14 -12 v24z" fill="${col}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="-12" cy="-3" r="3" fill="${C.ink}"/><path d="M-4 -12 q6 -8 12 -2" fill="none" stroke="${C.ink}" stroke-width="2"/></g>`;
+const birdI=(x,y,s=1,col=C.sky)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="20" ry="14" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="18" cy="-10" r="10" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><path d="M27 -10 l10 3 l-10 3z" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/><circle cx="20" cy="-12" r="2" fill="${C.ink}"/><path d="M-6 -4 q-10 -14 6 -16 q6 8 -6 16z" fill="${C.ink}" opacity=".3"/><path d="M-18 10 l-6 10 M-12 12 l-2 12" stroke="${C.sun}" stroke-width="3"/></g>`;
+const frogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cy="6" rx="24" ry="16" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-12" cy="-10" r="8" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="12" cy="-10" r="8" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-12" cy="-10" r="3" fill="${C.ink}"/><circle cx="12" cy="-10" r="3" fill="${C.ink}"/><path d="M-8 8 q8 6 16 0" stroke="${C.ink}" stroke-width="2" fill="none"/><path d="M-24 14 l-10 10 M24 14 l10 10" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/></g>`;
+const butterflyI=(x,y,s=1,col=C.accent)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0 q-30 -30 -30 -6 q0 20 30 6z M0 0 q30 -30 30 -6 q0 20 -30 6z M0 0 q-24 24 -22 8 q4 -10 22 -8z M0 0 q24 24 22 8 q-4 -10 -22 -8z" fill="${col}" stroke="${C.ink}" stroke-width="2"/><ellipse rx="4" ry="16" fill="${C.ink}"/><path d="M-3 -14 l-5 -8 M3 -14 l5 -8" stroke="${C.ink}" stroke-width="2"/></g>`;
+const heartI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 22 q-30 -20 -30 -38 q0 -14 14 -14 q10 0 16 10 q6 -10 16 -10 q14 0 14 14 q0 18 -30 38z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const germI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="20" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/>${[0,60,120,180,240,300].map(a=>`<line x1="0" y1="-20" x2="0" y2="-28" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}<circle cx="-6" cy="-4" r="3" fill="${C.ink}"/><circle cx="6" cy="-4" r="3" fill="${C.ink}"/><path d="M-6 6 q6 5 12 0" stroke="${C.ink}" stroke-width="2" fill="none"/></g>`;
+const virusI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="16" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<g transform="rotate(${a})"><line x1="0" y1="-16" x2="0" y2="-24" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-26" r="3.5" fill="${C.grape}" stroke="${C.ink}" stroke-width="2"/></g>`).join('')}</g>`;
+const mushroomI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-8" y="0" width="16" height="22" rx="4" fill="#F2E6D0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 4 q0 -30 26 -30 q26 0 26 30z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-10" cy="-10" r="4" fill="#fff"/><circle cx="8" cy="-14" r="3" fill="#fff"/></g>`;
+const sunI2=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="20" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-26" x2="0" y2="-34" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+const dropI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -24 q18 24 18 36 a18 18 0 0 1 -36 0 q0 -12 18 -36z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="24" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M18 18 l20 20" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/></g>`;
+const kidI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+/* Life Science 7: Ecosystems */
+const grassI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 0 q-2 -20 4 -30 M-6 0 q0 -24 6 -34 M4 0 q2 -22 10 -30 M12 0 q4 -16 14 -22" stroke="${C.leaf}" stroke-width="4" fill="none" stroke-linecap="round"/></g>`;
+const mouseI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="18" ry="11" fill="#9AA3AB" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-4" r="8" fill="#9AA3AB" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-18" cy="-12" r="5" fill="#F4A3A8" stroke="${C.ink}" stroke-width="2"/><circle cx="-16" cy="-5" r="1.8" fill="${C.ink}"/><path d="M18 2 q16 -4 20 -14" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>`;
+const snakeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 0 q10 -16 20 0 t20 0 t20 0" stroke="${C.leaf}" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="30" cy="-2" r="2.5" fill="${C.ink}"/><path d="M34 0 l8 -2 l-8 4" stroke="${C.bad}" stroke-width="2" fill="none"/></g>`;
+const owlI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cy="6" rx="20" ry="24" fill="#A0703F" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-8" cy="-6" r="8" fill="#fff" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-6" r="8" fill="#fff" stroke="${C.ink}" stroke-width="2"/><circle cx="-8" cy="-6" r="3.5" fill="${C.ink}"/><circle cx="8" cy="-6" r="3.5" fill="${C.ink}"/><path d="M-3 2 l3 6 l3 -6z" fill="${C.sun}" stroke="${C.ink}" stroke-width="1.5"/><path d="M-16 -18 l-4 -8 l8 4 M16 -18 l4 -8 l-8 4" fill="#A0703F" stroke="${C.ink}" stroke-width="2"/></g>`;
+const crabI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="18" ry="12" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-6" cy="-12" r="3" fill="${C.ink}"/><circle cx="6" cy="-12" r="3" fill="${C.ink}"/><path d="M-18 -4 q-12 -8 -10 -16 M18 -4 q12 -8 10 -16 M-14 8 l-8 8 M-6 10 l-4 10 M6 10 l4 10 M14 8 l8 8" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>`;
+const mangroveI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0 l-16 30 M0 0 l16 30 M0 0 l-6 32 M0 0 l6 32 M-8 14 l-14 18 M8 14 l14 18" stroke="#8A5A2B" stroke-width="4" fill="none" stroke-linecap="round"/><line x1="0" y1="0" x2="0" y2="-30" stroke="#8A5A2B" stroke-width="7"/><circle cy="-40" r="24" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const chain=(items,y,gap=130)=>items.map(([ic,n],k)=>G(`<g transform="translate(${80+k*gap} ${y})">${ic}</g>`+T(80+k*gap,y+55,n,'lab mid'),'a-pop',.1+k*.3)).join('')+items.slice(1).map((_,k)=>G(arrow(80+k*gap+40,y,80+(k+1)*gap-40,y,C.accent),'a-fade',.4+k*.3)).join('');
+const S=[
+{part:'learn',title:'Everything is connected',say:'Hi! No living thing lives alone. Plants, animals, microbes, water, soil and sunlight all work together in an <b>ecosystem</b>. A pond is an ecosystem. So is a rainforest, a mangrove swamp, and even the drain outside your house! Let\'s explore how it all fits together.',
+ draw:()=>G(sunI2(80,70,1.2),'a-pop',.1)+G(`<rect x="0" y="300" width="640" height="100" fill="#C9E0B8"/><ellipse cx="420" cy="330" rx="150" ry="40" fill="#BFE3F5" stroke="${C.ink}" stroke-width="2"/>`,'')+G(treeI(150,290,1.5),'a-pop',.3)+G(grassI(260,300,1.2)+grassI(560,300,1),'a-pop',.5)+G(birdI(170,150,.9),'a-pop',.7)+G(frogI(390,310,.9)+fishI2(450,340,.7),'a-pop',.9)+G(butterflyI(300,230,.9)+bugI(560,280,.5,'#2B2B3A'),'a-pop',1.1)+G(dropI(520,120,.9)+T(520,170,'rain','sm mid mut'),'a-pop',1.3)+otter(600,398,.5)},
+
+{part:'learn',title:'Habitats: a place to call home',say:'A <b>habitat</b> is where a living thing lives. It gives food, water, shelter and space. Singapore has many: the <b>rainforest</b> (Bukit Timah), <b>mangroves</b> (Sungei Buloh), <b>coral reefs</b> (Sisters\' Islands), and <b>urban</b> parks and drains where otters like me live!',
+ draw:()=>[['Rainforest','Bukit Timah','tall trees, monkeys, hornbills',treeI(0,-6,1.1),'#C9E0B8'],['Mangrove','Sungei Buloh','salty mud, crabs, mudskippers',mangroveI(0,0,.9),'#D9E7D0'],['Coral reef','Sisters\' Islands','warm sea, fish, clownfish',fishI2(0,0,1,C.accent),'#BFE3F5'],['Urban','parks and canals','otters, mynahs, lizards',otter(0,36,.45,{still:true}),'#E9EEF1']]
+  .map(([n,p,d,ic,c],k)=>G(box(24+k*150,50,140,230,c,16)+`<g transform="translate(${94+k*150} 120)">${ic}</g>`+T(94+k*150,180,n,'lab mid acc')+T(94+k*150,202,p,'sm mid mut')+wr(94+k*150,228,d,16,'sm mid',16),'a-pop',.1+k*.2)).join('')+G(T(320,335,'Each habitat has its own weather, food and animals.','lab mid'),'a-fade',1.2)},
+
+{part:'learn',title:'Food chains',say:'A <b>food chain</b> shows who eats whom. It always starts with a <b>plant</b>, because plants make their own food from the sun. Grass → grasshopper → frog → snake → owl. The arrow means "is eaten by". Energy from the sun passes along the chain, link by link!',
+ draw:()=>G(sunI2(80,70,1),'a-pop',0)+G(arrow(80,100,80,135,C.sun),'a-fade',.2)+chain([[grassI(0,14,1),'grass'],[bugI(0,0,.6,C.leaf),'grasshopper'],[frogI(0,0,.9),'frog'],[snakeI(0,0,.9),'snake'],[owlI(0,0,.9),'owl']],190,120)+G(box(100,300,440,60,C.sun,30)+T(320,338,'→ means "is eaten by"','lab mid'),'a-pop',1.8)},
+
+{part:'learn',title:'Producers, consumers, decomposers',say:'Everyone in an ecosystem has a job. <b>Producers</b> (plants) make food from sunlight. <b>Consumers</b> (animals) eat plants or other animals. <b>Decomposers</b> (fungi, worms, bacteria) break down dead things and return the goodness to the soil, so plants can grow again. It is a circle!',
+ draw:()=>[['Producers','plants make food from sunlight',treeI(0,-10,1),C.leaf],['Consumers','animals eat plants or animals',frogI(0,0,.9)+mouseI(30,10,.6),C.accent],['Decomposers','break down dead things',mushroomI(0,4,1)+`<path d="M-30 20 q10 -8 20 0 t20 0" stroke="#D98EA3" stroke-width="4" fill="none"/>`,'#A0703F']]
+  .map(([n,d,ic,c],k)=>G(box(30+k*195,50,180,220,'#fff',16)+`<rect x="${30+k*195}" y="50" width="180" height="40" rx="14" fill="${c}"/>`+T(120+k*195,77,n,'lab mid','style="fill:#fff"')+`<g transform="translate(${120+k*195} 150)">${ic}</g>`+wr(120+k*195,215,d,18,'sm mid',18),'a-pop',.1+k*.3)).join('')+G(arrow(210,160,225,160,C.ink)+arrow(405,160,420,160,C.ink)+`<path d="M600 160 q30 150 -480 150" fill="none" stroke="${C.ink}" stroke-width="3" stroke-dasharray="6 6"/>`+arrow(140,310,120,290,C.ink)+T(320,345,'goodness returns to the soil → new plants grow','sm mid acc'),'a-fade',1.2)},
+
+{part:'learn',title:'Food webs',say:'In real life, animals eat more than one thing, so food chains join up into a <b>food web</b>. The frog eats grasshoppers AND flies. The snake eats frogs AND mice. The owl eats snakes AND mice. If one animal disappears, the whole web is shaken!',
+ draw:()=>{const N={grass:[120,320],seeds:[320,320],hopper:[120,220],mouse:[320,220],frog:[200,130],snake:[420,130],owl:[320,50]};const ic={grass:grassI(0,14,.8),seeds:seedI(-6,0,.7)+seedI(8,2,.7),hopper:bugI(0,0,.5,C.leaf),mouse:mouseI(0,0,.7),frog:frogI(0,0,.7),snake:snakeI(0,0,.7),owl:owlI(0,0,.7)};
+  const E=[['grass','hopper'],['seeds','mouse'],['grass','mouse'],['hopper','frog'],['frog','snake'],['mouse','snake'],['mouse','owl'],['snake','owl']];
+  return E.map(([a,b],k)=>G(arrow(N[a][0]+(N[b][0]-N[a][0])*.25,N[a][1]+(N[b][1]-N[a][1])*.25,N[a][0]+(N[b][0]-N[a][0])*.72,N[a][1]+(N[b][1]-N[a][1])*.72,C.accent),'a-fade',.6+k*.12)).join('')+Object.entries(N).map(([n,[x,y]],k)=>G(`<circle cx="${x}" cy="${y}" r="30" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><g transform="translate(${x} ${y})">${ic[n]}</g>`+T(x,y+46,n==='hopper'?'grasshopper':n,'sm mid'),'a-pop',.1+k*.1)).join('')+G(box(470,220,150,120,C.sun,16)+wr(545,255,'The mouse is eaten by the snake AND the owl!',18,'sm mid',18),'a-pop',1.6)}},
+
+{part:'learn',title:'Singapore\'s mangroves',say:'Mangroves are special trees that grow in <b>salty mud</b> where the river meets the sea. Their tangled roots stick up to <b>breathe</b> and hold the soil so the coast does not wash away. Baby fish, <b>crabs</b> and <b>mudskippers</b> hide among the roots. You can see them at Sungei Buloh and Pasir Ris!',
+ draw:()=>G(`<rect x="0" y="260" width="640" height="140" fill="#8A7A5A"/><rect x="0" y="300" width="640" height="100" fill="#A9C7D3" opacity=".7"/>`,'')+[120,260,400,540].map((x,k)=>G(mangroveI(x,250,1.1+(k%2)*.2),'a-pop',.1+k*.2)).join('')+G(crabI(200,330,.8)+crabI(470,340,.7),'a-pop',.9)+G(`<g transform="translate(330 320)"><ellipse rx="22" ry="9" fill="#8A9A5A" stroke="${C.ink}" stroke-width="2"/><circle cx="-16" cy="-8" r="5" fill="#8A9A5A" stroke="${C.ink}" stroke-width="2"/><circle cx="-16" cy="-9" r="2" fill="${C.ink}"/><path d="M-10 6 l-6 6 M4 6 l6 6" stroke="${C.ink}" stroke-width="2"/></g>`+T(330,365,'mudskipper','sm mid'),'a-pop',1.1)+
+  G(box(40,40,260,120,'#fff',16)+T(60,70,'Mangrove roots','lab acc')+T(60,96,'• breathe above the mud','sm')+T(60,118,'• hold the shore together','sm')+T(60,140,'• hide baby fish and crabs','sm'),'a-fade',.8)+G(T(470,80,'Sungei Buloh','lab mid')+T(470,104,'Pasir Ris','lab mid')+T(470,128,'Chek Jawa','lab mid'),'a-fade',1.2)},
+
+{part:'learn',title:'Caring for nature',say:'Ecosystems are strong but not unbreakable. <b>Litter</b> in drains ends up in the sea where turtles eat plastic bags. Cutting <b>trees</b> takes away homes. But you can help: pick up litter, <b>reduce, reuse, recycle</b>, plant something, save water, and <b>never feed wild animals</b>, not even cute otters like me!',
+ draw:()=>[['Reduce','use less',`<path d="M-16 -10 h32 l-6 28 h-20z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-20 -10 h40" stroke="${C.ink}" stroke-width="3"/>`],['Reuse','use again',`<path d="M-14 -14 a14 14 0 1 1 -4 20" fill="none" stroke="${C.leaf}" stroke-width="4"/><path d="M-22 8 l6 -8 l6 8" fill="none" stroke="${C.leaf}" stroke-width="4"/>`],['Recycle','bin it right',`<rect x="-16" y="-12" width="32" height="30" rx="3" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><rect x="-20" y="-18" width="40" height="7" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/><path d="M-8 2 l5 -8 l3 5 M6 0 l4 8 l-6 0 M-6 10 l-5 -7 l6 -1" stroke="#fff" stroke-width="2" fill="none"/>`],['Plant','grow something',flowerI(0,6,.8,C.berry)],['Don\'t feed','wild animals',otter(0,34,.4,{still:true})+`<circle r="30" fill="none" stroke="${C.bad}" stroke-width="4"/><line x1="-21" y1="-21" x2="21" y2="21" stroke="${C.bad}" stroke-width="4"/>`]]
+  .map(([n,d,ic],k)=>G(box(20+k*122,60,112,190,'#fff',14)+`<g transform="translate(${76+k*122} 125)">${ic}</g>`+T(76+k*122,195,n,'lab mid acc','style="font-size:15px"')+T(76+k*122,220,d,'sm mid mut'),'a-pop',.1+k*.15)).join('')+G(T(320,310,'Small actions, repeated by many people, protect ecosystems.','lab mid'),'a-fade',1.2)},
+
+{part:'try',title:'Build a food chain',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const items=[['grass',grassI(0,14,.9),0],['grasshopper',bugI(0,0,.55,C.leaf),1],['frog',frogI(0,0,.8),2],['snake',snakeI(0,0,.8),3],['owl',owlI(0,0,.8),4]];const shuf=[3,0,4,1,2];let next=0;const placed=[];
+  const draw=()=>{a.q('.play').innerHTML=T(320,36,'Tap the links in order. Start with the producer!','lab mid acc')+shuf.map((i,k)=>`<g class="tap it" data-i="${i}">${box(30+k*118,60,108,110,placed.includes(i)?'#E6F6EA':'#fff',14)}<g transform="translate(${84+k*118} 105})">${items[i][1]}</g>${T(84+k*118,155,items[i][0],'sm mid','style="font-weight:800"')}</g>`.replace('105})','105)')).join('')+placed.map((i,k)=>G(`<circle cx="${80+k*120}" cy="270" r="32" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/><g transform="translate(${80+k*120} 270) scale(.8)">${items[i][1]}</g>`+(k<4?arrow(116+k*120,270,164+k*120,270,C.accent):''),'a-pop')).join('')+(placed.length?T(320,330,placed.map(i=>items[i][0]).join(' → '),'sm mid mut'):'');
+   a.qa('.it').forEach(g=>g.onclick=()=>{const i=+g.dataset.i;if(placed.includes(i))return;if(items[i][2]===next){placed.push(i);next++;draw();if(next===5)a.win('<b>A complete food chain!</b> Sun → grass → grasshopper → frog → snake → owl.');else a.say(`Yes! Who eats the ${items[i][0]}?`)}else a.say(next===0?'Food chains start with a <b>plant</b> (producer).':`Not yet. Who eats the ${items[placed[placed.length-1]][0]}?`)})};
+  draw();a.say('Build the food chain. Food chains always start with a <b>plant</b>.')}},
+
+{part:'try',title:'What if...?',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['All the frogs disappear.','Snakes have less food; grasshoppers increase and eat more grass.',['Nothing changes.','Owls become plants.']],['Someone plants many more trees.','More homes and food for birds and insects.',['Fewer animals can live there.','The sun stops shining.']],['Plastic litter fills the pond.','Fish and frogs get sick or trapped; the whole chain suffers.',['The pond gets cleaner.','Fish eat the plastic and grow bigger.']],['A long drought dries the grass.','Grasshoppers starve, then frogs, then snakes have less food.',['Only the owl is affected.','Grasshoppers start eating snakes.']]];let r=0,busy=false;
+  const show=()=>{busy=false;const [s,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 4`,'sm mid mut')+box(60,70,520,80,'#FFF4D6',16)+T(320,100,'What if...','sm mid mut')+T(320,130,s,'h mid')+chain([[grassI(0,14,.7),''],[bugI(0,0,.45,C.leaf),''],[frogI(0,0,.65,''),''],[snakeI(0,0,.65),''],[owlI(0,0,.65),'']],240,120)+T(320,320,'What happens to the food chain?','lab mid acc');
+   a.ui.innerHTML='';[ans,...Q[r][2]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>Right.</b> ${ans}`);a.later(show,2000)}else a.win(`<b>Right.</b> ${ans} Everything in an ecosystem is connected!`)}else{b.classList.add('no');a.say('Follow the arrows. Who loses their food? Who has fewer enemies?')}},'go'));
+   a.say('Think it through: if one link changes, what happens to the others?')};show();}},
+
+{part:'try',title:'Habitat match',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const A=[['crab','Mangrove',crabI(0,0,.9)],['monkey','Rainforest',`<circle r="16" fill="#A0703F" stroke="${C.ink}" stroke-width="2.5"/><ellipse cy="4" rx="10" ry="8" fill="#F2D2B0"/><circle cx="-6" cy="-4" r="2.5" fill="${C.ink}"/><circle cx="6" cy="-4" r="2.5" fill="${C.ink}"/><circle cx="-18" cy="-2" r="5" fill="#A0703F" stroke="${C.ink}" stroke-width="2"/><circle cx="18" cy="-2" r="5" fill="#A0703F" stroke="${C.ink}" stroke-width="2"/>`],['clownfish','Coral reef',fishI2(0,0,.9,C.accent)],['otter','Urban canal',otter(0,36,.45,{still:true})],['mudskipper','Mangrove',`<ellipse rx="22" ry="9" fill="#8A9A5A" stroke="${C.ink}" stroke-width="2"/><circle cx="-16" cy="-8" r="5" fill="#8A9A5A" stroke="${C.ink}" stroke-width="2"/>`],['hornbill','Rainforest',birdI(0,0,.9,'#2B2B3A').replace(C.sun,C.sun)]];let k=0;
+  const show=()=>{if(k>=A.length)return;a.q('.play').innerHTML=T(320,36,`${k+1} of 6`,'sm mid mut')+`<g transform="translate(320 160)">${A[k][2]}</g>`+T(320,230,A[k][0],'h mid')+T(320,270,'Where does it live?','lab mid mut')};
+  show();a.say('Where does each animal live? Tap its <b>habitat</b>.');
+  ['Rainforest','Mangrove','Coral reef','Urban canal'].forEach(h=>a.btn(h,b=>{if(k>=A.length)return;if(h===A[k][1]){k++;if(k<A.length){a.confetti();a.say(`<b>${A[k-1][0]} → ${h}</b>. Next!`);show()}else a.win(`<b>${A[k-1][0]} → ${h}</b>. Habitat expert!`)}else a.say(`Not the ${h.toLowerCase()}. Think about what a ${A[k][0]} needs: salt water? tall trees? the sea?`)},'go'));}},
+
+{part:'check',title:'Quiz 1',say:'Every food chain starts with a...',
+ draw:()=>sunI2(100,100,1)+arrow(130,120,190,170,C.sun)+`<circle cx="230" cy="200" r="36" fill="#FFF4D6" stroke="${C.ink}" stroke-width="3" stroke-dasharray="6 5"/>`+T(230,210,'?','big mid acc')+arrow(275,200,330,200,C.accent)+bugI(370,200,.6,C.leaf)+arrow(410,200,460,200,C.accent)+frogI(500,200,.9),
+ quiz:{options:['plant','frog','owl'],answer:'plant',why:'<b>Plants</b> are producers: they make food from sunlight, so every chain starts with them.',hint:'Which living thing makes its own food from the sun?'}},
+
+{part:'check',title:'Quiz 2',say:'In a food chain, what does the arrow → mean?',
+ draw:()=>grassI(180,210,1.2)+arrow(230,200,300,200,C.accent)+mouseI(360,200,1)+T(320,300,'grass → mouse','h mid'),
+ quiz:{options:['"is eaten by"','"is bigger than"','"runs away from"'],answer:'"is eaten by"',why:'The arrow shows the direction energy moves: grass <b>is eaten by</b> the mouse.',hint:'The arrow points from the food to the eater.'}},
+
+{part:'check',title:'Quiz 3',say:'Fungi and worms that break down dead leaves are called...',
+ draw:()=>mushroomI(260,200,1.5)+leafI(360,210,1,'#B5835A')+`<path d="M300 250 q10 -8 20 0 t20 0 t20 0" stroke="#D98EA3" stroke-width="5" fill="none"/>`,
+ quiz:{options:['producers','consumers','decomposers'],answer:'decomposers',why:'<b>Decomposers</b> break down dead things and return goodness to the soil.',hint:'They "de-compose": take things apart.'}},
+
+{part:'check',title:'Quiz 4',say:'Which Singapore habitat has salty mud and trees with roots that stick up to breathe?',
+ draw:()=>mangroveI(320,230,1.6)+crabI(420,300,.8),
+ quiz:{options:['rainforest','mangrove','coral reef'],answer:'mangrove',why:'<b>Mangroves</b> grow where rivers meet the sea. See them at Sungei Buloh!',hint:'Crabs and mudskippers live among its roots.'}},
+
+{part:'check',title:'Quiz 5',say:'If all the snakes in a habitat disappeared, what would probably happen to the frogs?',
+ draw:()=>frogI(200,200,1.1)+arrow(250,200,320,200,C.accent)+`<g opacity=".3">${snakeI(400,200,1)}</g><line x1="370" y1="170" x2="430" y2="230" stroke="${C.bad}" stroke-width="5"/>`,
+ quiz:{options:['There would be more frogs.','There would be fewer frogs.','Frogs would turn into snakes.'],answer:'There would be more frogs.',why:'Snakes eat frogs. With no snakes, <b>more frogs</b> survive, at least until they run out of food.',hint:'Who was eating the frogs?'}},
+
+{part:'check',title:'You did it!',say:'Wonderful! You understand <b>habitats</b>, <b>food chains and webs</b>, the jobs of <b>producers, consumers and decomposers</b>, and how to <b>care</b> for nature. One deck left: thinking like a scientist!',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+mangroveI(120,250,1)+owlI(520,230,1),'a-pop',.3)+T(320,60,'Ecosystem superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

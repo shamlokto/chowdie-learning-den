@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Lengths, Masses & Litres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 Maths · Deck 10</p>
+      <h1>Length, mass &amp; volume</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Mathematics, following the MOE 2021 syllabus. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* Deck 10: Length, Mass and Volume */
+function ruler(x,y,w,n,label=true){ // n units across width w
+  let s=box(x,y,w,46,'#FFE7A3',6);
+  for(let k=0;k<=n;k++){const xx=x+k*w/n; s+=`<line x1="${xx}" y1="${y}" x2="${xx}" y2="${y+(k%5===0?22:13)}" stroke="${C.ink}" stroke-width="2"/>`; if(label&&(n<=12||k%10===0)) s+=T(xx,y+39,k,'sm mid');}
+  return s;
+}
+function dial(cx,cy,r,max,val,unit,step=1){
+  let s=`<rect x="${cx-r-14}" y="${cy-r-14}" width="${2*r+28}" height="${2*r+60}" rx="22" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`;
+  for(let v=0;v<=max;v+=step){const a=(v/max*300-150)*Math.PI/180,x1=cx+Math.sin(a)*(r-4),y1=cy-Math.cos(a)*(r-4),x2=cx+Math.sin(a)*(r-16),y2=cy-Math.cos(a)*(r-16),tx=cx+Math.sin(a)*(r-30),ty=cy-Math.cos(a)*(r-30)+6;
+    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.ink}" stroke-width="3"/>`+T(tx.toFixed(1),ty.toFixed(1),v,'sm mid');}
+  s+=T(cx,cy+r*.45,unit,'lab mid mut');
+  const ang=val/max*300-150;
+  s+=`<g class="spin ptr" style="transform-origin:${cx}px ${cy}px;transform:rotate(-150deg)" data-a="${ang}"><path d="M${cx-4} ${cy} L${cx} ${cy-r+18} L${cx+4} ${cy}z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/></g><circle cx="${cx}" cy="${cy}" r="7" fill="${C.ink}"/>
+  <rect x="${cx-r-22}" y="${cy-r-30}" width="${2*r+44}" height="18" rx="9" fill="#D6E3EA" stroke="${C.ink}" stroke-width="3"/>`;
+  return s;
+}
+function spinPointers(a){a.later(()=>a.qa('.ptr').forEach(p=>p.style.transform=`rotate(${p.dataset.a}deg)`),120)}
+function jug(x,y,w,h,f,max=5,id='w'){ // x,y top-left; f litres
+  let s=`<path d="M${x+w} ${y+h*.15} q${w*.38} 0 ${w*.38} ${h*.3} t${-w*.38} ${h*.32}" stroke="${C.ink}" stroke-width="10" fill="none"/>
+  <path d="M${x+w} ${y+h*.15} q${w*.38} 0 ${w*.38} ${h*.3} t${-w*.38} ${h*.32}" stroke="#E6F4FA" stroke-width="5" fill="none"/>
+  <clipPath id="cp${id}"><path d="M${x} ${y} L${x+w} ${y} L${x+w-6} ${y+h} L${x+6} ${y+h}z"/></clipPath>
+  <path d="M${x} ${y} L${x+w} ${y} L${x+w-6} ${y+h} L${x+6} ${y+h}z" fill="#EEF8FC"/>
+  <g clip-path="url(#cp${id})"><rect class="lvl wat" x="${x}" y="${y}" width="${w}" height="${h}" fill="#7CC8EE" style="transform-box:fill-box;transform-origin:bottom;transform:scaleY(${f/max})"/></g>`;
+  for(let k=1;k<=max;k++){const yy=y+h-k*h/max; s+=`<line x1="${x+w-30}" y1="${yy}" x2="${x+w-4}" y2="${yy}" stroke="${C.ink}" stroke-width="2.5"/>`+T(x+w-36,yy+6,k+' ℓ','sm end');}
+  s+=`<path d="M${x-4} ${y} L${x+w+4} ${y} L${x+w-6} ${y+h} L${x+6} ${y+h}z" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`;
+  return s;
+}
+function balance(cx,cy,left,right,tilt){ // tilt in px: positive = left side lower
+  const L=150;
+  return `<path d="M${cx-60} ${cy+150} h120 l-40 -20 h-40z" fill="#C9A27A" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="${cx-8}" y="${cy}" width="16" height="132" fill="#C9A27A" stroke="${C.ink}" stroke-width="3"/>
+  <g class="tilt beam" style="transform-origin:${cx}px ${cy}px;transform:rotate(${-Math.atan2(tilt,L)*180/Math.PI}deg)">
+    <rect x="${cx-L-10}" y="${cy-7}" width="${2*L+20}" height="14" rx="7" fill="#E1B95B" stroke="${C.ink}" stroke-width="3"/></g>
+  <circle cx="${cx}" cy="${cy}" r="11" fill="${C.accent}" stroke="${C.ink}" stroke-width="3"/>
+  <g class="tilt panL" style="transform:translateY(${tilt}px)">${pan(cx-L,cy,left)}</g>
+  <g class="tilt panR" style="transform:translateY(${-tilt}px)">${pan(cx+L,cy,right)}</g>`;
+}
+function pan(x,y,item){return `<path d="M${x} ${y} L${x-46} ${y+70} M${x} ${y} L${x+46} ${y+70}" stroke="${C.ink}" stroke-width="2"/><g class="load">${item||''}</g><path d="M${x-58} ${y+70} h116 q-10 22 -58 22 q-48 0 -58 -22z" fill="#9FB4C0" stroke="${C.ink}" stroke-width="3"/>`}
+const apple=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 q-6 -14 4 -20" stroke="#6B4423" stroke-width="4" fill="none"/><path d="M2 -40 q14 -10 22 0 q-12 8 -22 0z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/><path d="M0 -26 q-28 -14 -32 12 q0 30 32 28 q32 2 32 -28 q-4 -26 -32 -12z" fill="${C.bad}" stroke="${C.ink}" stroke-width="3"/><ellipse cx="-14" cy="-12" rx="5" ry="8" fill="#fff" opacity=".45"/></g>`;
+const melon=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="-30" rx="46" ry="34" fill="${C.leaf}" stroke="${C.ink}" stroke-width="3"/><path d="M-30 -55 q-12 25 0 50 M-10 -63 q-8 33 0 66 M10 -63 q8 33 0 66 M30 -55 q12 25 0 50" stroke="#2E7A40" stroke-width="5" fill="none"/></g>`;
+const durian=(x,y,s=1)=>{let sp='';for(let k=0;k<18;k++){const a=k/18*Math.PI*2,p=(t,r)=>`${(Math.cos(t)*40*r).toFixed(1)} ${(-32+Math.sin(t)*32*r).toFixed(1)}`;sp+=`<path d="M${p(a-.17,.92)} L${p(a,1.22)} L${p(a+.17,.92)}z" fill="#9BBF3D" stroke="${C.ink}" stroke-width="2" stroke-linejoin="round"/>`}
+  return `<g transform="translate(${x} ${y}) scale(${s})">${sp}<ellipse cx="0" cy="-32" rx="40" ry="32" fill="#A8C94A" stroke="${C.ink}" stroke-width="3"/><path d="M-20 -46 l6 6 M0 -50 l0 8 M18 -44 l-5 6 M-26 -26 l7 2 M24 -24 l-7 3 M-6 -24 l5 5 M8 -16 l-3 6" stroke="#6E8F25" stroke-width="3" stroke-linecap="round"/></g>`};
+const rice=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-34 0 q-6 -50 6 -72 l-6 -8 h68 l-6 8 q12 22 6 72z" fill="#F3E3C3" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><rect x="-22" y="-52" width="44" height="30" rx="6" fill="${C.berry}"/><text x="0" y="-31" class="sm mid wht" style="fill:#fff">1 kg</text></g>`;
+const weight=(x,y,kg)=>{const w=kg===2?44:36,h=kg===2?40:32;return `<g><path d="M${x-w/2} ${y} l6 ${-h} h${w-12} l6 ${h}z" fill="#5E6B75" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><path d="M${x-7} ${y-h} q7 -12 14 0" stroke="${C.ink}" stroke-width="4" fill="none"/>${T(x,y-8,kg+'kg','sm mid wht','style="fill:#fff;font-size:13px"')}</g>`};
+const ribbon=(x,y,w,col,lab)=>`<rect x="${x}" y="${y}" width="${w}" height="26" rx="5" fill="${col}" stroke="${C.ink}" stroke-width="3"/>${lab?T(x+w+12,y+21,lab,'lab'):''}`;
+const bottle=(x,y,s=1,lab='1 ℓ')=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-10" y="-120" width="20" height="14" rx="3" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><path d="M-10 -106 q-22 16 -22 40 v62 q0 6 6 6 h52 q6 0 6 -6 v-62 q0 -24 -22 -40z" fill="#DDF1FA" stroke="${C.ink}" stroke-width="3"/><path d="M-30 -60 h60 v54 q0 4 -4 4 h-52 q-4 0 -4 -4z" fill="#7CC8EE"/><rect x="-26" y="-58" width="52" height="24" rx="4" fill="#fff" stroke="${C.ink}" stroke-width="2"/>${T(0,-40,lab,'sm mid')}</g>`;
+const clip=(x,y)=>`<path d="M${x} ${y} v-34 a8 8 0 0 1 16 0 v28 a5 5 0 0 1 -10 0 v-22" stroke="#8A9AA4" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+
+const S=[
+{part:'learn',title:'Hello, measuring!',say:'Hi, I\'m <b>Ollie the otter</b>! Today we measure three things: <b>how long</b>, <b>how heavy</b>, and <b>how much water</b>. Each one has its own tool.',
+ draw:()=>otter(110,370,1.5,{wave:true})+
+  G(`${ruler(250,70,330,10,false)}${T(415,145,'How long?','h mid')}`,'a-pop',.2)+
+  G(`${dial(320,250,60,5,0,'')}${T(320,382,'How heavy?','lab mid')}`,'a-pop',.5)+
+  G(`${jug(470,200,90,140,3,5,'a')}${T(515,382,'How much?','lab mid')}`,'a-pop',.8)},
+
+{part:'learn',title:'Metres for long things',say:'In Primary 1 we measured in <b>centimetres (cm)</b>. Long things need a bigger unit: the <b>metre</b>. <b>100 cm make 1 metre</b>. We write it as <b>m</b>.',
+ draw:()=>{let s=T(320,60,'100 cm = 1 m','big mid');
+  s+=G(`<rect x="50" y="110" width="540" height="40" rx="6" fill="#FFE7A3" stroke="${C.ink}" stroke-width="3" class="a-grow"/>`);
+  for(let k=0;k<=10;k++) s+=G(`<line x1="${50+k*54}" y1="110" x2="${50+k*54}" y2="${k%5?126:136}" stroke="${C.ink}" stroke-width="2"/>${T(50+k*54,172,k*10,'sm mid mut')}`,'a-fade',.1+k*.06);
+  s+=G(`${T(320,210,'1 metre stick','lab mid')}`,'a-fade',.9);
+  s+=G(otter(160,380,.9)+T(250,312,'Ollie is about','lab')+T(250,340,'1 m tall!','h acc'),'a-fade',1.2);
+  s+=G(`<path d="M86 270 v108" stroke="${C.accent}" stroke-width="4" stroke-dasharray="6 6"/>${T(80,330,'1 m','lab end acc')}`,'a-fade',1.5);
+  s+=G(`<rect x="430" y="240" width="130" height="140" rx="6" fill="#C9A27A" stroke="${C.ink}" stroke-width="3"/><circle cx="545" cy="315" r="6" fill="${C.ink}"/>${T(495,234,'A door is','sm mid')}${T(495,256,'about 1 m wide','sm mid')}`,'a-fade',1.8);
+  return s;}},
+
+{part:'learn',title:'cm or m?',say:'Short things like a pencil, use <b>cm</b>. Long things like a classroom or an MRT train, use <b>m</b>. Ask yourself: <b>is it shorter or longer than a metre stick?</b>',
+ draw:()=>G(box(30,40,270,320,'#fff',20)+T(165,90,'Use cm','h mid acc')+
+   `<g transform="translate(70 150)"><rect width="150" height="18" rx="4" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/><path d="M150 0 l26 9 l-26 9z" fill="#F2DDBE" stroke="${C.ink}" stroke-width="3"/><rect x="-14" width="16" height="18" rx="3" fill="${C.berry}" stroke="${C.ink}" stroke-width="3"/></g>`+T(165,200,'pencil: 15 cm','lab mid')+
+   `<rect x="110" y="235" width="110" height="70" rx="8" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><line x1="165" y1="235" x2="165" y2="305" stroke="${C.ink}" stroke-width="3"/>`+T(165,335,'book: 25 cm','lab mid'),'a-pop',.1)+
+  G(box(340,40,270,320,'#fff',20)+T(475,90,'Use m','h mid acc')+
+   `<g transform="translate(360 112)"><rect width="230" height="56" rx="16" fill="#E9EEF1" stroke="${C.ink}" stroke-width="3"/><rect y="34" width="230" height="8" fill="${C.leaf}"/>${[16,66,116,166].map(x=>`<rect x="${x}" y="10" width="38" height="20" rx="4" fill="#BFE3F5" stroke="${C.ink}" stroke-width="2"/>`).join('')}<circle cx="40" cy="60" r="7" fill="${C.ink}"/><circle cx="190" cy="60" r="7" fill="${C.ink}"/></g>`+T(475,208,'MRT train car: 23 m','lab mid')+
+   `<rect x="400" y="258" width="150" height="56" fill="#FCE6CF" stroke="${C.ink}" stroke-width="3"/><path d="M392 260 l83 -28 l83 28" fill="${C.accent}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(475,335,'classroom: 8 m','lab mid'),'a-pop',.5)},
+
+{part:'learn',title:'Kilograms and grams',say:'Mass tells us <b>how heavy</b> something is. Heavy things use <b>kilograms (kg)</b>, like a bag of rice. Very light things use <b>grams (g)</b>, like a paper clip. <b>1 kg = 1000 g</b>.',
+ draw:()=>G(rice(170,280,1.6),'a-drop',.1)+G(T(170,330,'bag of rice','lab mid')+T(170,362,'1 kg','h mid acc'),'a-fade',.5)+
+  G(clip(462,250)+T(470,330,'paper clip','lab mid')+T(470,362,'about 1 g','h mid acc'),'a-fade',.8)+
+  G(`<rect x="250" y="40" width="140" height="56" rx="16" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/>`+T(320,78,'1 kg = 1000 g','lab mid'),'a-pop',1.3)},
+
+{part:'learn',title:'Reading a weighing scale',say:'Put the durian on the scale. Watch the <b>red pointer</b>. It stops at <b>3</b>, so the durian has a mass of <b>3 kg</b>.',
+ draw:()=>dial(260,240,100,5,3,'kg')+`<g class="a-drop" style="--d:.2s">${durian(260,104,1)}</g>`+
+   G(otter(520,380,1)+bubble(430,80,170,70,'3 kg!','h'),'a-fade',1.4),
+ mount:spinPointers},
+
+{part:'learn',title:'Litres for liquids',say:'<b>Volume</b> tells us how much liquid a container holds. We use <b>litres</b>, written <b>ℓ</b>. This big bottle holds <b>1 ℓ</b>. Watch the jug fill up to <b>3 ℓ</b>!',
+ draw:()=>G(bottle(110,330,1.4,'1 ℓ'),'a-pop',.1)+jug(270,90,150,250,0,5,'b')+
+   G(`<path d="M430 50 q60 0 60 50" stroke="${C.sky}" stroke-width="8" fill="none" stroke-linecap="round"/>`+T(540,140,'Read the','lab mid')+T(540,165,'mark where','lab mid')+T(540,190,'the water','lab mid')+T(540,215,'stops.','lab mid'),'a-fade',.4),
+ mount:a=>a.later(()=>a.q('.wat').style.transform='scaleY(.6)',300)},
+
+{part:'learn',title:'Heavier or lighter?',say:'A balance is like a see-saw. The <b>heavier</b> side goes <b>down</b>. The <b>lighter</b> side goes <b>up</b>. Here, the watermelon is heavier than the apple.',
+ draw:()=>balance(320,120,melon(170,192,.85),apple(470,192,.9),0)+G(T(140,370,'heavier','h mid acc'),'a-fade',1.4)+G(T(500,370,'lighter','h mid'),'a-fade',1.6),
+ mount:a=>a.later(()=>{a.q('.beam').style.transform=`rotate(${-Math.atan2(36,150)*180/Math.PI}deg)`;a.q('.panL').style.transform='translateY(36px)';a.q('.panR').style.transform='translateY(-36px)';},500)},
+
+{part:'learn',title:'Longest to shortest',say:'To <b>compare lengths</b>, line things up at the same start. Mei\'s ribbons are <b>5 m</b>, <b>2 m</b> and <b>8 m</b>. The <b>longest</b> is 8 m. The <b>shortest</b> is 2 m.',
+ draw:()=>`<line x1="80" y1="50" x2="80" y2="290" stroke="${C.ink}" stroke-width="3" stroke-dasharray="6 6"/>`+T(80,40,'start','sm mid mut')+
+  G(ribbon(80,80,250,C.berry,'5 m'),'a-grow',.2)+G(ribbon(80,150,100,C.sky,'2 m')+T(260,172,'shortest','lab acc'),'a-grow',.5)+G(ribbon(80,220,400,C.sun,'8 m')+T(540,242,'longest','lab acc'),'a-grow',.8)+
+  G(T(320,350,'shortest → longest:  2 m, 5 m, 8 m','h mid'),'a-fade',1.4)},
+
+{part:'try',title:'Fill the jug to 3 ℓ',say:'Your turn! Tap <b>Pour 1 ℓ</b> to fill the jug. Stop at <b>3 ℓ</b>, then tap <b>Check</b>.',
+ draw:()=>jug(230,70,170,280,0,5,'c')+bottle(540,330,1.1,'1 ℓ')+G(T(560,110,'pour','lab mid mut'),'')+otter(90,380,.9),
+ mount:a=>{let v=0;const upd=()=>a.q('.wat').style.transform=`scaleY(${v/5})`;
+  a.btn('Pour 1 ℓ',()=>{if(v<5){v++;upd();a.say(`The jug has <b>${v} ℓ</b> of water.`)}},'go');
+  a.btn('Empty',()=>{v=0;upd();a.say('All empty. Try again!')});
+  a.btn('Check',()=>{if(v===3)a.win('<b>Perfect!</b> The water is at the <b>3 ℓ</b> mark.');else a.say(v<3?`That's only ${v} ℓ. Pour some more!`:`Oops, that's ${v} ℓ. Too much! Tap Empty and try again.`)});}},
+
+{part:'try',title:'Balance the watermelon',say:'The watermelon has a mass of <b>4 kg</b>. Add weights to the other side until the balance is <b>level</b>.',
+ draw:()=>balance(320,120,melon(170,192,.85),'',30)+T(170,370,'4 kg','h mid acc')+`<text class="h mid tot" x="470" y="370">0 kg</text>`,
+ mount:a=>{let w=[];const draw=()=>{const tot=w.reduce((p,q)=>p+q,0),d=Math.max(-36,Math.min(36,(4-tot)*12));
+   a.q('.beam').style.transform=`rotate(${-Math.atan2(d,150)*180/Math.PI}deg)`;a.q('.panL').style.transform=`translateY(${d}px)`;a.q('.panR').style.transform=`translateY(${-d}px)`;
+   let x=470-(w.length-1)*24,s='';w.forEach(k=>{s+=weight(x,190,k);x+=48});a.q('.panR .load').innerHTML=s;a.q('.tot').textContent=tot+' kg';
+   if(tot===4)a.win('<b>Level!</b> The watermelon has the same mass as the weights: <b>4 kg</b>.');else if(tot>4)a.say(`${tot} kg is too heavy! That side went down. Tap <b>Start again</b>.`);else a.say(`${tot} kg so far. The watermelon side is still lower. Add more!`)};
+  draw();a.say('The watermelon has a mass of <b>4 kg</b>. Add weights to the other side until the balance is <b>level</b>.');
+  a.btn('+ 1 kg',()=>{if(w.length<5){w.push(1);draw()}},'go');a.btn('+ 2 kg',()=>{if(w.length<5){w.push(2);draw()}},'go');a.btn('Start again',()=>{w=[];draw()});}},
+
+{part:'try',title:'Shortest to longest',say:'Tap the ribbons in order, from the <b>shortest</b> to the <b>longest</b>.',
+ draw:()=>{const r=[[6,C.berry],[3,C.sky],[9,C.sun],[4,C.leaf]];return `<line x1="70" y1="40" x2="70" y2="330" stroke="${C.ink}" stroke-width="3" stroke-dasharray="6 6"/>`+
+  r.map(([m,c],k)=>`<g class="tap rib" data-m="${m}">${ribbon(70,60+k*70,m*48,c,m+' m')}<rect x="70" y="50" width="${m*48+80}" height="46" fill="transparent" transform="translate(0 ${k*70})"/><g class="badge"></g></g>`).join('')},
+ mount:a=>{const order=[3,4,6,9];let n=0;a.qa('.rib').forEach(g=>g.onclick=()=>{if(g.dataset.done)return;const m=+g.dataset.m;
+   if(m===order[n]){g.dataset.done=1;n++;const y=g.querySelector('rect').getAttribute('y');g.querySelector('.badge').innerHTML=`<g class="a-pop"><circle cx="40" cy="${+y+13}" r="17" fill="${C.accent}" stroke="${C.ink}" stroke-width="3"/>${T(40,+y+20,n,'lab mid wht','style="fill:#fff"')}</g>`;
+     if(n===4)a.win('<b>Brilliant!</b> 3 m, 4 m, 6 m, 9 m. From shortest to longest!');else a.say(`Yes, <b>${m} m</b>. Which one is next?`);}
+   else a.say(`Hmm, ${m} m is not the shortest one left. Look again!`);});}},
+
+{part:'check',title:'Star check 1',say:'Which unit should we use to measure the <b>length of a classroom</b>?',
+ draw:()=>`<rect x="190" y="110" width="260" height="170" fill="#FCE6CF" stroke="${C.ink}" stroke-width="3"/><path d="M170 112 l150 -60 l150 60" fill="${C.accent}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+
+   [0,1,2].map(k=>`<rect x="${215+k*80}" y="150" width="50" height="40" rx="4" fill="#BFE3F5" stroke="${C.ink}" stroke-width="2"/>`).join('')+`<rect x="295" y="215" width="50" height="65" fill="#C9A27A" stroke="${C.ink}" stroke-width="3"/>`+arrow(190,320,450,320,C.accent)+arrow(450,320,190,320,C.accent)+T(320,355,'length = ?','lab mid'),
+ quiz:{options:['cm','m','kg','ℓ'],answer:'m',why:'A classroom is much longer than a metre stick, so we use <b>metres (m)</b>.',hint:'Is a classroom shorter or longer than a metre stick?'}},
+
+{part:'check',title:'Star check 2',say:'Read the scale. What is the mass of the pineapple?',
+ draw:()=>dial(320,240,100,10,6,'kg')+`<g transform="translate(320 100)"><path d="M-6 -50 l-14 -26 l18 14 l2 -24 l8 24 l14 -16 l-8 28z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="0" cy="-22" rx="28" ry="34" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/><path d="M-20 -40 l40 36 M-26 -18 l30 28 M20 -42 l-40 36 M26 -20 l-30 28" stroke="#C98A1B" stroke-width="2"/></g>`,
+ mount:spinPointers,
+ quiz:{options:['5 kg','6 kg','7 kg'],answer:'6 kg',why:'The pointer stops at <b>6</b>, so the pineapple is <b>6 kg</b>.',hint:'Follow the red pointer to the number it points at.'}},
+
+{part:'check',title:'Star check 3',say:'How much water is in the jug?',
+ draw:()=>jug(240,60,170,290,4,5,'d')+otter(530,380,.9),
+ quiz:{options:['3 ℓ','4 ℓ','5 ℓ'],answer:'4 ℓ',why:'The water reaches the <b>4 ℓ</b> mark.',hint:'Look at the line where the water stops.'}},
+
+{part:'check',title:'Star check 4',say:'A strawberry has a mass of about 15 ___. Which unit fits?',
+ draw:()=>`<g transform="translate(320 250) scale(2.4)"><path d="M0 34 q-34 -18 -30 -40 q4 -14 30 -12 q26 -2 30 12 q4 22 -30 40z" fill="${C.bad}" stroke="${C.ink}" stroke-width="1.5"/><path d="M-20 -18 l8 4 l4 -10 l8 8 l8 -8 l4 10 l8 -4 l-6 10 h-28z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="1.5" stroke-linejoin="round"/>${[[-14,0],[0,4],[14,0],[-8,14],[8,14],[0,24]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="1.6" ry="2.4" fill="#FFE7A3"/>`).join('')}</g>`+T(320,60,'15 ___ ?','big mid'),
+ quiz:{options:['g','kg','m'],answer:'g',why:'A strawberry is very light, so we use <b>grams</b>. It is about <b>15 g</b>.',hint:'Is a strawberry very light, or heavy like a bag of rice?'}},
+
+{part:'check',title:'Star check 5',say:'Hana has 3 bottles of juice. Which bottle holds the <b>most</b> juice?',
+ draw:()=>G(bottle(150,340,1.3,'2 ℓ')+T(150,385,'A','h mid'),'a-pop',.1)+G(bottle(320,340,1.3,'5 ℓ')+T(320,385,'B','h mid'),'a-pop',.3)+G(bottle(490,340,1.3,'3 ℓ')+T(490,385,'C','h mid'),'a-pop',.5),
+ quiz:{options:['A','B','C'],answer:'B',why:'5 ℓ is more than 3 ℓ and 2 ℓ, so <b>bottle B</b> holds the most.',hint:'Compare the numbers on the labels. Which is the biggest?'}},
+
+{part:'check',title:'You did it!',say:'Great measuring! Remember: <b>m</b> for long things, <b>kg</b> and <b>g</b> for heavy and light things, and <b>ℓ</b> for liquids. See you in the next lesson!',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+star(210,200,24,C.sky)+star(440,200,24,C.leaf),'a-pop',.3)+T(320,60,'Measuring superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

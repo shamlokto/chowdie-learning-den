@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Sharing & Grouping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 Maths · Deck 6</p>
+      <h1>Sharing &amp; grouping (÷)</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Mathematics, following the MOE 2021 syllabus. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared number helpers: base-ten blocks, place-value chart, number words */
+const HUNDRED_C='#5BB8E8',TEN_C='#4FAE63',ONE_C='#FFC83D';
+function cube(x,y,s=14,col=ONE_C){return `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="2" fill="${col}" stroke="${C.ink}" stroke-width="2"/>`}
+function rod(x,y,s=14,col=TEN_C){let r=`<rect x="${x}" y="${y}" width="${s}" height="${s*10}" rx="2" fill="${col}" stroke="${C.ink}" stroke-width="2"/>`;for(let k=1;k<10;k++)r+=`<line x1="${x}" y1="${y+k*s}" x2="${x+s}" y2="${y+k*s}" stroke="${C.ink}" stroke-width="1" opacity=".5"/>`;return r}
+function flat(x,y,s=14,col=HUNDRED_C){let r=`<rect x="${x}" y="${y}" width="${s*10}" height="${s*10}" rx="3" fill="${col}" stroke="${C.ink}" stroke-width="2"/>`;for(let k=1;k<10;k++)r+=`<line x1="${x}" y1="${y+k*s}" x2="${x+s*10}" y2="${y+k*s}" stroke="${C.ink}" stroke-width="1" opacity=".4"/><line x1="${x+k*s}" y1="${y}" x2="${x+k*s}" y2="${y+s*10}" stroke="${C.ink}" stroke-width="1" opacity=".4"/>`;return r}
+/* draw h flats, t rods, o cubes starting at x,y; s = unit size; returns svg + width used */
+function blocks(x,y,h,t,o,s=11,anim=true,d0=0){let out='',cx=x;
+  for(let k=0;k<h;k++){out+=G(flat(cx,y,s),anim?'a-drop':'',d0+k*.12);cx+=s*10+8}
+  for(let k=0;k<t;k++){out+=G(rod(cx,y,s),anim?'a-drop':'',d0+h*.12+k*.08);cx+=s+6}
+  if(t)cx+=6;
+  for(let k=0;k<o;k++){out+=G(cube(cx+(k%5)*(s+3),y+Math.floor(k/5)*(s+3),s),anim?'a-pop':'',d0+h*.12+t*.08+k*.06)}
+  return out}
+const ONES=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+function words(n){if(n===1000)return 'one thousand';const h=Math.floor(n/100),r=n%100;let s=h?ONES[h]+' hundred':'';if(r){if(s)s+=' and ';s+=r<20?ONES[r]:TENS[Math.floor(r/10)]+(r%10?'-'+ONES[r%10]:'')}return s||'zero'}
+function pvChart(x,y,n,w=70,showVals=true,d=0){const h=Math.floor(n/100),t=Math.floor(n/10)%10,o=n%10;
+  let s=box(x,y,w*3,88,'#fff',12);for(let k=1;k<3;k++)s+=`<line x1="${x+k*w}" y1="${y}" x2="${x+k*w}" y2="${y+88}" stroke="${C.ink}" stroke-width="2"/>`;
+  s+=`<line x1="${x}" y1="${y+30}" x2="${x+3*w}" y2="${y+30}" stroke="${C.ink}" stroke-width="2"/>`;
+  [['Hundreds',HUNDRED_C],['Tens',TEN_C],['Ones',ONE_C]].forEach(([l,c],k)=>s+=`<rect x="${x+k*w+2}" y="${y+2}" width="${w-4}" height="27" rx="${k===0?10:0}" fill="${c}" opacity=".5"/>`+T(x+k*w+w/2,y+22,l,'sm mid'));
+  if(showVals)[h,t,o].forEach((v,k)=>s+=G(T(x+k*w+w/2,y+74,v,'big mid'),'a-pop',d+k*.2));
+  return s}
+const digitTiles=(x,y,n,gap=64,size=56)=>String(n).split('').map((ch,k)=>box(x+k*gap,y,size,size,'#fff',10)+T(x+k*gap+size/2,y+size*.72,ch,'big mid')).join('');
+/* shared multiplication/division helpers */
+const dot=(x,y,col=C.sky,r=11)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/>`;
+/* array of rows × cols dots */
+function arr(x,y,rows,cols,col=C.sky,gap=30,anim=true,d0=0,r=11){let s='';for(let i=0;i<rows;i++)for(let j=0;j<cols;j++)s+=anim?G(dot(x+j*gap,y+i*gap,col,r),'a-pop',d0+(i*cols+j)*.04):dot(x+j*gap,y+i*gap,col,r);return s}
+/* groups: n plates each with k items */
+function groups(x,y,n,k,item,plateW=90,gapX=100,anim=true,d0=0){let s='';for(let g=0;g<n;g++){const px=x+(g%6)*gapX,py=y+Math.floor(g/6)*110;let inner=`<ellipse cx="${px+plateW/2}" cy="${py+34}" rx="${plateW/2}" ry="30" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`;
+  for(let i=0;i<k;i++){const a=k===1?0:(i/k)*Math.PI*2,rr=k===1?0:Math.min(22,plateW*.3);inner+=item(px+plateW/2+rr*Math.cos(a),py+34+rr*Math.sin(a)*.6)}s+=anim?G(inner,'a-pop',d0+g*.15):inner}return s}
+const strawberryI=(x,y)=>`<g transform="translate(${x} ${y}) scale(.55)"><path d="M0 14 q-14 -8 -12 -18 q2 -6 12 -5 q10 -1 12 5 q2 10 -12 18z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/><path d="M-8 -9 l4 2 l1 -5 l3 4 l3 -4 l1 5 l4 -2 l-3 5 h-10z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="1.5"/></g>`;
+const cookieI=(x,y)=>`<g><circle cx="${x}" cy="${y}" r="10" fill="#D9A066" stroke="${C.ink}" stroke-width="2"/><circle cx="${x-3}" cy="${y-3}" r="2" fill="#5B3A1E"/><circle cx="${x+4}" cy="${y+2}" r="2" fill="#5B3A1E"/><circle cx="${x-2}" cy="${y+5}" r="1.5" fill="#5B3A1E"/></g>`;
+const fishI=(x,y)=>`<g transform="translate(${x} ${y}) scale(.6)"><path d="M-14 0 q12 -13 24 0 q-12 13 -24 0z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/><path d="M10 0 l8 -7 v14z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/><circle cx="-7" cy="-2" r="2" fill="${C.ink}"/></g>`;
+const starI=(x,y)=>star(x,y,10);
+const eq=(x,y,txt,cls='h')=>T(x,y,txt,cls+' mid');
+/* number line with jumps of step, n jumps */
+function jumps(x,y,w,max,step,n,col=C.accent,anim=true,d0=0){let s=`<line x1="${x}" y1="${y}" x2="${x+w}" y2="${y}" stroke="${C.ink}" stroke-width="3"/>`;const u=w/max;
+  for(let v=0;v<=max;v+=step){s+=`<line x1="${x+v*u}" y1="${y-6}" x2="${x+v*u}" y2="${y+6}" stroke="${C.ink}" stroke-width="2"/>`+T(x+v*u,y+26,v,'sm mid')}
+  for(let k=0;k<n;k++){const a=x+k*step*u,b=x+(k+1)*step*u,h=Math.min(44,step*u*.9);s+=G(`<path d="M${a} ${y-4} q${(b-a)/2} ${-h*1.6} ${b-a} 0" fill="none" stroke="${col}" stroke-width="3"/><circle cx="${b}" cy="${y-4}" r="4" fill="${col}"/>`+T((a+b)/2,y-h-4,'+'+step,'sm mid acc'),anim?'a-fade':'',d0+k*.25)}return s}
+function tableCard(x,y,n,upto=10,hi=-1,cols=1){let s=box(x,y,cols===1?170:340,(cols===1?upto:Math.ceil(upto/2))*26+24,'#fff',14);for(let k=1;k<=upto;k++){const col=cols===1?0:(k>5?1:0),row=cols===1?k-1:(k-1)%5;const yy=y+28+row*26,xx=x+14+col*170;if(k===hi)s+=`<rect x="${xx-6}" y="${yy-19}" width="160" height="26" rx="6" fill="${C.sun}"/>`;s+=T(xx,yy,`${k} × ${n} = ${k*n}`,'lab',k===hi?'style="font-weight:800"':'')}return s}
+/* Deck 6: Division — sharing and grouping */
+const plate=(x,y,items,itemFn,w=90)=>{let s=`<ellipse cx="${x}" cy="${y}" rx="${w/2}" ry="26" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`;for(let i=0;i<items;i++){const a=(i/Math.max(items,1))*Math.PI*2,rr=items===1?0:Math.min(22,w*.3);s+=itemFn(x+rr*Math.cos(a),y+rr*Math.sin(a)*.55)}return s};
+const kid=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const bag=(x,y,n)=>`<g transform="translate(${x} ${y})"><path d="M-26 10 q-4 -36 6 -46 l-4 -8 h48 l-4 8 q10 10 6 46z" fill="#E9D3A8" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>${T(0,-6,n,'lab mid')}</g>`;
+const factFam=(x,y,a,b,hi=-1)=>{const L=[`${a} × ${b} = ${a*b}`,`${b} × ${a} = ${a*b}`,`${a*b} ÷ ${a} = ${b}`,`${a*b} ÷ ${b} = ${a}`];return box(x,y,230,160,'#fff',16)+L.map((t,k)=>(k===hi?`<rect x="${x+10}" y="${y+16+k*36}" width="210" height="30" rx="8" fill="${C.sun}"/>`:'')+T(x+115,y+38+k*36,t,'lab mid')).join('')};
+
+const S=[
+{part:'learn',title:'Sharing fairly',say:'Hi! Ollie has <b>12 cookies</b> to share with <b>3 friends</b> equally. One for you, one for you, one for you... Each friend gets <b>4</b>. We write <b>12 ÷ 3 = 4</b>. The ÷ sign means "divided by" or "shared into".',
+ draw:()=>G([...Array(12)].map((_,k)=>cookieI(60+(k%6)*30,60+Math.floor(k/6)*30)).join(''),'a-fade',.1)+G(T(135,140,'12 cookies','lab mid mut'),'a-fade',.3)+
+  [0,1,2].map(k=>G(kid(330+k*110,200,[C.sky,C.berry,C.leaf][k])+plate(330+k*110,250,4,cookieI,80),'a-pop',.8+k*.4)).join('')+
+  G(box(100,300,440,70,C.sun,35)+T(320,346,'12 ÷ 3 = 4 each','big mid'),'a-pop',2.2)},
+
+{part:'learn',title:'Making groups',say:'Division can also mean <b>grouping</b>. Ollie has <b>12 cookies</b> and puts <b>4 in each bag</b>. How many bags? Count: 4, 8, 12. That is <b>3 bags</b>. So <b>12 ÷ 4 = 3</b>. Same cookies, different question!',
+ draw:()=>G([...Array(12)].map((_,k)=>cookieI(60+(k%6)*30,60+Math.floor(k/6)*30)).join(''),'a-fade',.1)+G(T(135,140,'12 cookies, 4 in a bag','lab mid mut'),'a-fade',.3)+
+  [0,1,2].map(k=>G(bag(330+k*110,240,'4')+T(330+k*110,275,(k+1)*4,'sm mid acc'),'a-pop',.8+k*.4)).join('')+
+  G(box(100,300,440,70,C.sun,35)+T(320,346,'12 ÷ 4 = 3 bags','big mid'),'a-pop',2.2)},
+
+{part:'learn',title:'Division undoes multiplication',say:'Multiplication and division are <b>opposites</b>, like a lift going up and down. <b>3 × 4 = 12</b> puts 3 groups of 4 together. <b>12 ÷ 4 = 3</b> takes them apart again. If you know one, you know the other!',
+ draw:()=>G(arr(60,80,3,4,C.accent,34,false,0,12),'a-fade',.1)+G(T(114,230,'3 × 4 = 12','h mid'),'a-fade',.4)+
+  G(arrow(240,120,380,120,C.leaf)+T(310,100,'put together','sm mid')+arrow(380,180,240,180,C.bad)+T(310,210,'take apart','sm mid'),'a-fade',.9)+
+  G(box(400,70,210,130,'#fff',16)+T(505,110,'12','big mid')+T(505,150,'in all','lab mid mut'),'a-pop',1.2)+G(T(505,260,'12 ÷ 4 = 3','h mid acc'),'a-fade',1.6)+G(T(320,350,'Opposites!','h mid acc'),'a-fade',2)},
+
+{part:'learn',title:'Fact families',say:'Three numbers, four facts! With 5, 2 and 10 we can write <b>5 × 2 = 10</b>, <b>2 × 5 = 10</b>, <b>10 ÷ 2 = 5</b> and <b>10 ÷ 5 = 2</b>. They are a <b>fact family</b>. Learn one, get three free!',
+ draw:()=>G(`<path d="M320 60 L390 180 L250 180z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(320,110,'10','big mid')+T(282,170,'5','h mid')+T(358,170,'2','h mid'),'a-pop',.2)+G(factFam(60,210,5,2),'a-fade',.8)+G(factFam(350,210,2,5).replace(/<text[\s\S]*?<\/text>/g,'')+T(465,250,'The same family,','lab mid mut')+T(465,280,'written another way','lab mid mut')+T(465,330,'5, 2, 10','h mid acc'),'a-fade',1.2)},
+
+{part:'learn',title:'Dividing by 2 and 10',say:'<b>÷ 2</b> means share between two: it is <b>half</b>. 14 ÷ 2 = 7. <b>÷ 10</b> means make groups of ten: just take away the zero! 70 ÷ 10 = 7. 40 ÷ 10 = 4.',
+ draw:()=>G(box(40,60,270,130,'#fff',16)+T(175,100,'÷ 2 = half','h mid acc')+arr(80,120,2,7,C.sky,26,false,0,9)+T(175,178,'14 ÷ 2 = 7','lab mid'),'a-fade',.2)+
+  G(box(330,60,270,130,'#fff',16)+T(465,100,'÷ 10 = drop the 0','h mid acc')+[0,1,2,3,4,5,6].map(k=>rod(380+k*26,112,5)).join('')+T(465,178,'70 ÷ 10 = 7','lab mid'),'a-fade',.8)+
+  G(T(320,260,'Think: "How many 2s make 14?" or "How many 10s make 70?"','lab mid mut'),'a-fade',1.4)+otter(320,392,.6)},
+
+{part:'learn',title:'Dividing by 3, 4 and 5',say:'To divide, <b>think multiplication</b>. 24 ÷ 3: "3 times what is 24?" 3 × 8 = 24, so 24 ÷ 3 = <b>8</b>. 20 ÷ 4: "4 times what is 20?" <b>5</b>. 35 ÷ 5: "5 times what is 35?" <b>7</b>.',
+ draw:()=>[['24 ÷ 3','3 × ? = 24','3 × 8 = 24','8'],['20 ÷ 4','4 × ? = 20','4 × 5 = 20','5'],['35 ÷ 5','5 × ? = 35','5 × 7 = 35','7']].map(([q,t,f,ans],k)=>G(box(40,40+k*110,560,92,'#fff',16)+T(110,96+k*110,q,'h mid')+arrow(180,90+k*110,220,90+k*110,C.accent)+T(300,96+k*110,t,'lab mid mut')+arrow(380,90+k*110,420,90+k*110,C.accent)+T(500,80+k*110,f,'sm mid')+T(500,112+k*110,'= '+ans,'h mid acc'),'a-fade',.2+k*.4)).join('')},
+
+{part:'try',title:'Share the strawberries',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[[10,2],[12,4],[15,3],[20,5]];let r=0,given=[];
+  const draw=()=>{const [n,k]=Q[r],left=n-given.reduce((p,q)=>p+q,0);let s=T(320,36,`Share ${n} strawberries among ${k} children`,'lab mid acc')+T(80,90,`left: ${left}`,'lab mut');
+   for(let i=0;i<left;i++)s+=strawberryI(60+(i%10)*28,120+Math.floor(i/10)*30);
+   for(let c=0;c<k;c++){const x=80+c*(480/(k-1||1));s+=kid(x,250,[C.sky,C.berry,C.leaf,C.sun,C.grape][c])+plate(x,300,given[c],strawberryI,80)+T(x,345,given[c],'lab mid')}
+   a.q('.play').innerHTML=s};
+  const show=()=>{given=Array(Q[r][1]).fill(0);draw();a.ui.innerHTML='';a.btn('Give one to each',()=>{const [n,k]=Q[r];if(n-given.reduce((p,q)=>p+q,0)>=k){given=given.map(v=>v+1);draw();const left=n-given.reduce((p,q)=>p+q,0);if(left===0){r++;if(r<Q.length){a.confetti();a.say(`<b>${n} ÷ ${k} = ${given[0]}</b>. Each child gets ${given[0]}. Next!`);a.later(show,1800)}else a.win(`<b>${n} ÷ ${k} = ${given[0]}</b>. Fair sharing champion!`)}else a.say(`Each child has ${given[0]}. ${left} left. Keep sharing!`)}},'go');
+   a.say(`Give <b>one strawberry to each child</b>, round and round, until none are left. How many does each child get?`)};show();}},
+
+{part:'try',title:'Fill the bags',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[[12,3],[20,5],[16,4],[30,10]];let r=0,bags=0;
+  const draw=()=>{const [n,per]=Q[r],left=n-bags*per;let s=T(320,36,`${n} cookies, ${per} in each bag`,'lab mid acc')+T(60,90,`left: ${left}`,'lab mut');
+   for(let i=0;i<left;i++)s+=cookieI(60+(i%10)*26,120+Math.floor(i/10)*28);
+   for(let b=0;b<bags;b++)s+=G(bag(80+b*70,290,per),'a-pop');s+=T(320,340,`bags: ${bags}`,'h mid');a.q('.play').innerHTML=s};
+  const show=()=>{bags=0;draw();a.ui.innerHTML='';a.btn('Fill a bag',()=>{const [n,per]=Q[r];if(n-bags*per>=per){bags++;draw();const left=n-bags*per;if(left===0){r++;if(r<Q.length){a.confetti();a.say(`<b>${n} ÷ ${per} = ${bags}</b> bags. Next!`);a.later(show,1800)}else a.win(`<b>${n} ÷ ${per} = ${bags}</b> bags. Grouping genius!`)}else a.say(`${bags} bag${bags>1?'s':''} filled, ${left} cookies left.`)}},'go');
+   a.say(`Put <b>${Q[r][1]} cookies in each bag</b>. How many bags can you fill?`)};show();}},
+
+{part:'try',title:'Complete the fact family',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[[3,5],[4,6],[2,9],[5,7]];let r=0,found=[];
+  const show=()=>{found=[];const [p,q]=Q[r];a.q('.play').innerHTML=T(320,36,`Family ${r+1} of 4: ${p}, ${q}, ${p*q}`,'lab mid acc')+`<path d="M320 60 L380 160 L260 160z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(320,104,p*q,'h mid')+T(288,152,p,'lab mid')+T(352,152,q,'lab mid')+`<g class="ff"></g>`;
+   a.ui.innerHTML='';const facts=[`${p} × ${q} = ${p*q}`,`${q} × ${p} = ${p*q}`,`${p*q} ÷ ${p} = ${q}`,`${p*q} ÷ ${q} = ${p}`],wrong=[`${p*q} ÷ ${p} = ${p}`,`${p} × ${p*q} = ${q}`];
+   [...facts,...wrong].sort(()=>Math.random()-.5).forEach(f=>a.btn(f,b=>{if(found.includes(f))return;if(facts.includes(f)){found.push(f);b.classList.add('ok');b.disabled=true;a.q('.ff').innerHTML=found.map((t,k)=>G(T(320,210+k*34,t,'lab mid'),'a-pop')).join('');
+     if(found.length===4){r++;if(r<Q.length){a.confetti();a.say('<b>All four facts!</b> Next family.');a.later(show,1800)}else a.win('<b>Fact family expert!</b> Three numbers, four facts, every time.')}else a.say(`Yes! ${4-found.length} more to find.`)}
+    else{b.classList.add('no');a.say('That one is not true. Check: does it use all three numbers correctly?')}},'go'));
+   a.say('Tap the <b>four</b> true facts for this family. Two buttons are impostors!')};show();}},
+
+{part:'check',title:'Star check 1',say:'18 cookies are shared equally among 3 children. How many does each child get?',
+ draw:()=>[...Array(18)].map((_,k)=>cookieI(100+(k%9)*32,80+Math.floor(k/9)*32)).join('')+[0,1,2].map(k=>kid(200+k*120,250,[C.sky,C.berry,C.leaf][k])).join(''),
+ quiz:{options:['5','6','15'],answer:'6',why:'<b>18 ÷ 3 = 6</b>, because 3 × 6 = 18.',hint:'Think: 3 times what makes 18?'}},
+
+{part:'check',title:'Star check 2',say:'Arjun has 20 stickers. He puts 4 on each page. How many pages does he fill?',
+ draw:()=>[...Array(20)].map((_,k)=>G(starI(90+(k%10)*50,100+Math.floor(k/10)*50),'a-pop',k*.03)).join('')+T(320,230,'20 stickers, 4 on each page','lab mid mut'),
+ quiz:{options:['4','5','16'],answer:'5',why:'<b>20 ÷ 4 = 5</b> pages. Count in 4s: 4, 8, 12, 16, 20.',hint:'How many 4s make 20?'}},
+
+{part:'check',title:'Star check 3',say:'Which fact belongs to the same family as <b>4 × 5 = 20</b>?',
+ draw:()=>`<path d="M320 60 L390 180 L250 180z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(320,110,'20','big mid')+T(282,170,'4','h mid')+T(358,170,'5','h mid')+T(320,250,'4 × 5 = 20','h mid'),
+ quiz:{options:['20 ÷ 4 = 5','20 ÷ 5 = 5','5 × 5 = 20'],answer:'20 ÷ 4 = 5',why:'A fact family uses the same three numbers: 4, 5 and 20. <b>20 ÷ 4 = 5</b>.',hint:'The family must use 4, 5 and 20, and be true.'}},
+
+{part:'check',title:'Star check 4',say:'What is <b>27 ÷ 3</b>?',
+ draw:()=>T(320,130,'27 ÷ 3','mid','style="font-size:80px;font-weight:800"')+T(320,190,'3 × ? = 27','lab mid acc')+otter(320,392,.8),
+ quiz:{options:['8','9','24'],answer:'9',why:'3 × 9 = 27, so <b>27 ÷ 3 = 9</b>.',hint:'Count in 3s until you reach 27.'}},
+
+{part:'check',title:'Star check 5',say:'Mei has 40 marbles in bags of 10. Zack has 40 marbles in bags of 5. Who has <b>more bags</b>?',
+ draw:()=>G(T(160,70,'Mei: 40 ÷ 10','h mid')+[0,1,2,3].map(k=>bag(100+k*40,160,'10')).join(''),'a-fade',.1)+G(T(480,70,'Zack: 40 ÷ 5','h mid')+[...Array(8)].map((_,k)=>bag(360+k*34,160,'5')).join(''),'a-fade',.5),
+ quiz:{options:['Mei','Zack','The same'],answer:'Zack',why:'Mei: 40 ÷ 10 = 4 bags. Zack: 40 ÷ 5 = <b>8</b> bags. Smaller groups means more bags!',hint:'Work out both divisions.'}},
+
+{part:'check',title:'You did it!',say:'Fantastic! You can <b>share</b> and <b>group</b>, use the ÷ sign, and link division to multiplication with fact families. You have finished all the P2 number work!',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+T(120,230,'÷','mid','style="font-size:70px;font-weight:800;fill:#8E6BD8"')+T(520,230,'×','mid','style="font-size:70px;font-weight:800;fill:#4FAE63"'),'a-pop',.3)+T(320,60,'Division superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

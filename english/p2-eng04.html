@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Pronouns & Joining Words</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 English · Deck 4</p>
+      <h1>Pronouns &amp; joining words</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 English, following the MOE English Language Syllabus (STELLAR). Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* English 4: Pronouns and joining words */
+const S=[
+{part:'learn',title:'Words that stand in',say:'Hi! Listen: "Mei likes Mei\'s dog. Mei walks Mei\'s dog every day." Too many Meis! <b>Pronouns</b> stand in for nouns: "Mei likes <b>her</b> dog. <b>She</b> walks <b>it</b> every day." Much better!',
+ draw:()=>G(box(40,50,560,80,'#FDE7E5',16)+prose(60,84,'Mei likes Mei\'s dog. Mei walks Mei\'s dog every day.',50,'lab',26),'a-fade',.1)+G(arrow(320,140,320,175,C.accent),'a-fade',.8)+
+  G(box(40,190,560,80,'#E6F6EA',16)+prose(60,224,'Mei likes her dog. She walks it every day.',50,'lab',26),'a-pop',1.1)+G(tagPill(60,236,'her',C.grape,60)+tagPill(130,236,'She',C.grape,60)+tagPill(200,236,'it',C.grape,50)+T(270,256,'← pronouns','sm mut'),'a-pop',1.6)+
+  G(T(320,330,'pronoun = a word that stands in for a noun','lab mid acc'),'a-fade',2)+otter(570,395,.5)},
+
+{part:'learn',title:'I, you, he, she, it, we, they',say:'These pronouns are the <b>doers</b> in a sentence: <b>I</b> run, <b>you</b> run, <b>he</b> runs, <b>she</b> runs, <b>it</b> runs, <b>we</b> run, <b>they</b> run. Use <b>he</b> for a boy, <b>she</b> for a girl, <b>it</b> for a thing or animal, and <b>they</b> for more than one.',
+ draw:()=>[['I',`<text x="0" y="8" class="h mid">me!</text>`],['you',arrow(-20,-10,20,-10)],['he',boyI(0,22)],['she',girlI(0,22)],['it',ballI(0,0,1.2)],['we',boyI(-16,22,C.leaf)+girlI(16,22,C.grape)],['they',boyI(-20,22)+girlI(0,22)+boyI(20,22,C.sun)]]
+  .map(([p,ic],k)=>{const x=55+k*88;return G(box(x-40,60,80,170,'#fff',14)+`<g transform="translate(${x} 130)">${ic}</g>`+T(x,210,p,'h mid acc'),'a-pop',.1+k*.15)}).join('')+
+  G(box(40,260,560,100,C.sun,16)+T(320,295,'one person: he / she / it + verb-s','lab mid')+T(320,330,'more than one: we / they + verb','lab mid'),'a-pop',1.4)},
+
+{part:'learn',title:'Me, him, her, us, them',say:'When the pronoun is <b>receiving</b> the action, it changes! Not "Give it to <b>I</b>" but "Give it to <b>me</b>." I → me, he → him, she → her, we → us, they → them. <b>You</b> and <b>it</b> stay the same.',
+ draw:()=>T(150,50,'doer','h mid mut')+T(490,50,'receiver','h mid acc')+[['I','me'],['you','you'],['he','him'],['she','her'],['it','it'],['we','us'],['they','them']].map(([a,b],k)=>G(box(80,70+k*40,140,34,'#fff',10)+T(150,94+k*40,a,'lab mid')+arrow(240,87+k*40,400,87+k*40,C.ink)+box(420,70+k*40,140,34,a===b?'#fff':C.sun,10)+T(490,94+k*40,b,'lab mid'),'a-fade',.1+k*.12)).join('')+
+  G(T(320,365,'"She gave him a gift." · "Come with us!"','lab mid acc'),'a-fade',1.4)},
+
+{part:'learn',title:'Whose is it?',say:'<b>Possessive</b> words show who owns something. Before a noun: <b>my</b> bag, <b>your</b> bag, <b>his</b>, <b>her</b>, <b>its</b>, <b>our</b>, <b>their</b> bag. On their own: "The bag is <b>mine</b>, <b>yours</b>, <b>his</b>, <b>hers</b>, <b>ours</b>, <b>theirs</b>." Careful: <b>its</b> (owning) has no apostrophe!',
+ draw:()=>T(170,50,'before a noun','lab mid mut')+T(470,50,'on its own','lab mid mut')+[['my bag','mine'],['your bag','yours'],['his bag','his'],['her bag','hers'],['its tail','—'],['our bag','ours'],['their bag','theirs']].map(([a,b],k)=>G(box(60,66+k*38,220,32,'#fff',10)+T(170,89+k*38,a,'lab mid')+box(360,66+k*38,220,32,'#FFF4D6',10)+T(470,89+k*38,b,'lab mid'),'a-fade',.1+k*.12)).join('')+
+  G(T(320,355,'its = belongs to it · it\'s = it is','sm mid acc'),'a-fade',1.3)},
+
+{part:'learn',title:'Myself, yourself, themselves',say:'<b>Reflexive</b> pronouns bounce back to the doer: "I hurt <b>myself</b>." "She made the cake <b>herself</b>." "The children dressed <b>themselves</b>." They end in <b>-self</b> (one) or <b>-selves</b> (more than one).',
+ draw:()=>[['I','myself'],['you','yourself / yourselves'],['he','himself'],['she','herself'],['it','itself'],['we','ourselves'],['they','themselves']].map(([a,b],k)=>G(T(130,80+k*38,a,'lab end')+arrow(150,74+k*38,200,74+k*38,C.accent)+T(215,80+k*38,b,'lab'),'a-fade',.1+k*.12)).join('')+
+  G(`<path d="M470 110 q60 -40 60 20 q0 60 -60 20" fill="none" stroke="${C.accent}" stroke-width="4"/>`+arrow(470,150,455,145,C.accent)+girlI(440,190)+T(500,250,'She made it','lab mid')+T(500,276,'herself.','h mid acc'),'a-fade',1.2)},
+
+{part:'learn',title:'This, that, these, those',say:'<b>This</b> and <b>these</b> point to things <b>near</b> you. <b>That</b> and <b>those</b> point to things <b>far</b> away. One thing: this / that. Many: these / those. "<b>This</b> apple is mine. <b>Those</b> apples are yours."',
+ draw:()=>T(170,50,'near','h mid acc')+T(470,50,'far','h mid acc')+`<line x1="320" y1="40" x2="320" y2="300" stroke="${C.line}" stroke-width="3" stroke-dasharray="6 6"/>`+
+  G(boyI(120,200)+arrow(140,170,180,170,C.ink)+ballI(200,165,1.2)+T(200,215,'this ball','lab mid'),'a-pop',.2)+G(arrow(140,130,170,100,C.ink)+[0,1,2].map(k=>ballI(200+k*30,90,.8)).join('')+T(230,130,'these balls','lab mid'),'a-pop',.6)+
+  G(boyI(380,200,C.leaf)+arrow(400,170,540,170,C.ink)+ballI(570,165,.9)+T(570,215,'that ball','lab mid'),'a-pop',1)+G(arrow(400,130,530,100,C.ink)+[0,1,2].map(k=>ballI(555+k*22,90,.6)).join('')+T(575,130,'those balls','lab mid'),'a-pop',1.4)+
+  G(box(40,320,560,56,C.sun,28)+T(320,356,'one: this / that · many: these / those','lab mid'),'a-pop',1.8)},
+
+{part:'learn',title:'Joining words',say:'<b>Conjunctions</b> join ideas. <b>and</b> adds: "I like tea <b>and</b> cake." <b>but</b> shows a difference: "I like tea <b>but</b> not coffee." <b>because</b> gives a reason: "I stayed home <b>because</b> it rained." <b>so</b> shows a result: "It rained, <b>so</b> I stayed home." <b>or</b> gives a choice.',
+ draw:()=>[['and','adds','I like tea and cake.',C.leaf],['but','shows a difference','It is sunny but cold.',C.accent],['because','gives a reason','I ran because I was late.',C.berry],['so','shows a result','I was late, so I ran.',C.sky],['or','gives a choice','Tea or coffee?',C.grape]].map(([c,w,e,col],k)=>G(box(40,30+k*68,560,58,'#fff',14)+`<rect x="40" y="${30+k*68}" width="130" height="58" rx="14" fill="${col}"/>`+T(105,66+k*68,c,'h mid','style="fill:#fff"')+T(190,54+k*68,w,'sm mut')+T(190,78+k*68,e,'lab'),'a-fade',.1+k*.2)).join('')},
+
+{part:'learn',title:'Four kinds of sentence',say:'A <b>statement</b> tells: "The cat is asleep." A <b>question</b> asks: "Is the cat asleep?" A <b>command</b> tells someone to do something: "Wake the cat." An <b>exclamation</b> shows strong feeling: "What a lazy cat!" Each ends with its own mark.',
+ draw:()=>[['Statement','tells something','The cat is asleep.','.',C.sky],['Question','asks something','Is the cat asleep?','?',C.grape],['Command','tells you to do it','Wake the cat.','.',C.accent],['Exclamation','strong feeling','What a lazy cat!','!',C.berry]].map(([t,w,e,m,col],k)=>{const x=24+(k%2)*300,y=40+Math.floor(k/2)*160;return G(box(x,y,292,140,'#fff',16)+`<circle cx="${x+40}" cy="${y+40}" r="24" fill="${col}"/>`+T(x+40,y+50,m,'h mid','style="fill:#fff"')+T(x+80,y+36,t,'h')+T(x+80,y+60,w,'sm mut')+T(x+146,y+108,e,'lab mid'),'a-pop',.1+k*.25)}).join('')},
+
+{part:'try',title:'Swap in a pronoun',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['Arjun kicked the ball.','Arjun','He',['She','They']],['Mei and Hana are sisters.','Mei and Hana','They',['She','We']],['The dog wagged the dog\'s tail.','the dog\'s','its',['his','it\'s']],['Give the book to Zack.','Zack','him',['he','his']],['The cake is Mei\'s.','Mei\'s','hers',['her','she']],['Zack and I went home.','Zack and I','We',['They','Us']]];let r=0,busy=false;
+  const show=()=>{busy=false;const [s,tgt,ans]=Q[r];a.q('.play').innerHTML=T(320,40,`${r+1} of 6`,'sm mid mut')+prose(40,120,s,40,'h',36)+T(320,220,`Replace "${tgt}" with a pronoun.`,'lab mid acc')+otter(560,395,.5);
+   a.ui.innerHTML='';[ans,...Q[r][3]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===ans){busy=true;b.classList.add('ok');r++;const out=s.replace(tgt,ans);if(r<Q.length){a.confetti();a.say(`<b>${out}</b>`);a.later(show,1500)}else a.win(`<b>${out}</b> Pronoun pro!`)}else{b.classList.add('no');a.say('Think: boy or girl? One or many? Doer or receiver?')}},'go'));
+   a.say('Which pronoun can stand in for the <b>highlighted</b> words?')};show();}},
+
+{part:'try',title:'Join the sentences',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['I was tired','I went to bed early.','so',['but','or']],['Hana likes durian','Zack does not.','but',['and','because']],['We stayed indoors','it was raining.','because',['so','or']],['Would you like rice','noodles?','or',['and','so']],['Mei fed the cat','Arjun washed the dishes.','and',['because','or']]];let r=0,busy=false;
+  const show=()=>{busy=false;const [p,q,ans]=Q[r];a.q('.play').innerHTML=T(320,40,`${r+1} of 5`,'sm mid mut')+box(40,90,560,60,'#fff',14)+T(320,128,p,'lab mid')+box(230,170,180,60,'#FFF4D6',14)+T(320,208,'?','h mid acc')+box(40,250,560,60,'#fff',14)+T(320,288,q,'lab mid');
+   a.ui.innerHTML='';[ans,...Q[r][3]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===ans){busy=true;b.classList.add('ok');r++;const why={so:'The second part is a result.',but:'The two parts are different.',because:'The second part gives the reason.',or:'It is a choice.',and:'It adds another idea.'}[ans];if(r<Q.length){a.confetti();a.say(`<b>${p} ${ans} ${q}</b> ${why}`);a.later(show,1800)}else a.win(`<b>${p} ${ans} ${q}</b> ${why} Joining champion!`)}else{b.classList.add('no');a.say('Read both parts. Is the second part a reason, a result, a difference, a choice, or just another idea?')}},'go'));
+   a.say('Which <b>joining word</b> connects these two ideas best?')};show();}},
+
+{part:'try',title:'What kind of sentence?',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['Please close the door','Command','.'],['Where is my bag','Question','?'],['What a beautiful rainbow','Exclamation','!'],['My brother is seven years old','Statement','.'],['Do you like chicken rice','Question','?'],['Sit down quietly','Command','.'],['I can\'t believe we won','Exclamation','!']];let r=0,busy=false;
+  const show=()=>{busy=false;const [s,kind,m]=Q[r];a.q('.play').innerHTML=T(320,40,`${r+1} of 7`,'sm mid mut')+box(40,100,560,90,'#fff',16)+T(320,156,s+' ___','h mid')+otter(320,392,.7);
+   a.ui.innerHTML='';['Statement','Question','Command','Exclamation'].forEach(o=>a.btn(o,b=>{if(busy)return;if(o===kind){busy=true;b.classList.add('ok');a.q('.play').innerHTML=T(320,40,`${r+1} of 7`,'sm mid mut')+box(40,100,560,90,'#E6F6EA',16)+T(320,156,s+m,'h mid')+otter(320,392,.7);r++;if(r<Q.length){a.confetti();a.say(`A <b>${kind.toLowerCase()}</b>, so it ends with <b>${m}</b>`);a.later(show,1600)}else a.win(`A <b>${kind.toLowerCase()}</b>, so it ends with <b>${m}</b> Sentence sorter!`)}else{b.classList.add('no');a.say('Does it tell, ask, give an order, or show strong feeling?')}},'go'));
+   a.say('What kind of sentence is this? Tap the type.')};show();}},
+
+{part:'check',title:'Star check 1',say:'Fill in: "Hana lost ___ umbrella on the bus."',
+ draw:()=>prose(40,130,'Hana lost ______ umbrella on the bus.',36,'h',38)+girlI(320,300,C.grape),
+ quiz:{options:['she','her','hers'],answer:'her',why:'Before a noun (umbrella) we use <b>her</b>. "Hers" stands alone; "she" is the doer.',hint:'The word comes right before "umbrella". Which form goes before a noun?'}},
+
+{part:'check',title:'Star check 2',say:'Fill in: "The teacher gave ___ some homework." (Zack and me)',
+ draw:()=>prose(40,130,'The teacher gave ______ some homework.',36,'h',38)+boyI(280,300)+boyI(360,300,C.leaf),
+ quiz:{options:['we','us','they'],answer:'us',why:'Zack and I are <b>receiving</b> the homework, so we use <b>us</b>.',hint:'Are they doing the giving or receiving it?'}},
+
+{part:'check',title:'Star check 3',say:'Fill in: "I wanted to play outside, ___ it started to rain."',
+ draw:()=>prose(40,130,'I wanted to play outside, ______ it started to rain.',40,'h',38)+`<path d="M420 230 q40 -30 80 0 q40 -30 60 10" fill="none" stroke="${C.sky}" stroke-width="4"/>`+[0,1,2].map(k=>`<line x1="${450+k*30}" y1="250" x2="${445+k*30}" y2="275" stroke="${C.sky}" stroke-width="3" stroke-linecap="round"/>`).join(''),
+ quiz:{options:['and','but','because'],answer:'but',why:'The rain is a <b>difference</b> from what I wanted, so <b>but</b>.',hint:'Did the rain help my plan, or get in the way?'}},
+
+{part:'check',title:'Star check 4',say:'Which sentence is a <b>command</b>?',
+ draw:()=>otter(320,392,.8)+T(320,120,'Which one gives an order?','lab mid mut'),
+ quiz:{options:['Are you ready?','Put on your shoes.','We are going out.'],answer:'Put on your shoes.',why:'<b>Put on your shoes.</b> tells someone what to do. It starts with the verb.',hint:'A command often starts with a doing word.'}},
+
+{part:'check',title:'Star check 5',say:'Fill in: "Look at ___ birds flying far away in the sky!"',
+ draw:()=>prose(40,130,'Look at ______ birds flying far away in the sky!',40,'h',38)+[0,1,2,3].map(k=>`<path d="M${420+k*40} ${240+(k%2)*15} q8 -8 16 0 q8 -8 16 0" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`).join(''),
+ quiz:{options:['this','these','those'],answer:'those',why:'Many birds, <b>far away</b>: <b>those</b>.',hint:'Are the birds near or far? One or many?'}},
+
+{part:'check',title:'You did it!',say:'Excellent! You can use <b>pronouns</b> instead of repeating names, show who owns what, <b>join</b> ideas with and, but, because, so and or, and spot the <b>four kinds</b> of sentence.',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+T(120,230,'she','h mid acc')+T(520,230,'because','h mid acc'),'a-pop',.3)+T(320,60,'Pronoun superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

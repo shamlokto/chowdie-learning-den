@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Numbers to 1000</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 Maths · Deck 1</p>
+      <h1>Numbers to 1000</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Mathematics, following the MOE 2021 syllabus. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared number helpers: base-ten blocks, place-value chart, number words */
+const HUNDRED_C='#5BB8E8',TEN_C='#4FAE63',ONE_C='#FFC83D';
+function cube(x,y,s=14,col=ONE_C){return `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="2" fill="${col}" stroke="${C.ink}" stroke-width="2"/>`}
+function rod(x,y,s=14,col=TEN_C){let r=`<rect x="${x}" y="${y}" width="${s}" height="${s*10}" rx="2" fill="${col}" stroke="${C.ink}" stroke-width="2"/>`;for(let k=1;k<10;k++)r+=`<line x1="${x}" y1="${y+k*s}" x2="${x+s}" y2="${y+k*s}" stroke="${C.ink}" stroke-width="1" opacity=".5"/>`;return r}
+function flat(x,y,s=14,col=HUNDRED_C){let r=`<rect x="${x}" y="${y}" width="${s*10}" height="${s*10}" rx="3" fill="${col}" stroke="${C.ink}" stroke-width="2"/>`;for(let k=1;k<10;k++)r+=`<line x1="${x}" y1="${y+k*s}" x2="${x+s*10}" y2="${y+k*s}" stroke="${C.ink}" stroke-width="1" opacity=".4"/><line x1="${x+k*s}" y1="${y}" x2="${x+k*s}" y2="${y+s*10}" stroke="${C.ink}" stroke-width="1" opacity=".4"/>`;return r}
+/* draw h flats, t rods, o cubes starting at x,y; s = unit size; returns svg + width used */
+function blocks(x,y,h,t,o,s=11,anim=true,d0=0){let out='',cx=x;
+  for(let k=0;k<h;k++){out+=G(flat(cx,y,s),anim?'a-drop':'',d0+k*.12);cx+=s*10+8}
+  for(let k=0;k<t;k++){out+=G(rod(cx,y,s),anim?'a-drop':'',d0+h*.12+k*.08);cx+=s+6}
+  if(t)cx+=6;
+  for(let k=0;k<o;k++){out+=G(cube(cx+(k%5)*(s+3),y+Math.floor(k/5)*(s+3),s),anim?'a-pop':'',d0+h*.12+t*.08+k*.06)}
+  return out}
+const ONES=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+function words(n){if(n===1000)return 'one thousand';const h=Math.floor(n/100),r=n%100;let s=h?ONES[h]+' hundred':'';if(r){if(s)s+=' and ';s+=r<20?ONES[r]:TENS[Math.floor(r/10)]+(r%10?'-'+ONES[r%10]:'')}return s||'zero'}
+function pvChart(x,y,n,w=70,showVals=true,d=0){const h=Math.floor(n/100),t=Math.floor(n/10)%10,o=n%10;
+  let s=box(x,y,w*3,88,'#fff',12);for(let k=1;k<3;k++)s+=`<line x1="${x+k*w}" y1="${y}" x2="${x+k*w}" y2="${y+88}" stroke="${C.ink}" stroke-width="2"/>`;
+  s+=`<line x1="${x}" y1="${y+30}" x2="${x+3*w}" y2="${y+30}" stroke="${C.ink}" stroke-width="2"/>`;
+  [['Hundreds',HUNDRED_C],['Tens',TEN_C],['Ones',ONE_C]].forEach(([l,c],k)=>s+=`<rect x="${x+k*w+2}" y="${y+2}" width="${w-4}" height="27" rx="${k===0?10:0}" fill="${c}" opacity=".5"/>`+T(x+k*w+w/2,y+22,l,'sm mid'));
+  if(showVals)[h,t,o].forEach((v,k)=>s+=G(T(x+k*w+w/2,y+74,v,'big mid'),'a-pop',d+k*.2));
+  return s}
+const digitTiles=(x,y,n,gap=64,size=56)=>String(n).split('').map((ch,k)=>box(x+k*gap,y,size,size,'#fff',10)+T(x+k*gap+size/2,y+size*.72,ch,'big mid')).join('');
+/* Deck 1: Numbers to 1000 */
+const S=[
+{part:'learn',title:'Bigger numbers!',say:'Hi, I\'m <b>Ollie</b>! In Primary 1 we counted to <b>100</b>. This year we go all the way to <b>1000</b>. That\'s ten times more! Let\'s meet the blocks that help us: a <b>one</b>, a <b>ten</b>, and a <b>hundred</b>.',
+ draw:()=>otter(100,380,1.4,{wave:true})+G(cube(250,250,30)+T(265,310,'1','h mid')+T(265,336,'one','lab mid'),'a-pop',.3)+G(rod(330,120,16)+T(338,310,'10','h mid')+T(338,336,'ten','lab mid'),'a-pop',.7)+G(flat(420,90,17)+T(505,310,'100','h mid')+T(505,336,'hundred','lab mid'),'a-pop',1.1)+
+  G(T(320,50,'10 ones = 1 ten · 10 tens = 1 hundred','lab mid acc'),'a-fade',1.6)},
+
+{part:'learn',title:'Counting in hundreds',say:'Count the hundred-flats with me: <b>100, 200, 300, 400, 500</b>. When we have <b>10 hundreds</b>, that makes <b>one thousand</b>. We write it <b>1000</b>.',
+ draw:()=>[0,1,2,3,4].map(k=>G(flat(40+k*118,70,9)+T(85+k*118,190,(k+1)*100,'h mid acc'),'a-pop',.2+k*.35)).join('')+
+  G(box(120,250,400,70,C.sun,35)+T(320,296,'10 hundreds = 1000','h mid'),'a-pop',2.2)+G(T(320,365,'one thousand','lab mid mut'),'a-fade',2.5)},
+
+{part:'learn',title:'Counting in tens',say:'We can also count in <b>tens</b> past 100. Start at 230: <b>240, 250, 260, 270</b>. Only the tens digit changes... until we reach a new hundred!',
+ draw:()=>{const seq=[230,240,250,260,270,280,290,300];return seq.map((v,k)=>G(box(24+k*76,150,68,60,v===300?C.sun:'#fff',12)+T(58+k*76,190,v,'lab mid','style="font-size:19px"'),'a-pop',.1+k*.25)).join('')+
+  [0,1,2,3,4,5,6].map(k=>G(`<path d="M${92+k*76} 140 q22 -30 44 0" fill="none" stroke="${C.accent}" stroke-width="3"/>`+T(114+k*76,118,'+10','sm mid acc'),'a-fade',.3+k*.25)).join('')+
+  G(T(320,290,'290 + 10 = 300','h mid acc')+T(320,322,'a new hundred!','lab mid'),'a-fade',2.2)+otter(560,395,.6)}},
+
+{part:'learn',title:'Hundreds, tens and ones',say:'Here is <b>346</b>. It has <b>3 hundreds</b>, <b>4 tens</b> and <b>6 ones</b>. Each digit has a <b>place</b>, and the place tells us its <b>value</b>: 300 + 40 + 6.',
+ draw:()=>blocks(30,40,3,4,6,10)+pvChart(130,230,346,100,true,1.4)+G(T(320,360,'300 + 40 + 6 = 346','h mid acc'),'a-fade',2.2)},
+
+{part:'learn',title:'The sneaky zero',say:'Look at <b>407</b>. There are <b>no tens</b>! We can\'t leave the tens place empty, so we write a <b>0</b> to hold the place. 407 is <b>four hundred and seven</b>, not forty-seven!',
+ draw:()=>blocks(30,40,4,0,7,10)+pvChart(130,230,407,100,true,1.2)+G(`<circle cx="330" cy="294" r="34" fill="none" stroke="${C.bad}" stroke-width="5" stroke-dasharray="8 6"/>`+T(330,360,'0 holds the place','lab mid acc'),'a-pop',2)},
+
+{part:'learn',title:'Numbers in words',say:'We say the hundreds, then <b>"and"</b>, then the rest. <b>528</b> is "five hundred <b>and</b> twenty-eight". <b>260</b> is "two hundred and sixty". <b>603</b> is "six hundred and three".',
+ draw:()=>[[528,70],[260,180],[603,290]].map(([n,y],k)=>G(box(40,y-40,120,64,C.sun,14)+T(100,y+4,n,'h mid')+arrow(170,y-8,200,y-8,C.ink)+T(215,y,words(n),'lab')+T(215,y+26,'5 hundreds, 2 tens, 8 ones'.replace(/.*/,k===0?'5 hundreds, 2 tens, 8 ones':k===1?'2 hundreds, 6 tens, 0 ones':'6 hundreds, 0 tens, 3 ones'),'sm mut'),'a-fade',.2+k*.5)).join('')+otter(570,395,.55)},
+
+{part:'learn',title:'Counting on and back',say:'Counting on in hundreds: 125, <b>225, 325, 425</b>. Only the hundreds digit changes! Counting back in tens from 572: <b>562, 552, 542</b>.',
+ draw:()=>T(60,60,'+100 each time','lab acc')+[125,225,325,425].map((v,k)=>G(box(60+k*130,80,110,60,'#fff',12)+T(115+k*130,120,v,'h mid'),'a-pop',.1+k*.3)).join('')+
+  T(60,210,'−10 each time','lab acc')+[572,562,552,542].map((v,k)=>G(box(60+k*130,230,110,60,'#fff',12)+T(115+k*130,270,v,'h mid'),'a-pop',1.4+k*.3)).join('')+
+  G(T(320,350,'Which digit changes? Watch carefully!','lab mid mut'),'a-fade',2.6)},
+
+{part:'try',title:'Build the number',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const goals=[253,406,380,1000];let g=0,h=0,t=0,o=0;
+  const draw=()=>{const n=h*100+t*10+o;a.q('.play').innerHTML=T(320,36,`Build ${goals[g]}`,'h mid acc')+blocks(20,60,Math.min(h,10),t,o,h>6?5:8,false)+pvChart(130,250,n,100,true,0)+T(320,370,'you have: '+n,'lab mid mut')};
+  draw();a.say(`Tap the buttons to build <b>${goals[g]}</b>. Think: how many hundreds, tens and ones?`);
+  a.btn('+100',()=>{if(h<10){h++;draw()}},'go');a.btn('+10',()=>{if(t<9){t++;draw()}},'go');a.btn('+1',()=>{if(o<9){o++;draw()}},'go');a.btn('Clear',()=>{h=t=o=0;draw()});
+  a.btn('Check',()=>{const n=h*100+t*10+o;if(n===goals[g]){g++;if(g<goals.length){a.confetti();a.say(`<b>Yes!</b> ${n} = ${h} hundreds, ${t} tens, ${o} ones. Next!`);h=t=o=0;a.later(()=>{draw();a.say(`Now build <b>${goals[g]}</b>.`)},1500)}else a.win('<b>Block master!</b> You built all four numbers, even 1000 = 10 hundreds!')}
+   else a.say(n<goals[g]?`${n} is too small. You need <b>${goals[g]-n}</b> more.`:`${n} is too big. Tap Clear and try again.`)});}},
+
+{part:'try',title:'Read the number',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[[417,'four hundred and seventeen','four hundred and seventy','forty-seven'],[690,'six hundred and ninety','six hundred and nine','sixty-nine'],[305,'three hundred and five','three hundred and fifty','thirty-five'],[1000,'one thousand','one hundred','ten hundred']];let r=0,busy=false;
+  const show=()=>{busy=false;const [n]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 4`,'sm mid mut')+digitTiles(320-String(n).length*34,80,n,68,60)+T(320,200,'How do we say it?','lab mid mut')+otter(320,392,.75);
+   a.ui.innerHTML='';const opts=Q[r].slice(1).sort(()=>Math.random()-.5);opts.forEach(w=>a.btn(w,b=>{if(busy)return;if(w===Q[r][1]){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>Yes!</b> ${n} is "${w}".`);a.later(show,1600)}else a.win(`<b>Word wizard!</b> ${n} is "${w}".`)}else{b.classList.add('no');a.say('Look at each place: hundreds, tens, ones. Is there a zero holding a place?')}},'go'));
+   a.say('Tap the correct words for this number.')};show();}},
+
+{part:'try',title:'Fill the missing numbers',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[{seq:[340,350,360,null,380],ans:370,step:'+10'},{seq:[215,315,null,515,615],ans:415,step:'+100'},{seq:[800,790,780,770,null],ans:760,step:'−10'},{seq:[null,600,700,800,900],ans:500,step:'+100'}];let r=0,busy=false;
+  const show=()=>{busy=false;const q=Q[r];a.q('.play').innerHTML=T(320,36,`Pattern ${r+1} of 4`,'sm mid mut')+q.seq.map((v,k)=>G(box(40+k*116,120,100,70,v===null?'#FFF4D6':'#fff',12)+T(90+k*116,166,v===null?'?':v,'h mid',v===null?'style="fill:#B9471A"':''),'a-pop',k*.1)).join('')+otter(320,392,.75);
+   a.ui.innerHTML='';const opts=[q.ans,q.ans+(q.step.includes('100')?10:100),q.ans+(q.step.startsWith('+')?-20:20)].sort(()=>Math.random()-.5);
+   opts.forEach(o=>a.btn(o,b=>{if(busy)return;if(o===q.ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>Yes!</b> The rule is <b>${q.step}</b>, so the missing number is ${o}.`);a.later(show,1800)}else a.win(`<b>Pattern pro!</b> The rule was ${q.step}: ${o}.`)}else{b.classList.add('no');a.say('Find the jump between two numbers you can see. Then use the same jump.')}},'go'));
+   a.say('What number is missing? First find the <b>rule</b>.')};show();}},
+
+{part:'check',title:'Star check 1',say:'What number do the blocks show?',
+ draw:()=>blocks(30,60,2,5,3,11),
+ quiz:{options:['235','253','523'],answer:'253',why:'2 hundreds, 5 tens, 3 ones = <b>253</b>.',hint:'Count the big flats first, then the rods, then the cubes.'}},
+
+{part:'check',title:'Star check 2',say:'In <b>682</b>, what is the value of the digit <b>8</b>?',
+ draw:()=>digitTiles(200,80,682,80,72)+G(`<circle cx="316" cy="116" r="46" fill="none" stroke="${C.accent}" stroke-width="5"/>`,'a-pop',.5)+pvChart(170,230,682,100,false),
+ quiz:{options:['8','80','800'],answer:'80',why:'The 8 is in the <b>tens</b> place, so it stands for 8 tens = <b>80</b>.',hint:'Which place is the 8 in: hundreds, tens or ones?'}},
+
+{part:'check',title:'Star check 3',say:'Which number is <b>"five hundred and four"</b>?',
+ draw:()=>T(320,120,'five hundred and four','h mid')+otter(320,392,.8),
+ quiz:{options:['54','540','504'],answer:'504',why:'5 hundreds, 0 tens, 4 ones. The zero holds the tens place: <b>504</b>.',hint:'How many tens are there? Remember the sneaky zero.'}},
+
+{part:'check',title:'Star check 4',say:'What comes next? 455, 465, 475, ___',
+ draw:()=>[455,465,475,'?'].map((v,k)=>G(box(80+k*125,130,105,70,v==='?'?'#FFF4D6':'#fff',12)+T(132+k*125,176,v,'h mid',v==='?'?'style="fill:#B9471A"':''),'a-pop',k*.15)).join(''),
+ quiz:{options:['476','485','575'],answer:'485',why:'The numbers go up by <b>10</b> each time. 475 + 10 = <b>485</b>.',hint:'Which digit is changing? By how much?'}},
+
+{part:'check',title:'Star check 5',say:'How many hundreds make <b>1000</b>?',
+ draw:()=>T(320,120,'1000','mid','style="font-size:90px;font-weight:800"')+T(320,170,'one thousand','lab mid mut')+otter(320,392,.8),
+ quiz:{options:['10','100','1000'],answer:'10',why:'<b>10 hundreds</b> = 1000. Count: 100, 200, ... 900, 1000.',hint:'Count in hundreds on your fingers.'}},
+
+{part:'check',title:'You did it!',say:'Great counting! You can read and build numbers all the way to <b>1000</b>. Remember: every digit has a <b>place</b>, and a zero can hold a place.',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+flat(80,180,6)+rod(500,170,8)+cube(560,200,20),'a-pop',.3)+T(320,60,'Number superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

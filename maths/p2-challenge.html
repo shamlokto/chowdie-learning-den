@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Challenge Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 Maths · Stretch deck</p>
+      <h1>Challenge Quest</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Mathematics, following the MOE 2021 syllabus. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared fraction helpers */
+function frac(x,y,n,d,size=40,col=C.ink){ // stacked fraction centred at x, line at y
+  return `<g>${T(x,y-size*.18,n,'mid',`style="font-size:${size}px;font-weight:800;fill:${col}"`)}<line x1="${x-size*.42}" y1="${y}" x2="${x+size*.42}" y2="${y}" stroke="${col}" stroke-width="${Math.max(3,size/12)}" stroke-linecap="round"/>${T(x,y+size*.82,d,'mid',`style="font-size:${size}px;font-weight:800;fill:${col}"`)}</g>`;
+}
+const FR=(n,d)=>`<span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-size:20px"><span>${n}</span><span style="border-top:3px solid currentColor;padding-top:2px;margin-top:2px;min-width:1.2em;text-align:center">${d}</span></span>`;
+const fr=(n,d)=>`<b>${n}/${d}</b>`;
+function pie(cx,cy,r,d,k,col=C.berry,cls=''){ // d equal slices, first k shaded
+  if(d===1) return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${k?col:'#fff'}" stroke="${C.ink}" stroke-width="3"/>`;
+  let s='';for(let i=0;i<d;i++){const a1=(i/d)*2*Math.PI-Math.PI/2,a2=((i+1)/d)*2*Math.PI-Math.PI/2;
+    s+=`<path class="${cls}" data-i="${i}" d="M${cx} ${cy} L${(cx+r*Math.cos(a1)).toFixed(1)} ${(cy+r*Math.sin(a1)).toFixed(1)} A${r} ${r} 0 0 1 ${(cx+r*Math.cos(a2)).toFixed(1)} ${(cy+r*Math.sin(a2)).toFixed(1)}z" fill="${i<k?col:'#fff'}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`}
+  return s;
+}
+function fbar(x,y,w,h,d,k,col=C.sky,cls=''){let s='';for(let i=0;i<d;i++) s+=`<rect class="${cls}" data-i="${i}" x="${x+i*w/d}" y="${y}" width="${w/d}" height="${h}" fill="${i<k?col:'#fff'}" stroke="${C.ink}" stroke-width="3"/>`;return s}
+const crust=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy}" r="${r+9}" fill="#E8B36A" stroke="${C.ink}" stroke-width="3"/>`;
+
+/* Deck 9: Money */
+const COIN={5:[19,'#D5DCE1','5¢'],10:[22,'#D5DCE1','10¢'],20:[25,'#D5DCE1','20¢'],50:[29,'#D5DCE1','50¢'],100:[30,'#E8C35A','$1']};
+const NOTE={200:['#A98BD9','$2'],500:['#6BBF7A','$5'],1000:['#E57373','$10']};
+function coin(x,y,c,s=1){const [r,col,lab]=COIN[c];return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="${r}" fill="${col}" stroke="${C.ink}" stroke-width="3"/><circle r="${r-5}" fill="none" stroke="${C.ink}" stroke-opacity=".25" stroke-width="2"/>${T(0,6,lab,'mid','style="font-size:'+(c===100?18:15)+'px;font-weight:800"')}</g>`}
+function note(x,y,c,s=1){const [col,lab]=NOTE[c];return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-62" y="-32" width="124" height="64" rx="7" fill="${col}" stroke="${C.ink}" stroke-width="3"/><rect x="-54" y="-24" width="108" height="48" rx="4" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/><circle cx="22" cy="0" r="16" fill="#fff" opacity=".35"/>${T(-24,10,lab,'mid','style="font-size:26px;font-weight:800;fill:#fff"')}</g>`}
+const money=(x,y,c,s=1)=>c>=200?note(x,y,c,s):coin(x,y,c,s);
+const fmt=c=>c>=100?'$'+(c/100).toFixed(2):c+'¢';
+const tag=(x,y,txt,d=0)=>G(`<path d="M${x-50} ${y-22} h86 l18 22 l-18 22 h-86z" fill="#fff" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><circle cx="${x+30}" cy="${y}" r="5" fill="${C.ink}"/>`+T(x-8,y+8,txt,'lab mid'),'a-pop',d);
+const toast=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-36 20 v-36 q0 -18 18 -18 h36 q18 0 18 18 v36z" fill="#E3B66B" stroke="${C.ink}" stroke-width="3"/><path d="M-28 16 v-30 q0 -12 12 -12 h32 q12 0 12 12 v30z" fill="#FBE3B5"/><rect x="-28" y="-2" width="56" height="8" fill="${C.leaf}"/></g>`;
+const cup=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-24 -26 h48 l-6 46 h-36z" fill="#D9A066" stroke="${C.ink}" stroke-width="3"/><path d="M24 -16 q16 0 14 14 q-2 10 -16 8" fill="none" stroke="${C.ink}" stroke-width="3"/><path d="M-6 -34 q-6 -8 0 -14 M6 -34 q-6 -8 0 -14" stroke="${C.muted}" stroke-width="2" fill="none"/></g>`;
+const puff=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-36 18 a36 36 0 0 1 72 0z" fill="#E8B36A" stroke="${C.ink}" stroke-width="3"/><path d="M-30 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6" stroke="#B9813A" stroke-width="2.5" fill="none" transform="translate(0 -14)"/></g>`;
+const icecream=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-20 -6 L0 40 L20 -6z" fill="#E3B66B" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><circle cy="-16" r="22" fill="${C.berry}" stroke="${C.ink}" stroke-width="3"/></g>`;
+const bus=(x,y)=>`<g transform="translate(${x} ${y})"><rect x="-44" y="-30" width="88" height="56" rx="10" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><rect x="-36" y="-22" width="72" height="20" rx="3" fill="#DDF1FA" stroke="${C.ink}" stroke-width="2"/><circle cx="-24" cy="28" r="8" fill="${C.ink}"/><circle cx="24" cy="28" r="8" fill="${C.ink}"/></g>`;
+
+/* Deck 11: Time */
+function clock(cx,cy,r,h,m,o={}){
+  const tot=(h%12)*60+m;
+  let s=o.bells===false?'':`<g><circle cx="${cx-r*.72}" cy="${cy-r*.82}" r="${r*.26}" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/><circle cx="${cx+r*.72}" cy="${cy-r*.82}" r="${r*.26}" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/>
+   <path d="M${cx-r*.6} ${cy+r*.82} l-14 22 M${cx+r*.6} ${cy+r*.82} l14 22" stroke="${C.ink}" stroke-width="7" stroke-linecap="round"/></g>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r+12}" fill="${o.rim||C.accent}" stroke="${C.ink}" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`;
+  for(let k=0;k<60;k++){const a=k*6*Math.PI/180,big=k%5===0,r1=r-4,r2=r-(big?16:9);
+    s+=`<line x1="${(cx+Math.sin(a)*r1).toFixed(1)}" y1="${(cy-Math.cos(a)*r1).toFixed(1)}" x2="${(cx+Math.sin(a)*r2).toFixed(1)}" y2="${(cy-Math.cos(a)*r2).toFixed(1)}" stroke="${C.ink}" stroke-width="${big?3:1.5}"/>`;}
+  const fs=Math.max(14,r*.19);
+  for(let n=1;n<=12;n++){const a=n*30*Math.PI/180,rr=r-r*.3;s+=`<text x="${(cx+Math.sin(a)*rr).toFixed(1)}" y="${(cy-Math.cos(a)*rr+fs*.36).toFixed(1)}" class="mid" style="font-size:${fs}px;font-weight:800">${n}</text>`;}
+  const ha=o.anim?0:tot*.5, ma=o.anim?0:m*6+Math.floor(tot/60)*360;
+  s+=`<g class="spin hh" data-a="${tot*.5}" style="transform-origin:${cx}px ${cy}px;transform:rotate(${ha}deg)"><path d="M${cx-7} ${cy} L${cx} ${cy-r*.5} L${cx+7} ${cy}z" fill="${C.ink}" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round"/></g>`;
+  s+=`<g class="spin mh" data-a="${m*6+(o.anim?Math.floor(tot/60)*360:0)}" style="transform-origin:${cx}px ${cy}px;transform:rotate(${o.anim?0:m*6}deg)"><path d="M${cx-4.5} ${cy} L${cx} ${cy-r*.82} L${cx+4.5} ${cy}z" fill="${C.berry}" stroke="${C.berry}" stroke-width="3" stroke-linejoin="round"/></g>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="7" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/>`;
+  return s;
+}
+function spinHands(a,ms=200){a.later(()=>a.qa('.spin').forEach(g=>g.style.transform=`rotate(${g.dataset.a}deg)`),ms)}
+const pad=m=>String(m).padStart(2,'0');
+function bars(x,y,mins,unit=4.2,anim=true){ // 60-min sky bar(s) + leftover sun bar
+  let s='',xx=x,k=0; const hrs=Math.floor(mins/60),rest=mins%60;
+  for(let h=0;h<hrs;h++){s+=G(`<rect x="${xx}" y="${y}" width="${60*unit}" height="44" rx="8" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>${T(xx+30*unit,y+30,'60 min','lab mid wht','style="fill:#fff"')}`,anim?'a-grow':'',k++*.4);xx+=60*unit+8;}
+  if(rest) s+=G(`<rect x="${xx}" y="${y}" width="${rest*unit}" height="44" rx="8" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/>${T(xx+rest*unit/2,y+30,rest+' min','lab mid')}`,anim?'a-grow':'',k*.4);
+  return s;
+}
+
+/* Deck 12: 2D patterns and 3D shapes */
+function shade(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const t=f<0?0:255,p=Math.abs(f);r=Math.round((t-r)*p+r);g=Math.round((t-g)*p+g);b=Math.round((t-b)*p+b);return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
+const SW=`stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"`;
+function flat(type,x,y,s,col,rot=0){ // centred at x,y, s = size
+  const h=s/2;let d;
+  switch(type){
+    case 'circle':d=`<circle cx="0" cy="0" r="${h}" fill="${col}" ${SW}/>`;break;
+    case 'square':d=`<rect x="${-h}" y="${-h}" width="${s}" height="${s}" rx="4" fill="${col}" ${SW}/>`;break;
+    case 'rect':d=`<rect x="${-h*1.4}" y="${-h*.75}" width="${s*1.4}" height="${s*.75}" rx="4" fill="${col}" ${SW}/>`;break;
+    case 'triangle':d=`<path d="M0 ${-h} L${h} ${h*.85} L${-h} ${h*.85}z" fill="${col}" ${SW}/>`;break;
+    case 'half':d=`<path d="M${-h} ${h*.4} A${h} ${h} 0 0 1 ${h} ${h*.4}z" fill="${col}" ${SW}/>`;break;
+    case 'quarter':d=`<path d="M${-h*.7} ${h*.7} L${-h*.7} ${-h*1.1} A${h*1.8} ${h*1.8} 0 0 1 ${h*1.1} ${h*.7}z" fill="${col}" ${SW}/>`;break;
+  }
+  return `<g transform="translate(${x} ${y}) rotate(${rot})">${d}</g>`;
+}
+const icon=(type,col,rot=0,s=40)=>`<svg viewBox="0 0 60 60" width="${s}" height="${s}" aria-hidden="true">${flat(type,30,31,type==='circle'?40:40,col,rot)}</svg>`;
+function cube(x,y,s,col){const d=s*.4;return `<g><path d="M${x} ${y} h${s} l${d} ${-d} h${-s}z" fill="${shade(col,.35)}" ${SW}/><path d="M${x+s} ${y} l${d} ${-d} v${s} l${-d} ${d}z" fill="${shade(col,-.2)}" ${SW}/><rect x="${x}" y="${y}" width="${s}" height="${s}" fill="${col}" ${SW}/></g>`}
+function cuboid(x,y,w,h,dd,col){const d=dd*.5;return `<g><path d="M${x} ${y} h${w} l${d} ${-d} h${-w}z" fill="${shade(col,.35)}" ${SW}/><path d="M${x+w} ${y} l${d} ${-d} v${h} l${-d} ${d}z" fill="${shade(col,-.2)}" ${SW}/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${col}" ${SW}/></g>`}
+function cylinder(cx,y,r,h,col){const e=r*.32;return `<g><path d="M${cx-r} ${y} v${h} a${r} ${e} 0 0 0 ${2*r} 0 v${-h}" fill="${col}" ${SW}/><path d="M${cx-r*.55} ${y+e} v${h}" stroke="#fff" stroke-opacity=".35" stroke-width="8"/><ellipse cx="${cx}" cy="${y}" rx="${r}" ry="${e}" fill="${shade(col,.35)}" ${SW}/></g>`}
+function cone(cx,y,r,h,col){const e=r*.32;return `<g><path d="M${cx} ${y-h} L${cx+r} ${y} A${r} ${e} 0 0 1 ${cx-r} ${y}z" fill="${col}" ${SW}/><path d="M${cx-r} ${y} A${r} ${e} 0 0 0 ${cx+r} ${y}" fill="none" stroke="${C.ink}" stroke-width="3" stroke-dasharray="6 5"/><path d="M${cx-4} ${y-h+18} L${cx-r*.5} ${y-6}" stroke="#fff" stroke-opacity=".35" stroke-width="7"/></g>`}
+function sphere(cx,cy,r,col){return `<g><circle cx="${cx}" cy="${cy}" r="${r}" fill="${col}" ${SW}/><path d="M${cx-r*.9} ${cy+r*.15} a${r} ${r*.35} 0 0 0 ${r*1.8} 0" fill="none" stroke="${shade(col,-.25)}" stroke-width="4"/><ellipse cx="${cx-r*.38}" cy="${cy-r*.4}" rx="${r*.2}" ry="${r*.13}" fill="#fff" opacity=".6" transform="rotate(-30 ${cx-r*.38} ${cy-r*.4})"/></g>`}
+const row=(items,y,gap,size,d0=.1)=>{const x0=320-(items.length-1)*gap/2;return items.map(([t,c,r],k)=>G(flat(t,x0+k*gap,y,size,c,r||0),'a-pop',d0+k*.15)).join('')};
+const rowQ=(items,y,gap,size)=>{const n=items.length+1,x0=320-(n-1)*gap/2;return items.map(([t,c,r],k)=>G(flat(t,x0+k*gap,y,size,c,r||0),'a-pop',.1+k*.15)).join('')+qmark(x0+(n-1)*gap,y)};
+const qmark=(x,y)=>`<g class="a-wig"><rect x="${x-30}" y="${y-30}" width="60" height="60" rx="12" fill="#fff" stroke="${C.ink}" stroke-width="3" stroke-dasharray="7 6"/>${T(x,y+14,'?','big mid acc','style="font-size:40px"')}</g>`;
+
+/* pattern quiz options (same strings reused as answers) */
+const oCirc=icon('circle',C.sky),oTri=icon('triangle',C.accent),oSq=icon('square',C.leaf);
+const oBigR=icon('square',C.bad,0,48),oSmallB=icon('square',C.sky,0,26),oSmallR=icon('square',C.bad,0,26),oBigB=icon('square',C.sky,0,48);
+const oUp=icon('triangle',C.grape,0),oRight=icon('triangle',C.grape,90),oDown=icon('triangle',C.grape,180),oLeft=icon('triangle',C.grape,270);
+
+/* Deck 13: Picture graphs with scales */
+const IC={
+ book:(x,y,s=1,c=C.berry)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-14" y="-17" width="28" height="34" rx="3" fill="${c}" stroke="${C.ink}" stroke-width="2.5"/><rect x="-10" y="-17" width="4" height="34" fill="#fff" opacity=".5"/><rect x="-5" y="-9" width="14" height="6" rx="2" fill="#fff"/></g>`,
+ apple:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -12 q-2 -7 3 -10" stroke="#6B4423" stroke-width="2.5" fill="none"/><path d="M1 -17 q8 -6 13 0 q-7 5 -13 0z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="1.5"/><path d="M0 -10 q-16 -8 -18 7 q0 17 18 15 q18 2 18 -15 q-2 -15 -18 -7z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/></g>`,
+ banana:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-17 -10 q4 26 34 14 q4 -2 1 -5 q-24 8 -30 -12z" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M-18 -12 l-2 -5" stroke="#6B4423" stroke-width="3" stroke-linecap="round"/></g>`,
+ orange:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="17" fill="#FF9F43" stroke="${C.ink}" stroke-width="2.5"/><path d="M-2 -17 q4 -6 10 -4" stroke="${C.leaf}" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="-6" cy="-5" r="3" fill="#fff" opacity=".5"/></g>`,
+ pear:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -19 q-8 0 -8 10 q-10 6 -10 15 q0 13 18 13 q18 0 18 -13 q0 -9 -10 -15 q0 -10 -8 -10z" fill="#B5D447" stroke="${C.ink}" stroke-width="2.5"/><path d="M0 -19 v-5" stroke="#6B4423" stroke-width="2.5"/></g>`,
+ fish:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-18 0 q14 -16 30 0 q-16 16 -30 0z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/><path d="M12 0 l9 -9 v18z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="-9" cy="-2" r="2.5" fill="${C.ink}"/></g>`,
+ star:(x,y,s=1)=>star(x,y,17*s),
+ balloon:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 12 q-4 6 2 12" stroke="${C.ink}" stroke-width="1.5" fill="none"/><ellipse cy="-4" rx="14" ry="17" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-3 12 h6 l-3 -4z" fill="${C.grape}" stroke="${C.ink}" stroke-width="2"/><ellipse cx="-5" cy="-10" rx="3" ry="5" fill="#fff" opacity=".5"/></g>`
+};
+/* pictograph: rows [[name, count, iconKey]], x0 left of labels */
+function pgraph(rows,{x=30,y=60,rowH=62,lw=110,gap=46,key=null,keyIcon='book',anim=true,cls='',keyX=null,boxW=null}={}){
+  const bw=boxW||lw+gap*Math.max(...rows.map(r=>r[1]))+40;
+  let s=box(x,y-10,bw,rows.length*rowH+20,'#fff',16);
+  rows.forEach(([n,c,ic],r)=>{const yy=y+20+r*rowH;
+    s+=T(x+lw-10,yy+8,n,'lab end')+`<line x1="${x+lw}" y1="${y}" x2="${x+lw}" y2="${y+rows.length*rowH}" stroke="${C.line}" stroke-width="3"/>`;
+    if(r) s+=`<line x1="${x+12}" y1="${yy-rowH/2+2}" x2="${x+bw-12}" y2="${yy-rowH/2+2}" data-x2="${x+bw-12}" stroke="${C.line}" stroke-width="1.5" stroke-dasharray="4 5"/>`;
+    s+=`<g class="row${r} ${cls}">`;for(let k=0;k<c;k++) s+=G(IC[ic||keyIcon](x+lw+30+k*gap,yy+2,1),anim?'a-pop':'',anim?.15+r*.25+k*.07:0);s+='</g>';});
+  if(key!==null) s+=keyBox(keyX??x+bw+10,y,key,keyIcon);
+  return s;
+}
+const keyBox=(x,y,v,ic)=>`<g class="key">${box(x,y,130,74,C.sun,14)}${IC[ic](x+28,y+38,.9)}${T(x+56,y+30,'Each','sm')}${T(x+56,y+57,'= '+v,'lab keyv')}</g>`;
+const sumLabels=(rows,scale,{x=30,y=60,rowH=62,lw=110,gap=46,d=1})=>rows.map(([n,c],r)=>{let s='';for(let k=0;k<c;k++) s+=G(T(x+lw+30+k*gap,y+20+r*rowH+37,(k+1)*scale,'sm mid acc','style="font-size:14px"'),'a-fade',d+r*.6+k*.12);return s}).join('');
+
+const fruit=[['apples',5,'apple'],['bananas',3,'banana'],['oranges',6,'orange'],['pears',2,'pear']];
+
+/* Deck 15: Challenge Quest (P2 extension, MOE heuristics) */
+PARTS.learn='Strategy';PARTS.try='Puzzle';PARTS.check='Boss level';
+document.querySelectorAll('.parts button').forEach(b=>b.textContent={learn:'Strategies',try:'Puzzles',check:'Boss level'}[b.dataset.part]);
+
+const nbox=(x,y,v,col='#fff',d=0,w=64)=>G(box(x-w/2,y-32,w,64,col,14)+T(x,y+11,v,'h mid'),'a-pop',d);
+const jump=(x1,x2,y,lab,d=0)=>G(`<path d="M${x1} ${y} q${(x2-x1)/2} -44 ${x2-x1} 0" fill="none" stroke="${C.accent}" stroke-width="3" stroke-linecap="round"/><circle cx="${x2}" cy="${y}" r="4" fill="${C.accent}"/>`+T((x1+x2)/2,y-28,lab,'sm mid acc'),'a-fade',d);
+const mbar=(x,y,w,col,lab='',d=0,h=40)=>G(`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${col}" stroke="${C.ink}" stroke-width="3"/>`+(lab?T(x+w/2,y+h/2+7,lab,'lab mid'):''),'a-grow',d);
+const br=(x1,x2,y,lab,d=0)=>G(`<path d="M${x1} ${y} v12 h${x2-x1} v-12 M${(x1+x2)/2} ${y+12} v10" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T((x1+x2)/2,y+46,lab,'h mid acc'),'a-fade',d);
+const bike=(x,y)=>`<g transform="translate(${x} ${y})"><circle cx="-18" cy="0" r="14" fill="#fff" stroke="${C.ink}" stroke-width="3"/><circle cx="18" cy="0" r="14" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-18 0 L-4 -22 L14 -22 L18 0 M-4 -22 L0 0 L-18 0 M14 -22 L12 -32 M6 -32 h12 M-10 -27 h12" stroke="${C.sky}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+const trike=(x,y)=>`<g transform="translate(${x} ${y})"><circle cx="-22" cy="4" r="10" fill="#fff" stroke="${C.ink}" stroke-width="3"/><circle cx="-10" cy="4" r="10" fill="#fff" stroke="${C.ink}" stroke-width="3"/><circle cx="18" cy="-2" r="16" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-16 4 L0 -20 L18 -2 M0 -20 L-10 -26 M12 -36 L18 -2 M6 -36 h12" stroke="${C.accent}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+const sack=(x,y)=>`<g><path d="M${x-24} ${y} q-8 -38 8 -54 l-6 -10 h44 l-6 10 q16 16 8 54z" fill="#E9D3A8" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><path d="M${x-12} ${y-55} h24" stroke="${C.berry}" stroke-width="4"/></g>`;
+const crate=(x,y)=>`<g><rect x="${x-26}" y="${y-48}" width="52" height="48" rx="4" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><path d="M${x-26} ${y-24} h52 M${x} ${y-48} v48" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const scaleW=(cx,items,reading)=>`<rect x="${cx-112}" y="250" width="224" height="14" rx="5" fill="#C8D3DA" stroke="${C.ink}" stroke-width="3"/><rect x="${cx-90}" y="264" width="180" height="70" rx="12" fill="#9FB4C0" stroke="${C.ink}" stroke-width="3"/><rect x="${cx-52}" y="280" width="104" height="38" rx="6" fill="#DFF5D8" stroke="${C.ink}" stroke-width="3"/>${T(cx,307,reading,'h mid')}${items}`;
+const card=(x,y,w,txt,d=0)=>G(box(x,y,w,52,'#fff',14)+T(x+18,y+34,txt,'lab'),'a-fade',d);
+
+const S=[
+{part:'learn',title:'Welcome to Challenge Quest!',say:'You are ready for <b>harder puzzles</b>! Clever mathematicians use <b>5 tools</b>. Learn each one, solve the puzzles, then face the <b>Boss level</b>. Tap <b>💡 Hint</b> if you get stuck.',
+ draw:()=>[['Patterns','find the rule',`${T(0,8,'2 4 6','lab mid acc')}`],['Guess & check','try, then fix',`${T(0,10,'? ✓','h mid acc')}`],['Make a list','one by one',`<path d="M-20 -14 h40 M-20 0 h40 M-20 14 h40" stroke="${C.ink}" stroke-width="4" stroke-linecap="round"/>`],
+  ['Work backwards','undo each step',`${arrow(20,0,-20,0,C.accent)}`],['Draw a model','see the story',`<rect x="-26" y="-12" width="30" height="22" fill="${C.berry}" stroke="${C.ink}" stroke-width="3"/><rect x="4" y="-12" width="22" height="22" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>`]]
+  .map(([t,s,ic],k)=>G(box(14+k*124,40,114,170,'#fff',18)+`<g transform="translate(${71+k*124} 90)">${ic}</g>`+T(71+k*124,148,t,'mid','style="font-size:14px;font-weight:800"')+T(71+k*124,176,s,'sm mid mut','style="font-size:13px"'),'a-pop',.2+k*.25)).join('')+
+  G(otter(320,392,.8,{wave:true}),'a-fade',1.4)},
+
+{part:'learn',title:'Tool 1: Look for patterns',say:'Find the <b>rule</b>, then use it. In the top row the rule is <b>+4</b>, so next is <b>19</b>. The bottom row is trickier: the jump <b>grows</b> by 1 each time (+1, +2, +3, +4, +5), so next is <b>16</b>!',
+ draw:()=>{let s=T(320,30,'What comes next?','lab mid mut');const r1=[3,7,11,15,'?'];r1.forEach((v,k)=>s+=nbox(90+k*115,110,v,v==='?'?'#FFF4D6':'#fff',.1+k*.15));
+  for(let k=0;k<4;k++)s+=jump(90+k*115+22,90+(k+1)*115-22,78,'+4',.8+k*.2);s+=nbox(550,110,19,C.sun,1.8);
+  const r2=[1,2,4,7,11,'?'];r2.forEach((v,k)=>s+=nbox(70+k*100,280,v,v==='?'?'#FFF4D6':'#fff',2.2+k*.12,58));
+  for(let k=0;k<5;k++)s+=jump(70+k*100+20,70+(k+1)*100-20,248,'+'+(k+1),2.9+k*.25);s+=nbox(570,280,16,C.sun,4.3,58);
+  return s+G(T(320,360,'The jump can grow too!','lab mid acc'),'a-fade',4.5)}},
+
+{part:'learn',title:'Tool 2: Guess and check',say:'There are <b>5</b> bicycles and tricycles. They have <b>13 wheels</b> in all. How many tricycles? <b>Guess</b>, count the wheels, then <b>fix</b> your guess. 3 tricycles and 2 bicycles: 9 + 4 = <b>13</b>!',
+ draw:()=>{let s=T(320,34,'5 vehicles · 13 wheels','h mid')+box(60,56,520,52,C.sun,12)+[['tricycles',130],['bicycles',250],['wheels',405],['',540]].map(([t,x])=>T(x,90,t,'lab mid')).join('');
+  [[1,4,'3 + 8 = 11','too few'],[2,3,'6 + 6 = 12','too few'],[3,2,'9 + 4 = 13','✓']].forEach(([t,b,w,m],k)=>{const y=150+k*62;
+   s+=G(box(60,y-34,520,56,k===2?'#E6F6EA':'#fff',12)+T(130,y+2,t,'h mid')+T(250,y+2,b,'h mid')+T(405,y+2,w,'lab mid')+T(540,y+2,m,'lab mid',m==='✓'?`style="fill:${C.good};font-size:26px"`:`style="fill:${C.bad};font-size:16px"`),'a-fade',.5+k*.8)});
+  return s+G(T(320,370,'Each new guess gets closer!','lab mid acc'),'a-fade',2.8)}},
+
+{part:'learn',title:'Tool 3: Make a list',say:'How many ways can you make <b>30¢</b> using only <b>10¢</b> and <b>5¢</b> coins? Be <b>organised</b>: start with the most 10¢ coins, then use one fewer each time. There are <b>4 ways</b>!',
+ draw:()=>{let s='';[[10,10,10],[10,10,5,5],[10,5,5,5,5],[5,5,5,5,5,5]].forEach((list,k)=>{const y=60+k*68;
+   s+=G(T(70,y+8,'Way '+(k+1),'lab mid')+list.map((c,j)=>coin(150+j*52,y,c,.92)).join(''),'a-fade',.3+k*.6)});
+  return s+G(box(470,120,140,120,C.sun,20)+T(540,175,'4','big mid')+T(540,210,'ways','lab mid'),'a-pop',2.8)+G(T(320,365,'A list makes sure you miss none!','lab mid acc'),'a-fade',3.2)}},
+
+{part:'learn',title:'Tool 4: Work backwards',say:'Mei had some stickers. She <b>gave away 15</b>, then <b>got 20 more</b>. Now she has <b>50</b>. How many did she have at first? Start at the end and do the <b>opposite</b>: 50 − 20 = 30, then 30 + 15 = <b>45</b>.',
+ draw:()=>T(40,40,'Forward','lab mut')+nbox(100,100,'?','#FFF4D6',.1)+G(arrow(140,100,280,100,C.ink)+T(210,82,'− 15','lab mid'),'a-fade',.3)+nbox(320,100,'?','#fff',.5)+G(arrow(360,100,500,100,C.ink)+T(430,82,'+ 20','lab mid'),'a-fade',.7)+nbox(540,100,50,'#fff',.9)+
+  G(T(40,200,'Backward: do the opposite!','lab acc'),'a-fade',1.4)+nbox(540,270,50,'#fff',1.6)+G(arrow(500,270,360,270,C.accent)+T(430,252,'− 20','lab mid acc'),'a-fade',1.9)+nbox(320,270,30,'#fff',2.2)+
+  G(arrow(280,270,140,270,C.accent)+T(210,252,'+ 15','lab mid acc'),'a-fade',2.5)+nbox(100,270,45,C.sun,2.8)+G(T(100,342,'at first!','lab mid acc'),'a-fade',3)},
+
+{part:'learn',title:'Tool 5: Before and after',say:'Zack and Arjun each have <b>20</b> marbles. Zack gives <b>6</b> to Arjun. How many <b>more</b> does Arjun have now? Many people say 6, but look! Zack <b>loses</b> 6 and Arjun <b>gains</b> 6. Arjun has <b>12 more</b>!',
+ draw:()=>T(30,36,'Before','lab mut')+T(80,82,'Zack','lab end')+mbar(90,56,300,C.sky,'20',.2)+T(80,132,'Arjun','lab end')+mbar(90,106,300,C.berry,'20',.4)+
+  G(T(30,190,'After','lab mut')+T(80,236,'Zack','lab end'),'a-fade',.9)+mbar(90,210,210,C.sky,'14',1)+G(`<rect x="300" y="210" width="90" height="40" rx="6" fill="none" stroke="${C.ink}" stroke-width="2" stroke-dasharray="6 5"/>`,'a-fade',1.2)+
+  G(T(80,286,'Arjun','lab end'),'a-fade',.9)+mbar(90,260,300,C.berry,'',1.3)+mbar(390,260,90,C.sun,'6',1.6)+T(240,287,'20','lab mid','style="opacity:0"')+G(T(240,287,'20','lab mid'),'a-fade',1.4)+
+  br(300,480,304,'12 more!',2.2)},
+
+{part:'try',title:'Digit card puzzle',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const cards=[4,0,7],goals=[740,407];let stage=0,slots=[];
+  const draw=()=>{let s=T(320,42,['Make the LARGEST 3-digit number','Make the SMALLEST 3-digit number','Now find the difference!'][stage],'h mid acc');
+   if(stage<2){cards.forEach((c,k)=>{const used=slots.includes(k);s+=`<g class="tap crd" data-k="${k}" opacity="${used?.3:1}">${box(170+k*110,76,90,110,C.sun,14)}${T(215+k*110,150,c,'big mid')}</g>`});
+    ['hundreds','tens','ones'].forEach((p,k)=>{s+=box(170+k*110,226,90,110,'#fff',14,'stroke-dasharray="8 6"')+T(215+k*110,362,p,'sm mid mut')+(slots[k]!==undefined?G(T(215+k*110,300,cards[slots[k]],'big mid'),'a-pop'):'')});
+}
+   else s+=T(320,170,'740 − 407 = ?','big mid')+otter(320,392,.7);
+   a.q('.play').innerHTML=s;a.qa('.crd').forEach(g=>g.onclick=()=>{const k=+g.dataset.k;if(slots.includes(k)||slots.length>=3)return;slots.push(k);draw()})};
+  const ui=()=>{a.ui.innerHTML='';
+   if(stage<2){a.btn('Clear',()=>{slots=[];draw()});a.btn('Check',()=>{if(slots.length<3)return a.say('Fill all three boxes first.');
+     const d=slots.map(k=>cards[k]);if(d[0]===0)return a.say('A 3-digit number <b>cannot start with 0</b>. 0'+d[1]+d[2]+' is really just '+(d[1]*10+d[2])+'!');
+     const n=d[0]*100+d[1]*10+d[2];if(n===goals[stage]){a.confetti();a.say(stage===0?'<b>Yes!</b> Biggest digit in the hundreds place: <b>740</b>.':'<b>Yes!</b> Smallest digit that is not 0 goes first: <b>407</b>.');stage++;a.later(()=>{slots=[];draw();ui();if(stage===2)a.say('Subtract the smallest from the largest. Work it out on paper!')},1700)}
+     else a.say(stage===0?`${n} is not the largest. Put the <b>biggest</b> digit in the hundreds place.`:`${n} is not the smallest. Which digit can go first? It can't be 0!`)},'go')}
+   else [313,333,347].forEach(o=>a.btn(o,b=>{if(o===333){b.classList.add('ok');a.win('<b>Brilliant!</b> 740 − 407 = <b>333</b>. What a pattern!')}else{b.classList.add('no');a.say('Not quite. Use the column method and regroup carefully.')}},'go'))};
+  draw();ui();a.say('Use all three cards once. Tap a card to put it in the next box.');}},
+
+{part:'try',title:'Coin puzzle',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{let tray=[];const found=[];
+  const draw=()=>{const tot=tray.reduce((p,q)=>p+q,0);let s=box(20,16,600,80,'#fff',16)+T(40,50,'Make $1 using exactly 5 coins.','lab')+T(40,80,'Find 2 different ways!','lab acc')+
+    T(500,48,'coins: '+tray.length+'/5','lab mid')+T(500,80,fmt(tot),'h mid')+`<rect x="30" y="120" width="580" height="96" rx="16" fill="#F6E7CF" stroke="${C.ink}" stroke-width="3" stroke-dasharray="8 6"/>`;
+   tray.forEach((c,k)=>s+=G(coin(110+k*105,168,c,1.2),'a-pop'));
+   s+=T(40,262,'Ways found:','lab mut');found.forEach((f,k)=>s+=G(box(40,278+k*52,560,44,'#E6F6EA',22)+T(320,307,f,'lab mid'),'a-pop'));
+   a.q('.play').innerHTML=s};
+  draw();a.say('Tap the coins. You must use <b>exactly 5 coins</b> that add up to <b>$1</b>.');
+  [5,10,20,50].forEach(c=>a.btn(c+'¢',()=>{if(tray.length<5){tray.push(c);draw()}},'go'));a.btn('Undo',()=>{tray.pop();draw()});
+  a.btn('Check',()=>{const tot=tray.reduce((p,q)=>p+q,0);if(tray.length<5)return a.say(`You have ${tray.length} coins. You need <b>5</b>.`);
+   if(tot!==100)return a.say(`These 5 coins make <b>${fmt(tot)}</b>. ${tot<100?'Too little! Try bigger coins.':'Too much! Try smaller coins.'}`);
+   const key=[...tray].sort((p,q)=>q-p).map(c=>c+'¢').join(' + ');if(found.includes(key))return a.say('You found that one already. Try a <b>different mix</b>!');
+   found.push(key);tray=[];draw();if(found.length>=2)a.win('<b>Coin genius!</b> There are 3 ways in all. Can you find the third?');else{a.confetti();a.say('<b>Great!</b> Now find a <b>different</b> way.')}});}},
+
+{part:'try',title:'Shape code',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['triangle',C.accent],['circle',C.sky],['square',C.leaf]],eqs=[[0,0,12],[0,1,10],[1,2,9]],ans=[6,4,5],opts=[[5,6,12],[4,6,10],[3,5,9]];let stage=0;
+  const draw=()=>{let s='';eqs.forEach(([p,q,v],k)=>{const y=80+k*100;s+=G(box(30,y-42,400,84,'#fff',16)+flat(Q[p][0],100,y,52,Q[p][1])+T(170,y+12,'+','h mid')+flat(Q[q][0],240,y,52,Q[q][1])+T(310,y+12,'=','h mid')+T(375,y+14,v,'big mid'),'a-fade',k*.2)});
+   s+=box(460,38,160,284,C.sun,18)+T(540,70,'Code','lab mid');Q.forEach(([t,c],k)=>{const y=125+k*80;s+=flat(t,500,y,40,c)+T(530,y+10,'=','lab')+T(578,y+12,k<stage?ans[k]:'?','h mid',k<stage?'':'style="fill:#B9471A"')});
+   a.q('.play').innerHTML=s};
+  const ui=()=>{a.ui.innerHTML='';if(stage>2)return;opts[stage].forEach(o=>a.btn(o,b=>{if(o===ans[stage]){stage++;draw();if(stage>2)a.win('<b>Code cracked!</b> △ = 6, ● = 4, ■ = 5.');else{a.confetti();a.say(['<b>Yes!</b> 6 + 6 = 12. Now use the triangle to find the <b>circle</b>.','<b>Yes!</b> 6 + 4 = 10. Now find the <b>square</b>!'][stage-1]);ui()}}
+   else{b.classList.add('no');a.say(['Two triangles make 12. What number plus itself makes 12?','You know the triangle now. Triangle + circle = 10.','You know the circle now. Circle + square = 9.'][stage])}},'go'))};
+  draw();ui();a.say('Each shape stands for a number. Crack the code! First, what is the <b>triangle</b>?');}},
+
+{part:'try',title:'Wheel machine',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{let t=0;const draw=()=>{const w=t*3+(7-t)*2;let s=box(120,14,400,56,C.sun,28)+T(320,51,'7 vehicles · 17 wheels','h mid');
+   for(let k=0;k<7;k++){const x=62+k*86;s+=(k<t?trike(x,190):bike(x,190))+T(x,240,k<t?'3':'2','sm mid mut')}
+   s+=box(60,270,520,100,'#fff',18)+T(320,308,`${t} tricycles + ${7-t} bicycles`,'lab mid')+T(320,348,`${t}×3 + ${7-t}×2 = ${w} wheels`,'h mid',w===17?`style="fill:${C.good}"`:'');a.q('.play').innerHTML=s;return w};
+  const tell=()=>{const w=draw();a.say(w<17?`<b>${w}</b> wheels. Too few! Swap a bicycle for a tricycle.`:w>17?`<b>${w}</b> wheels. Too many! Swap a tricycle back.`:'<b>17 wheels!</b> That matches. Tap <b>Check</b>.')};
+  draw();a.say('There are <b>7</b> bicycles and tricycles with <b>17 wheels</b>. How many are tricycles? Use guess and check!');
+  a.btn('− tricycle',()=>{if(t>0){t--;tell()}});a.btn('+ tricycle',()=>{if(t<7){t++;tell()}},'go');
+  a.btn('Check',()=>{if(t===3)a.win('<b>Solved!</b> 3 tricycles and 4 bicycles: 9 + 8 = 17 wheels.');else a.say('Not yet. Keep swapping until there are exactly 17 wheels.')});}},
+
+{part:'check',title:'Boss 1 · Patterns',say:'5, 9, 13, 17, ... What is the <b>7th</b> number in this pattern?',
+ draw:()=>[5,9,13,17,'?','?','?'].map((v,k)=>nbox(60+k*87,170,v,v==='?'?'#FFF4D6':'#fff',.1+k*.1,62)+T(60+k*87,230,['1st','2nd','3rd','4th','5th','6th','7th'][k],'sm mid mut')).join(''),
+ quiz:{options:['21','25','29','33'],answer:'29',why:'The rule is +4. 17, then 21 (5th), 25 (6th), <b>29</b> (7th).',hint:'Find the jump between each number. Then keep jumping until the 7th box.'}},
+
+{part:'check',title:'Boss 2 · Patterns',say:'This pattern keeps repeating. What is the <b>15th</b> shape?',
+ draw:()=>{const P=[['circle',C.sky],['triangle',C.accent],['square',C.leaf],['triangle',C.accent]];let s='';for(let k=0;k<8;k++){const [t,c]=P[k%4];s+=G(flat(t,52+k*62,140,46,c),'a-pop',.1+k*.1)+T(52+k*62,198,k+1,'sm mid mut')}
+  return s+T(550,150,'. . .','h mid')+T(320,290,'15th = ?','big mid acc')},
+ quiz:{options:[oCirc,oTri,oSq],answer:oSq,why:'The pattern repeats every 4 shapes. 4, 8, 12 end a group. 13th ○, 14th △, <b>15th □</b>.',hint:'How many shapes before the pattern repeats? Count in those groups up to 15.'}},
+
+{part:'check',title:'Boss 3 · Guess and check',say:'Read all the clues. Who am I?',
+ draw:()=>card(30,24,460,'I am a 3-digit odd number.',.1)+card(30,90,460,'I am between 300 and 400.',.4)+card(30,156,460,'My tens digit is 0.',.7)+card(30,222,460,'My digits add up to 8.',1)+G(otter(560,392,.8)+bubble(500,120,110,60,'Who?','h'),'a-fade',1.3),
+ quiz:{options:['305','350','503','307'],answer:'305',why:'Between 300 and 400 means it starts with 3. Tens digit 0: 30_. Digits add to 8: 3 + 0 + 5. 305 is odd. ✓',hint:'Start with the hundreds digit. Then the tens digit. What is left for the ones?'}},
+
+{part:'check',title:'Boss 4 · Work backwards',say:'The clock shows the time now. What time was it <b>50 minutes ago</b>?',
+ draw:()=>clock(200,215,140,9,35,{anim:true})+G(box(400,90,210,90,'#fff',18)+T(505,128,'now','lab mid mut')+T(505,166,'9:35','h mid'),'a-pop',.8)+G(T(505,240,'50 min ago','lab mid acc')+T(505,280,'= ?','h mid acc'),'a-fade',1.2),
+ mount:a=>spinHands(a),
+ quiz:{options:['8:35','8:45','9:15','10:25'],answer:'8:45',why:'Go back 35 min to 9:00. Go back 15 more min to <b>8:45</b>. (35 + 15 = 50)',hint:'Go back to 9:00 first. How many minutes is that? How many more to go?'}},
+
+{part:'check',title:'Boss 5 · Draw a model',say:'The 3 sacks of rice are the same. What is the mass of the <b>box</b>?',
+ draw:()=>G(scaleW(170,sack(110,248)+sack(170,248)+sack(230,248),'12 kg'),'a-pop',.1)+G(scaleW(470,sack(430,248)+crate(510,248),'7 kg'),'a-pop',.5)+T(320,385,'3 sacks = 12 kg · 1 sack + box = 7 kg','lab mid'),
+ quiz:{options:['3 kg','4 kg','5 kg'],answer:'3 kg',why:'3 equal sacks = 12 kg, so 1 sack = 4 kg. 7 − 4 = <b>3 kg</b>.',hint:'First find the mass of ONE sack. 12 shared into 3 equal parts.'}},
+
+{part:'check',title:'Boss 6 · Fractions',say:'Arjun ate <b>2/9</b> of a cake. Mei ate <b>3/9 more</b> than Arjun. What fraction of the cake is <b>left</b>?',
+ draw:()=>crust(170,200,130)+pie(170,200,130,9,0)+card(340,70,270,'Arjun: 2/9',.3)+card(340,140,270,'Mei: 3/9 more',.6)+card(340,210,270,'Left: ?',.9),
+ quiz:{options:[FR(2,9),FR(4,9),FR(5,9),FR(7,9)],answer:FR(2,9),why:'Mei ate 2/9 + 3/9 = 5/9. Together: 2/9 + 5/9 = 7/9. Left: 9/9 − 7/9 = <b>2/9</b>.',hint:'First work out how much Mei ate. Then how much they ate together.'}},
+
+{part:'check',title:'Boss 7 · Picture graphs',say:'The three children read <b>30 books</b> altogether. How many pictures should go in <b>Hana\'s</b> row?',
+ draw:()=>T(30,34,'Books read','h')+pgraph([['Mei',4],['Arjun',3],['Hana',0]],{y:60,rowH:80,key:'2',keyIcon:'book'})+T(200,252,'?','big mid acc')+G(box(374,160,250,60,'#fff',14)+T(499,198,'Total = 30 books','lab mid'),'a-fade',.5),
+ quiz:{options:['7','8','16','23'],answer:'8',why:'Mei + Arjun = 7 pictures = 14 books. Hana read 30 − 14 = 16 books. 16 ÷ 2 = <b>8 pictures</b>.',hint:'How many books did Mei and Arjun read? Remember each picture is 2 books.'}},
+
+{part:'check',title:'Boss 8 · Make a list',say:'Hana has <b>4 coins</b>. Together they make <b>$1.20</b>. None of them is a $1 coin. Which coins does she have?',
+ draw:()=>[0,1,2,3].map(k=>G(`<circle cx="${170+k*100}" cy="170" r="38" fill="#D5DCE1" stroke="${C.ink}" stroke-width="3"/>`+T(170+k*100,182,'?','h mid'),'a-pop',.1+k*.15)).join('')+T(320,280,'4 coins = $1.20','big mid acc'),
+ quiz:{options:['50¢ 50¢ 20¢ 5¢','50¢ 50¢ 10¢ 10¢','50¢ 20¢ 20¢ 20¢'],answer:'50¢ 50¢ 10¢ 10¢',why:'50 + 50 + 10 + 10 = 120¢ = <b>$1.20</b> ✓',hint:'$1.20 is 120¢. Add up each set of coins.'}},
+
+{part:'check',title:'Boss 9 · Balance',say:'The see-saw is balanced. Both sides are <b>equal</b>. What is the missing number?',
+ draw:()=>`<path d="M320 250 l-40 70 h80z" fill="#C9A27A" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><rect x="90" y="236" width="460" height="16" rx="8" fill="#E1B95B" stroke="${C.ink}" stroke-width="3"/>`+
+  G(box(110,150,170,80,'#fff',16)+T(195,203,'? × 4','h mid'),'a-drop',.2)+G(box(360,150,170,80,'#fff',16)+T(445,203,'3 × 8','h mid'),'a-drop',.4)+T(320,370,'? × 4 = 3 × 8','h mid acc'),
+ quiz:{options:['5','6','8','24'],answer:'6',why:'3 × 8 = 24. Which number × 4 = 24? <b>6</b>, because 6 × 4 = 24.',hint:'Work out the right side first.'}},
+
+{part:'check',title:'Quest complete!',say:'You beat the Boss level! Remember your 5 tools: <b>patterns</b>, <b>guess and check</b>, <b>make a list</b>, <b>work backwards</b> and <b>draw a model</b>. Real mathematicians never give up!',
+ draw:()=>otter(320,370,1.5,{wave:true})+G(`<g transform="translate(120 170)"><path d="M-40 -60 h80 v30 q0 40 -40 46 q-40 -6 -40 -46z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/><path d="M-40 -48 q-28 0 -24 20 q4 16 26 14 M40 -48 q28 0 24 20 q-4 16 -26 14" fill="none" stroke="${C.ink}" stroke-width="4"/><rect x="-8" y="-14" width="16" height="30" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/><rect x="-30" y="16" width="60" height="18" rx="4" fill="${C.accent}" stroke="${C.ink}" stroke-width="3"/></g>`+star(520,110,36)+star(470,200,22,C.sky),'a-pop',.3)+T(320,56,'Challenge champion!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+S.forEach(sc=>{if(sc.quiz){const m=sc.mount;sc.mount=a=>{a.btn('💡 Hint',()=>a.say('💡 '+sc.quiz.hint));if(m)m(a)}}});
+
+
+render();
+</script>
+
+</body></html>

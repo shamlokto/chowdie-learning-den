@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Writing Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Ollie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Primary 2 English · Deck 8</p>
+      <h1>Writing</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 English, following the MOE English Language Syllabus (STELLAR). Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* English 8: Writing Workshop */
+const paper=(x,y,w,h)=>box(x,y,w,h,'#FFFDF6',12)+[...Array(Math.floor((h-30)/28))].map((_,k)=>`<line x1="${x+14}" y1="${y+34+k*28}" x2="${x+w-14}" y2="${y+34+k*28}" stroke="#C9D3CE" stroke-width="1"/>`).join('');
+const pencil=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(-35)"><rect x="-8" y="-50" width="16" height="80" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-8 30 L0 48 L8 30z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-3 41 L0 48 L3 41z" fill="${C.ink}"/><rect x="-8" y="-58" width="16" height="10" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+
+const S=[
+{part:'learn',title:'Welcome to the workshop',say:'Hi, writer! Good writing has a <b>plan</b>. Today we learn to write a <b>recount</b> (something that happened), use <b>sequencing words</b>, describe with the <b>five senses</b>, write <b>instructions</b> and an <b>invitation</b>, and then <b>check</b> our work like a pro.',
+ draw:()=>paper(40,40,360,330)+G(pencil(300,170,1.3),'a-pop',.5)+[['Plan it','What happened? Who? Where?'],['Write it','First, next, then, finally'],['Describe it','See, hear, smell, taste, touch'],['Check it','Capitals, full stops, tense']].map(([t,s],k)=>G(T(430,80+k*76,t,'h acc')+prose(430,106+k*76,s,22,'sm',16),'a-fade',.3+k*.25)).join('')},
+
+{part:'learn',title:'Plan before you write',say:'Before writing, make a quick <b>plan</b>. Ask the 5W1H questions: <b>Who</b> was there? <b>Where</b>? <b>When</b>? <b>What</b> happened, in order? <b>How</b> did you feel? Jot down a word or two for each. Now you have a map for your story!',
+ draw:()=>G(box(40,40,560,80,'#fff',16)+T(320,72,'My topic: A day at the zoo','h mid')+T(320,100,'(personal recount)','sm mid mut'),'a-pop',.1)+
+  [['Who','me, Mum, Dad'],['Where','Singapore Zoo'],['When','last Sunday'],['What','saw lions, fed goats, ate ice cream'],['How I felt','excited, then tired']].map(([q,a],k)=>G(tagPill(60,140+k*46,q,[C.berry,C.leaf,C.sky,C.accent,C.grape][k],110)+T(190,160+k*46,a,'lab'),'a-fade',.4+k*.15)).join('')},
+
+{part:'learn',title:'Sequencing words',say:'A recount tells events <b>in order</b>. Use <b>sequencing words</b> to guide your reader: <b>First</b>, <b>Next</b>, <b>Then</b>, <b>After that</b>, <b>Finally</b>. Start a new sentence with each one. They are like stepping stones across a river!',
+ draw:()=>`<path d="M0 260 q80 -20 160 0 t160 0 t160 0 t160 0 V400 H0z" fill="${C.sky}" opacity=".35"/>`+[['First','we saw the lions.',C.sky],['Next','we fed the goats.',C.leaf],['Then','we ate ice cream.',C.sun],['After that','we watched a show.',C.accent],['Finally','we went home.',C.grape]].map(([w,s,c],k)=>G(`<ellipse cx="${80+k*120}" cy="${300-(k%2)*30}" rx="52" ry="22" fill="#9FB4C0" stroke="${C.ink}" stroke-width="3"/>`+T(80+k*120,306-(k%2)*30,w,'lab mid','style="font-size:15px"')+box(40,50+k*40,560,34,c===C.sun?C.sun:'#fff',10)+T(60,73+k*40,w+',','lab acc')+T(60+measure(w+',',20)+8,73+k*40,s,'lab'),'a-fade',.1+k*.2)).join('')},
+
+{part:'learn',title:'Show it with the five senses',say:'"The zoo was nice" is boring. <b>Show</b> the reader instead! What did you <b>see</b>? The lion\'s golden mane. <b>Hear</b>? A loud roar. <b>Smell</b>? Fresh popcorn. <b>Taste</b>? Sweet, cold ice cream. <b>Touch</b>? The goat\'s rough fur. Now the reader is <b>there</b> with you.',
+ draw:()=>G(box(40,40,560,60,'#FDE7E5',14)+T(320,78,'The zoo was nice.','h mid'),'a-fade',.1)+G(arrow(320,110,320,140,C.accent),'a-fade',.5)+
+  G(box(40,150,560,200,'#E6F6EA',16)+prose(60,186,'The lion shook its golden mane and let out a roar so loud I jumped. The air smelled of fresh popcorn. My ice cream was sweet and icy cold, and the goat\'s fur felt rough under my fingers.',52,'lab',27,'style="font-size:17px"'),'a-pop',.8)+
+  G([['see',C.sky,100],['hear',C.berry,210],['smell',C.leaf,320],['taste',C.sun,430],['touch',C.grape,540]].map(([s,c,x])=>tagPill(x-30,355,s,c,60)).join(''),'a-fade',1.4)},
+
+{part:'learn',title:'Build a better sentence',say:'Start small and grow it! "The dog ran." Add an <b>adjective</b>: "The <b>brown</b> dog ran." Add an <b>adverb</b>: "The brown dog ran <b>quickly</b>." Add <b>where</b>: "...<b>across the wet field</b>." Add <b>why</b>: "...<b>to catch the ball</b>." One sentence, five levels!',
+ draw:()=>[['The dog ran.',''],['The brown dog ran.','+ adjective'],['The brown dog ran quickly.','+ adverb'],['The brown dog ran quickly across the wet field.','+ where'],['The brown dog ran quickly across the wet field to catch the ball.','+ why']].map(([s,tag],k)=>G(box(40,40+k*66,560,56,k===4?C.sun:'#fff',12)+prose(56,74+k*66,s,k===4?66:52,'lab',22,'style="font-size:'+(k===4?14.5:16)+'px"')+(tag?T(590,60+k*66,tag,'sm end acc'):''),'a-fade',.1+k*.3)).join('')},
+
+{part:'learn',title:'Writing instructions',say:'<b>Instructions</b> tell someone how to do something. Start with what you <b>need</b>. Then number the <b>steps</b>, in order. Each step begins with a <b>command verb</b>: Spread, Place, Cut. Keep each step short. Let\'s make kaya toast!',
+ draw:()=>G(T(60,50,'How to make kaya toast','h')+T(60,80,'You need: bread, kaya, butter, a toaster','sm mut'),'a-fade',.1)+[['Toast','two slices of bread.'],['Spread','kaya on one slice.'],['Place','a thin slice of cold butter on top.'],['Put','the other slice on and press gently.'],['Cut','the toast in half and enjoy!']].map(([v,r],k)=>G(`<circle cx="80" cy="${120+k*48}" r="16" fill="${C.accent}"/>`+T(80,126+k*48,k+1,'lab mid','style="fill:#fff"')+tagPill(108,106+k*48,v,C.leaf,80)+T(200,127+k*48,r,'lab'),'a-fade',.4+k*.2)).join('')+G(T(320,375,'Each step starts with a command verb!','lab mid acc'),'a-fade',1.6)},
+
+{part:'learn',title:'Writing an invitation',say:'An <b>invitation</b> must answer: <b>What</b> is the event? <b>When</b>? <b>Where</b>? <b>Who</b> is inviting? Add a friendly opening and closing. If any part is missing, your guests will be lost!',
+ draw:()=>G(box(120,30,400,340,'#FFF4D6',18)+T(320,70,'You are invited!','h mid acc')+T(320,110,'Dear Hana,','lab')+prose(150,145,'Please come to my 8th birthday party.',34,'lab',26)+
+  [['When:','Saturday 12 July, 3 pm'],['Where:','Blk 123 Tampines St 11, #05-67'],['Bring:','your swimming costume!']].map(([k,v],i)=>T(150,205+i*32,k,'lab acc')+T(230,205+i*32,v,'lab','style="font-size:16px"')).join('')+T(150,320,'From, Mei','lab')+T(320,352,'RSVP by 5 July','sm mid mut'),'a-pop',.2)+
+  G([['what',60,80],['when',60,200],['where',60,240],['who',560,320]].map(([t,x,y])=>tagPill(x-30,y-16,t,C.accent,62)).join(''),'a-fade',1)},
+
+{part:'learn',title:'Check it like a pro',say:'Before you hand in, <b>check</b>! Read it aloud. Use the <b>CUPS</b> checklist: <b>C</b>apitals at the start and for names. <b>U</b>nderstanding: does it make sense? <b>P</b>unctuation at the end of every sentence. <b>S</b>pelling: check tricky words. Then check your <b>tense</b>: a recount stays in the past.',
+ draw:()=>[['C','Capitals','start of sentences, names, I',C.sky],['U','Understanding','does every sentence make sense?',C.leaf],['P','Punctuation','. ? ! at the end, commas in lists',C.accent],['S','Spelling','check tricky words, read it aloud',C.berry]].map(([l,t,d,c],k)=>G(`<rect x="40" y="${40+k*72}" width="70" height="60" rx="14" fill="${c}"/>`+T(75,82+k*72,l,'big mid','style="fill:#fff"')+T(130,70+k*72,t,'h')+T(130,96+k*72,d,'sm mut'),'a-fade',.1+k*.2)).join('')+G(box(380,330,220,50,C.sun,25)+T(490,362,'+ check the tense!','lab mid'),'a-pop',1)},
+
+{part:'try',title:'Order the recount',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const ev=['First, we packed our bags.','Next, we took the MRT to the zoo.','Then we saw the orangutans.','After that, we ate lunch.','Finally, we went home.'];const shuf=[3,0,4,1,2];let next=0;const placed=[];
+  const draw=()=>{a.q('.play').innerHTML=T(320,36,'Tap the sentences in order. Use the sequencing words!','lab mid acc')+shuf.map((i,k)=>`<g class="tap ev" data-i="${i}">${box(40,60+k*52,340,44,placed.includes(i)?'#E6F6EA':'#fff',12)}${T(56,88+k*52,ev[i],'sm','style="font-size:15px"')}</g>`).join('')+paper(400,56,220,300)+placed.map((i,k)=>G(prose(412,92+k*50,ev[i],22,'sm',16,'style="font-size:13px"'),'a-pop')).join('');
+   a.qa('.ev').forEach(g=>g.onclick=()=>{const i=+g.dataset.i;if(placed.includes(i))return;if(i===next){placed.push(i);next++;draw();if(next===ev.length)a.win('<b>A perfect recount!</b> First, next, then, after that, finally.');else a.say(`Yes! Which sequencing word comes <b>next</b>?`)}else a.say('Look at the first word of each sentence. Which one comes next in order?')})};
+  draw();a.say('Put the recount in order. Which sentence starts with <b>First</b>?');}},
+
+{part:'try',title:'Sense it up',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['The cake was nice.','The cake was sweet and soft, with sticky chocolate on top.',['The cake was very nice.','The cake was a cake.']],['The park was noisy.','Children shouted and birds chirped as a bus rumbled past.',['The park had noise in it.','It was a noisy park.']],['The flower was pretty.','The red flower smelled like honey and felt as soft as silk.',['The flower was so pretty.','There was a pretty flower.']],['The soup was hot.','Steam curled up from the spicy soup and burned my tongue.',['The soup was hot hot.','I had hot soup.']]];let r=0,busy=false;
+  const show=()=>{busy=false;const [b,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 4`,'sm mid mut')+box(40,70,560,70,'#FDE7E5',14)+T(320,114,b,'h mid')+arrow(320,150,320,180,C.accent)+T(320,215,'Which sentence SHOWS with the senses?','lab mid acc')+otter(560,392,.5);
+   a.ui.innerHTML='';[ans,...Q[r][2]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,bt=>{if(busy)return;if(o===ans){busy=true;bt.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>Yes!</b> Now the reader can see, smell or taste it too.`);a.later(show,1600)}else a.win('<b>Yes!</b> You are showing, not telling. That is what great writers do.')}else{bt.classList.add('no');a.say('That one just repeats the same idea. Which sentence uses the five senses?')}},'go'));
+   a.say('Pick the sentence that uses the <b>five senses</b> to show, not just tell.')};show();}},
+
+{part:'try',title:'Fix the mistakes',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[{s:'yesterday i go to the beach with my family',fixed:'Yesterday I went to the beach with my family.',errs:['capital Y','capital I','go → went','full stop'],words:['yesterday','i','go','to','the','beach','with','my','family'],bad:{0:'Yesterday',1:'I',2:'went',8:'family.'}},{s:'we builded a sandcastle and it were huge',fixed:'We built a sandcastle and it was huge.',words:['we','builded','a','sandcastle','and','it','were','huge'],bad:{0:'We',1:'built',6:'was',7:'huge.'}}];let r=0;const fixedSet=new Set();
+  const draw=()=>{const q=Q[r];const w=q.words.map((x,i)=>fixedSet.has(i)?q.bad[i]:x);const {svg}=sentence(40,120,w,{size:20,maxW:560,tap:()=>true,hi:Object.fromEntries([...fixedSet].map(i=>[i,'#E6F6EA']))});a.q('.play').innerHTML=T(320,36,`Sentence ${r+1} of 2 · ${Object.keys(q.bad).length-fixedSet.size} mistakes left`,'lab mid acc')+svg+T(320,300,'Tap a word that has a mistake to fix it.','sm mid mut')+T(320,330,'Check: capitals, tense, full stop','sm mid acc');
+   a.qa('.tok').forEach(g=>g.onclick=()=>{const i=+g.dataset.i;if(fixedSet.has(i))return;if(q.bad[i]){fixedSet.add(i);draw();a.say(`<b>${q.words[i]} → ${q.bad[i]}</b>. Good catch!`);if(fixedSet.size===Object.keys(q.bad).length){r++;if(r<Q.length){a.confetti();a.later(()=>{fixedSet.clear();draw();a.say('Next sentence. Find all the mistakes!')},1600)}else a.win(`<b>${q.fixed}</b> You are an editor!`)}}else a.say(`"${q.words[i]}" is fine. Look for missing capitals, wrong tense, or a missing full stop.`)})};
+  draw();a.say('This writer forgot to <b>check</b>. Tap each word that has a mistake.')}},
+
+{part:'check',title:'Star check 1',say:'Which word should start the <b>last</b> event in a recount?',
+ draw:()=>[['First',C.sky],['Next',C.leaf],['Then',C.sun],['?',C.grape]].map(([w,c],k)=>G(`<ellipse cx="${110+k*140}" cy="200" rx="56" ry="26" fill="${c}" stroke="${C.ink}" stroke-width="3"/>`+T(110+k*140,207,w,'lab mid',c===C.sun?'':'style="fill:#fff"'),'a-pop',k*.15)).join(''),
+ quiz:{options:['Finally','First','Next'],answer:'Finally',why:'<b>Finally</b> tells the reader this is the last thing that happened.',hint:'Which word means "at the end"?'}},
+
+{part:'check',title:'Star check 2',say:'Which sentence <b>shows</b> instead of tells?',
+ draw:()=>pencil(320,200,1.5),
+ quiz:{options:['The food was good.','The crispy chicken crunched and tasted of garlic and pepper.','I liked the food a lot.'],answer:'The crispy chicken crunched and tasted of garlic and pepper.',why:'It uses <b>hearing</b> (crunched) and <b>taste</b> (garlic, pepper). The reader can almost eat it!',hint:'Which one lets you taste or hear the food?'}},
+
+{part:'check',title:'Star check 3',say:'In a set of instructions, each step should begin with...',
+ draw:()=>[['1','Mix the flour and eggs.'],['2','Pour into a pan.'],['3','Cook for two minutes.']].map(([n,s],k)=>G(`<circle cx="100" cy="${120+k*60}" r="16" fill="${C.accent}"/>`+T(100,126+k*60,n,'lab mid','style="fill:#fff"')+T(130,127+k*60,s,'lab'),'a-fade',k*.2)).join(''),
+ quiz:{options:['a command verb','a question','the word "and"'],answer:'a command verb',why:'Steps start with a <b>command verb</b>: Mix, Pour, Cook. It tells the reader exactly what to do.',hint:'Look at the first word of each step above.'}},
+
+{part:'check',title:'Star check 4',say:'This invitation is missing something important. What is it?',
+ draw:()=>box(140,40,360,300,'#FFF4D6',18)+T(320,80,'You are invited!','h mid acc')+T(170,120,'Dear Zack,','lab')+prose(170,152,'Come to my pool party!',30,'lab',26)+T(170,200,'When: Sunday, 2 pm','lab')+T(170,236,'Bring: a towel','lab')+T(170,300,'From, Arjun','lab'),
+ quiz:{options:['Who it is from','Where the party is','When the party is'],answer:'Where the party is',why:'There is no <b>Where</b>! Zack would not know which pool to go to.',hint:'Check: What? When? Where? Who? Which one is not there?'}},
+
+{part:'check',title:'Star check 5',say:'Find the mistake: "Last week we visit my grandmother."',
+ draw:()=>sentence(40,140,['Last','week','we','visit','my','grandmother','.'],{size:22,maxW:560}).svg+T(320,240,'Something is wrong with the tense!','lab mid acc'),
+ quiz:{options:['"Last" should be "last"','"visit" should be "visited"','"grandmother" needs a capital'],answer:'"visit" should be "visited"',why:'"Last week" is in the past, so the verb must be past tense: <b>visited</b>.',hint:'When did this happen? What should the verb look like?'}},
+
+{part:'check',title:'You did it!',say:'Wonderful writing! You can <b>plan</b>, use <b>sequencing words</b>, <b>show</b> with the five senses, write <b>instructions</b> and <b>invitations</b>, and <b>check</b> your work with CUPS. Keep a journal and write a little every day!',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+pencil(120,230,1.1)+T(520,230,'Finally...','h mid acc'),'a-pop',.3)+T(320,60,'Writing superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.confetti(),400)}
+];
+
+
+render();
+</script>
+
+</body></html>

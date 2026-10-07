@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Disciplined Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: an almanac-style printed plate (kept light in both themes, like a page) with the narration beneath; quiet chrome around it. */
+:root{
+  --bg:#ECEEEA; --surface:#F8F8F5; --ink:#1C2733; --muted:#5D6670; --line:#D3D7CF; --accent:#2F5D50; --on-accent:#F8F8F5; --ochre:#8F6418; --ok:#3C7D4A; --bad:#B2423A;
+  --display:"Libre Caslon Text",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#12171C; --surface:#1A2129; --ink:#E5E8EB; --muted:#9BA5AF; --line:#2E3842; --accent:#86BBA9; --on-accent:#12171C; --ochre:#D7A653; --ok:#6DBB7C; --bad:#E07A70; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#12171C; --surface:#1A2129; --ink:#E5E8EB; --muted:#9BA5AF; --line:#2E3842; --accent:#86BBA9; --on-accent:#12171C; --ochre:#D7A653; --ok:#6DBB7C; --bad:#E07A70; color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:24px 40px;display:flex;flex-direction:column;gap:16px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ochre);font-weight:700}
+h1{margin:4px 0 0;font-family:var(--display);font-weight:400;font-size:clamp(28px,5vw,40px);line-height:1.1;text-wrap:balance}
+.progress{margin:0;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.progress b{color:var(--ink)}
+.parts{display:flex;gap:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.parts button{font:inherit;font-size:15px;font-weight:600;padding:8px 14px;border:none;background:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.parts button[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.scene-head{display:flex;flex-direction:column;gap:2px}
+.scene-no{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(22px,3.6vw,30px);line-height:1.2;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:8px;background:#FAFAF7;border:1px solid #DFE2DB;user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ui:empty{display:none}
+.ui button{font:inherit;font-size:15px;font-weight:600;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-align:left}
+.ui button.go{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.ui button.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.ui button.no{border-color:var(--bad);color:var(--bad)}
+.ui button:disabled{cursor:default;opacity:.7}
+.ui .row{display:flex;gap:8px;flex-wrap:wrap;width:100%}
+.ui input[type=text]{font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);flex:1 1 260px;min-width:0}
+.ui label.chk{display:flex;gap:8px;align-items:center;font-size:15px;cursor:pointer}
+.ui input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+.narr{border-left:3px solid var(--accent);padding:2px 0 2px 14px;min-width:0}
+.narr p{margin:0;max-width:70ch}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font:inherit;font-size:15px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.controls button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.controls button:disabled{opacity:.4;cursor:default}
+.controls button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.dots{display:flex;gap:5px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:9px;height:9px;padding:0;border-radius:50%;border:none;background:var(--line);cursor:pointer}
+.dots button.try{border-radius:2px}
+.dots button.done{background:var(--ochre)}
+.dots button[aria-current="true"]{background:var(--accent)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.foot{font-size:13px;color:var(--muted);margin:0}
+
+#stage text{font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;fill:#1C2733}
+#stage .h{font-family:"Libre Caslon Text",Georgia,serif;font-size:24px}
+#stage .big{font-family:"Libre Caslon Text",Georgia,serif;font-size:36px}
+#stage .q{font-family:"Libre Caslon Text",Georgia,serif;font-style:italic;font-size:19px}
+#stage .lab{font-size:16px;font-weight:700}
+#stage .sm{font-size:13.5px}
+#stage .xs{font-size:11.5px;font-weight:700;letter-spacing:.12em}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .mut{fill:#5D6670} #stage .acc{fill:#2F5D50} #stage .och{fill:#8F6418} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+.a-pop{animation:pop .45s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .7s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+@keyframes pop{from{opacity:0;transform:scale(.94)}}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+.stamp{animation:stamp 1.6s ease forwards}
+@keyframes stamp{0%{opacity:0;transform:scale(.6)}15%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-grow,.stamp{animation:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">A short course · For adults</p>
+      <h1>The disciplined life</h1>
+    </div>
+    <p class="progress">Exercises completed: <b id="starcount">0</b></p>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Practise</button>
+    <button type="button" data-part="check">Reflect</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="scene-no" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="narr"><p id="say"></p></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" aria-pressed="false">Read aloud</button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">History, Franklin's method, modern research and practical defences. Use the arrow keys or the buttons to move between slides.</p>
+</div>
+
+<script>
+const C={ink:'#1C2733',paper:'#FAFAF7',accent:'#2F5D50',sun:'#EADBB5',sky:'#3F6E8C',berry:'#9C4A4A',leaf:'#5C7F4E',grape:'#6A5A8C',ochre:'#8F6418',good:'#3C7D4A',bad:'#B2423A',line:'#D3D7CF',muted:'#5D6670',tint:'#EAF0EC',tint2:'#F4ECDC'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+const box=(x,y,w,h,fill='#fff',r=8,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="#C9CEC6" stroke-width="1.5" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=9;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.45)} ${y2-h*Math.sin(a-.45)} L${x2} ${y2} L${x2-h*Math.cos(a+.45)} ${y2-h*Math.sin(a+.45)}" stroke="${col}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+const PARTS={learn:'Learn',try:'Practise',check:'Reflect'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'')); u.rate=.98; const v=speechSynthesis.getVoices().find(v=>/en[-_](GB|SG|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('class','stamp'); g.style.transformOrigin='604px 36px';
+  g.innerHTML=`<circle cx="604" cy="36" r="20" fill="${C.good}"/><path d="M594 36 l7 7 l13 -14" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`; svg.appendChild(g); later(()=>g.remove(),1700); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size;} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Correct.</b> '+qz.why);}
+    else{b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=`${PARTS[sc.part]} · ${String(i+1).padStart(2,'0')} / ${S.length}`; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>go(k); d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('input,textarea')) return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* The Disciplined Life — adult edition */
+function wr(x,y,str,max=40,cls='sm',lh=19,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const nLines=(str,max)=>{const w=str.split(' ');let n=1,c='';w.forEach(t=>{if((c+' '+t).trim().length>max){n++;c=t}else c=(c+' '+t).trim()});return n};
+function seg(cx,cy,r1,r2,h0,h1,col){const a=h=>(h/24*360-90)*Math.PI/180,p=(r,h)=>`${(cx+r*Math.cos(a(h))).toFixed(1)} ${(cy+r*Math.sin(a(h))).toFixed(1)}`,lg=(h1-h0)>12?1:0;
+ return `<path d="M${p(r2,h0)} A${r2} ${r2} 0 ${lg} 1 ${p(r2,h1)} L${p(r1,h1)} A${r1} ${r1} 0 ${lg} 0 ${p(r1,h0)} Z" fill="${col}" stroke="#FAFAF7" stroke-width="2"/>`}
+const LS='style="letter-spacing:.12em"';
+const kicker=(x,y,t,cls='xs mut')=>T(x,y,t.toUpperCase(),cls);
+const practice=(x,y,w,h,txt,max)=>box(x,y,w,h,C.tint,8)+kicker(x+14,y+24,'In practice','xs acc')+wr(x+14,y+46,txt,max||Math.floor((w-28)/6.5),'sm',18);
+const rule=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.line}" stroke-width="1.5"/>`;
+const bullet=(x,y,txt,max=36)=>`<rect x="${x}" y="${y-8}" width="6" height="6" fill="${C.accent}"/>`+wr(x+14,y,txt,max,'sm',18);
+
+const S=[
+/* ===== HISTORY ===== */
+{part:'learn',title:'The disciplined life',say:`Self-discipline is one of the oldest projects in human thought. This short course moves from Odysseus to modern habit research, spends real time on the single most useful tool, the <b>if-then plan</b>, and ends with exercises you can use tonight. Use Next or the arrow keys.`,
+ draw:()=>kicker(32,52,"Poor Richard's Almanack, 1755")+T(32,104,'Who is powerful?','big')+T(32,150,'He that governs','big acc')+T(32,194,'his Passions.','big acc')+
+  wr(32,244,'Franklin wrote that in his almanac. This course is about how people have tried to do it, and what actually works.',40,'sm mut',19)+rule(338,40,338,360)+
+  kicker(366,52,'In this course')+[['A short history','from Odysseus to the monks'],["Franklin's method",'13 virtues and a little book'],['What research says','habits, willpower, temptation'],['If-then plans','the most useful single tool'],['Order and defences','routines, addictions, getting help'],['Practise and reflect','exercises you can use tonight']]
+  .map(([a,b],k)=>G(T(366,92+k*46,String(k+1).padStart(2,'0'),'lab och')+T(398,92+k*46,a,'lab')+T(398,111+k*46,b,'sm mut'),'a-fade',.1+k*.08)).join('')},
+
+{part:'learn',title:'Odysseus ties himself to the mast',say:`The oldest story about self-control is also the most practical. Odysseus knew he could not resist the Sirens' song, so he had his crew <b>tie him to the mast</b> and plug their own ears with wax. He did not rely on willpower in the moment. He decided <b>earlier, while calm</b>, and removed his future options. Psychologists call this <b>precommitment</b>.`,
+ draw:()=>{let s=`<rect x="16" y="16" width="330" height="368" rx="8" fill="#E9F0F2"/>`;for(let k=0;k<4;k++)s+=`<path d="M16 ${292+k*22} q20 -7 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t10 0" fill="none" stroke="#8FB1C2" stroke-width="2"/>`;
+  s+=`<path d="M60 268 H300 L276 306 H84 Z" fill="#7C5E40" stroke="${C.ink}" stroke-width="1.5" stroke-linejoin="round"/><line x1="180" y1="70" x2="180" y2="268" stroke="${C.ink}" stroke-width="4"/>`+
+   `<path d="M186 84 Q252 130 186 196 Z" fill="#F3EEE2" stroke="${C.ink}" stroke-width="1.5"/><circle cx="180" cy="150" r="9" fill="#E9D5BD" stroke="${C.ink}" stroke-width="1.5"/><rect x="172" y="160" width="16" height="40" rx="4" fill="${C.berry}"/>`+
+   `<path d="M166 170 h28 M166 186 h28" stroke="#5B3E22" stroke-width="3" stroke-linecap="round"/><ellipse cx="312" cy="276" rx="26" ry="11" fill="#9AA6AD"/>`+T(298,240,'♪','lab mut')+T(318,222,'♫','lab mut')+kicker(32,44,'Homer, Odyssey · c. 700 BCE');
+  s+=T(370,62,'Precommitment','h')+wr(370,92,'Decide while you are calm, and remove the option before the temptation arrives.',36,'sm',19)+kicker(370,160,'Modern versions');
+  ['App and website blockers on a schedule','Automatic transfer to savings on payday','No alcohol or snacks kept at home','Card left at home on a night out','Phone charged outside the bedroom'].forEach((t,k)=>s+=G(bullet(370,190+k*36,t,35),'a-fade',.3+k*.12));
+  return s}},
+
+{part:'learn',title:'Confucius and Aristotle: character is practice',say:`In China, Confucius taught <b>kè jǐ fù lǐ</b>: overcome the self and return to right conduct. He also described where practice leads: by seventy he could follow his heart's desire <b>without overstepping the line</b>. In Greece, Aristotle argued that virtue is a <b>habit</b>: we become just by doing just acts. Both say the same thing. Act first; character follows.`,
+ draw:()=>kicker(32,48,'Confucius · 551–479 BCE')+T(32,104,'克己复礼','big','style="font-size:42px"')+T(32,130,'kè jǐ fù lǐ','sm mut')+
+  wr(32,170,'"Overcome the self and return to right conduct: that is humaneness."',28,'q',25)+T(32,256,'Analects 12.1','sm mut')+
+  wr(32,294,`"At seventy I could follow my heart's desire without overstepping the line."`,40,'sm',18)+T(32,350,'Analects 2.4','sm mut')+rule(320,36,320,364)+
+  kicker(344,48,'Aristotle · 384–322 BCE')+wr(344,96,'"We become just by doing just acts, temperate by doing temperate acts, brave by doing brave acts."',27,'q',25)+T(344,214,'Nicomachean Ethics, Book II','sm mut')+
+  G(practice(344,244,272,108,'Act as the person you want to become before you feel like it. Feelings follow repetition.'),'a-fade',.4)},
+
+{part:'learn',title:'The Stoics: the circle of control',say:`The Stoics added a filter. <b>Epictetus</b>, a former slave, taught that some things are up to us and some are not, so spend effort only on the inner circle. And <b>Marcus Aurelius</b>, emperor of Rome, admitted in his private notebook that even he struggled to get out of bed.`,
+ draw:()=>`<circle cx="180" cy="208" r="164" fill="#EDF1F3" stroke="${C.line}" stroke-width="1.5"/>`+T(180,78,'Not up to me','lab mid mut')+T(180,98,'other people · outcomes · luck','sm mid mut')+T(180,348,'reputation · the past','sm mid mut')+
+  G(`<circle cx="180" cy="214" r="90" fill="${C.sun}"/>`+T(180,192,'Up to me','lab mid')+T(180,216,'my choices','sm mid')+T(180,236,'my effort','sm mid')+T(180,256,'my judgements','sm mid'),'a-pop',.3)+
+  kicker(372,48,'Epictetus · c. 50–135 CE')+wr(372,74,'Some things are up to us and some are not. Spend effort only on the first.',36,'sm',19)+
+  kicker(372,148,'Marcus Aurelius · 121–180 CE')+wr(372,176,'"At dawn, when you have trouble getting out of bed, tell yourself: I have to go to work, as a human being."',30,'q',22,'style="font-size:16px"')+
+  G(practice(372,280,244,96,'When upset, ask: is this up to me? If not, let it go. If yes, name the next action.'),'a-fade',.5)},
+
+{part:'learn',title:'Benedict invents the timetable',say:`Around <b>530 CE</b>, Benedict of Nursia wrote a Rule that ran the monastery by the bell: prayer, manual work, reading, meals and sleep, each at its hour. "Idleness is the enemy of the soul," he wrote. The timetable shown is a simplified example; the point is that every activity has a fixed slot, so nobody has to decide each day.`,
+ draw:()=>{const segs=[[20,26,C.grape],[2,3,C.sky],[3,6,C.leaf],[6,7,C.sky],[7,11,C.accent],[11,13,C.sun],[13,17,C.accent],[17,18,C.leaf],[18,20,C.sun]];
+  let s=segs.map(([a,b,c],k)=>G(seg(192,206,88,148,a,b,c),'a-fade',.05+k*.08)).join('')+T(192,202,'a monastic','sm mid mut')+T(192,220,'day','sm mid mut');
+  [[0,'midnight'],[6,'6 am'],[12,'noon'],[18,'6 pm']].forEach(([h,l])=>{const a=(h/24*360-90)*Math.PI/180;s+=T((192+164*Math.cos(a)).toFixed(0),(211+164*Math.sin(a)).toFixed(0),l,'sm mid mut')});
+  [['Prayer',C.sky],['Work',C.accent],['Reading',C.leaf],['Meals',C.sun],['Sleep',C.grape]].forEach(([l,c],k)=>s+=`<rect x="380" y="${36+k*26}" width="14" height="14" rx="3" fill="${c}"/>`+T(402,48+k*26,l,'sm'));
+  return s+wr(380,198,'"Idleness is the enemy of the soul."',24,'q',24)+T(380,248,'Rule of St Benedict, ch. 48','sm mut')+G(practice(380,270,236,106,'Give recurring work a fixed slot (writing 8–10 am, admin after lunch) so you stop deciding daily.'),'a-fade',.6)}},
+
+/* ===== FRANKLIN ===== */
+{part:'learn',title:"Franklin's thirteen virtues",say:`Around 1730, in his twenties, Franklin began what he called "the bold and arduous project of arriving at moral perfection." He listed <b>13 virtues</b>, each with a one-line rule, and ordered them deliberately. Temperance came first because it gives "coolness and clearness of head"; Silence and Order followed to free up time for work and study.`,
+ draw:()=>{const V=[['Temperance','Eat not to dullness; drink not to elevation'],['Silence','Speak only what benefits others or yourself'],['Order','A place for things, a time for tasks'],['Resolution','Perform without fail what you resolve'],['Frugality','Waste nothing'],['Industry','Lose no time; cut unnecessary actions'],['Sincerity','Use no hurtful deceit'],['Justice','Wrong none'],['Moderation','Avoid extremes'],['Cleanliness','In body, clothes and home'],['Tranquillity','Be not disturbed at trifles'],['Chastity','Restraint in desire'],['Humility','Imitate Jesus and Socrates']];
+  return V.map(([n,p],k)=>{const x=16+(k%5)*124,y=16+Math.floor(k/5)*120;return G(box(x,y,116,110,k===0?C.sun:'#fff',8)+T(x+10,y+22,String(k+1).padStart(2,'0'),'xs och')+T(x+10,y+46,n,'lab','style="font-size:15px"')+wr(x+10,y+68,p,16,'sm mut',16,'style="font-size:12.5px"'),'a-fade',.04*k)}).join('')+
+   G(practice(388,256,236,110,'Order matters. Start with the habit that makes the others easier: usually sleep, alcohol or the phone.'),'a-fade',.6)}},
+
+{part:'learn',title:'The little book of spots',say:`Franklin's tool was a small notebook: one page per week, a column for each day, a row for each virtue. Each night he marked a <b>black spot</b> for every fault. He gave one virtue full attention each week and only tracked the rest: <b>13 weeks per round, four rounds a year</b>. The spots thinned over the years, though they never disappeared.`,
+ draw:()=>{const L='TSORFISJMCTCH'.split(''),D='SMTWTFS'.split('');let s=box(24,24,300,334,'#fff',6)+`<rect x="25" y="25" width="298" height="28" fill="#EFE7D6"/><rect x="25" y="53" width="298" height="22" fill="${C.sun}" opacity=".6"/>`;
+  D.forEach((d,k)=>s+=T(90+k*33+16,44,d,'sm mid','style="font-weight:700"'));L.forEach((l,r)=>{s+=T(56,69+r*22,l,'sm mid','style="font-weight:700"')+rule(25,75+r*22,323,75+r*22)});
+  for(let k=0;k<=7;k++)s+=rule(90+k*33,25,90+k*33,357);
+  [[1,1],[1,4],[2,0],[2,2],[2,5],[3,3],[4,6],[5,1],[6,2],[7,5],[8,0],[9,4],[10,3],[11,6],[12,2],[2,6]].forEach(([r,c],k)=>s+=G(`<circle cx="${106+c*33}" cy="${64+r*22}" r="5" fill="${C.ink}"/>`,'a-pop',.3+k*.06));
+  s+=T(24,382,'Row T = this week\'s focus (Temperance). Rows are the 13 virtues.','sm mut');
+  s+=kicker(356,44,'How it worked');[['One page per week; one row per virtue.'],['A black spot for each fault, marked nightly.'],['One virtue in focus per week; the others only tracked.'],['13 weeks per round, four rounds a year.']].forEach(([t],k)=>s+=T(356,78+k*44,k+1,'lab och')+wr(376,78+k*44,t,36,'sm',18));
+  return s+G(practice(356,258,262,100,'Use any habit tracker. Track daily; give one habit your full attention each week.'),'a-fade',.5)}},
+
+{part:'learn',title:"Franklin's daily scheme",say:`This is Franklin's own timetable from his <i>Autobiography</i>. Notice the two questions that bracket the day. Morning: "What good shall I do this day?" Evening: "What good have I done to-day?" A plan and a review: still the core of most productivity systems.`,
+ draw:()=>{const R=[['5–7 am','Rise, wash, plan the day',C.sun,0],['8–11','Work',C.accent,1],['12–1 pm','Read, look over accounts, dine',C.leaf,1],['2–5','Work',C.accent,1],['6–9','Tidy up, supper, music, review',C.sky,1],['10 pm–4','Sleep',C.grape,1]];
+  let s=R.map(([t,a,c,w],k)=>{const y=20+k*56;return G(T(84,y+28,t,'sm end','style="font-weight:700"')+`<rect x="96" y="${y}" width="270" height="42" rx="6" fill="${c}"/>`+T(110,y+26,a,'sm',w?'style="fill:#fff;font-weight:600"':'style="font-weight:600"'),'a-grow',.05+k*.12)}).join('');
+  s+=G(rule(368,41,392,41)+box(394,16,226,80,'#fff',8)+kicker(408,38,'Morning question','xs och')+wr(408,62,'"What good shall I do this day?"',24,'q',22,'style="font-size:17px"'),'a-fade',.9);
+  s+=G(rule(368,265,392,265)+box(394,230,226,80,'#fff',8)+kicker(408,252,'Evening question','xs och')+wr(408,276,'"What good have I done to-day?"',24,'q',22,'style="font-size:17px"'),'a-fade',1.1);
+  return s+T(96,372,'Source: The Autobiography of Benjamin Franklin','sm mut')}},
+
+{part:'learn',title:"Poor Richard's proverbs",say:`Franklin packed his almanacs with short sayings. <b>Tap each card</b> to turn it over and see a concrete way to apply it.`,
+ draw:()=>`<g class="pvs"></g>`,
+ mount:a=>{const P=[['Early to bed and early to rise, makes a man healthy, wealthy and wise.','Fix your wake time. Set a phone-off alarm 60 minutes before bed.'],['Lost time is never found again.','Put your most important task in the calendar as an appointment, not on a list.'],['Well done is better than well said.','Finish one thing before you announce the next.'],['Diligence is the mother of good luck.','Show up on schedule on low days too. Output varies; attendance should not.'],['Little strokes fell great oaks.','Choose a daily dose too small to skip: 10 minutes, one page, five push-ups.'],["Neglect mending a small fault, and 'twill soon be a great one.",'After a slip, recover within 24 hours. Never miss twice.']];
+  const on=new Set();const draw=()=>{a.q('.pvs').innerHTML=P.map(([f,b],k)=>{const x=16+(k%3)*206,y=16+Math.floor(k/3)*184,o=on.has(k);
+   return `<g class="tap pv" data-k="${k}">${G(box(x,y,196,172,o?C.tint:'#fff',8)+(o?kicker(x+14,y+28,'In practice','xs acc')+wr(x+14,y+56,b,25,'sm',19,'style="font-size:14.5px"'):wr(x+14,y+40,f,20,'q',24,'style="font-size:17px"')+T(x+14,y+156,'Tap to apply','xs mut')),o?'a-fade':'')}</g>`}).join('');
+   a.qa('.pv').forEach(g=>g.onclick=()=>{const k=+g.dataset.k;on.has(k)?on.delete(k):on.add(k);draw();if(on.size===6)a.win('All six turned. Pick the one you need most this week and do it tonight.')})};draw();}},
+
+/* ===== RESEARCH ===== */
+{part:'learn',title:'Discipline becomes a science',say:`In 1859 Samuel Smiles' <i>Self-Help</i> became a Victorian bestseller. In 1890 William James urged readers to "make our nervous system our ally instead of our enemy," meaning automate good habits early. From the 1960s Walter Mischel's marshmallow studies turned self-control into a lab science, and since the 2000s researchers have measured how habits actually form and break.`,
+ draw:()=>{const N=[[96,'1859','Self-Help','Samuel Smiles makes self-improvement a bestseller.',1],[244,'1890','William James','"Make our nervous system our ally instead of our enemy."',0],[396,'1960s','Marshmallow studies','Walter Mischel brings self-control into the lab.',1],[544,'2000s','Habit science','Field studies measure how habits form and break.',0]];
+  let s=`<line x1="24" y1="200" x2="616" y2="200" stroke="${C.ink}" stroke-width="2"/>`;
+  N.forEach(([x,yr,t,b,up],k)=>{const cy=up?24:224,cx=Math.min(Math.max(x-84,16),456);s+=G(`<line x1="${x}" y1="${up?172:200}" x2="${x}" y2="${up?200:224}" stroke="${C.ink}" stroke-width="1.5"/><circle cx="${x}" cy="200" r="6" fill="${C.accent}"/>`+
+   box(cx,cy,168,148,'#fff',8)+T(cx+14,cy+36,yr,'h och')+T(cx+14,cy+60,t,'lab','style="font-size:15px"')+wr(cx+14,cy+84,b,22,'sm',18),'a-fade',.1+k*.25)});return s}},
+
+{part:'learn',title:'Two numbers about habits',say:`About <b>43%</b> of what people do each day is habit, usually in the same place and while thinking about something else (Wendy Wood's diary studies). When Pippa Lally's team followed people building a new habit, it took a median of <b>66 days</b> to feel automatic, with a wide range from <b>18 to 254</b>. And <b>missing one day made little difference</b>.`,
+ draw:()=>{let s=`<circle cx="150" cy="168" r="104" fill="none" stroke="#E6E9E4" stroke-width="24"/>`+G(seg(150,168,92,116,0,24*.43,C.accent).replace('stroke="#FAFAF7"','stroke="none"'),'a-fade',.2)+T(150,180,'≈43%','big mid')+
+   T(150,312,'of daily actions are habits','lab mid')+T(150,334,'Wood et al., 2002','sm mid mut');
+  s+=T(476,52,'Days until a new habit felt automatic','lab mid')+`<line x1="340" y1="226" x2="604" y2="226" stroke="${C.ink}" stroke-width="1.5"/>`;
+  [0,50,100,150,200,250].forEach(v=>s+=`<line x1="${342+v}" y1="226" x2="${342+v}" y2="232" stroke="${C.ink}" stroke-width="1.5"/>`+T(342+v,250,v,'sm mid mut'));
+  s+=G(`<rect x="${342+18}" y="150" width="${254-18}" height="36" rx="4" fill="#C9DCE6"/>`,'a-grow',.4)+T(360,140,'18','sm mid')+T(596,140,'254','sm mid');
+  s+=G(`<line x1="${342+66}" y1="120" x2="${342+66}" y2="206" stroke="${C.bad}" stroke-width="3"/>`+T(342+66,110,'median 66','sm mid','style="fill:#B2423A;font-weight:700"'),'a-fade',.9);
+  return s+T(476,270,'days','sm mid mut')+G(practice(350,288,268,90,'Plan for about two months, not 21 days. If you miss a day, simply resume tomorrow.'),'a-fade',1.2)+T(476,394,'Lally et al., 2010','sm mid mut')}},
+
+{part:'learn',title:'Willpower is not a fuel tank',say:`The popular idea that willpower runs out like fuel (<b>ego depletion</b>) failed a 23-lab replication in 2016: the effect was close to <b>zero</b>. Studies that followed people through their day found that those high in self-control report <b>fewer temptations</b> in the first place. They do not resist harder; they arrange life so they need to resist less. Simple <b>if-then plans</b> also had a reliable effect.`,
+ draw:()=>{const C3=[['Myth','Willpower runs out like fuel','23 labs, 2,141 people: effect about zero (d = 0.04). Hagger et al., 2016.','#F7E9E6',C.bad],['Finding','Disciplined people meet fewer temptations','They shape their surroundings rather than resist more. Hofmann et al., 2012.',C.tint,C.accent],['Tool','If-then plans work','Medium-to-large effect across 94 tests (d = 0.65). Gollwitzer & Sheeran, 2006.',C.tint2,C.ochre]];
+  return C3.map(([tag,t,b,f,c],k)=>{const x=16+k*206;return G(box(x,16,196,256,f,8)+kicker(x+14,42,tag,'xs','style="fill:'+c+'"')+wr(x+14,76,t,20,'h',28,'style="font-size:21px"')+wr(x+14,184,b,27,'sm',18),'a-fade',.1+k*.2)}).join('')+
+  G(practice(16,288,608,90,'Spend your effort redesigning your surroundings and writing plans in advance, not gritting your teeth in the moment.',90),'a-fade',.8)}},
+
+/* ===== IF-THEN PLANS ===== */
+{part:'learn',title:'If-then plans: what they are',say:`Psychologist <b>Peter Gollwitzer</b> called them <b>implementation intentions</b>. A goal says what you want ("exercise more"). An if-then plan says exactly <b>when, where and how</b> you will act: "If <i>situation</i>, then I will <i>action</i>." The decision is made once, in advance. When the situation arrives, the action starts almost automatically.`,
+ draw:()=>box(24,24,592,84,'#fff',8)+T(48,76,'If','big')+`<rect x="88" y="44" width="170" height="46" rx="6" fill="${C.sun}"/>`+T(173,74,'situation','lab mid')+T(270,76,', then I will','big','style="font-size:30px"')+`<rect x="458" y="44" width="140" height="46" rx="6" fill="#CFE0D8"/>`+T(528,74,'action','lab mid')+
+  T(320,140,'"If it is 9 pm on a weeknight,','q mid')+T(320,166,"then I will write tomorrow's top three tasks.\"",'q mid')+
+  [['Decided in advance','Nothing to debate in the moment; the choice is already made.'],['The cue reminds you','The situation stands out in memory, so it comes to mind when it happens.'],['Action starts itself','The response begins like a habit, before excuses arrive.']].map(([t,b],k)=>G(T(24+k*204,212,t,'lab','style="font-size:15px"')+wr(24+k*204,236,b,28,'sm',18),'a-fade',.2+k*.2)).join('')+
+  G(box(24,310,592,68,C.tint2,8)+kicker(40,336,'Evidence','xs och')+T(40,362,'94 tests · medium-to-large effect (d = 0.65) · Gollwitzer & Sheeran, 2006','sm'),'a-fade',.8)},
+
+{part:'learn',title:'Weak goals, strong plans',say:`Here is how to turn a vague goal into a plan. A good if-then plan has three features: the <b>situation is specific</b> (a time, a place, or a feeling you can notice), the <b>action is concrete and small</b> enough to start within two minutes, and there is <b>one plan per obstacle</b>.`,
+ draw:()=>{const R=[['I will exercise more.','If it is 6:30 am on Monday, Wednesday or Friday, then I will put on my running shoes and walk out the door.'],['I will use my phone less.','If I sit down at my desk, then I will put my phone in the drawer before I open my laptop.'],['I will drink less.','If I am offered a second drink, then I will ask for sparkling water with lime.'],['I will be more patient with the kids.','If I feel my voice rising, then I will pause for one slow breath before I answer.']];
+  let s=kicker(24,36,'Vague goal')+kicker(220,36,'If-then plan','xs acc')+rule(24,46,616,46);
+  R.forEach(([g,p],k)=>{const y=74+k*60;s+=G(wr(24,y,g,26,'q',20,'style="font-size:15px;fill:#5D6670"')+arrow(186,y-5,206,y-5,C.muted)+wr(220,y,p,62,'sm',19,'style="font-size:14.5px"')+rule(24,y+36,616,y+36),'a-fade',.1+k*.15)});
+  [['Specific situation','a time, place or feeling'],['Small, concrete action','can start within 2 minutes'],['One plan per obstacle','not one plan for everything']].forEach(([a,b],k)=>s+=G(box(24+k*200,320,192,60,C.tint,8)+T(38+k*200,344,'✓ '+a,'lab acc','style="font-size:14.5px"')+T(38+k*200,366,b,'sm mut'),'a-fade',.8+k*.1));
+  return s}},
+
+{part:'learn',title:'Two kinds of plan',say:`Use <b>start plans</b> to begin a good habit, and <b>obstacle plans</b> to block a bad one. A useful variant is <b>habit stacking</b>: attach the new action to something you already do every day ("After I pour my coffee, I will…"). And always write one plan for slips, so a single lapse does not become "I'll start again next Monday."`,
+ draw:()=>{const col=(x,f,title,sub,items)=>box(x,16,296,286,f,8)+T(x+16,50,title,'h')+T(x+16,72,sub,'sm mut')+items.map((t,k)=>wr(x+16,108+k*64,'"'+t+'"',40,'q',19,'style="font-size:15px"')).join('');
+  return G(col(16,C.tint,'Start plans','to begin a good habit',["If it is 9 pm, then I will write tomorrow's top three tasks.",'After I pour my morning coffee, I will read one page of a book.','If I sit down at my desk, then I will open the draft before email.']),'a-fade',.1)+
+   G(col(328,C.tint2,'Obstacle plans','to block a bad one',['If I feel the urge to scroll, then I will stand up and drink a glass of water.','If I get home stressed and think of a drink, then I will walk for 10 minutes first.','If I slip, then I will note the trigger and restart at the next meal, not next Monday.']),'a-fade',.4)+
+   G(box(16,316,608,64,'#fff',8)+kicker(32,340,'Habit stacking','xs och')+T(32,364,'"After I [daily habit], I will [new small action]." The old habit becomes the cue.','sm'),'a-fade',.8)}},
+
+{part:'learn',title:'WOOP: find the real obstacle first',say:`Psychologist <b>Gabriele Oettingen</b> found that plans work best when you first picture the obstacle. Her four-step routine is called <b>WOOP</b>: Wish, Outcome, Obstacle, Plan. Picture the best outcome, then the inner obstacle that usually stops you, then write the if-then plan that targets that obstacle. It takes about five minutes.`,
+ draw:()=>{const W=[['W','Wish','What do I want in the next 4 weeks?','Finish the grant draft by the 30th.'],['O','Outcome','What is the best result? Picture it.','Submitted early; a calm final week.'],['O','Obstacle','What inside me gets in the way?','I check email first and lose the morning.'],['P','Plan','If [obstacle], then I will…','If I open my laptop before 10 am, then I will open the draft, not email.']];
+  return W.map(([l,n,q,e],k)=>{const x=16+k*154;return G(box(x,16,146,282,k===3?C.tint:'#fff',8)+T(x+14,58,l,'big och')+T(x+14,84,n,'lab')+wr(x+14,108,q,20,'sm mut',18)+rule(x+14,158,x+132,158)+kicker(x+14,180,'Example','xs')+wr(x+14,202,e,18,'q',19,'style="font-size:14px"'),'a-fade',.1+k*.2)+(k<3?arrow(x+148,157,x+156,157,C.muted):'')}).join('')+
+  G(box(16,312,608,68,C.tint2,8)+kicker(32,336,'Why it works','xs och')+T(32,360,'Picturing the obstacle right after the outcome means the plan targets the real barrier.','sm'),'a-fade',.9)}},
+
+/* ===== ORDER & DEFENCES ===== */
+{part:'learn',title:'A practical first week',say:`Here is the history boiled down to one week of small steps. Do one per day. By day 7 you will have a focus, a sleep anchor, protected work time, one cleared surface, one temptation removed, and a review habit.`,
+ draw:()=>{const D=['Pick one focus for the month and write one if-then plan for it.','Fix a wake-up time. Set a wind-down alarm 60 minutes before bed.','Block two 90-minute focus sessions in this week\'s calendar.','Clear one surface (desk, bag or inbox) and give each thing a place.','Remove one easy temptation: log out, delete an app, move it out of sight.',"Do Franklin's evening review: three lines on \"What good have I done today?\"",'Weekly review: what worked, what slipped? Edit one plan.'];
+  return D.map((t,k)=>{const y=16+k*52;return G((k%2?'':`<rect x="16" y="${y}" width="608" height="48" rx="6" fill="${C.tint}"/>`)+T(32,y+30,'Day '+(k+1),'lab och')+T(100,y+30,t,'sm','style="font-size:14.5px"'),'a-fade',.05+k*.1)}).join('')}},
+
+{part:'learn',title:'How compulsions hook us',say:`Every habit runs on a loop: a <b>cue</b> triggers a <b>craving</b>, you <b>respond</b>, and a <b>reward</b> reinforces it. Many apps, games and betting products are designed around this loop, and rewards that arrive <b>unpredictably</b> (a new post, an occasional win) make it strongest. You can break the loop at any of its four stages.`,
+ draw:()=>{const N=[[220,62,'Cue','phone buzzes',C.sky],[372,206,'Craving','"what is it?"',C.berry],[220,350,'Response','pick it up',C.accent],[68,206,'Reward','something new',C.ochre]];
+  let s=N.map(([x,y,t,b,c],k)=>G(`<rect x="${x-62}" y="${y-30}" width="124" height="60" rx="8" fill="${c}"/>`+T(x,y-4,t,'lab mid wht')+T(x,y+16,b,'sm mid wht'),'a-fade',.1+k*.3)).join('');
+  s+=[[284,86,346,170],[346,244,284,322],[156,322,94,244],[94,170,156,86]].map(([a1,b1,a2,b2],k)=>G(arrow(a1,b1,a2,b2,C.ink),'a-fade',.3+k*.3)).join('')+T(220,212,'repeat','sm mid mut');
+  return s+G(practice(452,40,172,320,'Write down the loop for one habit you want to change: the cue, the craving, what you do, and what you get from it. You cannot redesign a loop you have not named.',22),'a-fade',1.5)}},
+
+{part:'learn',title:'Seven defences',say:`One or two defences for each stage of the loop. Against the <b>cue</b>: add distance and decide in advance. Against the <b>craving</b>: check whether you are Hungry, Angry, Lonely or Tired (<b>HALT</b>), and wait it out. At the <b>response</b>: swap in a different routine. <b>Afterwards</b>: have an ally, and treat a slip as information.`,
+ draw:()=>{const D=[['Distance','Cue','Add friction: phone in another room, app deleted, nothing in the house.',C.sky],['Precommit','Cue','Decide while calm: blockers, limits, a planned route home.',C.sky],['HALT','Craving','Hungry, Angry, Lonely or Tired? Fix that first.',C.berry],['Delay','Craving','Wait 10 minutes. Urges rise, peak and fade.',C.berry],['Replace','Response','Keep the cue, swap the routine: walk, water, call someone.',C.accent],['Ally','After','Tell one person. Accountability makes slips harder to hide.',C.ochre],['Lapse ≠ relapse','After','A slip is information, not defeat. Never miss twice.',C.ochre]];
+  return D.map(([t,st,b,c],k)=>{const row=k<4?0:1,x=row?92+(k-4)*154:16+k*154,y=row?204:16;return G(box(x,y,146,176,'#fff',8)+`<rect x="${x}" y="${y}" width="146" height="5" rx="2" fill="${c}"/>`+kicker(x+12,y+30,st,'xs','style="fill:'+c+'"')+
+   T(x+12,y+56,t,'lab','style="font-size:15.5px"')+wr(x+12,y+82,b,19,'sm',18),'a-fade',.05+k*.1)}).join('')}},
+
+{part:'learn',title:'Defences for common habits',say:`The same principles applied to four common problems. For each, <b>add distance</b> at the cue, have a <b>replacement</b> ready, and write <b>one if-then plan</b>. Pick the row that fits you and copy its plan into the Practise section.`,
+ draw:()=>{const R=[['Phone and social media','Charge it outside the bedroom; remove feed apps from the phone; turn on grayscale.','A book or notebook by the bed','If I reach for my phone in bed, then I will read five pages instead.'],['Alcohol','Keep none at home; decide your limit before you go out.','Sparkling water, tea, a walk','If I am offered another drink, then I will say "I\'m fine with water."'],['Gambling','Self-exclusion; block betting sites; let someone you trust hold the card.','Exercise, a call to a friend','If I think about placing a bet, then I will text my accountability partner.'],['Late-night snacking','Do not buy it; keep fruit visible; close the kitchen at 9 pm.','Herbal tea; brush teeth early','If it is after 9 pm and I am in the kitchen, then I will make tea and leave.']];
+  const X=[16,124,290,418],Wd=[100,158,120,206];let s=['Habit','Add distance','Replace with','If-then plan'].map((h,k)=>kicker(X[k],36,h,k===3?'xs acc':'xs mut')).join('')+rule(16,46,624,46);
+  R.forEach((r,k)=>{const y=70+k*78;s+=G(r.map((t,c)=>wr(X[c],y,t,Math.floor(Wd[c]/(c===3?7.2:6.9)),c===0?'lab':c===3?'q':'sm',c===3?18:17,c===0?'style="font-size:14px"':c===3?'style="font-size:13.5px"':'style="font-size:12.5px"')).join('')+rule(16,y+56,624,y+56),'a-fade',.1+k*.15)});
+  return s+T(16,392,'Singapore readers: casino self-exclusion is available through the National Council on Problem Gambling.','sm mut','style="font-size:12px"')}},
+
+{part:'learn',title:'When to get help',say:`Discipline tools work for habits. But if a substance or behaviour has taken control, that is a <b>health condition, not a character flaw</b>, and treatment works. In Singapore, the <b>National Addictions Management Service (NAMS)</b> helps with alcohol, drugs, gambling, gaming and more. A GP is also a good first step.`,
+ draw:()=>box(16,16,328,368,'#fff',8)+kicker(32,44,'Signs it has taken control')+['Losing control over how much or how often','Carrying on despite harm to health, work or family','Needing more to get the same effect','Hiding it, or feeling irritable without it','Giving up things you used to enjoy'].map((t,k)=>bullet(32,84+k*58,t,40)).join('')+
+  G(box(360,16,264,256,C.tint,8)+kicker(376,44,'NAMS · Singapore','xs acc')+wr(376,70,'National Addictions Management Service',24,'lab',20)+T(376,140,'6389 2200','big')+T(376,164,'appointments','sm mut')+wr(376,198,'Walk-ins welcome for immediate support. Alcohol, drugs, gambling, gaming, vaping.',34,'sm',18),'a-fade',.3)+
+  G(box(360,288,264,96,'#fff',8)+kicker(376,316,'In crisis right now?','xs och')+T(376,348,'SOS: 1767','h')+T(376,370,'24-hour helpline','sm mut'),'a-fade',.5)},
+
+/* ===== PRACTISE ===== */
+{part:'try',title:'Write your own if-then plan',say:'',draw:()=>box(24,24,592,158,'#fff',8)+kicker(40,50,'Your plan')+`<g class="pv"></g>`+`<g class="chk"></g>`+
+  wr(24,330,'Next: write it on a sticky note where the situation happens (desk, fridge, phone lock screen) and read it aloud once a day this week.',90,'sm mut',19),
+ mount:a=>{const EX=[['it is 6:30 am on a weekday','put on my running shoes and step outside'],['I sit down at my desk','put my phone in the drawer before opening my laptop'],['I feel the urge to scroll','stand up and drink a glass of water'],['it is 9 pm','write tomorrow\'s top three tasks']];let ex=0,done=false;
+  a.ui.insertAdjacentHTML('beforeend',`<div class="row"><input type="text" id="ifIn" placeholder="If… (a specific time, place or feeling)" aria-label="If situation"><input type="text" id="thenIn" placeholder="then I will… (a small, concrete action)" aria-label="Then action"></div>
+   <div class="row"><label class="chk"><input type="checkbox" id="c1"> The situation is specific</label><label class="chk"><input type="checkbox" id="c2"> I can start it in under 2 minutes</label><label class="chk"><input type="checkbox" id="c3"> I can picture myself doing it</label></div>`);
+  const fi=document.getElementById('ifIn'),ft=document.getElementById('thenIn'),cb=['c1','c2','c3'].map(id=>document.getElementById(id));
+  const clean=s=>s.trim().replace(/^if\s+/i,'').replace(/^then\s+(i\s+will\s+)?/i,'').replace(/[.,]+$/,'').replace(/[<>&]/g,'');
+  const upd=()=>{const f=clean(fi.value),t=clean(ft.value);a.q('.pv').innerHTML=wr(40,90,`If ${f||'______'}, then I will ${t||'______'}.`,52,'q',30,'style="font-size:21px"');
+   a.q('.chk').innerHTML=[['Specific situation',cb[0].checked],['Starts within 2 minutes',cb[1].checked],['Easy to picture',cb[2].checked]].map(([l,on],k)=>`<circle cx="${40+k*200}" cy="222" r="10" fill="${on?C.good:'none'}" stroke="${on?C.good:C.muted}" stroke-width="2"/>`+(on?`<path d="M${35+k*200} 222 l4 4 l7 -8" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>`:'')+T(58+k*200,227,l,'sm')).join('');
+   const ok=f.split(/\s+/).length>=3&&t.split(/\s+/).length>=3&&cb.every(c=>c.checked);if(ok&&!done){done=true;a.win('<b>That is a solid plan.</b> Copy it, put it where the situation happens, and review it at the end of the week. If it fails, change the plan, not your opinion of yourself.')}};
+  fi.oninput=ft.oninput=upd;cb.forEach(c=>c.onchange=upd);upd();
+  a.btn('Use an example',()=>{const [f,t]=EX[ex++%EX.length];fi.value=f;ft.value=t;upd();a.say('Edit the example to fit your life, then tick the three checks.')});
+  a.btn('Copy plan',()=>{const txt=`If ${clean(fi.value)}, then I will ${clean(ft.value)}.`;try{navigator.clipboard.writeText(txt).then(()=>a.say('Copied. Paste it into your notes or phone reminder.'),()=>a.say('Copying was blocked here. Select the text above and copy it by hand.'))}catch(e){a.say('Copying was blocked here. Select the text above and copy it by hand.')}},'go');
+  a.say('Write one plan for this week. Fill in both parts in your own words, then tick the three checks. Stuck? Tap <b>Use an example</b>.');}},
+
+{part:'try',title:'Your four-week chart',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const V=['Sleep','Movement','Deep work','Order','Phone limits','Presence','Frugality','Kindness','Learning','Calm'],D='MTWTFSS'.split('');let pick=[],built=false,wk=0;const spots=new Set();
+  const draw=()=>{let s='';
+   if(!built){s+=kicker(24,40,'Choose four areas');V.forEach((v,k)=>{const x=24+(k%5)*120,y=60+Math.floor(k/5)*58,on=pick.includes(v);s+=`<g class="tap vch" data-v="${v}">${box(x,y,110,44,on?C.accent:'#fff',22)}${T(x+55,y+28,v,'sm mid',on?'style="fill:#fff;font-weight:700"':'style="font-weight:700"')}</g>`});
+    s+=T(24,210,`${pick.length} of 4 chosen`,'sm mut')+wr(24,250,"Franklin rotated 13 virtues over 13 weeks. Four areas over four weeks is easier to keep up: one gets your full attention each week, the others are only tracked.",86,'sm',19)}
+   else{s+=kicker(24,36,`Week ${wk+1} focus: ${pick[wk]}`,'xs acc');D.forEach((d,k)=>s+=T(205+k*58,64,d,'sm mid','style="font-weight:700"'));
+    pick.forEach((v,r)=>{const y=76+r*58;s+=(r===wk?`<rect x="16" y="${y}" width="608" height="52" rx="6" fill="${C.sun}" opacity=".55"/>`:'')+T(166,y+31,v,'lab end');
+     D.forEach((d,c)=>{const key=r+'-'+c;s+=`<g class="tap cell" data-k="${key}"><rect x="${179+c*58}" y="${y+5}" width="52" height="42" rx="5" fill="#fff" stroke="#C9CEC6" stroke-width="1.5"/>${spots.has(key)?`<circle cx="${205+c*58}" cy="${y+26}" r="7" fill="${C.ink}"/>`:''}</g>`})});
+    s+=T(24,326,'Tap a box to mark a slip. Aim for fewer spots, not zero.','sm mut')}
+   a.q('.play').innerHTML=s;
+   a.qa('.vch').forEach(g=>g.onclick=()=>{const v=g.dataset.v;if(pick.includes(v))pick=pick.filter(x=>x!==v);else if(pick.length<4)pick.push(v);draw()});
+   a.qa('.cell').forEach(g=>g.onclick=()=>{const k=g.dataset.k;spots.has(k)?spots.delete(k):spots.add(k);draw()})};
+  const ui=()=>{a.ui.innerHTML='';if(!built)a.btn('Make my chart',()=>{if(pick.length<4)return a.say(`Choose ${4-pick.length} more.`);built=true;draw();ui();a.win('Your chart is ready. Copy it into a notebook or habit app; give one area full attention each week, then repeat the cycle.')},'go');
+   else{a.btn('Next week',()=>{wk=(wk+1)%4;draw();a.say(`Week ${wk+1}: full attention on <b>${pick[wk]}</b>. Write one if-then plan for it.`)},'go');a.btn('Start over',()=>{built=false;pick=[];spots.clear();wk=0;draw();ui()})}};
+  draw();ui();a.say(`Franklin's chart, updated. Choose <b>four</b> areas that matter right now, then make the chart.`);}},
+
+{part:'try',title:'Surf the urge',say:'',draw:()=>{const f=t=>1+8*Math.exp(-Math.pow(t-6,2)/16),X=t=>64+t*26,Y=v=>320-v*24;let pts=[];for(let t=0;t<=20;t+=.5)pts.push(X(t).toFixed(1)+','+Y(f(t)).toFixed(1));
+  return `<path d="M64 320 L${pts.join(' L')} L584 320 Z" fill="#E3ECF0"/><clipPath id="sv"><rect class="svr" x="64" y="0" width="0" height="400"/></clipPath><path d="M64 320 L${pts.join(' L')} L584 320 Z" fill="#B9D1DC" clip-path="url(#sv)"/>`+
+   `<polyline points="${pts.join(' ')}" fill="none" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><line x1="64" y1="320" x2="594" y2="320" stroke="${C.ink}" stroke-width="1.5"/><line x1="64" y1="320" x2="64" y2="80" stroke="${C.ink}" stroke-width="1.5"/>`+
+   [0,4,8,12,16,20].map(t=>T(X(t),342,t,'sm mid mut')).join('')+T(330,370,'minutes (illustrative)','sm mid mut')+T(56,94,'strong','sm end mut')+T(56,318,'calm','sm end mut')+
+   `<g class="surfer" style="transition:transform .7s ease"><circle cx="0" cy="0" r="9" fill="${C.ochre}" stroke="#fff" stroke-width="2"/></g><g class="meter"></g>`},
+ mount:a=>{const f=t=>1+8*Math.exp(-Math.pow(t-6,2)/16);let t=0;
+  const upd=()=>{const v=f(t);a.q('.surfer').style.transform=`translate(${64+t*26}px,${320-v*24}px)`;a.q('.svr').setAttribute('width',t*26);a.q('.meter').innerHTML=box(456,24,160,44,'#fff',8)+T(536,52,`Urge: ${Math.round(v)} / 10`,'lab mid')};upd();
+  const msg=['The urge is building. Notice it without acting. Where do you feel it in your body?','Still rising. Breathe slowly. You only need to get through the next few minutes.','This is about the peak. It will not get much stronger than this.','It is fading on its own. You did not have to fight it, only outlast it.','Nearly calm. Notice how much smaller it is now.'];
+  a.btn('Breathe and wait 2 minutes',()=>{if(t>=20)return;t+=2;upd();if(t>=20)a.win('<b>The urge passed.</b> Each urge you outlast without acting weakens the cue–response link a little.');else a.say(msg[t<=2?0:t<=4?1:t<=8?2:t<=12?3:4])},'go');
+  a.btn('Reset',()=>{t=0;upd();a.say('An urge arrives.')});
+  a.say('This technique is called <b>urge surfing</b>. Instead of fighting the craving or giving in, observe it like a wave. Tap the button to let time pass.');}},
+
+{part:'try',title:'Trap or defence?',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const R=[['Phone charging next to the bed','trap','It becomes the last thing at night and the first thing in the morning. Charge it in another room.'],['Fruit on the counter, snacks out of sight','defence','What you see is what you eat. Visibility is a strong cue.'],['"Just one episode" with autoplay on','trap','Autoplay removes the decision point. Turn it off so stopping becomes the default.'],['Gym bag packed by the door the night before','defence','Your past self removed the friction for your future self.'],['Keeping the betting app "just in case"','trap','Distance is a defence. Delete it and install a blocker.'],['Telling a friend about your goal','defence','An ally raises the cost of quietly giving up.']];let r=0,busy=false;
+  const show=()=>{busy=false;a.q('.play').innerHTML=kicker(24,40,`Situation ${r+1} of ${R.length}`)+G(box(24,64,592,150,'#fff',8)+wr(320,132,R[r][0],40,'h mid',34),'a-fade');a.say('Does this make the good choice easier, or the bad one? <b>Trap</b> or <b>defence</b>?')};
+  show();['trap','defence'].forEach(k=>a.btn(k==='trap'?'Trap':'Defence',b=>{if(busy)return;const [,ans,why]=R[r];
+   if(k===ans){busy=true;r++;a.q('.play').innerHTML+=G(practice(24,236,592,110,why,88),'a-fade');if(r<R.length){a.say('<b>Right.</b> Next one coming.');a.later(show,2800)}else a.win('<b>Right.</b> '+why+' Now walk through your own home and desk with the same eye.')}
+   else a.say('Think again: does it make the good choice <b>easier</b>, or the bad one?')},'go'));}},
+
+/* ===== REFLECT ===== */
+{part:'check',title:'Which plan is strongest?',say:'Which of these is the strongest if-then plan?',
+ draw:()=>kicker(24,40,'Remember the three features')+[['Specific situation','a time, place or feeling'],['Small, concrete action','can start within 2 minutes'],['One plan per obstacle','not one plan for everything']].map(([a,b],k)=>G(box(24+k*200,60,192,70,C.tint,8)+T(38+k*200,88,'✓ '+a,'lab acc','style="font-size:14.5px"')+T(38+k*200,110,b,'sm mut'),'a-fade',k*.1)).join(''),
+ quiz:{options:['If I have time, then I will exercise more.','If it is 6:30 am on a weekday, then I will put on my running shoes.','I will try hard to exercise every day.'],answer:'If it is 6:30 am on a weekday, then I will put on my running shoes.',why:'A specific time, and a small concrete first action. The other two leave the decision for later.',hint:'Which one names an exact moment and a first physical step?'}},
+
+{part:'check',title:'Missing a day',say:'In the habit study, what happened when someone missed a single day?',
+ draw:()=>`<rect x="160" y="140" width="236" height="36" rx="4" fill="#C9DCE6"/><line x1="208" y1="120" x2="208" y2="196" stroke="${C.bad}" stroke-width="3"/>`+T(208,110,'median 66 days','sm mid','style="fill:#B2423A;font-weight:700"')+T(320,240,'building a new habit…','q mid'),
+ quiz:{options:['The count reset to zero','It made little difference','It doubled the time needed'],answer:'It made little difference',why:'One missed day barely affected how automatic the habit felt. The rule of thumb: never miss twice.',hint:'This was the encouraging finding.'}},
+
+{part:'check',title:'What disciplined people do',say:'Compared with others, people high in self-control mostly…',
+ draw:()=>T(320,150,'"They do not resist harder…"','q mid','style="font-size:24px"')+T(320,200,'Hofmann et al., 2012','sm mid mut'),
+ quiz:{options:['Resist far more temptations','Meet fewer temptations','Never feel temptation'],answer:'Meet fewer temptations',why:'They shape their surroundings so temptation rarely shows up. Design beats willpower.',hint:'Think back to "Willpower is not a fuel tank."'}},
+
+{part:'check',title:'A better and happier man',say:`Franklin admitted he never reached the perfection he aimed for. But the effort, he wrote, made him "a better and a happier man than I otherwise should have been if I had not attempted it." Your next step: write one if-then plan tonight, and put it where the situation happens.`,
+ draw:()=>wr(32,90,'"…yet I was, by the endeavour, a better and a happier man than I otherwise should have been if I had not attempted it."',40,'q',34,'style="font-size:24px"')+T(32,250,'Benjamin Franklin, Autobiography','sm mut')+
+  G(box(32,280,576,90,C.tint2,8)+wr(48,312,'"Be at war with your vices, at peace with your neighbours, and let every New-Year find you a better man."',80,'q',22,'style="font-size:16px"')+T(48,356,'Poor Richard, 1755','sm mut'),'a-fade',.5)}
+];
+
+
+render();
+</script>
+
+</body></html>
