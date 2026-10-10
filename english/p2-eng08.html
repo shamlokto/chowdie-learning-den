@@ -225,6 +225,175 @@ const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x=
 const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
 /* quiz helper: multiple-choice over a sentence with blank */
 function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .pyf{font-family:var(--body);font-style:normal} /* Baloo 2 draws macron vowels (ā ē ī ō ū) broken, so pinyin in display text uses the body font */
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+/* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
+  const pool=vs.filter(ok); if(!pool.length) return null;
+  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
+  const base=loc.length?loc:pool;
+  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
+  const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
+ }catch(e){} }
+try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
+  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+   },'lie'))}};
+}
+const shk=b=>{b.classList.remove('no');void b.offsetWidth;b.classList.add('no')};
+/* Wala in the English decks: Chowdie teaches Wala English (she speaks Chinese and is learning English) */
+/* English speech bubble. side 'l' anchors x as left edge, 'r' anchors x as right edge. sub = small line (e.g. Chinese gloss) */
+function edlg(x,y,txt,sub='',side='l',d=0,who=''){const w=Math.max(zhLen(txt,21,10.4),zhLen(sub,15,7.2))+40;if(side==='r')x=x-w;const h=sub?72:54,tx=side==='l'?x+30:x+w-30,dir=side==='l'?-1:1;
+  return G(`<g data-zh="${txt.replace(/"/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 14 l${-dir*2} -14 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="${who==='wala'?'#F1F3F6':'#fff'}" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+33,txt,'lab mid','style="font-size:19px"')+(sub?T(x+w/2,y+56,sub,'zh mid','style="font-size:14px;fill:'+C.muted+';font-weight:500"'):'')+`</g>`,'a-pop',d);}
+/* conversation slide: lines = [[who,text,sub],...] (max 4) */
+const chat=(title,lines,say,part='learn')=>({part,title,who:'wala',say,
+  draw:()=>G(otter(70,398,.7,{still:true})+wala(572,398,.7,{still:true}),'a-fade',0)+lines.map(([w,t,s],k)=>edlg(w==='wala'?600:40,10+k*(lines.length>3?78:96),t,s,w==='wala'?'r':'l',.3+k*.7,w==='otter'?'otter':'wala')).join('')});
+const ebtn='lie';
+/* "Help Wala!": Wala says something with a learner's mistake; kids choose the fix */
+function helpWala(R){return {part:'try',title:'Help Wala!',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{let r=0,busy=false;const show=()=>{busy=false;const Q=R[r];
+   a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+G(wala(520,392,1.15,{still:true}),'')+G(otter(100,392,.75,{still:true}),'')+(Q.story?G(box(30,40,580,86,'#FFF4D6',14)+T(46,64,'Story:','sm acc','style="font-weight:800"')+prose(46,88,Q.story,64,'sm',20),'a-pop')+edlg(600,138,Q.say,'','r',.3,'wala'):edlg(600,60,Q.say,Q.sub||'','r',.1,'wala'))+T(240,250,'Wala is learning English.','sm mid mut')+T(240,276,'Can you help her fix it?','lab mid acc');
+   a.ui.innerHTML='';[...Q.options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');r++;
+     if(r<R.length){a.confetti();a.as('wala',WL+`Oh! "<b>${Q.answer}</b>" ${Q.why} 谢谢！`);a.later(show,2600)}else a.win(WL+`"<b>${Q.answer}</b>" ${Q.why} Thank you for teaching me! 谢谢你们！`)}
+     else{shk(b);a.as('otter',CH+(Q.hint||'Hmm, look carefully at what Wala said.'))}},ebtn))};
+  show();a.as('wala',WL+'I\'m still learning English. Sometimes I make mistakes! Please help me fix my sentences. 请帮帮我！')}};}
+/* "Talk to Wala": Wala says or asks something; kids choose the best reply */
+function talkWala(R){return {part:'try',title:'Talk to Wala',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{let r=0,busy=false;const show=()=>{busy=false;const Q=R[r];
+   a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+G(wala(530,392,1.1,{still:true}),'')+G(otter(110,392,1.1,{still:true}),'')+edlg(600,50,Q.wala,'','r',.1,'wala')+edlg(40,170,'What should I say?','','l',.4,'otter');
+   a.ui.innerHTML='';[...Q.options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');a.hear(o);r++;
+     if(r<R.length){a.confetti();a.as('wala',WL+(Q.reply||'Great answer! Thank you!'));a.later(show,2400)}else a.win(WL+(Q.reply||'')+' I love chatting with you!')}
+     else{shk(b);a.as('otter',CH+(Q.hint||'Which reply answers Wala\'s question in a full, friendly sentence?'))}},ebtn))};
+  show();a.as('wala',WL+'Let\'s have a chat! I\'ll say something, and you choose the best reply.')}};}
+/* insert helpers */
+const insertAt=(i,...sl)=>S.splice(i,0,...sl);
+const firstCheck=()=>S.findIndex(s=>s.part==='check');
+function addWala(open,help,talk){insertAt(1,open);insertAt(firstCheck(),helpWala(help),talkWala(talk));}
 /* English 8: Writing Workshop */
 const paper=(x,y,w,h)=>box(x,y,w,h,'#FFFDF6',12)+[...Array(Math.floor((h-30)/28))].map((_,k)=>`<line x1="${x+14}" y1="${y+34+k*28}" x2="${x+w-14}" y2="${y+34+k*28}" stroke="#C9D3CE" stroke-width="1"/>`).join('');
 const pencil=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(-35)"><rect x="-8" y="-50" width="16" height="80" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-8 30 L0 48 L8 30z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-3 41 L0 48 L3 41z" fill="${C.ink}"/><rect x="-8" y="-58" width="16" height="10" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
@@ -253,7 +422,7 @@ const S=[
 
 {part:'learn',title:'Writing an invitation',say:'An <b>invitation</b> must answer: <b>What</b> is the event? <b>When</b>? <b>Where</b>? <b>Who</b> is inviting? Add a friendly opening and closing. If any part is missing, your guests will be lost!',
  draw:()=>G(box(120,30,400,340,'#FFF4D6',18)+T(320,70,'You are invited!','h mid acc')+T(320,110,'Dear Hana,','lab')+prose(150,145,'Please come to my 8th birthday party.',34,'lab',26)+
-  [['When:','Saturday 12 July, 3 pm'],['Where:','Blk 123 Tampines St 11, #05-67'],['Bring:','your swimming costume!']].map(([k,v],i)=>T(150,205+i*32,k,'lab acc')+T(230,205+i*32,v,'lab','style="font-size:16px"')).join('')+T(150,320,'From, Mei','lab')+T(320,352,'RSVP by 5 July','sm mid mut'),'a-pop',.2)+
+  [['When:','Saturday 11 July, 3 pm'],['Where:','Blk 123 Tampines St 11, #05-67'],['Bring:','your swimming costume!']].map(([k,v],i)=>T(150,205+i*32,k,'lab acc')+T(230,205+i*32,v,'lab','style="font-size:16px"')).join('')+T(150,320,'From, Mei','lab')+T(320,352,'RSVP by 5 July','sm mid mut'),'a-pop',.2)+
   G([['what',60,80],['when',60,200],['where',60,240],['who',560,320]].map(([t,x,y])=>tagPill(x-30,y-16,t,C.accent,62)).join(''),'a-fade',1)},
 
 {part:'learn',title:'Check it like a pro',say:'Before you hand in, <b>check</b>! Read it aloud. Use the <b>CUPS</b> checklist: <b>C</b>apitals at the start and for names. <b>U</b>nderstanding: does it make sense? <b>P</b>unctuation at the end of every sentence. <b>S</b>pelling: check tricky words. Then check your <b>tense</b>: a recount stays in the past.',
@@ -301,6 +470,81 @@ const S=[
  draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+pencil(120,230,1.1)+T(520,230,'Finally...','h mid acc'),'a-pop',.3)+T(320,60,'Writing superstar!','h mid acc'),
  mount:a=>a.later(()=>a.confetti(),400)}
 ];
+
+const DECK=8;
+/* Wala's English lessons: per-deck content. EW[n] = [openChat, helpRounds, talkRounds] */
+const EW={
+1:[chat('Chat: Wala learns nouns',[['wala','Chowdie, what is this? 这是什么？',''],['otter','It\'s an apple! An apple, two apples.',''],['wala','An apple? Not "a apple"?','苹果 = an apple'],['otter','Yes! Use "an" before a, e, i, o, u sounds.','']],WL+'In Chinese we don\'t change words for one or many, and we don\'t say "a" or "an". 一个苹果, 两个苹果: same word! So English nouns are tricky for me. Chowdie is helping!'),
+ [{say:'I have two cat.',sub:'我有两只猫。',options:['I have two cats.','I have two cat.','I have two a cat.'],answer:'I have two cats.',why:'More than one cat, so add -s: two cats.',hint:'How many cats? Then the noun needs an -s.'},
+  {say:'I ate apple for snack.',sub:'我吃了苹果。',options:['I ate an apple for snack.','I ate a apple for snack.','I ate apples for snack a.'],answer:'I ate an apple for snack.',why:'One apple needs "an", because apple starts with a vowel sound.',hint:'One apple. Which little word goes in front?'},
+  {say:'I live in singapore.',sub:'我住在新加坡。',options:['I live in Singapore.','I live in singapore.','I Live In Singapore.'],answer:'I live in Singapore.',why:'Singapore is a proper noun, a name, so it starts with a capital letter.',hint:'Names of places are proper nouns.'},
+  {say:'I have many homeworks today.',sub:'我今天有很多功课。',options:['I have a lot of homework today.','I have many homeworks today.','I have a homework today.'],answer:'I have a lot of homework today.',why:'Homework can\'t be counted, so no -s. Say "a lot of homework".',hint:'Can you count "homework"? One homework, two homeworks?'}],
+ [{wala:'What is in your school bag?',options:['I have two books and a pencil case.','I has book two.','Bag.'],answer:'I have two books and a pencil case.',reply:'Two books and a pencil case. Thank you!'},
+  {wala:'Is that your cat?',options:['Yes! It\'s my cat. Her name is Mimi.','Cat yes.','Is cat.'],answer:'Yes! It\'s my cat. Her name is Mimi.',reply:'Mimi is a lovely name!'},
+  {wala:'How many children are in your class?',options:['There are thirty children in my class.','There are thirty childs in my class.','Class children.'],answer:'There are thirty children in my class.',reply:'Thirty children! Not "childs". I remember!'}]],
+2:[chat('Chat: Wala learns tenses',[['wala','Chowdie! Yesterday I go to the park!',''],['otter','Ooh! Say "yesterday I WENT to the park".',''],['wala','Went? Why not go?','我昨天去了公园。'],['otter','Yesterday is the past. Go becomes went!','']],WL+'In Chinese, verbs don\'t change for past or present. We just add words like 昨天 (yesterday) or 了. In English the verb itself changes. Go, went! Eat, ate! That\'s a lot to remember!'),
+ [{say:'Yesterday I go to the zoo.',sub:'昨天我去了动物园。',options:['Yesterday I went to the zoo.','Yesterday I go to the zoo.','Yesterday I goed to the zoo.'],answer:'Yesterday I went to the zoo.',why:'Yesterday is the past, and go becomes went.',hint:'It happened yesterday. What is the past of "go"?'},
+  {say:'My brother like bananas.',sub:'我哥哥喜欢香蕉。',options:['My brother likes bananas.','My brother like bananas.','My brother liking bananas.'],answer:'My brother likes bananas.',why:'With he, she or one person, add -s: he likes.',hint:'My brother = he. He like, or he likes?'},
+  {say:'Look! I am eat now.',sub:'看！我在吃东西。',options:['Look! I am eating now.','Look! I am eat now.','Look! I eat now am.'],answer:'Look! I am eating now.',why:'Happening right now: am + -ing. I am eating.',hint:'It\'s happening now. Which ending goes with "am"?'},
+  {say:'Tomorrow I will went to school.',sub:'明天我会去学校。',options:['Tomorrow I will go to school.','Tomorrow I will went to school.','Tomorrow I will going to school.'],answer:'Tomorrow I will go to school.',why:'After "will", use the plain verb: will go.',hint:'"Will" + the simple verb.'}],
+ [{wala:'What did you do last weekend?',options:['I played football with my friends.','I play football tomorrow.','I playing football.'],answer:'I played football with my friends.',reply:'You played football! Played: past tense, I hear it!'},
+  {wala:'What are you doing now?',options:['I am reading a book.','I read a book yesterday.','I am read book.'],answer:'I am reading a book.',reply:'Reading right now. Am reading!'},
+  {wala:'What will you do tomorrow?',options:['I will visit my grandma.','I visited my grandma.','I will visited grandma.'],answer:'I will visit my grandma.',reply:'Will visit. Tomorrow is the future!'}]],
+3:[chat('Chat: Wala describes things',[['wala','My kite is more high than your kite!',''],['otter','We say "higher"! Short words add -er.',''],['wala','My kite is higher! 我的风筝更高！',''],['otter','But mine is the highest! Hehe!','']],WL+'In Chinese I just put 更 (more) or 最 (most) in front: 更高, 最高. In English, short words change their ending: high, higher, highest. Long words use more and most. I\'m learning!'),
+ [{say:'The elephant is more big than the cat.',sub:'大象比猫大。',options:['The elephant is bigger than the cat.','The elephant is more big than the cat.','The elephant is biggest than the cat.'],answer:'The elephant is bigger than the cat.',why:'Big is a short word: big, bigger (double the g!).',hint:'Short words add -er instead of "more".'},
+  {say:'This is the goodest cake ever!',sub:'这是最好吃的蛋糕！',options:['This is the best cake ever!','This is the goodest cake ever!','This is the most good cake ever!'],answer:'This is the best cake ever!',why:'Good is a rebel: good, better, best.',hint:'Good is a rebel word. Good, better, …?'},
+  {say:'The tortoise walks very slow.',sub:'乌龟走得很慢。',options:['The tortoise walks very slowly.','The tortoise walks very slow.','The tortoise slow walks.'],answer:'The tortoise walks very slowly.',why:'To describe HOW it walks, add -ly: slowly.',hint:'How does it walk? Adverbs often end in -ly.'},
+  {say:'The cat is in the table.',sub:'猫在桌子上。',options:['The cat is on the table.','The cat is in the table.','The cat is at table.'],answer:'The cat is on the table.',why:'On top of something is "on". "In" means inside.',hint:'Is the cat inside the table, or on top?'}],
+ [{wala:'What does durian smell like?',options:['It smells strong and stinky!','It smell good very.','Durian.'],answer:'It smells strong and stinky!',reply:'Strong and stinky! Haha, that\'s true!'},
+  {wala:'Where is my water bottle?',options:['It is under your chair.','It under chair.','Water bottle is.'],answer:'It is under your chair.',reply:'Under my chair! Found it, thank you!'},
+  {wala:'How did the cheetah run?',options:['It ran very quickly.','It ran very quick.','It quickly very ran.'],answer:'It ran very quickly.',reply:'Very quickly! Quick plus -ly!'}]],
+4:[chat('Chat: he or she?',[['wala','In Chinese, 他 and 她 both sound like tā!',''],['otter','In English they sound different: he and she.',''],['wala','So my mum… he is kind?','我妈妈很善良。'],['otter','Mum is a girl, so: SHE is kind!','']],WL+'他 (he) and 她 (she) sound exactly the same in Chinese: tā! So I often mix up he and she in English. Chowdie says: boys and men are "he", girls and women are "she", and things are "it".'),
+ [{say:'My mum is a teacher. He is very kind.',sub:'我妈妈是老师。她很善良。',options:['My mum is a teacher. She is very kind.','My mum is a teacher. He is very kind.','My mum is a teacher. It is very kind.'],answer:'My mum is a teacher. She is very kind.',why:'Mum is a woman, so use "she".',hint:'Is Mum a he or a she?'},
+  {say:'Please give the book to I.',sub:'请把书给我。',options:['Please give the book to me.','Please give the book to I.','Please give I the book to.'],answer:'Please give the book to me.',why:'After "to", use "me", not "I".',hint:'I do things; things are given to …?'},
+  {say:'This are my new shoes.',sub:'这是我的新鞋子。',options:['These are my new shoes.','This are my new shoes.','This is my new shoes.'],answer:'These are my new shoes.',why:'Shoes are more than one, so: these are.',hint:'One thing: this is. Many things: …?'},
+  {say:'I was tired, but I went to bed.',sub:'我很累，所以我去睡觉。',options:['I was tired, so I went to bed.','I was tired, but I went to bed.','I was tired, or I went to bed.'],answer:'I was tired, so I went to bed.',why:'"So" shows what happened because of the reason, just like 所以!',hint:'Going to bed is the result. Which joining word means 所以?'}],
+ [{wala:'Is this your pencil?',options:['No, it\'s Mei\'s. It belongs to her.','No, it\'s him pencil.','No, she pencil.'],answer:'No, it\'s Mei\'s. It belongs to her.',reply:'It belongs to her. Her pencil! Got it.'},
+  {wala:'Who is that boy?',options:['He is my brother, Arjun.','She is my brother.','Him is my brother.'],answer:'He is my brother, Arjun.',reply:'A boy is "he". He is your brother!'},
+  {wala:'Can you help me carry these books?',options:['Yes, I can help you.','Yes, me can help you.','Yes, I can help I.'],answer:'Yes, I can help you.',reply:'Thank you! You are so kind!'}]],
+5:[chat('Chat: full stops and question marks',[['wala','In Chinese, our full stop is a circle: 。',''],['otter','In English it is a little dot: .',''],['wala','And English questions end with ? too!','你叫什么名字？'],['otter','Yes! And every sentence starts with a capital.','']],WL+'Chinese has no capital letters at all! And our full stop is a tiny circle 。, and our comma looks like this: ，. So in English I sometimes forget capitals, or I write 。 instead of a dot!'),
+ [{say:'I like apples。',sub:'我喜欢苹果。',options:['I like apples.','I like apples。','I like apples,'],answer:'I like apples.',why:'English full stops are a little dot, not a circle.',hint:'Look at the mark at the end.'},
+  {say:'where is my bag.',sub:'我的书包在哪里？',options:['Where is my bag?','where is my bag.','Where is my bag.'],answer:'Where is my bag?',why:'A capital letter to start, and a question mark for a question.',hint:'Two things: the start and the end!'},
+  {say:'I bought eggs milk and bread.',sub:'我买了鸡蛋、牛奶和面包。',options:['I bought eggs, milk and bread.','I bought eggs milk and bread.','I bought, eggs, milk, and, bread.'],answer:'I bought eggs, milk and bread.',why:'Use commas between things in a list (Chinese uses 、 here).',hint:'Separate the list items.'},
+  {say:'Lets play together!',sub:'我们一起玩吧！',options:['Let\'s play together!','Lets play together!','Let\'s play together.'],answer:'Let\'s play together!',why:'Let\'s is short for "let us", so it needs an apostrophe.',hint:'Lets = let us squeezed together. What mark shows the missing letter?'}],
+ [{wala:'Is your birthday in May?',options:['Yes, it is on 5 May.','yes it is on 5 may','Yes it is on 5 may'],answer:'Yes, it is on 5 May.',reply:'Capital Y, a comma, capital M for May, and a full stop. Perfect!'},
+  {wala:'Do you like durian?',options:['No, I don\'t like durian!','no i dont like durian','No, I dont like durian!'],answer:'No, I don\'t like durian!',reply:'Don\'t, with an apostrophe. And capital I!'},
+  {wala:'What did your teacher say?',options:['She said, "Please sit down."','She said please sit down.','she said "please sit down"'],answer:'She said, "Please sit down."',reply:'Speech marks around the words she said. Got it!'}]],
+6:[chat('Chat: open the light?',[['wala','Chowdie, it\'s dark! Please open the light!','请开灯！'],['otter','Haha! In English we "switch on" the light.',''],['wala','So "open" is not for lights?',''],['otter','"Open" is for doors and boxes. Lights are switched on!','']],WL+'In Chinese we say 开灯 (open light) and 关电视 (close TV). But English uses different words: switch on the light, turn off the TV. These are phrasal verbs. Lots of Singapore kids mix them up too!'),
+ [{say:'Please open the light.',sub:'请开灯。',options:['Please switch on the light.','Please open the light.','Please open on the light.'],answer:'Please switch on the light.',why:'Lights are switched on or turned on, not opened.',hint:'What do you do to a light switch?'},
+  {say:'Can you close the TV?',sub:'你可以关电视吗？',options:['Can you turn off the TV?','Can you close the TV?','Can you close off the TV?'],answer:'Can you turn off the TV?',why:'TVs and lights are turned off or switched off.',hint:'You close doors. TVs are turned …?'},
+  {say:'I very like ice cream.',sub:'我很喜欢冰淇淋。',options:['I like ice cream very much.','I very like ice cream.','I like very ice cream.'],answer:'I like ice cream very much.',why:'In English, "very much" goes at the end: I like it very much.',hint:'Where does "very much" go in English?'},
+  {say:'The opposite of happy is angry.',sub:'开心的反义词是难过。',options:['The opposite of happy is sad.','The opposite of happy is angry.','The opposite of happy is glad.'],answer:'The opposite of happy is sad.',why:'Happy ↔ sad are antonyms. Glad means the same as happy: a synonym!',hint:'开心 ↔ 难过. Which English word is 难过?'}],
+ [{wala:'It\'s so dark in here!',options:['Let me switch on the light.','Let me open the light.','Light is dark.'],answer:'Let me switch on the light.',reply:'Switch on the light. Thank you! Now I can see!'},
+  {wala:'I\'m so tired after PE.',options:['You should sit down and take a rest.','You should open the rest.','Tired is big.'],answer:'You should sit down and take a rest.',reply:'Take a rest. Good idea!'},
+  {wala:'This bag is very heavy!',options:['Let me pick it up for you.','Let me pick up it for you.','Bag heavy you.'],answer:'Let me pick it up for you.',reply:'Pick it up! You\'re a good friend, Chowdie!'}]],
+7:[chat('Chat: reading together',[['wala','I read a story, but I don\'t understand it all.',''],['otter','Let\'s be detectives! Ask who, what, where…',''],['wala','Who? Mei! Where? On the way home!','谁？在哪里？'],['otter','Great detective work! Now: why?','']],WL+'Reading in English is hard for me, so Chowdie taught me to ask questions: who, what, where, when, why and how. It\'s just like 看图说话 in Chinese: 谁、什么时候、在哪里、做什么!'),
+ [{story:'Mei forgot her umbrella. On the way home, it rained. Her mum gave her a towel and hot soup. Mei smiled.',say:'Why was Mei wet? Because she went swimming!',options:['Because it rained and she had no umbrella.','Because she went swimming.','Because she drank water.'],answer:'Because it rained and she had no umbrella.',why:'The clues are in the story: no umbrella + rain = wet!',hint:'Look for the clues in the story.'},
+  {story:'Mei forgot her umbrella. On the way home, it rained. Her mum gave her a towel and hot soup. Mei smiled.',say:'Who gave Mei a towel? Her teacher!',options:['Her mum gave her a towel.','Her teacher gave her a towel.','Mei gave her mum a towel.'],answer:'Her mum gave her a towel.',why:'The story says "her mum", so the answer is her mum.',hint:'Read the sentence again: who gave the towel?'},
+  {story:'Mei forgot her umbrella. On the way home, it rained. Her mum gave her a towel and hot soup. Mei smiled.',say:'How did Mei feel? Angry!',options:['She felt warm and happy.','She felt angry.','She felt hungry and sad.'],answer:'She felt warm and happy.',why:'She smiled and had hot soup, so she felt warm and happy.',hint:'What does smiling tell you?'}],
+ [{wala:'What is the story about?',options:['It\'s about Mei getting caught in the rain.','It\'s about a towel.','Mei.'],answer:'It\'s about Mei getting caught in the rain.',reply:'The big idea: Mei and the rain! Thank you!'},
+  {wala:'Why did Mum give Mei hot soup?',options:['To warm her up after the rain.','Because soup is red.','Mum hungry.'],answer:'To warm her up after the rain.',reply:'To warm her up. That\'s reading between the lines!'},
+  {wala:'What should Mei do next time?',options:['She should bring her umbrella.','She should go swimming.','Next time is Tuesday.'],answer:'She should bring her umbrella.',reply:'Bring an umbrella! 带雨伞！'}]],
+8:[chat('Chat: Wala writes a recount',[['wala','Can you check my story? "I go beach. I swim."',''],['otter','It happened yesterday, so: I went to the beach.',''],['wala','And then? 然后？',''],['otter','Use First, Next, Then and Finally!','']],WL+'I\'m writing my first English story! Chowdie says a recount tells what happened in order, uses past tense, and starts with when and where. It\'s like 先…然后…最后… in Chinese!'),
+ [{say:'yesterday I go to the beach.',sub:'昨天我去了海边。',options:['Yesterday, I went to the beach.','yesterday I go to the beach.','Yesterday I go to the beach.'],answer:'Yesterday, I went to the beach.',why:'A capital letter to start, and past tense: went.',hint:'Two fixes: the first letter and the verb.'},
+  {say:'First I swim. Then I eat. Then I go home.',sub:'',options:['First, I swam. Next, I ate lunch. Finally, I went home.','First I swim. Then I eat. Then I go home.','Finally I swam. First I ate.'],answer:'First, I swam. Next, I ate lunch. Finally, I went home.',why:'Past tense, plus sequencing words: First, Next, Finally.',hint:'Past tense AND good order words.'},
+  {say:'The sea was nice.',sub:'海很漂亮。',options:['The sea was sparkling blue and the waves splashed my feet.','The sea was nice nice.','Sea nice.'],answer:'The sea was sparkling blue and the waves splashed my feet.',why:'Use your senses to show, not just tell!',hint:'Which one helps you see and feel it?'}],
+ [{wala:'How do I start my story?',options:['Start with when and where: Last Saturday, I went to the beach.','Start with The End.','Start with a question mark.'],answer:'Start with when and where: Last Saturday, I went to the beach.',reply:'When and where first. Like 什么时候、在哪里!'},
+  {wala:'How do I end my story?',options:['Say how you felt: I felt tired but happy.','Stop in the middle.','Write the title again.'],answer:'Say how you felt: I felt tired but happy.',reply:'End with feelings, like 心情怎样!'},
+  {wala:'What do I do after I finish writing?',options:['Check it: capitals, full stops and spelling.','Throw it away.','Write it in Chinese.'],answer:'Check it: capitals, full stops and spelling.',reply:'Check like a pro! Thank you, teacher Chowdie!'}]],
+9:[chat('Chat: Wala practises Show and Tell',[['wala','I\'m nervous! I must talk in front of the class.','我有点紧张。'],['otter','You can do it! Speak loudly and slowly.',''],['wala','And look at my friends, not the floor?',''],['otter','Yes! And smile. Tell them who, what, where, why!','']],WL+'Tomorrow is my first English Show and Tell! I\'m bringing my eucalyptus leaf. Chowdie helped me plan: say what it is, where I got it, and why I like it. And be polite when friends ask questions!'),
+ [{say:'Give me water!',sub:'请给我水。',options:['May I have some water, please?','Give me water!','Water! Now!'],answer:'May I have some water, please?',why:'"May I… please?" is the polite way to ask.',hint:'Which one has the magic word?'},
+  {say:'What?',sub:'(when you didn\'t hear)',options:['Pardon? Could you say that again, please?','What?','Huh? Say again!'],answer:'Pardon? Could you say that again, please?',why:'"Pardon?" is polite when you didn\'t hear.',hint:'Which one is polite?'},
+  {say:'Stop talking! My turn!',sub:'',options:['Excuse me, may I say something?','Stop talking! My turn!','Be quiet, I talk now.'],answer:'Excuse me, may I say something?',why:'Wait for a pause and say "Excuse me".',hint:'How do you politely join a conversation?'},
+  {say:'Bye.',sub:'(to Mrs Tan, the teacher)',options:['Goodbye, Mrs Tan. Thank you!','Bye.','See you, Tan.'],answer:'Goodbye, Mrs Tan. Thank you!',why:'Use the teacher\'s name and say thank you.',hint:'How do you say goodbye nicely to a teacher?'}],
+ [{wala:'This is my eucalyptus leaf. I eat it every day!',options:['Wow! Where do you get your leaves?','Boring.','I don\'t care.'],answer:'Wow! Where do you get your leaves?',reply:'From the tree near my house! Thank you for asking!'},
+  {wala:'Do you have a question for me?',options:['Yes! Why do you like eucalyptus leaves?','No. Sit down.','Leaf leaf leaf.'],answer:'Yes! Why do you like eucalyptus leaves?',reply:'Because they\'re yummy and smell fresh! Good question!'},
+  {wala:'How did I do?',options:['You spoke clearly and smiled. Well done!','You were bad.','Next!'],answer:'You spoke clearly and smiled. Well done!',reply:'Thank you, Chowdie! I feel brave now!'}]]};
+addWala(...EW[DECK]);
 
 
 render();

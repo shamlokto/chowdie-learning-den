@@ -262,7 +262,7 @@ const plantFull=(x,y,s=1,o={})=>`<g transform="translate(${x} ${y}) scale(${s})"
   </g>`;
 const pot=(x,y,fill,level)=>`<path d="M${x-30} ${y} h60 l-6 50 h-48z" fill="#C9735A" stroke="${C.ink}" stroke-width="2.5"/><rect x="${x-26}" y="${y+4}" width="52" height="40" fill="#5B3A1E" clip-path="none" opacity=".9"/>`+(level>0?`<line x1="${x}" y1="${y+4}" x2="${x}" y2="${y+4-level*22}" stroke="${C.leaf}" stroke-width="4" stroke-linecap="round"/>`+(level>1?leafI(x-8,y-level*18,.3):'')+(level>2?leafI(x+9,y-level*22,.32):''):'');
 const S=[
-{part:'learn',title:'Plants are everywhere',say:'Hi! Plants are the quiet heroes of our planet. They make the <b>oxygen</b> we breathe, give us <b>food</b> like rice and fruit, and provide <b>shade</b>, <b>wood</b> and homes for animals. Singapore is called a <b>City in a Garden</b> because we have so many! Let\'s see how plants work.',
+{part:'learn',title:'Plants are everywhere',say:'Hi! Plants are the quiet heroes of our planet. They make the <b>oxygen</b> we breathe, give us <b>food</b> like rice and fruit, and provide <b>shade</b>, <b>wood</b> and homes for animals. Singapore calls itself a <b>City in Nature</b> because we have so many! Let\'s see how plants work.',
  draw:()=>G(sunI2(80,70,1.2),'a-pop',.1)+G(`<rect x="0" y="300" width="640" height="100" fill="#C9E0B8"/>`,'')+[treeI(140,290,1.6),treeI(300,300,1.2),treeI(470,290,1.5)].map((t,k)=>G(t,'a-pop',.3+k*.2)).join('')+G(flowerI(230,310,.9)+flowerI(390,310,.9,C.grape)+flowerI(560,310,.9,C.sun),'a-pop',.9)+
   G(box(380,40,240,120,'#fff',16)+T(500,70,'Plants give us','lab mid mut')+T(500,100,'oxygen · food · shade','lab mid')+T(500,128,'wood · medicine · homes','lab mid'),'a-fade',1.2)+otter(60,398,.6)},
 
