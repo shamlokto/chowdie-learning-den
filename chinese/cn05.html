@@ -178,7 +178,7 @@ function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=
 const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
   btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
 function mountQuiz(sc){ const qz=sc.quiz; let done=false;
-  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
     if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
     else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
 function render(){
@@ -465,9 +465,9 @@ const S=[
  quiz:{options:['我想喝水。','我穿很多衣服。','我带雨伞。'],answer:'我想喝水。',why:'Because it\'s hot, so I want to drink water: 我想喝水。',hint:'What do you want when it\'s very hot?'}},
 
 bossIntro('Baddie brings a storm!','Mwahaha! I\'ve brought a thunderstorm of LIES about weather and festivals!'),
-boss('Lie #1: weather',{lines:['晴天 qíngtiān means','a RAINY day! Hehehe!'],claim:'晴天 means a rainy day!',options:['No! 晴天 is a sunny day. Rain is 下雨.','Yes, 晴天 is rainy.','No! 晴天 is windy.'],answer:'No! 晴天 is a sunny day. Rain is 下雨.',why:'<b>晴天</b> = sunny day (see the 日 sun in 晴!). Raining is 下雨.',taunt:'Mwahaha! Bring an umbrella to the beach!',hint:'Look for the sun 日 in 晴.',art:sunW(440,310,1.8)}),
-boss('Lie #2: festivals',{lines:['We eat 月饼 mooncakes','at Chinese New Year!'],claim:'We eat mooncakes at Chinese New Year!',options:['No! Mooncakes are for 中秋节, the Mid-Autumn Festival.','Yes, at 春节.','No! At Christmas.'],answer:'No! Mooncakes are for 中秋节, the Mid-Autumn Festival.',why:'月饼 are for <b>中秋节</b>, when the moon is full. At 春节 we get 红包 and 橘子.',taunt:'Hehehe! Festivals, schmestivals!',hint:'月饼 has 月 (moon) in it.',art:`<g transform="translate(440 310) scale(1.6)">${FE.mooncake}</g>`}),
-boss('Lie #3: the hardest one',{lines:['因为我带雨伞，所以下雨了！','My umbrella MAKES it rain!'],claim:'Because I brought an umbrella, it rained!',options:['No! 因为下雨了，所以我带雨伞。The rain is the reason.','Yes, umbrellas make rain.','No! 因为晴天，所以下雨了。'],answer:'No! 因为下雨了，所以我带雨伞。The rain is the reason.',why:'The <b>reason</b> goes after 因为, the <b>result</b> after 所以. Rain is the reason; bringing an umbrella is the result.',taunt:'Mwahaha! I\'ll open my umbrella and flood Singapore!',hint:'Which happens first: the rain or the umbrella?',art:umbrellaI(440,300,1.6)}),
+boss('Lie #1: weather',{lines:['晴天 qíngtiān means','a RAINY day! Hehehe!'],claim:'晴天 means a rainy day!',options:["sunny", "rainy", "windy"],answer:"sunny",why:'<b>晴天</b> = sunny day (see the 日 sun in 晴!). Raining is 下雨.',taunt:'Mwahaha! Bring an umbrella to the beach!',hint:'Look for the sun 日 in 晴.',art:sunW(440,310,1.8)}),
+boss('Lie #2: festivals',{lines:['We eat 月饼 mooncakes','at Chinese New Year!'],claim:'We eat mooncakes at Chinese New Year!',options:["中秋节", "春节", "圣诞节"],answer:"中秋节",why:'月饼 are for <b>中秋节</b>, when the moon is full. At 春节 we get 红包 and 橘子.',taunt:'Hehehe! Festivals, schmestivals!',hint:'月饼 has 月 (moon) in it.',art:`<g transform="translate(440 310) scale(1.6)">${FE.mooncake}</g>`}),
+boss('Lie #3: the hardest one',{lines:['因为我带雨伞，所以下雨了！','My umbrella MAKES it rain!'],claim:'Because I brought an umbrella, it rained!',options:["因为下雨了，所以我带雨伞。", "因为我带雨伞，所以下雨了。", "因为晴天，所以下雨了。"],answer:"因为下雨了，所以我带雨伞。",why:'The <b>reason</b> goes after 因为, the <b>result</b> after 所以. Rain is the reason; bringing an umbrella is the result.',taunt:'Mwahaha! I\'ll open my umbrella and flood Singapore!',hint:'Which happens first: the rain or the umbrella?',art:umbrellaI(440,300,1.6)}),
 finale('Sunshine again! 晴天了！','晴天了！','Qíngtiān le!','The sun is out!','太棒了！You learned weather words, 热 and 冷, 因为…所以…, and festivals in Singapore. 下次见！<i class="py">Xiàcì jiàn!</i> See you next time!'),
 ];
 

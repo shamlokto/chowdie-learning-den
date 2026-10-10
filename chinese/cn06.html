@@ -178,7 +178,7 @@ function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=
 const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
   btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
 function mountQuiz(sc){ const qz=sc.quiz; let done=false;
-  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
     if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
     else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
 function render(){
@@ -463,9 +463,9 @@ const S=[
  quiz:{options:['some… some…','big… small…','first… then…'],answer:'some… some…',why:'有的…有的… = some… some… (有的在游泳，有的在吃鱼).',hint:'It describes different members of a group.'}},
 
 bossIntro('Baddie at the zoo!','Mwahaha! I\'m the king of the zoo! And I know EVERYTHING about animals. Hehehe… not really.'),
-boss('Lie #1: pandas',{lines:['熊猫 has 猫 (cat) in it,','so a panda is a CAT!'],claim:'熊猫 has 猫 in it, so a panda is a cat!',options:['No! 熊猫 is a panda, a kind of bear (熊).','Yes, a panda is a cat.','No! A panda is a monkey.'],answer:'No! 熊猫 is a panda, a kind of bear (熊).',why:'熊 means bear. A 熊猫 is a <b>panda</b>, a bear, not a cat! Its name means "bear cat" because of its cute face.',taunt:'Mwahaha! Here, kitty kitty!',hint:'熊 means bear.',art:`<g transform="translate(440 300) scale(1.8)">${A.panda}</g>`}),
-boss('Lie #2: measure words',{lines:['One monkey is 一条猴子!','Monkeys are long, right?'],claim:'One monkey is 一条猴子!',options:['No! 一只猴子. 条 is for snakes and fish.','Yes, 一条猴子.','No! 一本猴子.'],answer:'No! 一只猴子. 条 is for snakes and fish.',why:'Most animals use <b>只</b>: 一只猴子. 条 is for long, wiggly things like 一条蛇, 一条鱼.',taunt:'Hehehe! A monkey is just a hairy snake!',hint:'Is a monkey long and wiggly like a snake?',art:`<g transform="translate(440 300) scale(1.8)">${A.monkey}</g>`}),
-boss('Lie #3: the hardest one',{lines:['Koalas eat bamboo,','just like pandas! Hehehe!'],claim:'Koalas eat bamboo, just like pandas!',options:['No! 考拉吃桉树叶: koalas eat eucalyptus leaves.','Yes, koalas eat bamboo.','No! Koalas eat fish.'],answer:'No! 考拉吃桉树叶: koalas eat eucalyptus leaves.',why:'熊猫吃<b>竹子</b> (bamboo), but 考拉吃<b>桉树叶</b> (eucalyptus leaves). Wala would know!',taunt:'Mwahaha! Feed the koala some bamboo!',hint:'What is Wala always holding?',art:wala(440,374,1.2,{still:true})}),
+boss('Lie #1: pandas',{lines:['熊猫 has 猫 (cat) in it,','so a panda is a CAT!'],claim:'熊猫 has 猫 in it, so a panda is a cat!',options:["a bear", "a cat", "a monkey"],answer:"a bear",why:'熊 means bear. A 熊猫 is a <b>panda</b>, a bear, not a cat! Its name means "bear cat" because of its cute face.',taunt:'Mwahaha! Here, kitty kitty!',hint:'熊 means bear.',art:`<g transform="translate(440 300) scale(1.8)">${A.panda}</g>`}),
+boss('Lie #2: measure words',{lines:['One monkey is 一条猴子!','Monkeys are long, right?'],claim:'One monkey is 一条猴子!',options:["一只猴子", "一条猴子", "一本猴子"],answer:"一只猴子",why:'Most animals use <b>只</b>: 一只猴子. 条 is for long, wiggly things like 一条蛇, 一条鱼.',taunt:'Hehehe! A monkey is just a hairy snake!',hint:'Is a monkey long and wiggly like a snake?',art:`<g transform="translate(440 300) scale(1.8)">${A.monkey}</g>`}),
+boss('Lie #3: the hardest one',{lines:['Koalas eat bamboo,','just like pandas! Hehehe!'],claim:'Koalas eat bamboo, just like pandas!',options:["桉树叶 eucalyptus leaves", "竹子 bamboo", "竹子 bamboo, just like pandas"],answer:"桉树叶 eucalyptus leaves",why:'熊猫吃<b>竹子</b> (bamboo), but 考拉吃<b>桉树叶</b> (eucalyptus leaves). Wala would know!',taunt:'Mwahaha! Feed the koala some bamboo!',hint:'What is Wala always holding?',art:wala(440,374,1.2,{still:true})}),
 finale('The zoo is safe! 太好了！','动物真可爱！','Dòngwù zhēn kě\'ài!','Animals are so cute!','太棒了！You learned zoo animals, 鼻子/脖子/尾巴/耳朵, 只/头/条, 有的…有的…, and what animals eat. 我们下次再去动物园吧！'),
 ];
 

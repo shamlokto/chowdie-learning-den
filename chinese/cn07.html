@@ -178,7 +178,7 @@ function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=
 const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
   btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
 function mountQuiz(sc){ const qz=sc.quiz; let done=false;
-  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
     if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
     else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
 function render(){
@@ -458,9 +458,9 @@ const S=[
  quiz:{options:['眼睛','耳朵','脚'],answer:'眼睛',why:'我用<b>眼睛</b>看书: we read with our eyes!',hint:'看 means look.'}},
 
 bossIntro('Baddie has bad manners!','Mwahaha! Manners are boring! I\'m going to teach you ALL the wrong polite words!'),
-boss('Lie #1: thank you',{lines:['When someone says 谢谢,','you reply 对不起! Hehehe!'],claim:'When someone says 谢谢, you reply 对不起!',options:['No! 谢谢 → 不客气 (you\'re welcome).','Yes, say 对不起.','No! Say 再见 and run away.'],answer:'No! 谢谢 → 不客气 (you\'re welcome).',why:'谢谢 (thank you) → <b>不客气</b> (you\'re welcome). 对不起 means sorry.',taunt:'Hehehe! Say sorry for everything!',hint:'What do you say after "thank you"?'}),
-boss('Lie #2: body parts',{lines:['眼睛 yǎnjing is for','LISTENING! Mwahaha!'],claim:'眼睛 is for listening!',options:['No! 眼睛 are eyes for looking. 耳朵 are ears for listening.','Yes, we listen with 眼睛.','No! 眼睛 is for eating.'],answer:'No! 眼睛 are eyes for looking. 耳朵 are ears for listening.',why:'我用<b>眼睛</b>看 (look), 我用<b>耳朵</b>听 (listen).',taunt:'Hehehe! I can hear colours!',hint:'Which body part do you listen with?'}),
-boss('Lie #3: the hardest one',{lines:['If YOU bump into someone,','YOU say 没关系!'],claim:'If you bump into someone, you say 没关系!',options:['No! I say 对不起. The other person says 没关系.','Yes, I say 没关系.','No! I say 谢谢.'],answer:'No! I say 对不起. The other person says 没关系.',why:'If you did it, you say <b>对不起</b> (sorry). The other person replies <b>没关系</b> (it\'s OK).',taunt:'Mwahaha! Bump into everyone and say "no problem"!',hint:'Who should say sorry?'}),
+boss('Lie #1: thank you',{lines:['When someone says 谢谢,','you reply 对不起! Hehehe!'],claim:'When someone says 谢谢, you reply 对不起!',options:["不客气", "对不起", "再见"],answer:"不客气",why:'谢谢 (thank you) → <b>不客气</b> (you\'re welcome). 对不起 means sorry.',taunt:'Hehehe! Say sorry for everything!',hint:'What do you say after "thank you"?'}),
+boss('Lie #2: body parts',{lines:['眼睛 yǎnjing is for','LISTENING! Mwahaha!'],claim:'眼睛 is for listening!',options:["耳朵 is for listening.", "眼睛 is for listening.", "鼻子 is for listening."],answer:"耳朵 is for listening.",why:'我用<b>眼睛</b>看 (look), 我用<b>耳朵</b>听 (listen).',taunt:'Hehehe! I can hear colours!',hint:'Which body part do you listen with?'}),
+boss('Lie #3: the hardest one',{lines:['If YOU bump into someone,','YOU say 没关系!'],claim:'If you bump into someone, you say 没关系!',options:["I say 对不起.", "I say 没关系.", "I say 谢谢."],answer:"I say 对不起.",why:'If you did it, you say <b>对不起</b> (sorry). The other person replies <b>没关系</b> (it\'s OK).',taunt:'Mwahaha! Bump into everyone and say "no problem"!',hint:'Who should say sorry?'}),
 finale('Baddie learns manners! 谢谢！','谢谢你们！','Xièxie nǐmen!','Thank you, everyone!','太棒了！You learned body parts, 看/听/闻, feelings, polite words and what to say when you\'re sick. 你们真棒！<i class="py">Nǐmen zhēn bàng!</i>'),
 ];
 

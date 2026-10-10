@@ -178,7 +178,7 @@ function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=
 const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
   btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
 function mountQuiz(sc){ const qz=sc.quiz; let done=false;
-  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
     if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
     else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
 function render(){
@@ -452,9 +452,9 @@ const S=[
  quiz:{options:['music','maths','art'],answer:'music',why:'音乐 <i class="py">yīnyuè</i> is music. 数学 is maths; 美术 is art.',hint:'Look at the picture!'}},
 
 bossIntro('Baddie sneaks into school!','Mwahaha! I sneaked into your school. I\'ll teach you <b>my</b> kind of Chinese. Hehehe!'),
-boss('Lie #1: zhī or zhī?',{lines:['一只铅笔! 只 and 支 sound the','same, so they are the same word!'],claim:'一只铅笔! 只 and 支 sound the same, so they are the same word!',options:['No! 一支铅笔: 支 is for pencils, 只 is for animals.','Yes, they are the same.','No! 一张铅笔.'],answer:'No! 一支铅笔: 支 is for pencils, 只 is for animals.',why:'Same sound, different characters! <b>支</b> for long thin things (一支铅笔), <b>只</b> for animals (一只猫).',taunt:'Hehehe! A pencil is basically a skinny cat!',hint:'Look at the characters, not just the sound.',art:pencilI(440,320,1.6)}),
-boss('Lie #2: positions',{lines:['上面 shàngmiàn means','UNDER! Mwahaha!'],claim:'上面 means under!',options:['No! 上面 is on top; 下面 is under.','Yes, 上面 is under.','No! 上面 is inside.'],answer:'No! 上面 is on top; 下面 is under.',why:'<b>上</b> is up, so 上面 is on top. <b>下</b> is down, so 下面 is under.',taunt:'Hehehe! Up is down, down is up!',hint:'上 points up, 下 points down.',art:posScene(440,300,POS[0],1.6)}),
-boss('Lie #3: the hardest one',{lines:['同学 tóngxué means TEACHER!','Your teacher is your 同学!'],claim:'同学 means teacher!',options:['No! 同学 is a classmate; 老师 is a teacher.','Yes, 同学 is teacher.','No! 同学 is the principal.'],answer:'No! 同学 is a classmate; 老师 is a teacher.',why:'<b>同学</b> <i class="py">tóngxué</i> = classmates who learn together. <b>老师</b> = teacher. <b>校长</b> = principal.',taunt:'Mwahaha! Call your teacher "buddy"!',hint:'同 means "same": people in the same class.'}),
+boss('Lie #1: zhī or zhī?',{lines:['一只铅笔! 只 and 支 sound the','same, so they are the same word!'],claim:'一只铅笔! 只 and 支 sound the same, so they are the same word!',options:["一支铅笔", "一只铅笔", "一张铅笔"],answer:"一支铅笔",why:'Same sound, different characters! <b>支</b> for long thin things (一支铅笔), <b>只</b> for animals (一只猫).',taunt:'Hehehe! A pencil is basically a skinny cat!',hint:'Look at the characters, not just the sound.',art:pencilI(440,320,1.6)}),
+boss('Lie #2: positions',{lines:['上面 shàngmiàn means','UNDER! Mwahaha!'],claim:'上面 means under!',options:["上面 is on top.", "上面 is under.", "上面 is inside the box."],answer:"上面 is on top.",why:'<b>上</b> is up, so 上面 is on top. <b>下</b> is down, so 下面 is under.',taunt:'Hehehe! Up is down, down is up!',hint:'上 points up, 下 points down.',art:posScene(440,300,POS[0],1.6)}),
+boss('Lie #3: the hardest one',{lines:['同学 tóngxué means TEACHER!','Your teacher is your 同学!'],claim:'同学 means teacher!',options:["classmate", "teacher", "school principal"],answer:"classmate",why:'<b>同学</b> <i class="py">tóngxué</i> = classmates who learn together. <b>老师</b> = teacher. <b>校长</b> = principal.',taunt:'Mwahaha! Call your teacher "buddy"!',hint:'同 means "same": people in the same class.'}),
 finale('Baddie leaves school! 再见！','上学真好玩！','Shàngxué zhēn hǎowán!','School is so much fun!','太棒了！We beat Baddie again! You learned school words, 支/块/把/本/张, position words and school subjects. 明天见！<i class="py">Míngtiān jiàn!</i>'),
 ];
 

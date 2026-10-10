@@ -178,7 +178,7 @@ function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=
 const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
   btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
 function mountQuiz(sc){ const qz=sc.quiz; let done=false;
-  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
     if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
     else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
 function render(){
@@ -473,9 +473,9 @@ const S=[
  quiz:{options:['甜','热','短'],answer:'甜',why:'冰淇淋又冷又<b>甜</b>: ice cream is cold and sweet. It can\'t be cold and hot at once!',hint:'How does ice cream taste?'}},
 
 bossIntro('Baddie is hungry!','Mwahaha! I\'m starving, and I\'m going to mess up your food words AND your numbers!'),
-boss('Lie #1: numbers',{lines:['三十 sānshí means 13!','Three and ten, see?'],claim:'三十 means 13!',options:['No! 三十 is 30. 13 is 十三.','Yes, 三十 is 13.','No! 三十 is 3.'],answer:'No! 三十 is 30. 13 is 十三.',why:'三十 = 3 tens = <b>30</b>. 十三 = ten and three = <b>13</b>. Order matters!',taunt:'Hehehe! Order doesn\'t matter!',hint:'The number BEFORE 十 tells you how many tens.'}),
-boss('Lie #2: likes',{lines:['喜欢 xǐhuan means','"don\'t like"! Yuck!'],claim:'喜欢 means don\'t like!',options:['No! 喜欢 is like; 不喜欢 is don\'t like.','Yes, 喜欢 is don\'t like.','No! 喜欢 means eat.'],answer:'No! 喜欢 is like; 不喜欢 is don\'t like.',why:'<b>喜欢</b> = like. Add <b>不</b> for not: 不喜欢 = don\'t like.',taunt:'Mwahaha! I don\'t like liking!',hint:'Which little word makes it "not"?',art:`<g transform="translate(400 300) scale(1.6)">${face(true)}</g><g transform="translate(520 300) scale(1.4)">${F.melon}</g>`}),
-boss('Lie #3: the hardest one',{lines:['A bowl of noodles is 四块五.','That means $4.05! Hehehe!'],claim:'四块五 means 4 dollars 5 cents!',options:['No! 四块五 is $4.50.','Yes, $4.05.','No! It is $45.'],answer:'No! 四块五 is $4.50.',why:'The 五 after 块 is <b>5 tens of cents</b>: 四块五 = <b>$4.50</b>.',taunt:'Mwahaha! Give me your 45 cents change!',hint:'Remember 三块五 = $3.50.',art:`<g transform="translate(440 310) scale(1.4)">${F.mian}</g>`}),
+boss('Lie #1: numbers',{lines:['三十 sānshí means 13!','Three and ten, see?'],claim:'三十 means 13!',options:["30", "13", "3"],answer:"30",why:'三十 = 3 tens = <b>30</b>. 十三 = ten and three = <b>13</b>. Order matters!',taunt:'Hehehe! Order doesn\'t matter!',hint:'The number BEFORE 十 tells you how many tens.'}),
+boss('Lie #2: likes',{lines:['喜欢 xǐhuan means','"don\'t like"! Yuck!'],claim:'喜欢 means don\'t like!',options:["喜欢 is like.", "喜欢 is don't like.", "喜欢 is eat."],answer:"喜欢 is like.",why:'<b>喜欢</b> = like. Add <b>不</b> for not: 不喜欢 = don\'t like.',taunt:'Mwahaha! I don\'t like liking!',hint:'Which little word makes it "not"?',art:`<g transform="translate(400 300) scale(1.6)">${face(true)}</g><g transform="translate(520 300) scale(1.4)">${F.melon}</g>`}),
+boss('Lie #3: the hardest one',{lines:['A bowl of noodles is 四块五.','That means $4.05! Hehehe!'],claim:'四块五 means 4 dollars 5 cents!',options:["$4.50", "$4.05", "$45"],answer:"$4.50",why:'The 五 after 块 is <b>5 tens of cents</b>: 四块五 = <b>$4.50</b>.',taunt:'Mwahaha! Give me your 45 cents change!',hint:'Remember 三块五 = $3.50.',art:`<g transform="translate(440 310) scale(1.4)">${F.mian}</g>`}),
 finale('Baddie is beaten! 打败了！','真好吃！','Zhēn hǎochī!','So yummy!','太棒了！You learned food and fruit, 喜欢 and 不喜欢, numbers to 100, 多少钱 and 又…又…. Let\'s go eat! 我们去吃东西吧！'),
 ];
 
