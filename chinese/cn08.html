@@ -470,6 +470,15 @@ boss('Lie #3: the hardest one',{lines:['End EVERY sentence with ！','"我叫小
 finale('P2 Chinese complete! 太棒了！','你们是华文小明星！','Nǐmen shì huáwén xiǎo míngxīng!','You are little Chinese stars!','你们真棒！You finished all eight P2 Chinese decks with Chowdie and me! You can greet people, talk about school, food, weather, festivals, animals, your body and feelings, and do 看图说话. 再见！<i class="py">Zàijiàn!</i>','P2 Chinese series complete'),
 ];
 
+const DOORKEY='cn08';
+/* Secret door to Baddie Daddy, shown on the final "Baddie beaten" slide */
+const DOORS={'boss-maths':'../maths/daddy-maths.html','boss-eng':'../english/daddy-eng.html','cn08':'../chinese/daddy-cn.html','boss-sci':'../science/daddy-sci.html'};
+(function(){const L=S[S.length-1],d0=L.draw,m0=L.mount;
+ L.draw=a=>`<g class="shadow" style="opacity:0;transition:opacity 1.5s"><g style="filter:brightness(0)" opacity=".28">${daddySil(440,400,1.75)}</g>${T(560,120,'?','big mid','style="fill:#4B2A6B"')}</g>`+(d0?d0(a):'');
+ L.mount=a=>{if(m0)m0(a);a.later(()=>{const g=a.q('.shadow');if(g)g.style.opacity=1;setWho('baddie');a.say(BD+'Waaah! I\'m telling my <b>DADDY</b>! He\'s much smarter than me… and he doesn\'t always lie!');
+   const b=a.btn('🚪 Who is that shadow?',()=>{const u=DOORS[DOORKEY];window.open(u,u.startsWith('http')?'_blank':'_self')},'go');},2600)};})();
+function daddySil(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z"/><ellipse cx="0" cy="-40" rx="32" ry="38"/><ellipse cx="0" cy="-104" rx="36" ry="28"/><path d="M12 -112 q52 -4 56 13 q2 16 -54 18z"/><rect x="-26" y="-182" width="48" height="40"/><rect x="-38" y="-146" width="72" height="9"/><circle cx="-16" cy="-124" r="12"/><circle cx="13" cy="-126" r="12"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#000" stroke-width="5"/></g>`}
+
 
 render();
 </script>

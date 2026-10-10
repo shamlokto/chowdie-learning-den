@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Beat Baddie: Maths</title>
+<title>Baddie Daddy: Science</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
@@ -103,8 +103,8 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 <div class="wrap">
   <header>
     <div>
-      <p class="eyebrow">Boss level · P2 Maths</p>
-      <h1>Beat Baddie: Maths</h1>
+      <p class="eyebrow">Hidden boss · Life Science</p>
+      <h1>Baddie Daddy: Science</h1>
     </div>
     <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
   </header>
@@ -126,7 +126,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
     <button id="replay" type="button">Replay</button>
     <button id="next" type="button" class="primary">Next</button>
   </div>
-  <p class="foot">Boss level for P2 Maths: catch Baddie Vampire's lies. Use the arrow keys or the big buttons to move around.</p>
+  <p class="foot">Hidden boss for Life Science. Baddie Daddy sometimes lies, sometimes tells the truth. Use the arrow keys or the big buttons to move around.</p>
 </div>
 
 <script>
@@ -364,46 +364,140 @@ function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
        a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
    },'lie'))}};
 }
-/* Beat Baddie: P2 Maths boss level */
-PARTS.learn='How to play';
-document.querySelectorAll('.parts button').forEach(b=>{if(b.dataset.part==='learn')b.textContent=PARTS.learn});
-const colSum=(x,y,a,b,op,res)=>`<g transform="translate(${x} ${y})">${box(0,0,150,150,'#fff',14)}${T(120,44,a,'h end')}${T(120,84,b,'h end')}${T(26,84,op,'h mid')}<line x1="16" y1="98" x2="132" y2="98" stroke="${C.ink}" stroke-width="3"/>${T(120,134,res,'h end','style="fill:'+C.bad+'"')}</g>`;
-const pvChart=(x,y,d)=>`<g transform="translate(${x} ${y})">${['H','T','O'].map((h,k)=>box(k*70,0,66,40,[C.grape,C.sky,C.leaf][k],8)+T(k*70+33,27,h,'lab mid wht')+box(k*70,44,66,66,'#fff',8)+T(k*70+33,92,d[k],'big mid')).join('')}</g>`;
-const dotsG=(x,y,g,n)=>Array.from({length:g},(_,k)=>`<rect x="${x+k*72}" y="${y}" width="62" height="${16+Math.ceil(n/2)*22}" rx="12" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/>`+Array.from({length:n},(_,j)=>`<circle cx="${x+k*72+18+(j%2)*26}" cy="${y+20+Math.floor(j/2)*22}" r="8" fill="${C.accent}" stroke="${C.ink}" stroke-width="2"/>`).join('')).join('');
-const fbar=(x,y,n,f,w=150,col=C.sky)=>Array.from({length:n},(_,k)=>`<rect x="${x+k*w/n}" y="${y}" width="${w/n}" height="34" fill="${k<f?col:'#fff'}" stroke="${C.ink}" stroke-width="2.5"/>`).join('');
-const clk=(x,y,h,m,s=1)=>{const ha=((h%12)+m/60)*30*Math.PI/180,ma=m*6*Math.PI/180;return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="44" fill="#fff" stroke="${C.ink}" stroke-width="4"/>${Array.from({length:12},(_,k)=>T(34*Math.sin((k+1)*Math.PI/6),34*-Math.cos((k+1)*Math.PI/6)+5,k+1,'sm mid','style="font-size:12px"')).join('')}<line x1="0" y1="0" x2="${20*Math.sin(ha)}" y2="${-20*Math.cos(ha)}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="${32*Math.sin(ma)}" y2="${-32*Math.cos(ma)}" stroke="${C.accent}" stroke-width="3.5" stroke-linecap="round"/><circle r="4" fill="${C.ink}"/></g>`};
-const cubeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-40 -20 l40 -20 l40 20 v50 l-40 20 l-40 -20z" fill="${C.sky}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><path d="M-40 -20 l40 20 l40 -20 M0 0 v70" fill="none" stroke="${C.ink}" stroke-width="3"/><path d="M-40 -20 l40 -20 l40 20 l-40 20z" fill="#9AD3F0" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/></g>`;
-const appleM=(x,y)=>`<g transform="translate(${x} ${y})"><circle r="11" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/><path d="M0 -11 l2 -6" stroke="${C.ink}" stroke-width="2"/></g>`;
-const S=[
-{part:'learn',title:'How to beat Baddie',say:CH+'Oh no, it\'s <b>Baddie Vampire</b>! He <b>always lies</b> about maths. Read what he says, find his mistake, and tap the answer that <b>corrects</b> him. Each lie you catch earns a star and makes the lie detector go <b>LIE!</b> Ready?',
- draw:()=>G(baddie(450,385,2,{point:false}),'a-drop',.1)+G(otter(130,385,1.4,{wave:true}),'a-pop',.4)+G(box(30,26,300,150,'#fff',18)+T(180,60,'3 steps to beat him','lab mid acc')+T(50,96,'1. Read his claim','lab')+T(50,128,'2. Spot the mistake','lab')+T(50,160,'3. Tap the correction','lab'),'a-pop',.8)},
-boss('Lie #1: place value',{lines:['In 352, the 5 means','5 ones! Hehehe!'],claim:'In 352, the 5 means 5 ones!',options:["The 5 means 50, five tens.", "The 5 means 500, five hundreds.", "The 5 means 5 tens and 2 ones."],answer:"The 5 means 50, five tens.",why:'352 = 3 hundreds, <b>5 tens</b>, 2 ones. The 5 is worth <b>50</b>.',taunt:'Mwahaha! Places don\'t matter!',hint:'Which column is the 5 in?',art:pvChart(330,220,['3','5','2'])}),
-boss('Lie #2: comparing',{lines:['409 is bigger than 490,','because 9 is the biggest digit!'],claim:'409 is bigger than 490, because 9 is the biggest digit!',options:["490 is bigger.", "409 is bigger: it has a 9.", "They are the same size."],answer:"490 is bigger.",why:'Both have 4 hundreds. Then compare <b>tens</b>: 9 tens beats 0 tens, so <b>490 > 409</b>.',taunt:'Hehehe! Biggest digit wins, always!',hint:'Compare hundreds first, then tens.',art:T(440,280,'409  ?  490','big mid')}),
-boss('Lie #3: adding',{lines:['47 + 38 = 715!','7 + 8 = 15 and 4 + 3 = 7!'],claim:'47 plus 38 equals 715!',options:["47 + 38 = 85", "47 + 38 = 75", "47 + 38 = 715"],answer:"47 + 38 = 85",why:'7 + 8 = 15 ones = 1 ten and 5 ones. Carry the 1 ten: 4 + 3 + 1 = 8 tens. <b>85</b>.',taunt:'Mwahaha! Who needs regrouping?',hint:'15 ones is 1 ten and 5 ones.',art:colSum(370,212,'47','38','+','715')}),
-boss('Lie #4: subtracting',{lines:['52 − 27 = 35! Just take the','smaller digit from the bigger one!'],claim:'52 minus 27 is 35. Just take the smaller digit from the bigger one!',options:["52 − 27 = 25", "52 − 27 = 35", "52 − 27 = 79"],answer:"52 − 27 = 25",why:'2 − 7 can\'t be done, so regroup: 12 − 7 = 5, then 4 − 2 = 2. <b>25</b>. Check: 25 + 27 = 52 ✓',taunt:'Hehehe! Flip the digits, easy!',hint:'Check by adding back: does 35 + 27 make 52?',art:colSum(370,212,'52','27','−','35')}),
-boss('Lie #5: multiplying',{lines:['3 × 4 means 3 + 4,','so 3 × 4 = 7!'],claim:'3 times 4 means 3 plus 4, so it is 7!',options:["3 × 4 = 12", "3 × 4 = 7 (3 + 4)", "3 × 4 = 34 (side by side)"],answer:"3 × 4 = 12",why:'× means <b>groups of</b>. 3 groups of 4 = 4 + 4 + 4 = <b>12</b>.',taunt:'Mwahaha! Times, plus, same thing!',hint:'Count the dots in the groups.',art:dotsG(330,210,3,4)}),
-boss('Lie #6: dividing',{lines:['12 ÷ 3 = 9, because','dividing means take away 3!'],claim:'12 divided by 3 is 9, because dividing means take away 3!',options:["12 ÷ 3 = 4 (4 in each group)", "12 ÷ 3 = 9 (12 take away 3)", "12 ÷ 3 = 15 (12 add 3 makes it bigger)"],answer:"12 ÷ 3 = 4 (4 in each group)",why:'12 ÷ 3 means share 12 equally into 3 groups: <b>4</b> in each. Check: 3 × 4 = 12 ✓',taunt:'Hehehe! Sharing is for softies!',hint:'Share 12 cookies fairly among 3 friends.',art:dotsG(330,210,3,4)}),
-boss('Lie #7: fractions',{lines:['¼ is bigger than ½,','because 4 is bigger than 2!'],claim:'One quarter is bigger than one half, because 4 is bigger than 2!',options:["½ is bigger than ¼.", "¼ is bigger, as 4 > 2.", "They are the same size, just cut differently."],answer:"½ is bigger than ¼.",why:'Cut the same bar into 2 or 4 parts. Halves are bigger than quarters: <b>½ > ¼</b>.',taunt:'Mwahaha! More pieces, more cake!',hint:'Look at the bars: which shaded part is longer?',art:fbar(330,230,2,1,220)+T(320,256,'½','lab end')+fbar(330,290,4,1,220,C.leaf)+T(320,316,'¼','lab end')}),
-boss('Lie #8: adding fractions',{lines:['⅕ + ⅖ = 3/10!','Add the tops AND the bottoms!'],claim:'One fifth plus two fifths is three tenths!',options:["⅕ + ⅖ = 3/5", "⅕ + ⅖ = 3/10", "⅕ + ⅖ = 2/10"],answer:"⅕ + ⅖ = 3/5",why:'1 fifth + 2 fifths = <b>3 fifths</b>. The parts are still fifths, so the bottom stays 5.',taunt:'Hehehe! Add everything you see!',hint:'1 apple + 2 apples = 3 apples. 1 fifth + 2 fifths = ?',art:fbar(330,250,5,3,240)}),
-boss('Lie #9: money',{lines:['$3.05 is three dollars','and fifty cents! Hehehe!'],claim:'3 dollars point 0 5 is three dollars and fifty cents!',options:["3 dollars and 5 cents", "3 dollars and 50 cents", "305 dollars"],answer:"3 dollars and 5 cents",why:'After the dot come the cents: <b>05</b> cents = 5 cents. Fifty cents would be $3.50.',taunt:'Mwahaha! Give me your fifty cents!',hint:'Look at the two digits after the dot: 0 and 5.',art:T(440,290,'$3.05','big mid','style="font-size:64px"')}),
-boss('Lie #10: length',{lines:['A centimetre is longer','than a metre! Mwahaha!'],claim:'A centimetre is longer than a metre!',options:["1 metre is 100 centimetres.", "1 cm is longer than 1 m", "1 m and 1 cm are exactly the same length"],answer:"1 metre is 100 centimetres.",why:'A centimetre is tiny (about a fingernail wide). A metre is <b>100 cm</b>, about a big step.',taunt:'Hehehe! Size is an illusion!',hint:'Which one do you use for a door, and which for a pencil?',art:`<rect x="290" y="250" width="300" height="20" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>`+T(440,300,'1 m = 100 cm','lab mid')+`<rect x="290" y="330" width="6" height="20" fill="${C.accent}"/>`+T(306,346,'1 cm','sm')}),
-boss('Lie #11: time',{lines:['Half past 3 is','3:50! Obviously!'],claim:'Half past 3 is 3:50!',options:["3:30", "3:50", "3:15"],answer:"3:30",why:'An hour has 60 minutes. Half of 60 is <b>30</b>, so half past 3 is <b>3:30</b>.',taunt:'Mwahaha! Half means fifty, everyone knows!',hint:'How many minutes in half an hour?',art:clk(440,285,3,30,1.45)}),
-boss('Lie #12: 3D shapes',{lines:['A cube has 4 faces!','I counted them myself!'],claim:'A cube has 4 faces!',options:["6 faces", "4 faces", "8 faces"],answer:"6 faces",why:'Top, bottom, front, back, left, right: <b>6</b> square faces. (8 is the number of corners!)',taunt:'Hehehe! I only count the ones I can see!',hint:'Think of a dice: how many numbers are on it?',art:cubeI(440,270,1.2)}),
-boss('Lie #13: picture graphs',{lines:['Each 🍎 stands for 2 apples.','5 pictures = 5 apples!'],claim:'Each picture stands for 2 apples, so 5 pictures means 5 apples!',options:["10 apples", "5 apples (one each)", "7 apples (5 pictures + 2)"],answer:"10 apples",why:'Each picture is worth 2, so 5 pictures = 5 × 2 = <b>10</b> apples. Always check the key!',taunt:'Mwahaha! Keys are for locks!',hint:'Read the key: one 🍎 = 2 apples.',art:[0,1,2,3,4].map(k=>appleM(330+k*44,280)).join('')+T(440,330,'Key: 🍎 = 2 apples','lab mid acc')}),
-boss('Lie #14: the hardest one',{lines:['Mei has 45 stickers.','Arjun has 18 more than Mei.','Together they have 63!'],claim:'Mei has 45 stickers. Arjun has 18 more than Mei. Together they have 63!',options:["Together they have 108.", "Together they have 63.", "Together they have 27 (45 − 18)."],answer:"Together they have 108.",why:'Step 1: Arjun = 45 + 18 = <b>63</b>. Step 2: together = 45 + 63 = <b>108</b>. Baddie stopped after step 1!',taunt:'Hehehe! One step is enough for me!',hint:'63 is only how many Arjun has. Now add Mei\'s.',art:`<rect x="310" y="236" width="150" height="30" rx="4" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/>`+T(300,258,'Mei','sm end')+T(385,257,'45','sm mid')+`<rect x="310" y="286" width="150" height="30" rx="4" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><rect x="460" y="286" width="60" height="30" rx="4" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>`+T(300,308,'Arjun','sm end')+T(385,307,'45','sm mid')+T(490,307,'18','sm mid')+T(560,290,'?','h mid acc')}),
-{part:'boss',title:'Baddie is defeated!',say:CH+'You caught <b>all 14 lies</b>! Baddie Vampire is too dizzy to trick anyone. Remember his favourite tricks: forgetting place value, skipping regrouping, mixing up × and +, and stopping after one step. Don\'t let him fool you in your next test!',
- draw:()=>G(baddie(320,388,1.2,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(320,70,40),'a-pop',.8)+T(320,150,'Maths champion!','h mid acc'),
- mount:a=>a.later(()=>a.win(),600)},
-];
-
-const DOORKEY='boss-maths';
-/* Secret door to Baddie Daddy, shown on the final "Baddie beaten" slide */
-const DOORS={'boss-maths':'../maths/daddy-maths.html','boss-eng':'../english/daddy-eng.html','cn08':'../chinese/daddy-cn.html','boss-sci':'../science/daddy-sci.html'};
-(function(){const L=S[S.length-1],d0=L.draw,m0=L.mount;
- L.draw=a=>`<g class="shadow" style="opacity:0;transition:opacity 1.5s"><g style="filter:brightness(0)" opacity=".28">${daddySil(440,400,1.75)}</g>${T(560,120,'?','big mid','style="fill:#4B2A6B"')}</g>`+(d0?d0(a):'');
- L.mount=a=>{if(m0)m0(a);a.later(()=>{const g=a.q('.shadow');if(g)g.style.opacity=1;setWho('baddie');a.say(BD+'Waaah! I\'m telling my <b>DADDY</b>! He\'s much smarter than me… and he doesn\'t always lie!');
-   const b=a.btn('🚪 Who is that shadow?',()=>{const u=DOORS[DOORKEY];window.open(u,u.startsWith('http')?'_blank':'_self')},'go');},2600)};})();
-function daddySil(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z"/><ellipse cx="0" cy="-40" rx="32" ry="38"/><ellipse cx="0" cy="-104" rx="36" ry="28"/><path d="M12 -112 q52 -4 56 13 q2 16 -54 18z"/><rect x="-26" y="-182" width="48" height="40"/><rect x="-38" y="-146" width="72" height="9"/><circle cx="-16" cy="-124" r="12"/><circle cx="13" cy="-126" r="12"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#000" stroke-width="5"/></g>`}
+/* ===== Baddie Daddy: the hidden boss. Baddie Vampire's dad. He SOMETIMES lies. ===== */
+/* origin = feet centre, ~170 tall at s=1. o.busted: caught; o.point: arm raised with cane */
+function daddy(x,y,s=1,o={}){
+  const g='#4E8A47',g2='#3E7238',belly='#D2E5A4',ink=C.ink,b=o.busted,cape='#4B2A6B',gold='#E3B23C';
+  const eyes=b?`<path d="M-21 -128 l10 10 M-11 -128 l-10 10 M7 -130 l10 10 M17 -130 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+   :`<ellipse cx="-16" cy="-123" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="-15" cy="-122" rx="1.8" ry="5" fill="${ink}"/>
+     <ellipse cx="13" cy="-125" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="14" cy="-124" rx="1.8" ry="5" fill="${ink}"/>
+     <circle cx="13" cy="-125" r="11" fill="none" stroke="${gold}" stroke-width="3"/><path d="M23 -120 q14 20 4 46" stroke="${gold}" stroke-width="1.5" fill="none"/>`;
+  const brows=b?'':`<path d="M-28 -138 q10 -6 20 2 M2 -140 q10 -8 22 0" stroke="#E9EEF1" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  const hat=`<g transform="${b?'translate(100 134) rotate(-10)':''}"><rect x="-26" y="-182" width="48" height="40" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/><rect x="-26" y="-156" width="48" height="9" fill="${cape}"/><rect x="-38" y="-146" width="72" height="9" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/></g>`;
+  const cane=o.point?`<path d="M30 -60 q24 -12 40 -34" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="72" cy="-96" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><line x1="74" y1="-110" x2="66" y2="-40" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="75" cy="-112" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`
+   :`<ellipse cx="30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 30 -50)"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="40" cy="-46" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z" fill="${cape}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-74 0 h148" stroke="${gold}" stroke-width="5"/><path d="M-30 -78 q-24 34 -30 74 h120 q-6 -40 -30 -74z" fill="#7A3B8F"/>
+  <path d="M-30 -10 q-36 2 -46 -20 q24 6 44 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-40" rx="32" ry="38" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-36" rx="20" ry="28" fill="${belly}"/><path d="M-17 -50 h34 M-19 -37 h38 M-17 -24 h34" stroke="${g2}" stroke-width="2"/>
+  <path d="M-16 -74 l16 10 l16 -10 l-6 14 h-20z" fill="#fff" stroke="${ink}" stroke-width="2"/><path d="M-8 -68 l8 8 l8 -8 l-8 -4z" fill="${b?C.bad:'#B3243A'}" stroke="${ink}" stroke-width="1.5"/>
+  ${b?`<circle cx="6" cy="-30" r="8" fill="none" stroke="${gold}" stroke-width="3"/>`:''}
+  <ellipse cx="-17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -30 -50)"/>${cane}
+  <path d="M-44 -78 l-18 -40 l24 18 l7 -24 l13 33z M44 -78 l18 -40 l-24 18 l-7 -24 l-13 33z" fill="${cape}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-104" rx="36" ry="28" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M12 -112 q52 -4 56 13 q2 16 -54 18z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="62" cy="-106" r="2.3" fill="${ink}"/><circle cx="53" cy="-107" r="2.3" fill="${ink}"/>
+  <path d="M10 -84 q14 10 26 0 q12 10 26 -2 q-6 12 -26 6 q-20 8 -26 -4z" fill="#F4F6F8" stroke="${ink}" stroke-width="2"/>
+  <circle cx="-16" cy="-124" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-126" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${brows}${hat}
+  <circle cx="-24" cy="-98" r="2" fill="${g2}"/><circle cx="-16" cy="-92" r="2" fill="${g2}"/><circle cx="-28" cy="-90" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+FACES.daddy=()=>daddy(36,124,.62,{still:true});
+VOICE.daddy={en:[.8,.35],zh:[.7,.4],pref:VMALE};
+const DD='<b class="dd">Baddie Daddy:</b> ';
+PARTS.boss='Baddie Daddy';
+(function(){const st=document.createElement('style');st.textContent=`
+ .bubble b.dd{color:#4B2A6B} .tag.boss{background:#4B2A6B} .dots button.boss:not(.done):not([aria-current="true"]){background:#E4DAF0;border-color:#4B2A6B}
+ .parts button[data-part="boss"]{border-color:#4B2A6B;color:#4B2A6B} .parts button[data-part="boss"][aria-current="true"]{background:#4B2A6B;color:#fff}
+ .ui button.opt{font-size:18px;text-align:left;max-width:100%}
+ .ui button.tf{font-size:20px;min-width:220px}
+ .ui button.pick[aria-pressed="true"]{background:var(--sky);color:#fff}
+ .ui button.tok{font-size:20px;min-width:0;padding:6px 12px 3px}
+ .ui button.tok[aria-pressed="true"]{background:var(--bad);color:#fff;text-decoration:line-through}
+ .ui button.key{min-width:58px;font-size:24px}
+ .ui .pad{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:var(--display);font-weight:800;font-size:26px}
+ .ui .pad output{min-width:140px;padding:6px 16px 2px;border:3px solid var(--ink);border-radius:14px;background:#fff;text-align:center}
+ .ui .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}`;document.head.appendChild(st);})();
+/* stage: Daddy on the left, a wrapped speech bubble on the right, optional art below the bubble */
+function wrapLines(t,max){const w=t.split(' '),L=[];let c='';w.forEach(x=>{if((c+' '+x).trim().length>max){L.push(c);c=x}else c=(c+' '+x).trim()});if(c)L.push(c);return L}
+function daddyStage(text,art='',head='Baddie Daddy says:'){const L=wrapLines(text,34),h=L.length*28+46;
+  return G(daddy(118,384,1.45,{point:true}),'a-drop',.05,'data-dd="1"')
+   +G(`<path d="M248 18 h364 a16 16 0 0 1 16 16 v${h-32} a16 16 0 0 1 -16 16 h-344 l-28 24 l6 -24 a16 16 0 0 1 -14 -16 v${-(h-32)} a16 16 0 0 1 16 -16z" fill="#F1EAF8" stroke="#4B2A6B" stroke-width="3"/>`
+     +T(266,44,head,'sm','style="fill:#4B2A6B;font-weight:800"')+L.map((l,k)=>T(266,74+k*28,l,'lab')).join(''),'a-pop',.3)
+   +`<g class="stamp"></g>`+(art?`<g transform="translate(0 ${Math.max(0,h-110)})">${G(art,'a-fade',.6)}</g>`:'');}
+const stamp=(a,truth)=>{a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-10 470 ${60})"><rect x="380" y="30" width="180" height="60" rx="10" fill="none" stroke="${truth?C.good:C.bad}" stroke-width="5"/>${T(470,74,truth?'TRUE!':'LIE!','h mid','style="fill:'+(truth?C.good:C.bad)+';font-size:38px;letter-spacing:4px"')}</g>`};
+const bust=a=>{const g=a.q('[data-dd]');if(g)g.innerHTML=daddy(118,384,1.45,{busted:true})};
+const shuf=x=>[...x].sort(()=>Math.random()-.5);
+const nope=(a,taunt,hint)=>{a.as('daddy',DD+(taunt||'Ho ho ho! Wrong, little one.'));a.later(()=>a.as('otter',CH+hint),2300)};
+const winD=(a,why)=>{bust(a);setWho('otter');a.win('<b>You beat him!</b> '+why)};
+/* ---- question types ---- */
+/* 1. Truth or lie, then WHY */
+function tl(title,{claim,truth,reasons,reason,why,hint,hint2,art='',taunt}){return {_ans:{truth,reason},options:reasons,part:'boss',title,who:'daddy',say:DD+claim+' <i>Am I telling the truth… or a lie?</i>',draw:()=>daddyStage(claim,art),
+ mount:a=>{let step=1;const s2=()=>{step=2;a.ui.innerHTML='';a.say(CH+`Right, he was ${truth?'telling the <b>truth</b>':'<b>lying</b>'}! Now the hard part: <b>WHY?</b>`);
+   shuf(reasons).forEach(r=>a.btn(r,b=>{if(step!==2)return;if(r===reason){step=3;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,'Ho ho! Right answer, wrong reason. That doesn\'t count!',hint2||hint)}},'opt'))};
+  [['😇 He is telling the TRUTH',true],['😈 He is telling a LIE',false]].forEach(([l,v])=>a.btn(l,b=>{if(step!==1)return;if(v===truth){b.classList.add('ok');stamp(a,truth);a.later(s2,900)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'tf'));}}}
+/* 2. Hard multiple choice (5-6 options) */
+function mc(title,{q,options,answer,why,hint,art='',taunt}){return {_ans:answer,options,part:'boss',title,who:'daddy',say:DD+q,draw:()=>daddyStage(q,art),
+ mount:a=>{let done=false;shuf(options).forEach(o=>a.btn(o,b=>{if(done)return;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'opt'))}}}
+/* 3. Type the answer on a keypad */
+function num(title,{q,answer,unit='',why,hint,art='',keys=[],taunt}){return {_ans:String(answer),part:'boss',title,who:'daddy',say:DD+q+' <i>Type your answer.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{let v='',done=false;const pad=document.createElement('div');pad.className='pad';pad.innerHTML=`<output>?</output><span>${unit}</span>`;a.ui.appendChild(pad);
+  const out=pad.querySelector('output'),upd=()=>out.textContent=v||'?';const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  const mk=(l,fn,c='key')=>{const b=document.createElement('button');b.type='button';b.className=c;b.innerHTML=l;b.onclick=()=>fn(b);row.appendChild(b);return b};
+  [...'1234567890',...keys].forEach(k=>mk(k,()=>{if(done||v.length>=7)return;v+=k;upd()}));mk('⌫',()=>{if(done)return;v=v.slice(0,-1);upd()});
+  mk('Check ✓',b=>{if(done||!v)return;if(v===String(answer)){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`${v}${unit?' '+unit:''}? Ho ho ho! Not even close.`,hint)}},'go');}}}
+/* 4. Pick ALL the correct ones */
+function multi(title,{q,options,correct,why,hint,art='',taunt}){return {_ans:correct,options,part:'boss',title,who:'daddy',say:DD+q+' <i>Pick ALL the right ones, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  shuf(options).forEach(o=>{const b=document.createElement('button');b.type='button';b.className='pick opt';b.innerHTML=o;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(o)?sel.delete(o):sel.add(o);b.setAttribute('aria-pressed',sel.has(o))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=correct.length===sel.size&&correct.every(c=>sel.has(c));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{const wrong=[...sel].filter(x=>!correct.includes(x)).length+correct.filter(x=>!sel.has(x)).length;b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`Ho ho! ${wrong===1?'One choice is':wrong+' choices are'} still wrong.`,hint)}},'go');}}}
+/* 5. Put in order */
+function order(title,{q,items,why,hint,art='',taunt}){return {_ans:items,part:'boss',title,who:'daddy',say:DD+q+' <i>Tap them in the right order.</i>',draw:()=>daddyStage(q,art)+`<g class="seq"></g>`,
+ mount:a=>{let n=0;const show=()=>{a.q('.seq').innerHTML=items.slice(0,n).map((t,k)=>T(270,250+k*26,(k+1)+'. '+t.replace(/<[^>]+>/g,''),'sm','style="font-weight:800;fill:'+C.good+'"')).join('')};
+  shuf(items).forEach(t=>a.btn(t,b=>{if(b.disabled)return;if(t===items[n]){n++;b.disabled=true;b.classList.add('ok');show();if(n===items.length)winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'opt'));}}}
+/* 6. Tap the mistake(s) */
+function spot(title,{q,tokens,wrong,why,hint,art='',taunt}){return {_ans:wrong,part:'boss',title,who:'daddy',say:DD+q+' <i>Tap every wrong part, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  tokens.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='tok';b.innerHTML=t;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(i)?sel.delete(i):sel.add(i);b.setAttribute('aria-pressed',sel.has(i))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=wrong.length===sel.size&&wrong.every(i=>sel.has(i));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||(sel.size<wrong.length?'Ho ho! You missed something.':'Ho ho! Some of those were right all along.'),hint)}},'go');}}}
+/* intro, rules and finale */
+const daddyIntro=(subject)=>[{part:'learn',title:'Who is THAT?',who:'daddy',say:DD+`Ho… ho… ho. So you beat my son, Baddie Vampire? Impressive. I am <b>Baddie Daddy</b>, his father. Unlike my silly son, I don't <i>always</i> lie. <b>Sometimes I tell the truth.</b> Good luck spotting which is which in my super-hard ${subject} challenge.`,
+  draw:()=>G(`<rect x="0" y="0" width="640" height="400" rx="16" fill="#2B1E3A" opacity=".9"/>`,'')+G(daddy(330,388,2.15),'a-drop',.2)+G(baddie(560,392,.8,{still:true})+T(560,250,'"Daddy!"','sm mid','style="fill:#fff"'),'a-pop',1)+G(otter(80,392,.8,{still:true})+T(80,262,'Gulp!','sm mid','style="fill:#fff"'),'a-pop',1.3)+G(T(330,40,'THE HIDDEN BOSS','h mid','style="fill:#E3B23C;letter-spacing:3px"'),'a-fade',.6)},
+ {part:'learn',title:'How to beat Baddie Daddy',who:'otter',say:CH+'Careful! Daddy is trickier than Baddie. Sometimes he tells the <b>truth</b>, so think before you shout "Lie!" And getting the answer is not enough: you must know <b>WHY</b>. Some questions have six choices, some need you to type a number, tap a mistake, or pick <b>all</b> the right answers.',
+  draw:()=>[['😇 / 😈','Truth or lie?','then choose WHY'],['1 2 3','Type it','use the keypad'],['✓ ✓ ✗','Pick ALL','maybe more than one'],['✗','Tap the mistake','find every wrong part'],['1→2→3','Put in order','tap in sequence'],['A–F','Tricky choices','up to six options']]
+  .map(([ic,n,d],k)=>{const x=20+(k%3)*204,y=24+Math.floor(k/3)*180;return G(box(x,y,192,166,'#fff',16)+T(x+96,y+60,ic,'h mid','style="fill:#4B2A6B"')+T(x+96,y+104,n,'lab mid')+T(x+96,y+130,d,'sm mid mut'),'a-pop',.1+k*.12)}).join('')}];
+const daddyEnd=(subject)=>({part:'boss',title:'Baddie Daddy is beaten!',who:'otter',say:CH+`You did it! You out-thought <b>Baddie Daddy</b> himself. You didn't just find answers: you explained <b>why</b>. That's how real ${subject} champions think. Count your stars: every star is a challenge you beat.`,
+ draw:()=>G(daddy(270,388,1.2,{busted:true}),'a-pop',.1)+G(baddie(420,392,.7,{busted:true}),'a-pop',.3)+G(otter(85,392,1.05,{wave:true})+wala(560,392,.95,{wave:true}),'a-pop',.5)+G(star(200,80,34)+star(440,80,34),'a-pop',.8)+T(320,96,'Super brain!','h mid acc'),
+ mount:a=>a.later(()=>a.win(`You beat Baddie Daddy! Stars: <b>${earned.size} of ${S.length-3}</b>.`),500)});
+/* Baddie Daddy: super-hard Life Science */
+const S=[...daddyIntro('science'),
+tl('Challenge 1: whale of a time',{claim:'A whale is a mammal, even though it lives in the sea.',truth:true,
+ reasons:['It breathes air and feeds its babies milk.','Anything as big as a whale must be a mammal.','It has fins and a tail, and all mammals have fins.','It lives in the sea, so it\'s really a big fish.','It lays its eggs on the sea floor, like a turtle.'],
+ reason:'It breathes air and feeds its babies milk.',why:'True! Whales breathe <b>air</b> through a blowhole and feed their babies <b>milk</b>, just like us. Where an animal lives doesn\'t decide its group.',hint:'Does a whale breathe air or water?',hint2:'What makes an animal a mammal?'}),
+tl('Challenge 2: fruit or vegetable?',{claim:'A tomato is a fruit.',truth:true,
+ reasons:['It grows from a flower and has seeds inside.','It is red, and all red food is fruit.','It grows on a plant, and everything on a plant is fruit.','Anything round is a fruit.','It is a fruit because we can eat it raw.'],
+ reason:'It grows from a flower and has seeds inside.',why:'True! Scientists call a <b>fruit</b> the part that grows from a <b>flower</b> and holds the <b>seeds</b>. So tomatoes, cucumbers and chillies are fruits!',hint:'Cut a tomato open in your mind. What is inside?',hint2:'Lettuce grows on a plant too, and it isn\'t a fruit.'}),
+tl('Challenge 3: batty',{claim:'Bats are birds, because they can fly.',truth:false,
+ reasons:['Bats have fur and feed their babies milk, so they are mammals.','Bats can\'t really fly; they only jump from tree to tree and glide.','Birds can\'t fly at night, so bats must be a special kind of night bird.','Bats are insects, like moths, because they come out at night.','Bats lay eggs in caves, so they must be a kind of bird.'],
+ reason:'Bats have fur and feed their babies milk, so they are mammals.',why:'A lie! Bats are the only <b>mammals</b> that can truly fly. They have <b>fur</b> and feed babies <b>milk</b>. Flying doesn\'t make you a bird; feathers do.',hint:'Do bats have feathers?',hint2:'What do bat mums feed their babies?'}),
+multi('Challenge 4: alive or not?',{q:'Which of these are living things?',options:['mushroom','rock','seed','fire','cloud','tree','bacteria','robot'],correct:['mushroom','seed','tree','bacteria'],
+ why:'Mushrooms, seeds, trees and bacteria are alive: they can grow and make more of themselves. Fire "grows" and needs air, but it doesn\'t make babies or come from parents. It isn\'t alive!',hint:'A seed looks still, but can it grow? Fire grows too… but is it alive?'}),
+tl('Challenge 5: plant food',{claim:'Plants need soil to make their own food.',truth:false,
+ reasons:['Leaves make food from sunlight, water and air, not from soil.','Plants eat soil through their roots, the way we eat rice with a spoon.','Plants make their food at night, using the minerals in the soil.','Only big plants need soil; small plants catch insects for their food.','Plants don\'t need water or light, only soil, so they can grow anywhere.'],
+ reason:'Leaves make food from sunlight, water and air, not from soil.',why:'A lie! Leaves make food from <b>sunlight</b>, <b>water</b> and <b>air</b>. Some plants grow with no soil at all, just water (like hydroponic vegetables!).',hint:'What do leaves need from the sky?',hint2:'Can plants grow in just water?'}),
+order('Challenge 6: frog life cycle',{q:'Put a frog\'s life cycle in order, starting with the egg.',items:['egg (frogspawn)','tadpole','tadpole with back legs','froglet with a short tail','adult frog'],
+ why:'Egg → tadpole → back legs grow → froglet (tail shrinking) → adult frog. The back legs come before the front legs!',hint:'Which legs grow first?'}),
+mc('Challenge 7: fair or unfair?',{q:'Mei asks: "Do bigger seeds grow taller plants?" Which test is FAIR?',options:['Big and small seeds, with the same soil, water and sunlight.','Big seeds in the sun, small seeds in the shade.','Big seeds get more water because they are bigger.','Plant only big seeds, and measure how tall they grow after a month.','Plant the big seeds a week before the small seeds.','Big seeds in a big pot, small seeds in a small pot, so each one fits nicely.'],answer:'Big and small seeds, with the same soil, water and sunlight.',
+ why:'In a fair test, only the thing you\'re testing (seed size) changes. Everything else stays the <b>same</b>.',hint:'How many things change in each test?'}),
+tl('Challenge 8: snakes and frogs',{claim:'If all the snakes in a field disappear, at first there will be MORE frogs.',truth:true,
+ reasons:['Snakes eat frogs, so fewer frogs would be eaten.','Snakes give frogs food, so frogs would starve.','Frogs eat snakes, so frogs would lose their food.','Taking animals away never changes a food chain.','Without snakes, the frogs would turn into snakes.'],
+ reason:'Snakes eat frogs, so fewer frogs would be eaten.',why:'True! Snakes are frogs\' <b>predators</b>. Without them, fewer frogs get eaten, so at first the frogs increase. (Later, more frogs means fewer grasshoppers!)',hint:'Who eats whom: snake or frog?',hint2:'Think about the food chain: grass → grasshopper → frog → snake.'}),
+num('Challenge 9: heartbeat maths',{q:'A child\'s heart beats about 80 times in one minute. About how many times does it beat in 3 minutes?',answer:240,unit:'beats',
+ why:'80 + 80 + 80 = <b>240</b> beats. (When you run, it beats even faster!)',hint:'3 minutes = 80 beats, 3 times.'}),
+spot('Challenge 10: penguin fact check',{q:'One part of my penguin fact is wrong. Tap it!',tokens:['Penguins','are birds','that cannot fly,','have feathers,','lay eggs,','and drink milk from their mums.'],wrong:[5],
+ why:'Penguins are birds: they have feathers, lay eggs, and can\'t fly. But birds don\'t make milk! Penguin chicks eat fish that their parents bring back up.',hint:'Which part only mammals do?'}),
+multi('Challenge 11: germ spreaders',{q:'Which of these help germs SPREAD?',options:['sneezing without covering your nose','sharing a cup with a sick friend','washing hands with soap for 20 seconds','touching your face with dirty hands','coughing into your elbow','eating food that flies have landed on'],correct:['sneezing without covering your nose','sharing a cup with a sick friend','touching your face with dirty hands','eating food that flies have landed on'],
+ why:'Uncovered sneezes, shared cups, dirty hands on your face, and food that flies have landed on all spread germs. Washing with soap and coughing into your elbow STOP them.',hint:'Read carefully: which ones STOP germs instead?'}),
+tl('Challenge 12: the hardest one',{claim:'A seed is alive, even though it doesn\'t move or eat.',truth:true,
+ reasons:['It can grow into a new plant when it gets water and warmth.','Anything small, like a seed or a grain of sand, is alive.','It moves very slowly, so slowly that we can\'t see it moving.','Seeds are not alive; they are like little stones until we plant them.','It is alive because it is brown, and brown things come from trees.'],
+ reason:'It can grow into a new plant when it gets water and warmth.',why:'True! A seed is a <b>sleeping</b> baby plant with a food store. Give it water and warmth, and it wakes up and grows. Not all living things move or eat like animals.',hint:'What happens when you plant a seed and water it?',hint2:'Do all living things have to move?'}),
+daddyEnd('science')];
 
 
 render();

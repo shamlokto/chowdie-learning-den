@@ -12,4 +12,6 @@ Interactive, clickable lesson decks for young learners, starring **Chowdie** the
 
 Maths, English and Science each have a **Beat Baddie** boss level where kids catch and correct Baddie's lies.
 
+**Hidden boss: Baddie Daddy**, Baddie's father, waits behind a secret door after each Beat Baddie round (and after the last Chinese deck). He only *sometimes* lies, so kids must decide truth or lie **and explain why**, plus type answers, tap mistakes, pick all correct options and put things in order.
+
 Every deck is a single self-contained HTML file with Learn / Try it / Quiz sections, read-aloud, and no build step.
