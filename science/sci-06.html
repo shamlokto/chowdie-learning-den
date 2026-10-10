@@ -230,8 +230,10 @@ const wr=(x,y,str,max=40,cls='sm',lh=19,ex='')=>prose(x,y,str,max,cls,lh,ex);
 PARTS.learn='Discover';PARTS.try='Experiment';PARTS.check='Quiz';
 document.querySelectorAll('.parts button').forEach(b=>b.textContent={learn:'Discover',try:'Experiment',check:'Quiz'}[b.dataset.part]);
 const card=(x,y,w,h,title,body,{fill='#fff',d=0,icon=''}={})=>G(box(x,y,w,h,fill,16)+icon+T(x+w/2,y+(icon?96:34),title,'lab mid')+wr(x+w/2,y+(icon?120:58),body,Math.floor((w-24)/7.4),'sm mid',18),'a-pop',d);
-const funfact=(x,y,w,txt)=>G(box(x,y,w,64,C.sun,16)+T(x+14,y+26,'Fun fact!','sm','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.4);
-const tryhome=(x,y,w,txt)=>G(box(x,y,w,70,'#E6F6EA',16)+T(x+14,y+26,'Try at home','sm acc','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.6);
+const nLines=(str,max)=>{let n=1,c='';str.split(' ').forEach(t=>{if((c+' '+t).trim().length>max){n++;c=t}else c=(c+' '+t).trim()});return n};
+const noteH=(w,txt)=>42+nLines(txt,Math.floor((w-28)/7.2))*17; // box grows with its wrapped text
+const funfact=(x,y,w,txt)=>G(box(x,y,w,noteH(w,txt),C.sun,16)+T(x+14,y+26,'Fun fact!','sm','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.4);
+const tryhome=(x,y,w,txt)=>G(box(x,y,w,noteH(w,txt),'#E6F6EA',16)+T(x+14,y+26,'Try at home','sm acc','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.6);
 /* icons */
 const leafI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 C26 -22 26 14 0 30 C-26 14 -26 -22 0 -30z" fill="${col}" stroke="${C.ink}" stroke-width="2.5" transform="rotate(30)"/><path d="M0 -24 v50 M0 -6 l10 -8 M0 6 l-10 -8" stroke="${C.ink}" stroke-width="1.5" fill="none" transform="rotate(30)"/></g>`;
 const flowerI=(x,y,s=1,col=C.berry)=>`<g transform="translate(${x} ${y}) scale(${s})"><line x1="0" y1="10" x2="0" y2="60" stroke="${C.leaf}" stroke-width="5"/><path d="M0 40 q18 -6 22 8 q-14 6 -22 -8z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/>${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-16" rx="9" ry="14" fill="${col}" stroke="${C.ink}" stroke-width="2" transform="rotate(${a})"/>`).join('')}<circle r="8" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/></g>`;
