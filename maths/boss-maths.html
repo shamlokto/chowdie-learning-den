@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beat Baddie: Maths</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Boss level · P2 Maths</p>
+      <h1>Beat Baddie: Maths</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Boss level for P2 Maths: catch Baddie Vampire's lies. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const en=vs.find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang));
+  const zh=vs.find(v=>/^(zh|cmn)[-_](CN|SG|Hans)/i.test(v.lang))||vs.find(v=>/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang));
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; u.rate=z?.78:.92; u.pitch=who==='baddie'?.55:who==='wala'?1.35:1.1; speechSynthesis.speak(u)});
+ }catch(e){} }
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
+  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+   },'lie'))}};
+}
+/* Beat Baddie: P2 Maths boss level */
+PARTS.learn='How to play';
+document.querySelectorAll('.parts button').forEach(b=>{if(b.dataset.part==='learn')b.textContent=PARTS.learn});
+const colSum=(x,y,a,b,op,res)=>`<g transform="translate(${x} ${y})">${box(0,0,150,150,'#fff',14)}${T(120,44,a,'h end')}${T(120,84,b,'h end')}${T(26,84,op,'h mid')}<line x1="16" y1="98" x2="132" y2="98" stroke="${C.ink}" stroke-width="3"/>${T(120,134,res,'h end','style="fill:'+C.bad+'"')}</g>`;
+const pvChart=(x,y,d)=>`<g transform="translate(${x} ${y})">${['H','T','O'].map((h,k)=>box(k*70,0,66,40,[C.grape,C.sky,C.leaf][k],8)+T(k*70+33,27,h,'lab mid wht')+box(k*70,44,66,66,'#fff',8)+T(k*70+33,92,d[k],'big mid')).join('')}</g>`;
+const dotsG=(x,y,g,n)=>Array.from({length:g},(_,k)=>`<rect x="${x+k*72}" y="${y}" width="62" height="${16+Math.ceil(n/2)*22}" rx="12" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/>`+Array.from({length:n},(_,j)=>`<circle cx="${x+k*72+18+(j%2)*26}" cy="${y+20+Math.floor(j/2)*22}" r="8" fill="${C.accent}" stroke="${C.ink}" stroke-width="2"/>`).join('')).join('');
+const fbar=(x,y,n,f,w=150,col=C.sky)=>Array.from({length:n},(_,k)=>`<rect x="${x+k*w/n}" y="${y}" width="${w/n}" height="34" fill="${k<f?col:'#fff'}" stroke="${C.ink}" stroke-width="2.5"/>`).join('');
+const clk=(x,y,h,m,s=1)=>{const ha=((h%12)+m/60)*30*Math.PI/180,ma=m*6*Math.PI/180;return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="44" fill="#fff" stroke="${C.ink}" stroke-width="4"/>${Array.from({length:12},(_,k)=>T(34*Math.sin((k+1)*Math.PI/6),34*-Math.cos((k+1)*Math.PI/6)+5,k+1,'sm mid','style="font-size:12px"')).join('')}<line x1="0" y1="0" x2="${20*Math.sin(ha)}" y2="${-20*Math.cos(ha)}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="${32*Math.sin(ma)}" y2="${-32*Math.cos(ma)}" stroke="${C.accent}" stroke-width="3.5" stroke-linecap="round"/><circle r="4" fill="${C.ink}"/></g>`};
+const cubeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-40 -20 l40 -20 l40 20 v50 l-40 20 l-40 -20z" fill="${C.sky}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><path d="M-40 -20 l40 20 l40 -20 M0 0 v70" fill="none" stroke="${C.ink}" stroke-width="3"/><path d="M-40 -20 l40 -20 l40 20 l-40 20z" fill="#9AD3F0" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/></g>`;
+const appleM=(x,y)=>`<g transform="translate(${x} ${y})"><circle r="11" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/><path d="M0 -11 l2 -6" stroke="${C.ink}" stroke-width="2"/></g>`;
+const S=[
+{part:'learn',title:'How to beat Baddie',say:CH+'Oh no, it\'s <b>Baddie Vampire</b>! He <b>always lies</b> about maths. Read what he says, find his mistake, and tap the answer that <b>corrects</b> him. Each lie you catch earns a star and makes the lie detector go <b>LIE!</b> Ready?',
+ draw:()=>G(baddie(450,385,2,{point:false}),'a-drop',.1)+G(otter(130,385,1.4,{wave:true}),'a-pop',.4)+G(box(30,26,300,150,'#fff',18)+T(180,60,'3 steps to beat him','lab mid acc')+T(50,96,'1. Read his claim','lab')+T(50,128,'2. Spot the mistake','lab')+T(50,160,'3. Tap the correction','lab'),'a-pop',.8)},
+boss('Lie #1: place value',{lines:['In 352, the 5 means','5 ones! Hehehe!'],claim:'In 352, the 5 means 5 ones!',options:['No! The 5 is in the tens place: it means 50.','Yes, it means 5 ones.','No! It means 500.'],answer:'No! The 5 is in the tens place: it means 50.',why:'352 = 3 hundreds, <b>5 tens</b>, 2 ones. The 5 is worth <b>50</b>.',taunt:'Mwahaha! Places don\'t matter!',hint:'Which column is the 5 in?',art:pvChart(330,220,['3','5','2'])}),
+boss('Lie #2: comparing',{lines:['409 is bigger than 490,','because 9 is the biggest digit!'],claim:'409 is bigger than 490, because 9 is the biggest digit!',options:['No! Same hundreds, so compare tens: 490 > 409.','Yes, 409 is bigger.','No! They are equal.'],answer:'No! Same hundreds, so compare tens: 490 > 409.',why:'Both have 4 hundreds. Then compare <b>tens</b>: 9 tens beats 0 tens, so <b>490 > 409</b>.',taunt:'Hehehe! Biggest digit wins, always!',hint:'Compare hundreds first, then tens.',art:T(440,280,'409  ?  490','big mid')}),
+boss('Lie #3: adding',{lines:['47 + 38 = 715!','7 + 8 = 15 and 4 + 3 = 7!'],claim:'47 plus 38 equals 715!',options:['No! Regroup 15 ones: 47 + 38 = 85.','Yes, 715.','No! 47 + 38 = 75.'],answer:'No! Regroup 15 ones: 47 + 38 = 85.',why:'7 + 8 = 15 ones = 1 ten and 5 ones. Carry the 1 ten: 4 + 3 + 1 = 8 tens. <b>85</b>.',taunt:'Mwahaha! Who needs regrouping?',hint:'15 ones is 1 ten and 5 ones.',art:colSum(370,212,'47','38','+','715')}),
+boss('Lie #4: subtracting',{lines:['52 − 27 = 35! Just take the','smaller digit from the bigger one!'],claim:'52 minus 27 is 35. Just take the smaller digit from the bigger one!',options:['No! Regroup a ten: 52 − 27 = 25.','Yes, 35.','No! 52 − 27 = 79.'],answer:'No! Regroup a ten: 52 − 27 = 25.',why:'2 − 7 can\'t be done, so regroup: 12 − 7 = 5, then 4 − 2 = 2. <b>25</b>. Check: 25 + 27 = 52 ✓',taunt:'Hehehe! Flip the digits, easy!',hint:'Check by adding back: does 35 + 27 make 52?',art:colSum(370,212,'52','27','−','35')}),
+boss('Lie #5: multiplying',{lines:['3 × 4 means 3 + 4,','so 3 × 4 = 7!'],claim:'3 times 4 means 3 plus 4, so it is 7!',options:['No! 3 × 4 is 3 groups of 4 = 12.','Yes, 7.','No! 3 × 4 = 34.'],answer:'No! 3 × 4 is 3 groups of 4 = 12.',why:'× means <b>groups of</b>. 3 groups of 4 = 4 + 4 + 4 = <b>12</b>.',taunt:'Mwahaha! Times, plus, same thing!',hint:'Count the dots in the groups.',art:dotsG(330,210,3,4)}),
+boss('Lie #6: dividing',{lines:['12 ÷ 3 = 9, because','dividing means take away 3!'],claim:'12 divided by 3 is 9, because dividing means take away 3!',options:['No! Share 12 into 3 equal groups: 4 each.','Yes, 9.','No! 12 ÷ 3 = 36.'],answer:'No! Share 12 into 3 equal groups: 4 each.',why:'12 ÷ 3 means share 12 equally into 3 groups: <b>4</b> in each. Check: 3 × 4 = 12 ✓',taunt:'Hehehe! Sharing is for softies!',hint:'Share 12 cookies fairly among 3 friends.',art:dotsG(330,210,3,4)}),
+boss('Lie #7: fractions',{lines:['¼ is bigger than ½,','because 4 is bigger than 2!'],claim:'One quarter is bigger than one half, because 4 is bigger than 2!',options:['No! ½ is bigger: fewer parts means bigger parts.','Yes, ¼ is bigger.','No! They are the same.'],answer:'No! ½ is bigger: fewer parts means bigger parts.',why:'Cut the same bar into 2 or 4 parts. Halves are bigger than quarters: <b>½ > ¼</b>.',taunt:'Mwahaha! More pieces, more cake!',hint:'Look at the bars: which shaded part is longer?',art:fbar(330,230,2,1,220)+T(320,256,'½','lab end')+fbar(330,290,4,1,220,C.leaf)+T(320,316,'¼','lab end')}),
+boss('Lie #8: adding fractions',{lines:['⅕ + ⅖ = 3/10!','Add the tops AND the bottoms!'],claim:'One fifth plus two fifths is three tenths!',options:['No! Add the tops, keep the bottom: 3/5.','Yes, 3/10.','No! It is 2/5.'],answer:'No! Add the tops, keep the bottom: 3/5.',why:'1 fifth + 2 fifths = <b>3 fifths</b>. The parts are still fifths, so the bottom stays 5.',taunt:'Hehehe! Add everything you see!',hint:'1 apple + 2 apples = 3 apples. 1 fifth + 2 fifths = ?',art:fbar(330,250,5,3,240)}),
+boss('Lie #9: money',{lines:['$3.05 is three dollars','and fifty cents! Hehehe!'],claim:'3 dollars point 0 5 is three dollars and fifty cents!',options:['No! $3.05 is 3 dollars and 5 cents.','Yes, 50 cents.','No! It is 305 dollars.'],answer:'No! $3.05 is 3 dollars and 5 cents.',why:'After the dot come the cents: <b>05</b> cents = 5 cents. Fifty cents would be $3.50.',taunt:'Mwahaha! Give me your fifty cents!',hint:'Look at the two digits after the dot: 0 and 5.',art:T(440,290,'$3.05','big mid','style="font-size:64px"')}),
+boss('Lie #10: length',{lines:['A centimetre is longer','than a metre! Mwahaha!'],claim:'A centimetre is longer than a metre!',options:['No! 1 metre = 100 centimetres.','Yes, cm is longer.','No! They are the same length.'],answer:'No! 1 metre = 100 centimetres.',why:'A centimetre is tiny (about a fingernail wide). A metre is <b>100 cm</b>, about a big step.',taunt:'Hehehe! Size is an illusion!',hint:'Which one do you use for a door, and which for a pencil?',art:`<rect x="290" y="250" width="300" height="20" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>`+T(440,300,'1 m = 100 cm','lab mid')+`<rect x="290" y="330" width="6" height="20" fill="${C.accent}"/>`+T(306,346,'1 cm','sm')}),
+boss('Lie #11: time',{lines:['Half past 3 is','3:50! Obviously!'],claim:'Half past 3 is 3:50!',options:['No! Half past 3 is 3:30.','Yes, 3:50.','No! It is 3:15.'],answer:'No! Half past 3 is 3:30.',why:'An hour has 60 minutes. Half of 60 is <b>30</b>, so half past 3 is <b>3:30</b>.',taunt:'Mwahaha! Half means fifty, everyone knows!',hint:'How many minutes in half an hour?',art:clk(440,285,3,30,1.45)}),
+boss('Lie #12: 3D shapes',{lines:['A cube has 4 faces!','I counted them myself!'],claim:'A cube has 4 faces!',options:['No! A cube has 6 faces.','Yes, 4 faces.','No! A cube has 8 faces.'],answer:'No! A cube has 6 faces.',why:'Top, bottom, front, back, left, right: <b>6</b> square faces. (8 is the number of corners!)',taunt:'Hehehe! I only count the ones I can see!',hint:'Think of a dice: how many numbers are on it?',art:cubeI(440,270,1.2)}),
+boss('Lie #13: picture graphs',{lines:['Each 🍎 stands for 2 apples.','5 pictures = 5 apples!'],claim:'Each picture stands for 2 apples, so 5 pictures means 5 apples!',options:['No! 5 pictures × 2 = 10 apples.','Yes, 5 apples.','No! 5 + 2 = 7 apples.'],answer:'No! 5 pictures × 2 = 10 apples.',why:'Each picture is worth 2, so 5 pictures = 5 × 2 = <b>10</b> apples. Always check the key!',taunt:'Mwahaha! Keys are for locks!',hint:'Read the key: one 🍎 = 2 apples.',art:[0,1,2,3,4].map(k=>appleM(330+k*44,280)).join('')+T(440,330,'Key: 🍎 = 2 apples','lab mid acc')}),
+boss('Lie #14: the hardest one',{lines:['Mei has 45 stickers.','Arjun has 18 more than Mei.','Together they have 63!'],claim:'Mei has 45 stickers. Arjun has 18 more than Mei. Together they have 63!',options:['No! Arjun has 63, so together 45 + 63 = 108.','Yes, together 63.','No! Together 45 − 18 = 27.'],answer:'No! Arjun has 63, so together 45 + 63 = 108.',why:'Step 1: Arjun = 45 + 18 = <b>63</b>. Step 2: together = 45 + 63 = <b>108</b>. Baddie stopped after step 1!',taunt:'Hehehe! One step is enough for me!',hint:'63 is only how many Arjun has. Now add Mei\'s.',art:`<rect x="310" y="236" width="150" height="30" rx="4" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/>`+T(300,258,'Mei','sm end')+T(385,257,'45','sm mid')+`<rect x="310" y="286" width="150" height="30" rx="4" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><rect x="460" y="286" width="60" height="30" rx="4" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>`+T(300,308,'Arjun','sm end')+T(385,307,'45','sm mid')+T(490,307,'18','sm mid')+T(560,290,'?','h mid acc')}),
+{part:'boss',title:'Baddie is defeated!',say:CH+'You caught <b>all 14 lies</b>! Baddie Vampire is too dizzy to trick anyone. Remember his favourite tricks: forgetting place value, skipping regrouping, mixing up × and +, and stopping after one step. Don\'t let him fool you in your next test!',
+ draw:()=>G(baddie(320,388,1.2,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(320,70,40),'a-pop',.8)+T(320,150,'Maths champion!','h mid acc'),
+ mount:a=>a.later(()=>a.win(),600)},
+];
+
+
+render();
+</script>
+
+</body></html>

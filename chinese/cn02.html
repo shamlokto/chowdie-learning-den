@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Chinese 2: 我的一天</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">P2 Chinese · 2 · 华文</p>
+      <h1>我的一天</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Chinese with Chowdie and Wala: my day, days of the week, opposites, radicals and stroke order. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const en=vs.find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang));
+  const zh=vs.find(v=>/^(zh|cmn)[-_](CN|SG|Hans)/i.test(v.lang))||vs.find(v=>/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang));
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; u.rate=z?.78:.92; u.pitch=who==='baddie'?.55:who==='wala'?1.35:1.1; speechSynthesis.speak(u)});
+ }catch(e){} }
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
+  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+   },'lie'))}};
+}
+/* P2 Chinese 2: 我的一天 — times of day, routine, days of the week, opposites, 一边…一边…, radicals, stroke order */
+PARTS.learn='学一学 Learn';PARTS.try='玩一玩 Play';PARTS.check='考考你 Quiz';
+document.querySelectorAll('.parts button').forEach(b=>b.textContent=PARTS[b.dataset.part]);
+(function(){const st=document.createElement('style');st.textContent=`.strk{stroke-dasharray:var(--L);stroke-dashoffset:var(--L);animation:drawS .8s ease forwards;animation-delay:var(--d,0s)}@keyframes drawS{to{stroke-dashoffset:0}}@media (prefers-reduced-motion: reduce){.strk{animation:none;stroke-dashoffset:0}}`;document.head.appendChild(st);})();
+const clockI=(x,y,h,m=0,s=1)=>{const ha=((h%12)+m/60)*30*Math.PI/180,ma=m*6*Math.PI/180;return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="26" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${[0,3,6,9].map(k=>`<circle cx="${20*Math.sin(k*Math.PI/6)}" cy="${-20*Math.cos(k*Math.PI/6)}" r="2" fill="${C.ink}"/>`).join('')}<line x1="0" y1="0" x2="${12*Math.sin(ha)}" y2="${-12*Math.cos(ha)}" stroke="${C.ink}" stroke-width="4" stroke-linecap="round"/><line x1="0" y1="0" x2="${18*Math.sin(ma)}" y2="${-18*Math.cos(ma)}" stroke="${C.accent}" stroke-width="3" stroke-linecap="round"/></g>`};
+const sunP=(x,y,s=1,moon=false)=>moon?`<g transform="translate(${x} ${y}) scale(${s})"><path d="M8 -18 a20 20 0 1 0 10 30 a16 16 0 1 1 -10 -30z" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/></g>`:`<g transform="translate(${x} ${y}) scale(${s})"><circle r="16" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,1,2,3,4,5,6,7].map(k=>`<line x1="${22*Math.cos(k*Math.PI/4)}" y1="${22*Math.sin(k*Math.PI/4)}" x2="${28*Math.cos(k*Math.PI/4)}" y2="${28*Math.sin(k*Math.PI/4)}" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/>`).join('')}</g>`;
+const grid=(x,y,w=100)=>`<rect x="${x}" y="${y}" width="${w}" height="${w}" fill="#fff" stroke="${C.bad}" stroke-width="2"/><path d="M${x} ${y+w/2} h${w} M${x+w/2} ${y} v${w} M${x} ${y} l${w} ${w} M${x+w} ${y} l${-w} ${w}" stroke="${C.bad}" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>`;
+/* animated strokes in a 100x100 box; P = [[path,len],...] */
+const strokes=(x,y,w,P,d0=0)=>`<g transform="translate(${x} ${y}) scale(${w/100})">${P.map(([p,L],k)=>`<path d="${p}" class="strk" style="--L:${L};--d:${d0+k*.9}s" stroke="${C.ink}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`+`<g class="a-fade" style="--d:${d0+k*.9}s">${T(+p.split(' ')[0].slice(1)-6,+p.split(' ')[1]-6,k+1,'sm mid','style="fill:'+C.accent+';font-size:14px"')}</g>`).join('')}</g>`;
+const SHI=[['M15 50 H85',70],['M50 12 V90',78]], REN=[['M50 14 Q48 56 14 88',85],['M50 42 Q62 72 88 88',60]], SAN=[['M25 22 H75',50],['M30 50 H70',40],['M14 82 H86',72]], CHUAN=[['M26 16 Q26 62 12 88',76],['M50 22 V78',56],['M78 12 V90',78]];
+const opp=[['大','dà','big',`<circle r="30" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>`,'小','xiǎo','small',`<circle r="12" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>`],
+ ['多','duō','many',[-18,0,18,-9,9].map((dx,k)=>`<circle cx="${dx}" cy="${k<3?8:-10}" r="8" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/>`).join(''),'少','shǎo','few',`<circle r="8" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/>`],
+ ['长','cháng','long',`<rect x="-40" y="-6" width="80" height="12" rx="6" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/>`,'短','duǎn','short',`<rect x="-14" y="-6" width="28" height="12" rx="6" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/>`],
+ ['高','gāo','tall',`<rect x="-10" y="-34" width="20" height="60" rx="4" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>`,'矮','ǎi','short (height)',`<rect x="-10" y="2" width="20" height="24" rx="4" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>`],
+ ['快','kuài','fast',`<path d="M-30 0 h50 M-24 -10 h34 M-24 10 h34" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/><path d="M14 -14 l18 14 l-18 14z" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/>`,'慢','màn','slow',`<ellipse rx="22" ry="14" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-6 -6 a8 8 0 1 1 6 8" fill="none" stroke="${C.ink}" stroke-width="2"/>`],
+ ['上','shàng','up / on',`<rect x="-26" y="10" width="52" height="8" fill="${C.ink}"/><circle cy="-6" r="12" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/>`,'下','xià','down / under',`<rect x="-26" y="-14" width="52" height="8" fill="${C.ink}"/><circle cy="10" r="12" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/>`]];
+const S=[
+{part:'learn',title:'Good morning! 早上好！',who:'wala',say:WL+'早上好！<i class="py">Zǎoshang hǎo!</i> Good morning! A day has four parts: <b>早上</b> morning, <b>中午</b> noon, <b>下午</b> afternoon and <b>晚上</b> evening. At bedtime we say 晚安 <i class="py">wǎn\'ān</i>, good night!',
+ draw:()=>G(`<path d="M40 210 Q320 -30 600 210" fill="none" stroke="${C.line}" stroke-width="4" stroke-dasharray="8 8"/>`,'a-fade',0)+[['早上','zǎoshang','morning',90,150],['中午','zhōngwǔ','noon',250,70],['下午','xiàwǔ','afternoon',400,80],['晚上','wǎnshang','evening',555,165]]
+  .map(([z,p,e,x,y],k)=>G(sunP(x,y,1,k===3)+zhw(x,y+70,z,p,e,26),'a-pop',.2+k*.3)).join('')
+  +dlg(30,300,0,'早上好！','Zǎoshang hǎo!','Good morning!','l',1.5,'otter')+dlg(610,300,0,'晚安！','Wǎn\'ān!','Good night!','r',1.8,'wala')},
+
+{part:'learn',title:'Wala\'s day 我的一天',who:'wala',say:WL+'Here is my day! 我七点起床 (I get up at seven). 七点半去上学 (half past seven I go to school). 十二点吃午饭 (twelve o\'clock I eat lunch). 晚上九点睡觉 (nine at night I sleep). <b>点</b> means o\'clock and <b>半</b> means half past.',
+ draw:()=>[['七点','qī diǎn',7,0,'起床','qǐchuáng','get up'],['七点半','qī diǎn bàn',7,30,'去上学','qù shàngxué','go to school'],['十二点','shí\'èr diǎn',12,0,'吃午饭','chī wǔfàn','eat lunch'],['九点','jiǔ diǎn',9,0,'睡觉','shuìjiào','sleep']]
+  .map(([t,tp,h,m,z,p,e],k)=>{const x=86+k*156;return G(box(x-70,30,140,300,'#fff',16)+clockI(x,90,h,m,1.3)+zhw(x,152,t,tp,'',24)+`<line x1="${x-50}" y1="190" x2="${x+50}" y2="190" stroke="${C.line}" stroke-width="2"/>`+zhw(x,238,z,p,e,30),'a-pop',.2+k*.35)}).join('')
+  +G(T(320,370,'时间 + 做什么   (time + what you do)','lab mid acc'),'a-fade',1.8)},
+
+{part:'learn',title:'Days of the week 星期',say:CH+'Days of the week are easy in Chinese: <b>星期</b> + a number! 星期一 is Monday, 星期二 Tuesday… up to 星期六 Saturday. Sunday is special: <b>星期天</b> (or 星期日). Ask 今天是星期几？ "What day is it today?"',
+ draw:()=>['一','二','三','四','五','六','天'].map((n,k)=>{const x=50+k*90;const py=['yī','èr','sān','sì','wǔ','liù','tiān'][k],en=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][k];return G(box(x-40,30,80,150,k===6?'#FFE3D6':k===4?'#FFF4D6':'#fff',12)+`<rect x="${x-40}" y="30" width="80" height="26" rx="10" fill="${k===6?C.accent:C.sky}"/>`+T(x,49,en,'sm mid wht')+T(x,90,'星期','zh mid','style="font-size:17px"')+T(x,108,'xīngqī','py mid','style="font-size:12px"')+zhw(x,146,n,py,'',30),'a-pop',.1+k*.12)}).join('')
+  +dlg(30,212,0,'今天是星期几？','Jīntiān shì xīngqī jǐ?','What day is it today?','l',1.1,'otter')+dlg(610,290,0,'今天是星期五。','Jīntiān shì xīngqīwǔ.','Today is Friday.','r',1.6,'wala')},
+
+{part:'learn',title:'Opposites 反义词',who:'wala',say:WL+'<b>反义词</b> <i class="py">fǎnyìcí</i> are opposites. 大 big ↔ 小 small, 多 many ↔ 少 few, 长 long ↔ 短 short, 高 tall ↔ 矮 short, 快 fast ↔ 慢 slow, 上 up ↔ 下 down. Learn them in pairs!',
+ draw:()=>opp.map(([a,ap,ae,ai,b,bp,be,bi],k)=>{const x=110+(k%3)*210,y=k<3?40:215;return G(box(x-95,y,190,160,'#fff',16)+`<g transform="translate(${x-48} ${y+50})">${ai}</g><g transform="translate(${x+48} ${y+50})">${bi}</g>`+T(x,y+60,'↔','lab mid mut')+zhw(x-48,y+118,a,ap,ae,28)+zhw(x+48,y+118,b,bp,be,28),'a-pop',.1+k*.15)}).join('')},
+
+{part:'learn',title:'Two things at once 一边…一边…',say:CH+'When you do <b>two things at the same time</b>, use <b>一边…一边…</b> <i class="py">yìbiān… yìbiān…</i>. Wala sings and dances at the same time: 我一边唱歌，一边跳舞！ I listen to music while I draw: 我一边听音乐，一边画画。',
+ draw:()=>dlg(610,14,0,'我一边唱歌，一边跳舞。','Wǒ yìbiān chànggē, yìbiān tiàowǔ.','I sing and dance at the same time.','r',.1,'wala')+G(wala(470,330,1.1,{wave:true})+`<path d="M530 150 q8 -16 16 0 M540 150 v-24 l14 -4 v24" stroke="${C.grape}" stroke-width="3" fill="none"/><path d="M400 170 q6 -12 12 0 M408 170 v-18 l10 -3 v18" stroke="${C.grape}" stroke-width="3" fill="none"/>`,'a-pop',.5)
+  +dlg(20,180,0,'我一边听音乐，一边画画。','Wǒ yìbiān tīng yīnyuè, yìbiān huà huà.','I listen to music while I draw.','l',1,'otter')+G(otter(130,392,.9,{still:true})+`<rect x="190" y="320" width="70" height="56" rx="6" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M200 360 q14 -24 28 -6 q10 10 22 -12" stroke="${C.berry}" stroke-width="3" fill="none"/>`,'a-pop',1.3)
+  +G(box(20,24,220,44,C.sun,22)+T(130,53,'一边 A，一边 B','zh mid','style="font-size:22px"'),'a-pop',1.7)},
+
+{part:'learn',title:'Radicals 部首',who:'wala',say:WL+'Many characters have a <b>部首</b> <i class="py">bùshǒu</i>, a radical that gives a clue to the meaning. <b>氵</b> means water: 河 river, 海 sea, 洗 wash. <b>口</b> means mouth: 吃 eat, 喝 drink, 唱 sing. <b>木</b> means tree or wood: 树 tree, 林 woods, 桌 table. The radical is not always on the left: look at 桌!',
+ draw:()=>[['氵','water',C.sky,[['河','hé','river'],['海','hǎi','sea'],['洗','xǐ','wash']]],['口','mouth',C.berry,[['吃','chī','eat'],['喝','hē','drink'],['唱','chàng','sing']]],['木','tree, wood',C.leaf,[['树','shù','tree'],['林','lín','woods'],['桌','zhuō','table']]]]
+  .map(([r,m,col,ex],k)=>{const y=24+k*122;return G(box(20,y,600,110,'#fff',16)+`<rect x="20" y="${y}" width="140" height="110" rx="16" fill="${col}" opacity=".25"/>`+`<g data-zh="${r}" class="tap">`+T(90,y+66,r,'zh mid','style="font-size:52px"')+`</g>`+T(90,y+94,m,'en mid','style="font-size:14px"')+ex.map(([z,p,e],j)=>zhw(250+j*140,y+56,z,p,e,38)).join(''),'a-pop',.1+k*.3)}).join('')},
+
+{part:'learn',title:'Stroke order 笔顺',say:CH+'Chinese characters are written in a set order. Watch! <b>先横后竖</b>: across before down (十). <b>先撇后捺</b>: left-falling before right-falling (人). <b>从上到下</b>: top to bottom (三). <b>从左到右</b>: left to right (川). Press Replay to watch again.',
+ draw:()=>[['十','先横后竖','across, then down',SHI],['人','先撇后捺','left, then right',REN],['三','从上到下','top to bottom',SAN],['川','从左到右','left to right',CHUAN]]
+  .map(([z,r,e,P],k)=>{const x=24+k*152;return G(grid(x+14,40,120)+strokes(x+14,40,120,P,.4+k*.3)+zhw(x+74,210,r,'',e,22)+'','',0)}).join('')
+  +G(T(320,340,'Strokes: 横 héng ─  竖 shù │  撇 piě ノ  捺 nà ㇏','lab mid'),'a-fade',.4)},
+
+{part:'try',title:'Put my day in order 排一排',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const W=[['起床','get up',7,0],['刷牙','brush teeth',7,10],['去上学','go to school',7,30],['吃午饭','eat lunch',12,0],['睡觉','sleep',21,0]];let got=0;
+  const draw=()=>{a.q('.play').innerHTML=T(320,36,'Tap what Wala does first, then next…','lab mid acc')+W.slice(0,got).map(([z,e,h,m],k)=>G(clockI(70+k*125,110,h,m,1)+T(70+k*125,170,z,'zh mid','style="font-size:24px"')+T(70+k*125,194,e,'en mid','style="font-size:13px"')+(k<got-1?arrow(104+k*125,110,132+k*125,110,C.accent):''),'a-pop')).join('')+G(wala(560,392,.9,{still:true}),'')};
+  draw();a.as('wala',WL+'What do I do first in the morning? Tap my day in order.');
+  [...W].sort(()=>Math.random()-.5).forEach(([z,e])=>a.btn(z,b=>{if(b.disabled)return;if(z===W[got][0]){got++;b.disabled=true;b.classList.add('ok');a.hear(z);draw();if(got===W.length)a.win(WL+'<b>对了！</b> 起床 → 刷牙 → 去上学 → 吃午饭 → 睡觉. That\'s my day!')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.as('wala',WL+`Hmm, not yet. What comes after ${got?W[got-1][0]:'waking up'}?`)}},'zhb'));}},
+
+{part:'try',title:'Opposites match 找反义词',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const R=[['大','小',['小','多','高']],['长','短',['快','短','上']],['多','少',['少','大','慢']],['快','慢',['高','慢','长']],['高','矮',['矮','小','下']],['上','下',['下','短','少']]];let r=0,busy=false;
+  const show=()=>{busy=false;const [w,ans,opts]=R[r];const o=opp.find(x=>x[0]===w);a.q('.play').innerHTML=T(320,36,`${r+1} of ${R.length}`,'sm mid mut')+G(box(200,60,240,220,'#fff',20)+`<g transform="translate(320 130)">${o[3]}</g>`+zhw(320,220,w,o[1],o[2],52),'a-pop')+T(320,320,'What is the opposite?','lab mid acc');
+   a.ui.innerHTML='';opts.forEach(x=>a.btn(x,b=>{if(busy)return;if(x===ans){busy=true;b.classList.add('ok');a.hear(w+x);r++;if(r<R.length){a.confetti();a.say(CH+`<b>对了！</b> ${w} ↔ ${x}`);a.later(show,1600)}else a.win(CH+'<b>Opposite champion!</b> 大小，长短，多少，快慢，高矮，上下!')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.say(CH+'Not that one. Think of the picture: what is the other side?')}},'zhb'))};
+  show();a.say(CH+'Find the opposite of each word.')}},
+
+{part:'try',title:'Which radical? 找部首',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const R=[['洗','xǐ','wash','氵'],['吃','chī','eat','口'],['树','shù','tree','木'],['海','hǎi','sea','氵'],['喝','hē','drink','口'],['林','lín','woods','木']];let r=0,busy=false;
+  const show=()=>{busy=false;const [z,p,e,ans]=R[r];a.q('.play').innerHTML=T(320,36,`${r+1} of ${R.length}`,'sm mid mut')+G(grid(240,60,160)+zhw(320,180,z,'','',120),'a-pop')+T(320,270,p+' · '+e,'py mid','style="font-size:22px"')+T(320,310,'Which radical does it have?','lab mid acc')+G(wala(570,392,.8,{still:true}),'');
+   a.ui.innerHTML='';['氵','口','木'].forEach(x=>a.btn(x+' '+{'氵':'water','口':'mouth','木':'tree'}[x],b=>{if(busy)return;if(x===ans){busy=true;b.classList.add('ok');a.hear(z);r++;if(r<R.length){a.confetti();a.as('wala',WL+`<b>对了！</b> ${z} (${e}) has ${x}.`);a.later(show,1700)}else a.win(WL+'<b>Radical detective!</b> Radicals give clues to the meaning.')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.as('wala',WL+`Think about the meaning: ${e}. Is it about water, the mouth, or trees?`)}},'zhb'))};
+  show();a.as('wala',WL+'Look closely at each character. Which radical can you spot?')}},
+
+{part:'try',title:'What day is it? 星期几？',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const D=['星期一','星期二','星期三','星期四','星期五','星期六','星期天'];const R=[[0,'明天',1],[4,'明天',5],[5,'明天',6],[2,'昨天',1]];let r=0,busy=false;
+  const show=()=>{busy=false;const [t,w,ans]=R[r];a.q('.play').innerHTML=T(320,36,`${r+1} of ${R.length}`,'sm mid mut')+D.map((d,k)=>G(box(26+k*84,70,76,60,k===t?C.sun:'#fff',10)+T(64+k*84,108,d,'zh mid','style="font-size:17px"'),'',0)).join('')
+    +G(zhw(320,200,`今天是${D[t]}，${w}是星期几？`,`Jīntiān shì ${['xīngqīyī','xīngqī\'èr','xīngqīsān','xīngqīsì','xīngqīwǔ','xīngqīliù','xīngqītiān'][t]}, ${w==='明天'?'míngtiān':'zuótiān'} shì xīngqī jǐ?`,'',28),'a-pop')+T(320,290,'今天 jīntiān = today · 明天 míngtiān = tomorrow · 昨天 zuótiān = yesterday','sm mid mut');
+   a.ui.innerHTML='';[...new Set([D[ans],D[(ans+1)%7],D[(ans+6)%7]])].sort().forEach(x=>a.btn(x,b=>{if(busy)return;if(x===D[ans]){busy=true;b.classList.add('ok');a.hear(w+'是'+x);r++;if(r<R.length){a.confetti();a.say(CH+`<b>对了！</b> ${w}是${x}。`);a.later(show,1800)}else a.win(CH+'<b>太棒了！</b> 今天, 明天, 昨天: you know them all!')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.say(CH+(w==='明天'?'明天 is the NEXT day.':'昨天 is the day BEFORE.'))}},'zhb'))};
+  show();a.say(CH+'Use the calendar to work out the day.')}},
+
+{part:'check',title:'Quiz 1',who:'wala',say:WL+'What does <b>早上好</b> mean?',draw:()=>G(sunP(320,80,1.4),'a-pop',.1)+zhw(320,210,'早上好','zǎoshang hǎo','',60),
+ quiz:{options:['Good morning','Good night','Goodbye'],answer:'Good morning',why:'早上 is morning, so 早上好 <i class="py">zǎoshang hǎo</i> is good morning. Good night is 晚安.',hint:'早上 is the time the sun comes up.'}},
+{part:'check',title:'Quiz 2',say:CH+'What is the opposite of <b>大</b> (big)?',draw:()=>G(`<circle cx="320" cy="140" r="70" fill="${C.sky}" stroke="${C.ink}" stroke-width="4"/>`,'a-pop',.1)+zhw(320,300,'大','dà','big',60),
+ quiz:{options:['小','多','高'],answer:'小',why:'大 <i class="py">dà</i> big ↔ 小 <i class="py">xiǎo</i> small.',hint:'Think of a big ball and a tiny ball.'}},
+{part:'check',title:'Quiz 3',who:'wala',say:WL+'Which radical is in <b>喝</b> (drink)?',draw:()=>G(grid(250,40,140)+zhw(320,145,'喝','hē','drink',104),'a-pop',.1),
+ quiz:{options:['氵 water','口 mouth','木 tree'],answer:'口 mouth',why:'喝 has 口 on the left: you drink with your mouth! (Water 氵 is a good guess, but look again.)',hint:'Look at the small box on the left side.'}},
+{part:'check',title:'Quiz 4',say:CH+'今天是星期六。明天是星期几？ Today is Saturday. What is tomorrow?',draw:()=>['一','二','三','四','五','六','天'].map((n,k)=>G(box(26+k*84,120,76,90,k===5?C.sun:'#fff',10)+T(64+k*84,160,'星期','zh mid','style="font-size:16px"')+T(64+k*84,196,n,'zh mid','style="font-size:28px"'),'a-pop',.05*k)).join(''),
+ quiz:{options:['星期七','星期天','星期一'],answer:'星期天',why:'After 星期六 comes Sunday: <b>星期天</b> (or 星期日). There is no 星期七!',hint:'Sunday has a special name, not a number.'}},
+{part:'check',title:'Quiz 5',say:CH+'How do you write <b>十</b>? Which stroke comes first?',draw:()=>G(grid(250,60,140)+T(320,180,'十','zh mid','style="font-size:120px;fill:#C9D3D8"'),'a-pop',.1)+T(320,260,'先___后___','zh mid','style="font-size:30px"'),
+ quiz:{options:['横 across first','竖 down first'],answer:'横 across first',why:'先横后竖: across (横) before down (竖).',hint:'Remember the rule 先横后竖.'}},
+
+{part:'boss',title:'Baddie is back!',who:'baddie',say:BD+'Mwahaha! Did you miss me? I am back with <b>even sneakier lies</b> about Chinese. Wala can\'t help you now!',
+ draw:()=>G(baddie(320,385,2.2),'a-drop',.1)+G(wala(570,390,.8,{still:true})+otter(70,390,.8,{still:true}),'a-fade',.6)+G(box(150,22,340,46,'#FBEFF4',23)+T(320,52,'Correct every one of his lies!','lab mid','style="fill:#6B2D5C"'),'a-pop',1.2)},
+boss('Lie #1: times of day',{lines:['早上 zǎoshang means','NIGHT-TIME! Hehehe!'],claim:'早上 means night-time!',options:['No! 早上 is morning.','Yes, 早上 is night.','No! 早上 is lunch.'],answer:'No! 早上 is morning.',why:'早上 <i class="py">zǎoshang</i> is <b>morning</b>. Evening is 晚上 <i class="py">wǎnshang</i>.',taunt:'Hehehe! Say 早上好 at midnight!',hint:'What do we say when we wake up?',art:sunP(440,310,1.4)}),
+boss('Lie #2: opposites',{lines:['大 and 小 mean the same:','BIG! Mwahaha!'],claim:'大 and 小 mean the same thing: big!',options:['No! 大 is big, 小 is small.','Yes, they both mean big.','No! They both mean fast.'],answer:'No! 大 is big, 小 is small.',why:'大 <i class="py">dà</i> and 小 <i class="py">xiǎo</i> are <b>opposites</b>: big ↔ small.',taunt:'Mwahaha! A mouse is as big as an elephant!',hint:'They are a pair of opposites.',art:`<circle cx="380" cy="320" r="40" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><circle cx="480" cy="345" r="14" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>`}),
+boss('Lie #3: days',{lines:['After 星期六 comes','星期七! Easy peasy!'],claim:'After 星期六 comes 星期七!',options:['No! It is 星期天.','Yes, 星期七.','No! It is 星期零.'],answer:'No! It is 星期天.',why:'Sunday is <b>星期天</b> (or 星期日). There is no 星期七.',taunt:'Hehehe, 星期七, 星期八, 星期九… a very long week!',hint:'Sunday has a special name.'}),
+boss('Lie #4: radicals',{lines:['洗 (wash) has the 口 radical,','because you wash your mouth!'],claim:'洗 has the 口 radical because you wash your mouth!',options:['No! 洗 has 氵, the water radical.','Yes, 口 because of the mouth.','No! 洗 has 木, the tree radical.'],answer:'No! 洗 has 氵, the water radical.',why:'洗 <i class="py">xǐ</i> has <b>氵</b>: you wash with water!',taunt:'Mwahaha! I wash with mouths, obviously!',hint:'Look at the three dots on the left.',art:grid(380,240,110)+T(435,330,'洗','zh mid','style="font-size:88px"')}),
+boss('Lie #5: the hardest one',{lines:['To write 十, draw the','DOWN stroke 竖 first!'],claim:'To write 十, you draw the down stroke first!',options:['No! 先横后竖: across first.','Yes, down first.','No! Draw both at the same time.'],answer:'No! 先横后竖: across first.',why:'The rule is <b>先横后竖</b>: across (横) first, then down (竖).',taunt:'Hehehe! Rules are for koalas!',hint:'Remember the stroke-order rule for 十.',art:grid(380,240,110)+strokes(380,240,110,SHI,.8)}),
+{part:'boss',title:'Baddie is beaten again! 又打败了！',who:'wala',say:WL+'太棒了！<i class="py">Tài bàng le!</i> Baddie can\'t trick you! You learned times of day, days of the week, opposites, 一边…一边…, radicals and stroke order. 明天见！<i class="py">Míngtiān jiàn!</i> See you tomorrow!',
+ draw:()=>G(baddie(320,388,1.1,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(160,80,30)+star(480,80,30),'a-pop',.8)+zhw(320,95,'明天见！','míngtiān jiàn','see you tomorrow!',44),
+ mount:a=>a.later(()=>a.win(),600)},
+];
+
+
+render();
+</script>
+
+</body></html>
