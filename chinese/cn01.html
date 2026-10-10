@@ -297,13 +297,23 @@ const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{
 let WHO='otter';
 function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
 const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+/* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
+  const pool=vs.filter(ok); if(!pool.length) return null;
+  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
+  const base=loc.length?loc:pool;
+  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
 function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
   const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
-  const vs=speechSynthesis.getVoices(); const en=vs.find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang));
-  const zh=vs.find(v=>/^(zh|cmn)[-_](CN|SG|Hans)/i.test(v.lang))||vs.find(v=>/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang));
+  const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
+  const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
   s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
-    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; u.rate=z?.78:.92; u.pitch=who==='baddie'?.55:who==='wala'?1.35:1.1; speechSynthesis.speak(u)});
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
  }catch(e){} }
+try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}
 speak=function(t){ if(reading) speakNow(t); };
 api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
 api.hear=t=>speakNow(t);
@@ -373,7 +383,7 @@ function tiles(a,rounds,intro){let r=0,got=[];const show=()=>{const R=rounds[r];
      else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.as('wala',WL+R.hint)}},'zhb'));};
   show();a.as('wala',intro);}
 const S=[
-{part:'learn',title:'Meet Wala! 认识 Wala',who:'wala',say:WL+'你好！<i class="py">Nǐ hǎo!</i> Hello! I\'m Wala the koala, Chowdie\'s best friend. I love Chinese, and I will teach you! <b>Tap any Chinese words</b> to hear them, and switch on 🔊 Read to me.',
+{part:'learn',title:'Meet Wala! 认识 Wala',who:'wala',say:WL+'你好！<i class="py">Nǐ hǎo!</i> Hello! I\'m Wala the koala. I\'m eight years old, just like lots of you, and I\'m Chowdie\'s best friend! Hehe! I love Chinese, so let\'s learn together! <b>Tap any Chinese words</b> to hear them, and switch on 🔊 Read to me.',
  draw:()=>G(otter(130,385,1.45,{wave:true}),'a-pop',.1)+G(wala(510,385,1.45,{wave:true}),'a-pop',.3)+dlg(30,26,0,'你好！我叫 Chowdie。','Nǐ hǎo! Wǒ jiào Chowdie.','Hello! My name is Chowdie.','l',.6,'otter')+dlg(615,104,0,'你好！我叫 Wala。','Nǐ hǎo! Wǒ jiào Wala.','Hello! My name is Wala.','r',1.1,'wala')
   +G(`<path d="M320 318 c-14 -18 -40 -4 -26 16 l26 24 l26 -24 c14 -20 -12 -34 -26 -16z" fill="${C.berry}" stroke="${C.ink}" stroke-width="3"/>`+zhw(320,240,'朋友','péngyou','friends',30),'a-pop',1.5)},
 
