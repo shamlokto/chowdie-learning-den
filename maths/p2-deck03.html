@@ -258,7 +258,7 @@ const S=[
 {part:'learn',title:'Borrowing a ten',say:'<b>452 − 127</b>. Ones: 2 − 7? We can\'t! So <b>borrow</b> 1 ten from the 5 tens. Now we have 4 tens and <b>12 ones</b>. 12 − 7 = 5. Tens: 4 − 2 = 2. Hundreds: 4 − 1 = 3. Answer: <b>325</b>.',
  draw:()=>column(60,60,452,127,'−',325,{borrow:[[1,'4',1],[2,'12',1.2]],d0:1.8,hi:2})+
   G(T(460,80,'2 − 7? Not enough ones!','lab mid'),'a-fade',.3)+G(rod(380,100,12)+T(400,170,'1 ten','sm')+arrow(430,130,470,130,C.accent)+[...Array(10)].map((_,k)=>cube(480+(k%5)*20,110+Math.floor(k/5)*20,16)).join('')+T(530,170,'10 ones','sm'),'a-pop',.8)+
-  G(T(470,215,'2 + 10 = 12 ones','h mid acc'),'a-fade',1.3)+G(bubbleR(360,300,250,50,'Borrow, then subtract!','lab'),'a-fade',2)},
+  G(T(470,252,'2 + 10 = 12 ones','h mid acc'),'a-fade',1.3)+G(bubbleR(360,300,250,50,'Borrow, then subtract!','lab'),'a-fade',2)},
 
 {part:'learn',title:'Borrowing a hundred',say:'<b>635 − 272</b>. Ones: 5 − 2 = 3. Tens: 3 − 7? Can\'t! Borrow 1 hundred from the 6: now <b>5 hundreds</b> and <b>13 tens</b>. 13 − 7 = 6. Hundreds: 5 − 2 = 3. Answer: <b>363</b>.',
  draw:()=>column(60,60,635,272,'−',363,{borrow:[[0,'5',1],[1,'13',1.2]],d0:1.8,hi:1})+
@@ -266,10 +266,10 @@ const S=[
   G(T(470,215,'3 + 10 = 13 tens','h mid acc'),'a-fade',1.3)+G(bubbleR(360,300,250,50,'Same trick, bigger block!','lab'),'a-fade',2)},
 
 {part:'learn',title:'Mental maths: add ones, tens, hundreds',say:'Some sums you can do in your head! Adding <b>ones</b>: 346 + 3, only the ones change: <b>349</b>. Adding <b>tens</b>: 346 + 30, only the tens change: <b>376</b>. Adding <b>hundreds</b>: 346 + 300 = <b>646</b>. Watch which digit moves!',
- draw:()=>[['346 + 3','349','only the ones change',ONE_C],['346 + 30','376','only the tens change',TEN_C],['346 + 300','646','only the hundreds change',HUNDRED_C]].map(([q,a,w,c],k)=>G(box(40,40+k*110,560,90,'#fff',16)+`<rect x="40" y="${40+k*110}" width="14" height="90" rx="7" fill="${c}"/>`+T(80,95+k*110,q,'h')+T(300,95+k*110,'=','h')+T(360,95+k*110,a,'h acc')+T(440,98+k*110,w,'sm mut'),'a-fade',.2+k*.4)).join('')},
+ draw:()=>[['346 + 3','349','only the ones change',ONE_C],['346 + 30','376','only the tens change',TEN_C],['346 + 300','646','only the hundreds change',HUNDRED_C]].map(([q,a,w,c],k)=>G(box(40,40+k*110,560,90,'#fff',16)+`<rect x="40" y="${40+k*110}" width="14" height="90" rx="7" fill="${c}"/>`+T(80,95+k*110,q,'h')+T(255,95+k*110,'=','h')+T(295,95+k*110,a,'h acc')+T(400,98+k*110,w,'sm mut'),'a-fade',.2+k*.4)).join('')},
 
 {part:'learn',title:'Mental maths: taking away',say:'Taking away works the same way. <b>582 − 2</b>: ones only, <b>580</b>. <b>582 − 40</b>: tens only, <b>542</b>. <b>582 − 300</b>: hundreds only, <b>282</b>. Find the place, change that digit, leave the rest alone.',
- draw:()=>[['582 − 2','580','ones',ONE_C],['582 − 40','542','tens',TEN_C],['582 − 300','282','hundreds',HUNDRED_C]].map(([q,a,w,c],k)=>G(box(40,40+k*110,560,90,'#fff',16)+`<rect x="40" y="${40+k*110}" width="14" height="90" rx="7" fill="${c}"/>`+T(80,95+k*110,q,'h')+T(310,95+k*110,'=','h')+T(370,95+k*110,a,'h acc')+T(470,98+k*110,'change the '+w,'sm mut'),'a-fade',.2+k*.4)).join('')},
+ draw:()=>[['582 − 2','580','ones',ONE_C],['582 − 40','542','tens',TEN_C],['582 − 300','282','hundreds',HUNDRED_C]].map(([q,a,w,c],k)=>G(box(40,40+k*110,560,90,'#fff',16)+`<rect x="40" y="${40+k*110}" width="14" height="90" rx="7" fill="${c}"/>`+T(80,95+k*110,q,'h')+T(265,95+k*110,'=','h')+T(305,95+k*110,a,'h acc')+T(410,98+k*110,'change the '+w,'sm mut'),'a-fade',.2+k*.4)).join('')},
 
 {part:'try',title:'Regroup or not?',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const Q=[[124,352,false],[268,145,true],[433,261,true],[512,384,false]];let r=0,busy=false;

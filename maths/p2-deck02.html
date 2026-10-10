@@ -232,7 +232,7 @@ const S=[
   G(T(320,370,'The open side faces the bigger number.','lab mid'),'a-fade',1.6)},
 
 {part:'learn',title:'Compare the hundreds first',say:'Which is bigger: <b>472</b> or <b>516</b>? Start with the <b>hundreds</b>. 4 hundreds is less than 5 hundreds, so <b>472 &lt; 516</b>. We don\'t even need to look at the other digits!',
- draw:()=>pairBlocks(30,40,472)+pairBlocks(340,40,516)+G(pvChart(40,190,472,80)+pvChart(360,190,516,80),'a-fade',.8)+G(`<rect x="42" y="192" width="78" height="84" rx="10" fill="none" stroke="${C.accent}" stroke-width="5"/><rect x="362" y="192" width="78" height="84" rx="10" fill="none" stroke="${C.accent}" stroke-width="5"/>`,'a-pop',1.5)+
+ draw:()=>pairBlocks(30,60,472,4)+pairBlocks(340,60,516,4)+G(pvChart(40,190,472,80)+pvChart(360,190,516,80),'a-fade',.8)+G(`<rect x="42" y="192" width="78" height="84" rx="10" fill="none" stroke="${C.accent}" stroke-width="5"/><rect x="362" y="192" width="78" height="84" rx="10" fill="none" stroke="${C.accent}" stroke-width="5"/>`,'a-pop',1.5)+
   G(T(320,345,'472 < 516','h mid acc'),'a-pop',2)},
 
 {part:'learn',title:'Same hundreds? Check the tens',say:'<b>385</b> or <b>352</b>? Both have <b>3 hundreds</b>, so that\'s a tie. Move to the <b>tens</b>: 8 tens is more than 5 tens. So <b>385 &gt; 352</b>. If the tens tie too, check the ones!',

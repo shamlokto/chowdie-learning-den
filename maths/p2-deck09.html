@@ -227,10 +227,11 @@ const S=[
   G(T(185,210,'$7','h mid acc')+T(440,210,'70¢','h mid acc'),'a-fade',1.2)+G(box(150,260,340,70,C.sun,35)+T(320,307,'7 dollars 70 cents','h mid'),'a-pop',1.8)},
 
 {part:'learn',title:'Writing money with a dot',say:'We write 7 dollars 70 cents as <b>$7.70</b>. The <b>dot</b> separates dollars and cents. Cents always use <b>two digits</b>. 3 dollars 5 cents is <b>$3.05</b>, not $3.5!',
- draw:()=>G(T(320,140,'$7.70','mid','style="font-size:96px;font-weight:800"'),'a-pop',.1)+
-  G(arrow(235,170,220,220,C.accent)+T(210,246,'dollars','lab mid acc'),'a-fade',.6)+G(`<circle cx="323" cy="134" r="13" fill="none" stroke="${C.accent}" stroke-width="4"/>`+T(320,246,'dot','lab mid acc'),'a-fade',1)+
+ draw:()=>G(T(320,140,'$7.70','mid money','style="font-size:96px;font-weight:800"'),'a-pop',.1)+
+  G(arrow(235,170,220,220,C.accent)+T(210,246,'dollars','lab mid acc'),'a-fade',.6)+G(`<circle class="dotring" cx="323" cy="134" r="13" fill="none" stroke="${C.accent}" stroke-width="4"/>`+T(320,246,'dot','lab mid acc'),'a-fade',1)+
   G(arrow(400,170,420,220,C.accent)+T(430,246,'cents','lab mid acc'),'a-fade',1.4)+
-  G(box(90,290,220,64,'#E6F6EA',32)+T(200,332,'$3.05 ✓','h mid'),'a-pop',2)+G(box(330,290,220,64,'#FDE7E5',32)+T(440,332,'$3.5 ✗','h mid'),'a-pop',2.3)},
+  G(box(90,290,220,64,'#E6F6EA',32)+T(200,332,'$3.05 ✓','h mid'),'a-pop',2)+G(box(330,290,220,64,'#FDE7E5',32)+T(440,332,'$3.5 ✗','h mid'),'a-pop',2.3),
+ mount:a=>{const fit=()=>{const t=a.q('.money'),r=a.q('.dotring');if(!t||!r)return;const e=t.getExtentOfChar(2);r.setAttribute('cx',e.x+e.width/2);r.setAttribute('cy',+t.getAttribute('y')-9)};fit();document.fonts.ready.then(fit)}},
 
 {part:'learn',title:'Dollars into cents',say:'How many cents is <b>$3.45</b>? Each dollar is 100 cents, so <b>$3 = 300¢</b>. Add the 45 cents: <b>300 + 45 = 345¢</b>.',
  draw:()=>T(320,70,'$3.45 = ?¢','big mid')+G(coin(150,160,100)+coin(230,160,100)+coin(310,160,100),'a-drop',.3)+G(coin(420,160,20)+coin(480,160,20)+coin(530,160,5),'a-drop',.8)+

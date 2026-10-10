@@ -259,7 +259,7 @@ const S=[
   G(box(400,70,210,130,'#fff',16)+T(505,110,'12','big mid')+T(505,150,'in all','lab mid mut'),'a-pop',1.2)+G(T(505,260,'12 ÷ 4 = 3','h mid acc'),'a-fade',1.6)+G(T(320,350,'Opposites!','h mid acc'),'a-fade',2)},
 
 {part:'learn',title:'Fact families',say:'Three numbers, four facts! With 5, 2 and 10 we can write <b>5 × 2 = 10</b>, <b>2 × 5 = 10</b>, <b>10 ÷ 2 = 5</b> and <b>10 ÷ 5 = 2</b>. They are a <b>fact family</b>. Learn one, get three free!',
- draw:()=>G(`<path d="M320 60 L390 180 L250 180z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(320,110,'10','big mid')+T(282,170,'5','h mid')+T(358,170,'2','h mid'),'a-pop',.2)+G(factFam(60,210,5,2),'a-fade',.8)+G(factFam(350,210,2,5).replace(/<text[\s\S]*?<\/text>/g,'')+T(465,250,'The same family,','lab mid mut')+T(465,280,'written another way','lab mid mut')+T(465,330,'5, 2, 10','h mid acc'),'a-fade',1.2)},
+ draw:()=>G(`<path d="M320 60 L390 180 L250 180z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(320,138,'10','h mid')+T(282,170,'5','h mid')+T(358,170,'2','h mid'),'a-pop',.2)+G(factFam(60,210,5,2),'a-fade',.8)+G(factFam(350,210,2,5).replace(/<text[\s\S]*?<\/text>/g,'')+T(465,250,'The same family,','lab mid mut')+T(465,280,'written another way','lab mid mut')+T(465,330,'5, 2, 10','h mid acc'),'a-fade',1.2)},
 
 {part:'learn',title:'Dividing by 2 and 10',say:'<b>÷ 2</b> means share between two: it is <b>half</b>. 14 ÷ 2 = 7. <b>÷ 10</b> means make groups of ten: just take away the zero! 70 ÷ 10 = 7. 40 ÷ 10 = 4.',
  draw:()=>G(box(40,60,270,130,'#fff',16)+T(175,100,'÷ 2 = half','h mid acc')+arr(80,120,2,7,C.sky,26,false,0,9)+T(175,178,'14 ÷ 2 = 7','lab mid'),'a-fade',.2)+
@@ -304,7 +304,7 @@ const S=[
  quiz:{options:['4','5','16'],answer:'5',why:'<b>20 ÷ 4 = 5</b> pages. Count in 4s: 4, 8, 12, 16, 20.',hint:'How many 4s make 20?'}},
 
 {part:'check',title:'Star check 3',say:'Which fact belongs to the same family as <b>4 × 5 = 20</b>?',
- draw:()=>`<path d="M320 60 L390 180 L250 180z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(320,110,'20','big mid')+T(282,170,'4','h mid')+T(358,170,'5','h mid')+T(320,250,'4 × 5 = 20','h mid'),
+ draw:()=>`<path d="M320 60 L390 180 L250 180z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`+T(320,138,'20','h mid')+T(282,170,'4','h mid')+T(358,170,'5','h mid')+T(320,250,'4 × 5 = 20','h mid'),
  quiz:{options:['20 ÷ 4 = 5','20 ÷ 5 = 5','5 × 5 = 20'],answer:'20 ÷ 4 = 5',why:'A fact family uses the same three numbers: 4, 5 and 20. <b>20 ÷ 4 = 5</b>.',hint:'The family must use 4, 5 and 20, and be true.'}},
 
 {part:'check',title:'Star check 4',say:'What is <b>27 ÷ 3</b>?',
@@ -312,10 +312,10 @@ const S=[
  quiz:{options:['8','9','24'],answer:'9',why:'3 × 9 = 27, so <b>27 ÷ 3 = 9</b>.',hint:'Count in 3s until you reach 27.'}},
 
 {part:'check',title:'Star check 5',say:'Mei has 40 marbles in bags of 10. Zack has 40 marbles in bags of 5. Who has <b>more bags</b>?',
- draw:()=>G(T(160,70,'Mei: 40 ÷ 10','h mid')+[0,1,2,3].map(k=>bag(100+k*40,160,'10')).join(''),'a-fade',.1)+G(T(480,70,'Zack: 40 ÷ 5','h mid')+[...Array(8)].map((_,k)=>bag(360+k*34,160,'5')).join(''),'a-fade',.5),
+ draw:()=>G(T(160,70,'Mei: 40 ÷ 10','h mid')+[0,1,2,3].map(k=>bag(75+k*58,170,'10')).join(''),'a-fade',.1)+G(T(480,70,'Zack: 40 ÷ 5','h mid')+[...Array(8)].map((_,k)=>bag(395+(k%4)*58,170+Math.floor(k/4)*66,'5')).join(''),'a-fade',.5),
  quiz:{options:['Mei','Zack','The same'],answer:'Zack',why:'Mei: 40 ÷ 10 = 4 bags. Zack: 40 ÷ 5 = <b>8</b> bags. Smaller groups means more bags!',hint:'Work out both divisions.'}},
 
-{part:'check',title:'You did it!',say:'Fantastic! You can <b>share</b> and <b>group</b>, use the ÷ sign, and link division to multiplication with fact families. You have finished all the P2 number work!',
+{part:'check',title:'You did it!',say:'Fantastic! You can <b>share</b> and <b>group</b>, use the ÷ sign, and link division to multiplication with fact families. You can now add, subtract, multiply and divide!',
  draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+T(120,230,'÷','mid','style="font-size:70px;font-weight:800;fill:#8E6BD8"')+T(520,230,'×','mid','style="font-size:70px;font-weight:800;fill:#4FAE63"'),'a-pop',.3)+T(320,60,'Division superstar!','h mid acc'),
  mount:a=>a.later(()=>a.confetti(),400)}
 ];
