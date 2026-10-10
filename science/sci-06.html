@@ -230,10 +230,8 @@ const wr=(x,y,str,max=40,cls='sm',lh=19,ex='')=>prose(x,y,str,max,cls,lh,ex);
 PARTS.learn='Discover';PARTS.try='Experiment';PARTS.check='Quiz';
 document.querySelectorAll('.parts button').forEach(b=>b.textContent={learn:'Discover',try:'Experiment',check:'Quiz'}[b.dataset.part]);
 const card=(x,y,w,h,title,body,{fill='#fff',d=0,icon=''}={})=>G(box(x,y,w,h,fill,16)+icon+T(x+w/2,y+(icon?96:34),title,'lab mid')+wr(x+w/2,y+(icon?120:58),body,Math.floor((w-24)/7.4),'sm mid',18),'a-pop',d);
-const nLines=(str,max)=>{let n=1,c='';str.split(' ').forEach(t=>{if((c+' '+t).trim().length>max){n++;c=t}else c=(c+' '+t).trim()});return n};
-const noteH=(w,txt)=>42+nLines(txt,Math.floor((w-28)/7.2))*17; // box grows with its wrapped text
-const funfact=(x,y,w,txt)=>G(box(x,y,w,noteH(w,txt),C.sun,16)+T(x+14,y+26,'Fun fact!','sm','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.4);
-const tryhome=(x,y,w,txt)=>G(box(x,y,w,noteH(w,txt),'#E6F6EA',16)+T(x+14,y+26,'Try at home','sm acc','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.6);
+const funfact=(x,y,w,txt)=>G(box(x,y,w,64,C.sun,16)+T(x+14,y+26,'Fun fact!','sm','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.4);
+const tryhome=(x,y,w,txt)=>G(box(x,y,w,70,'#E6F6EA',16)+T(x+14,y+26,'Try at home','sm acc','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.6);
 /* icons */
 const leafI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 C26 -22 26 14 0 30 C-26 14 -26 -22 0 -30z" fill="${col}" stroke="${C.ink}" stroke-width="2.5" transform="rotate(30)"/><path d="M0 -24 v50 M0 -6 l10 -8 M0 6 l-10 -8" stroke="${C.ink}" stroke-width="1.5" fill="none" transform="rotate(30)"/></g>`;
 const flowerI=(x,y,s=1,col=C.berry)=>`<g transform="translate(${x} ${y}) scale(${s})"><line x1="0" y1="10" x2="0" y2="60" stroke="${C.leaf}" stroke-width="5"/><path d="M0 40 q18 -6 22 8 q-14 6 -22 -8z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/>${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-16" rx="9" ry="14" fill="${col}" stroke="${C.ink}" stroke-width="2" transform="rotate(${a})"/>`).join('')}<circle r="8" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/></g>`;
@@ -252,43 +250,240 @@ const sunI2=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle 
 const dropI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -24 q18 24 18 36 a18 18 0 0 1 -36 0 q0 -12 18 -36z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
 const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="24" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M18 18 l20 20" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/></g>`;
 const kidI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
-/* Life Science 6: Microbes */
-const handI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 30 v-40 q0 -10 10 -10 q10 0 10 10 v-24 q0 -10 10 -10 q10 0 10 10 v20 q0 -10 10 -10 q10 0 10 10 v44 q0 20 -20 24 h-24 q-16 -4 -16 -24z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="3"/></g>`;
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+/* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
+  const pool=vs.filter(ok); if(!pool.length) return null;
+  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
+  const base=loc.length?loc:pool;
+  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
+  const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
+ }catch(e){} }
+try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
+  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+   },'lie'))}};
+}
+/* Life Science 6: Microbes (revised and expanded) */
+const handI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 40 q-6 -30 -2 -52 q2 -8 9 -6 q6 2 6 10 v18 v-48 q0 -9 8 -9 q8 0 8 9 v40 v-50 q0 -9 8 -9 q8 0 8 9 v50 v-42 q0 -9 8 -9 q8 0 8 9 v46 v-28 q0 -8 7 -8 q7 0 7 8 v40 q0 34 -30 40 h-24 q-20 -4 -28 -28z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/></g>`;
 const soapB=(x,y,s=1)=>`<circle cx="${x}" cy="${y}" r="${8*s}" fill="#fff" fill-opacity=".7" stroke="${C.sky}" stroke-width="1.5"/>`;
+const yeastI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="18" ry="14" fill="#F3D9A4" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="18" cy="-12" rx="8" ry="7" fill="#F3D9A4" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-4" cy="2" r="5" fill="#D9A95B"/></g>`;
+const mouldI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 20 h60" stroke="${C.ink}" stroke-width="3"/>${[[-22,-20],[-8,-34],[6,-26],[20,-38],[28,-16]].map(([dx,h],k)=>`<path d="M${dx} 20 q${k%2?4:-4} ${h/2} 0 ${h}" stroke="#7A8B4A" stroke-width="2.5" fill="none"/><circle cx="${dx}" cy="${20+h}" r="7" fill="${k%2?'#3F7FBF':'#6E8F25'}" stroke="${C.ink}" stroke-width="1.5"/>`).join('')}</g>`;
+const rodI=(x,y,s=1,col=C.leaf,rot=0)=>`<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})"><rect x="-22" y="-8" width="44" height="16" rx="8" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><path d="M22 0 q8 -8 14 0 t14 0" stroke="${C.ink}" stroke-width="1.8" fill="none"/></g>`;
+const cocI=(x,y,r=9,col=C.berry)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${col}" stroke="${C.ink}" stroke-width="2.2"/>`;
+const spiralI=(x,y,s=1,col=C.grape)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 0 q9 -16 18 0 t18 0 t18 0 t18 0" stroke="${C.ink}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M-36 0 q9 -16 18 0 t18 0 t18 0 t18 0" stroke="${col}" stroke-width="7" fill="none" stroke-linecap="round"/></g>`;
+const amoebaI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-26 -6 q-6 -20 12 -22 q10 -12 22 -2 q20 -4 18 16 q14 10 0 22 q-4 18 -22 12 q-14 12 -26 -2 q-18 -6 -4 -24z" fill="#CFE9D6" stroke="${C.ink}" stroke-width="2.5"/><circle cx="2" cy="2" r="7" fill="#7FB98F" stroke="${C.ink}" stroke-width="1.5"/></g>`;
+const algaeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="#BFE6A8" stroke="${C.ink}" stroke-width="2.5"/>${[[-7,-6],[6,-8],[-4,7],[8,5]].map(([a,b])=>`<ellipse cx="${a}" cy="${b}" rx="5" ry="3" fill="${C.leaf}"/>`).join('')}</g>`;
+const plateI=(x,y,r=70,inner='')=>`<g transform="translate(${x} ${y})"><circle r="${r}" fill="#F3E9C6" stroke="${C.ink}" stroke-width="3"/><circle r="${r-6}" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>${inner}</g>`;
+const pillI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(-30)"><rect x="-24" y="-10" width="48" height="20" rx="10" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><path d="M0 -10 h14 a10 10 0 0 1 0 20 h-14z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const scopeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-30" y="34" width="60" height="10" rx="3" fill="#5E6B75" stroke="${C.ink}" stroke-width="2.5"/><path d="M14 34 v-30 q0 -20 -16 -30" stroke="#5E6B75" stroke-width="8" fill="none" stroke-linecap="round"/><rect x="-18" y="-52" width="16" height="44" rx="4" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5" transform="rotate(-20 -10 -30)"/><rect x="-22" y="8" width="40" height="6" fill="${C.ink}"/></g>`;
+const box3=(x,y,w,h,title,lines,fill='#fff')=>G(box(x,y,w,h,fill,16)+T(x+14,y+28,title,'lab acc')+lines.map((l,k)=>T(x+14,y+54+k*22,l,'sm')).join(''),'a-fade',.6);
 const S=[
-{part:'learn',title:'Too small to see',say:'Hi! Right now, there are living things <b>on your hands</b>, <b>in the air</b>, and even <b>inside you</b> that are far too small to see. They are called <b>microbes</b>, or micro-organisms. A single drop of pond water can hold thousands! Let\'s meet them through a microscope.',
- draw:()=>G(`<circle cx="220" cy="200" r="130" fill="#E3F3FA" stroke="${C.ink}" stroke-width="6"/><path d="M310 300 l60 60" stroke="${C.ink}" stroke-width="14" stroke-linecap="round"/>`,'a-pop',.1)+[germI(170,160,.8),germI(260,220,.7,C.sky),virusI(200,250,.7),mushroomI(270,150,.6),germI(150,230,.5,C.berry)].map((g,k)=>G(g,'a-pop',.5+k*.2)).join('')+G(T(480,120,'microbes','h mid acc')+T(480,150,'micro = tiny','sm mid mut')+T(480,172,'organism = living thing','sm mid mut'),'a-fade',1)+funfact(380,220,240,'More microbes on one hand than people on Earth!')},
+{part:'learn',title:'Too small to see',say:'Hi! Right now there are living things <b>on your hands</b>, <b>in the air</b> and even <b>inside you</b> that are far too small to see. They are called <b>microbes</b>, or micro-organisms. One drop of pond water can hold thousands of them! Scientists use a <b>microscope</b> to see them.',
+ draw:()=>G(`<circle cx="210" cy="200" r="130" fill="#E3F3FA" stroke="${C.ink}" stroke-width="6"/><path d="M300 300 l60 60" stroke="${C.ink}" stroke-width="14" stroke-linecap="round"/>`,'a-pop',.1)+[germI(160,150,.8),rodI(250,210,.8),virusI(190,250,.7),yeastI(250,140,.8),amoebaI(140,235,.6),cocI(285,265,8),cocI(298,270,8)].map((g,k)=>G(g,'a-pop',.5+k*.15)).join('')
+  +G(T(490,90,'microbes','h mid acc')+T(490,120,'micro = tiny','sm mid mut')+T(490,142,'organism = living thing','sm mid mut'),'a-fade',1)
+  +G(box(370,180,250,110,C.sun,16)+T(384,206,'Fun fact!','sm','style="font-weight:800"')+wr(384,230,'Your body has about as many bacteria as its own cells: tens of trillions!',30,'sm',18),'a-pop',1.4)},
 
-{part:'learn',title:'Three kinds of microbe',say:'<b>Bacteria</b> are tiny single cells. Some are helpful, some make us sick. <b>Viruses</b> are even smaller. They are not really alive on their own and must get inside a cell to copy themselves. <b>Fungi</b> include yeast, mould and mushrooms. They feed on old food and dead things.',
- draw:()=>[['Bacteria','one tiny cell',germI(0,0,1.3),'yoghurt, tummy bugs',C.leaf],['Viruses','even smaller',virusI(0,0,1.3),'colds, flu, chickenpox',C.grape],['Fungi','yeast and mould',mushroomI(0,4,1.2),'bread, blue cheese, mould',C.bad]]
-  .map(([n,d,ic,e,c],k)=>G(box(30+k*195,50,180,260,'#fff',16)+`<rect x="${30+k*195}" y="50" width="180" height="40" rx="14" fill="${c}"/>`+T(120+k*195,77,n,'lab mid','style="fill:#fff"')+T(120+k*195,115,d,'sm mid mut')+`<g transform="translate(${120+k*195} 185})">${ic}</g>`.replace('185})','185)')+wr(120+k*195,255,e,18,'sm mid',18),'a-pop',.1+k*.3)).join('')+G(T(320,350,'bacteria > viruses in size, but all are tiny!','lab mid acc'),'a-fade',1.2)},
+{part:'learn',title:'How small is small?',say:'Microbes are measured in <b>micrometres</b> (µm). One micrometre is a thousandth of a millimetre! Imagine a bacterium grew to the size of a <b>grain of rice</b>. Then a virus would be a speck of <b>sand</b>, a yeast cell a <b>marble</b>, and the width of one of your hairs would be a <b>dinner plate</b>!',
+ draw:()=>G(T(320,36,'If a bacterium were as big as a grain of rice…','lab mid acc'),'a-fade',0)
+  +[['virus','about 0.1 µm','a speck of sand',`<circle r="3" fill="${C.grape}"/>`],['bacterium','about 2 µm','a grain of rice',`<ellipse rx="14" ry="6" fill="#FFF8E7" stroke="${C.ink}" stroke-width="2"/>`],['yeast cell','about 5 µm','a marble',`<circle r="18" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-6" cy="-6" r="5" fill="#fff" opacity=".7"/>`],['your hair (width)','about 70 µm','a dinner plate',`<circle r="66" fill="#fff" stroke="${C.ink}" stroke-width="3"/><circle r="50" fill="none" stroke="${C.line}" stroke-width="3"/>`]]
+  .map(([n,sz,an,ic],k)=>{const x=[62,190,318,500][k];return G(`<g transform="translate(${x} 170)">${ic}</g>`+T(x,272,an,'sm mid','style="font-weight:800"')+T(x,300,n,'sm mid')+T(x,322,sz,'sm mid mut'),'a-pop',.3+k*.35)}).join('')
+  +G(T(320,370,'1 µm = 1/1000 mm   ·   a full stop on this page is about 500 µm','sm mid mut'),'a-fade',1.8)},
 
-{part:'learn',title:'Helpful microbes',say:'Most microbes are <b>friends</b>! Bacteria in your <b>tummy</b> help digest food and fight bad germs. <b>Yeast</b> makes bread rise and puffs up with bubbles. Bacteria turn milk into <b>yoghurt</b> and cheese. Soil microbes <b>rot</b> dead leaves into food for plants. Without microbes, the world would be buried in rubbish!',
- draw:()=>[['In your tummy','help digest food',`<path d="M-10 -24 q30 -10 30 16 q0 24 -30 24 q-20 0 -16 -20 q4 -16 16 -20z" fill="#F6C28B" stroke="${C.ink}" stroke-width="2.5"/>${germI(-4,0,.35)}${germI(10,8,.3,C.sky)}`],['Yeast in bread','makes it rise',`<path d="M-26 10 q0 -30 26 -30 q26 0 26 30 v10 h-52z" fill="#E3B66B" stroke="${C.ink}" stroke-width="2.5"/>${[-10,2,12].map(x=>`<circle cx="${x}" cy="${-4+Math.abs(x)/3}" r="3" fill="#F3E3C3"/>`).join('')}`],['Yoghurt & cheese','from milk',`<path d="M-18 -20 h36 v36 q0 6 -6 6 h-24 q-6 0 -6 -6z" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><rect x="-18" y="-26" width="36" height="8" rx="2" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/>`],['In the soil','rot leaves into plant food',leafI(0,-6,.7,'#B5835A')+`${germI(14,12,.3)}${germI(-14,14,.3,C.berry)}`]]
-  .map(([n,d,ic],k)=>G(box(24+k*150,60,140,200,'#fff',16)+`<g transform="translate(${94+k*150} 120)">${ic}</g>`+T(94+k*150,185,n,'sm mid','style="font-weight:800"')+wr(94+k*150,210,d,16,'sm mid mut',16),'a-pop',.1+k*.2)).join('')+G(T(320,320,'Most microbes are helpful or harmless!','h mid acc'),'a-fade',1.2)},
+{part:'learn',title:'The microbe family',say:'There are four main kinds of microbe. <b>Bacteria</b> are tiny single cells. <b>Viruses</b> are the smallest of all; they can only copy themselves inside another living cell. <b>Fungi</b> microbes are <b>yeasts</b> and <b>moulds</b>. <b>Protists and algae</b> swim in ponds and oceans. (Mushrooms are fungi too, but big ones, so they are not microbes!)',
+ draw:()=>[['Bacteria','single cells; everywhere',germI(0,0,1.1),C.leaf],['Viruses','smallest; need a cell to copy themselves',virusI(0,0,1.1),C.grape],['Fungi','yeasts and moulds',yeastI(-18,-6,.8)+mouldI(20,6,.6),C.bad],['Protists & algae','pond and ocean swimmers',amoebaI(-12,0,.6)+algaeI(22,8,.7),C.sky]]
+  .map(([n,d,ic,c],k)=>G(box(22+k*152,40,142,250,'#fff',16)+`<rect x="${22+k*152}" y="40" width="142" height="40" rx="14" fill="${c}"/>`+T(93+k*152,67,n,'sm mid','style="fill:#fff;font-weight:800;font-size:16px"')+`<g transform="translate(${93+k*152} 150)">${ic}</g>`+wr(93+k*152,226,d,17,'sm mid',18),'a-pop',.1+k*.25)).join('')
+  +G(mushroomI(70,350,.6)+T(100,356,'Mushrooms: big cousins of moulds, fungi but NOT microbes','sm','style="font-weight:800"'),'a-fade',1.3)},
 
-{part:'learn',title:'Germs that make us sick',say:'A few microbes are <b>germs</b> that cause illness. Cold and flu <b>viruses</b> spread in tiny drops when someone coughs or sneezes. Some <b>bacteria</b> cause sore throats or tummy aches, often from dirty hands or food. <b>Mould</b> grows on old bread. Your body fights back with white blood cells, and <b>fever</b> is your body heating up to beat the germs!',
- draw:()=>G(kidI(120,220,C.sky)+`<path d="M140 190 q30 -10 60 0" stroke="${C.ink}" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>`+[0,1,2,3].map(k=>virusI(170+k*22,185+(k%2)*14,.3)).join('')+T(120,290,'ACHOO!','lab mid acc'),'a-pop',.1)+
-  G(box(280,60,330,110,'#fff',16)+T(300,90,'How germs spread','lab acc')+T(300,118,'• coughs and sneezes','sm')+T(300,140,'• dirty hands touching food or face','sm')+T(300,162,'• sharing cups and spoons','sm'),'a-fade',.6)+
-  G(box(280,190,330,110,'#FFF4D6',16)+T(300,220,'How your body fights back','lab acc')+T(300,248,'• white blood cells eat germs','sm')+T(300,270,'• fever heats up to slow germs','sm')+T(300,292,'• rest and water help you win','sm'),'a-fade',1)+G(`<circle cx="500" cy="345" r="16" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/>`+virusI(540,345,.4)+arrow(516,345,528,345,C.ink)+T(440,350,'white cell','sm end mut'),'a-fade',1.4)},
+{part:'learn',title:'Balls, rods and spirals',say:'Scientists sort bacteria by their <b>shape</b>. Round ones are <b>cocci</b> (berries), sausage shapes are <b>bacilli</b> (little sticks), and twisty ones are <b>spirilla</b> (spirals). Some cocci stick together in chains, like <b>Streptococcus</b>, whose name means "twisted chain of berries"!',
+ draw:()=>[['Cocci','balls ("berries")',cocI(-20,-10,12)+cocI(4,-10,12)+cocI(-8,14,12)+cocI(16,14,12),C.berry],['Bacilli','rods ("little sticks")',rodI(-10,-12,.9,C.leaf,-15)+rodI(6,16,.9,C.leaf,10),C.leaf],['Spirilla','spirals',spiralI(0,0,1,C.grape),C.grape]]
+  .map(([n,d,ic,c],k)=>G(box(30+k*200,30,180,190,'#fff',16)+`<g transform="translate(${120+k*200} 100)">${ic}</g>`+T(120+k*200,175,n,'lab mid','style="fill:'+c+'"')+T(120+k*200,200,d,'sm mid mut'),'a-pop',.1+k*.25)).join('')
+  +G(box(30,240,580,130,'#FFF4D6',16)+[0,1,2,3,4,5,6,7].map(k=>cocI(80+k*30,300+Math.sin(k*1.1)*16,13,C.berry)).join('')+T(340,282,'Streptococcus','h','style="font-style:italic"')+T(340,310,'strepto = twisted chain','sm')+T(340,332,'coccus = berry','sm')+T(340,356,'Some cause sore throats.','sm mut'),'a-pop',1)},
 
-{part:'learn',title:'Wash those hands!',say:'The best germ defence is <b>washing your hands</b>: before eating, after the toilet, after playing outside. Wet, <b>soap</b>, scrub for <b>20 seconds</b> (sing Happy Birthday twice!), rinse, dry. Soap breaks germs apart and washes them down the drain. Tap the hand to see!',
- draw:()=>`<g class="hand">${handI(200,200,1.6)}<g class="germs">${[[-30,-20],[10,-40],[30,10],[-10,30],[20,-5],[-35,20]].map(([dx,dy],k)=>germI(200+dx,200+dy,.35,[C.leaf,C.berry,C.grape][k%3])).join('')}</g><g class="soap"></g></g>`+[['1. Wet','with clean water'],['2. Soap','all over'],['3. Scrub','20 seconds'],['4. Rinse','and dry']].map(([a,b],k)=>G(T(400,80+k*70,a,'lab acc')+T(400,104+k*70,b,'sm mut'),'a-fade',.3+k*.2)).join(''),
- mount:a=>{let step=0;a.btn('Wash!',()=>{step++;if(step===1){a.q('.soap').innerHTML=[[-40,-50],[0,-60],[40,-40],[-30,40],[30,40],[0,0],[-50,0],[50,-10]].map(([dx,dy])=>soapB(200+dx,200+dy,1.2)).join('');a.say('<b>Soap!</b> Bubbles everywhere. Now scrub for 20 seconds.')}else if(step===2){a.q('.germs').style.transition='opacity 1s';a.q('.germs').style.opacity=0;a.say('<b>Scrub!</b> Soap breaks the germs apart...')}else if(step===3){a.q('.soap').innerHTML='';a.win('<b>Rinsed and clean!</b> The germs went down the drain. Wash before eating and after the toilet.')}},'go');}},
+{part:'learn',title:'Helpful microbes',say:'Most microbes are <b>friends</b>! Trillions of bacteria in your <b>gut</b> (your intestines) help digest food and crowd out bad germs. <b>Yeast</b> makes gas bubbles that make bread rise. Bacteria turn milk into <b>yoghurt</b> and cheese. Soil microbes <b>rot</b> dead leaves into food for plants. Without them, the world would be buried in rubbish!',
+ draw:()=>[['In your gut','digest food, crowd out bad germs',`<path d="M-24 -20 q-8 20 6 22 q14 2 12 -12 q-2 -12 12 -12 q14 0 12 14 q-2 18 -24 24 q-20 4 -22 -10" fill="none" stroke="#E79A9A" stroke-width="9" stroke-linecap="round"/>${rodI(-2,-6,.35)}${cocI(10,10,4,C.sky)}`],['Yeast in bread','gas bubbles make it rise',`<path d="M-26 10 q0 -30 26 -30 q26 0 26 30 v10 h-52z" fill="#E3B66B" stroke="${C.ink}" stroke-width="2.5"/>${[-10,2,12].map(x=>`<circle cx="${x}" cy="${-4+Math.abs(x)/3}" r="3" fill="#F3E3C3"/>`).join('')}`],['Yoghurt','bacteria turn milk into yoghurt and cheese',`<path d="M-18 -20 h36 v36 q0 6 -6 6 h-24 q-6 0 -6 -6z" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><rect x="-18" y="-26" width="36" height="8" rx="2" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/>`],['In the soil','rot leaves into plant food',leafI(0,-6,.7,'#B5835A')+`${germI(14,12,.3)}${germI(-14,14,.3,C.berry)}`]]
+  .map(([n,d,ic],k)=>G(box(24+k*150,50,140,210,'#fff',16)+`<g transform="translate(${94+k*150} 110)">${ic}</g>`+T(94+k*150,180,n,'sm mid','style="font-weight:800"')+wr(94+k*150,205,d,16,'sm mid mut',16),'a-pop',.1+k*.2)).join('')+G(T(320,320,'Most microbes are helpful or harmless!','h mid acc'),'a-fade',1.2)},
 
-{part:'learn',title:'Keeping food safe',say:'Germs love warm, wet food. To keep them away: keep cold food in the <b>fridge</b>, cook meat until it is <b>hot all the way through</b>, cover food so flies cannot land on it, and throw away food that smells bad or has <b>mould</b>. Never eat bread with green fuzzy spots!',
- draw:()=>[['Keep it cold','fridge slows germs down',`<rect x="-18" y="-26" width="36" height="52" rx="4" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><line x1="-18" y1="-6" x2="18" y2="-6" stroke="${C.ink}" stroke-width="2"/><line x1="12" y1="-20" x2="12" y2="-12" stroke="${C.ink}" stroke-width="2"/>`],['Cook it hot','heat kills germs',`<ellipse cy="6" rx="24" ry="8" fill="#5E6B75" stroke="${C.ink}" stroke-width="2.5"/><rect x="-24" y="-6" width="48" height="12" fill="#5E6B75" stroke="${C.ink}" stroke-width="2.5"/><path d="M-10 -14 q-4 -10 2 -16 M4 -14 q-4 -10 2 -16" stroke="${C.muted}" stroke-width="2" fill="none"/>`],['Cover it','keep flies away',`<path d="M-26 6 q0 -26 26 -26 q26 0 26 26z" fill="#C9CED3" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-22" r="4" fill="${C.ink}"/><ellipse cy="10" rx="30" ry="5" fill="#fff" stroke="${C.ink}" stroke-width="2"/>`],['Bin the mouldy','green fuzz = danger',`<path d="M-24 10 q0 -28 24 -28 q24 0 24 28 v8 h-48z" fill="#E3B66B" stroke="${C.ink}" stroke-width="2.5"/>${[[-8,-4],[6,-8],[12,4]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="#6E8F25"/>`).join('')}`]]
+{part:'learn',title:'Microbes make the air we breathe',say:'Here is an amazing one. Tiny <b>algae</b> floating in the ocean use sunlight to make food, just like plants, and they give off <b>oxygen</b>. Scientists think ocean microbes make about <b>half</b> of the oxygen on Earth. So you can thank a microbe for every second breath you take!',
+ draw:()=>G(`<rect x="0" y="200" width="640" height="200" fill="#BFE3F5"/><path d="M0 200 q40 -12 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0" fill="#BFE3F5" stroke="${C.sky}" stroke-width="3"/>`,'')+G(sunI2?sunI2(80,80,1.2):'','a-pop',.1)
+  +[[120,260],[200,300],[290,250],[380,320],[460,270],[540,310],[250,350],[420,370]].map(([x,y],k)=>G(algaeI(x,y,.7),'a-pop',.3+k*.08)).join('')
+  +[[200,180],[300,140],[400,170],[500,130],[260,90],[440,80]].map(([x,y],k)=>G(`<circle cx="${x}" cy="${y}" r="16" fill="#fff" stroke="${C.sky}" stroke-width="2.5"/>`+T(x,y+5,'O₂','sm mid','style="fill:'+C.sky+'"'),'a-drop',1+k*.15)).join('')
+  +G(box(30,326,280,60,C.sun,16)+T(170,352,'About half of Earth\'s oxygen','sm mid','style="font-weight:800"')+T(170,372,'is made by ocean microbes!','sm mid','style="font-weight:800"'),'a-pop',2)},
+
+{part:'learn',title:'Germs that make us sick',say:'A few microbes are <b>germs</b> that cause illness. Cold and flu <b>viruses</b> spread in tiny drops when someone coughs or sneezes. Some <b>bacteria</b> cause sore throats or tummy upsets, often from dirty hands or food. Some <b>moulds</b> make poisons, so never eat mouldy food. Your body fights back with white blood cells, and a <b>fever</b> helps your body fight harder!',
+ draw:()=>G(kidI(120,220,C.sky)+`<path d="M140 190 q30 -10 60 0" stroke="${C.ink}" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>`+[0,1,2,3].map(k=>virusI(170+k*22,185+(k%2)*14,.3)).join('')+T(120,290,'ACHOO!','lab mid acc'),'a-pop',.1)
+  +box3(270,40,350,120,'How germs spread',['• coughs and sneezes','• dirty hands touching food or face','• sharing cups and spoons'])
+  +box3(270,180,350,120,'How your body fights back',['• white blood cells catch and eat germs','• fever helps your defences work harder','• rest and water help you win'],'#FFF4D6')
+  +G(`<circle cx="520" cy="345" r="18" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/>`+virusI(560,345,.4)+arrow(538,345,548,345,C.ink)+T(490,350,'white blood cell','sm end mut'),'a-fade',1.4)},
+
+{part:'learn',title:'Wash those hands!',say:'The best germ defence is <b>washing your hands</b>: before eating, after the toilet, after playing outside. Wet, <b>soap</b>, scrub for <b>20 seconds</b> (sing Happy Birthday twice!), rinse, dry. Soap grabs dirt and grease so water can wash germs away, and it even breaks some viruses apart! Tap <b>Wash!</b> to see.',
+ draw:()=>`<g class="hand">${handI(200,210,1.5)}<g class="germs">${[[-30,-20],[10,-40],[30,10],[-10,30],[20,-5],[-35,20]].map(([dx,dy],k)=>germI(200+dx,200+dy,.35,[C.leaf,C.berry,C.grape][k%3])).join('')}</g><g class="soap"></g></g>`+[['1. Wet','with clean water'],['2. Soap','all over, between fingers'],['3. Scrub','20 seconds'],['4. Rinse','and dry with a clean towel']].map(([a,b],k)=>G(T(400,80+k*70,a,'lab acc')+T(400,104+k*70,b,'sm mut'),'a-fade',.3+k*.2)).join(''),
+ mount:a=>{let step=0;a.btn('Wash!',()=>{step++;if(step===1){a.q('.soap').innerHTML=[[-40,-50],[0,-60],[40,-40],[-30,40],[30,40],[0,0],[-50,0],[50,-10]].map(([dx,dy])=>soapB(200+dx,200+dy,1.2)).join('');a.say('<b>Soap!</b> Bubbles everywhere. Now scrub for 20 seconds.')}else if(step===2){a.q('.germs').style.transition='opacity 1s';a.q('.germs').style.opacity=0;a.say('<b>Scrub!</b> Soap lifts the germs off your skin...')}else if(step===3){a.q('.soap').innerHTML='';a.win('<b>Rinsed and clean!</b> The germs went down the drain. Wash before eating and after the toilet.')}},'go');}},
+
+{part:'learn',title:'Keeping food safe',say:'Germs love warm, wet food. To keep them away: keep cold food in the <b>fridge</b> (cold <b>slows</b> germs down, but doesn\'t kill them), cook meat until it is <b>hot all the way through</b> (heat kills most germs), cover food so flies can\'t land on it, and throw away food that smells bad or has <b>mould</b>.',
+ draw:()=>[['Keep it cold','fridge slows germs down',`<rect x="-18" y="-26" width="36" height="52" rx="4" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><line x1="-18" y1="-6" x2="18" y2="-6" stroke="${C.ink}" stroke-width="2"/><line x1="12" y1="-20" x2="12" y2="-12" stroke="${C.ink}" stroke-width="2"/>`],['Cook it hot','heat kills most germs',`<ellipse cy="6" rx="24" ry="8" fill="#5E6B75" stroke="${C.ink}" stroke-width="2.5"/><rect x="-24" y="-6" width="48" height="12" fill="#5E6B75" stroke="${C.ink}" stroke-width="2.5"/><path d="M-10 -14 q-4 -10 2 -16 M4 -14 q-4 -10 2 -16" stroke="${C.muted}" stroke-width="2" fill="none"/>`],['Cover it','keep flies away',`<path d="M-26 6 q0 -26 26 -26 q26 0 26 26z" fill="#C9CED3" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-22" r="4" fill="${C.ink}"/><ellipse cy="10" rx="30" ry="5" fill="#fff" stroke="${C.ink}" stroke-width="2"/>`],['Bin the mouldy','fuzzy spots = throw away',`<path d="M-24 10 q0 -28 24 -28 q24 0 24 28 v8 h-48z" fill="#E3B66B" stroke="${C.ink}" stroke-width="2.5"/>${[[-8,-4],[6,-8],[12,4]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="#6E8F25"/>`).join('')}`]]
   .map(([n,d,ic],k)=>G(box(24+k*150,60,140,200,'#fff',16)+`<g transform="translate(${94+k*150} 120)">${ic}</g>`+T(94+k*150,185,n,'sm mid','style="font-weight:800"')+wr(94+k*150,210,d,16,'sm mid mut',16),'a-pop',.1+k*.2)).join('')+G(T(320,320,'Cold, hot, covered, or in the bin!','h mid acc'),'a-fade',1.2)},
 
+{part:'learn',title:'Medicine from mould',say:'In <b>1928</b>, a scientist called <b>Alexander Fleming</b> noticed something odd: a blob of mould on his dish had killed the bacteria around it! That mould gave us <b>penicillin</b>, the first <b>antibiotic</b>. Antibiotics fight <b>bacteria</b>, but they do <b>not</b> work on <b>viruses</b>, so they can\'t cure a cold or flu.',
+ draw:()=>G(plateI(150,180,110,`<circle r="34" fill="#9FC57A" stroke="${C.ink}" stroke-width="2"/><circle r="62" fill="none" stroke="${C.good}" stroke-width="2" stroke-dasharray="5 5"/>`+[[-80,-30],[-70,30],[-40,72],[20,80],[70,50],[84,-10],[60,-60],[0,-84],[-50,-70]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="7" fill="#F7F0D6" stroke="#B9A56B" stroke-width="2"/>`).join('')),'a-pop',.1)
+  +G(T(150,320,'mould kills bacteria nearby','sm mid','style="font-weight:800"')+T(150,342,'(the clear ring)','sm mid mut'),'a-fade',.8)
+  +G(box(300,40,320,140,'#fff',16)+pillI(350,110,1.2)+T(400,80,'Antibiotics','lab acc')+T(400,108,'✓ fight bacteria','sm','style="fill:'+C.good+';font-weight:800"')+T(400,132,'✗ do nothing to viruses','sm','style="fill:'+C.bad+';font-weight:800"')+T(400,156,'(colds and flu are viruses)','sm mut'),'a-pop',1)
+  +G(box(300,200,320,150,'#FFF4D6',16)+T(316,228,'Use them wisely','lab acc')+T(316,256,'• only when a doctor says so','sm')+T(316,280,'• exactly how the doctor says','sm')+T(316,304,'• using them when not needed helps','sm')+T(316,326,'  bacteria learn to resist them','sm'),'a-pop',1.5)},
+
 {part:'learn',title:'Vaccines: training your body',say:'A <b>vaccine</b> is like a wanted poster for your body. It shows your white blood cells what a germ looks like, using a harmless piece or a weakened copy. Then if the real germ comes, your body recognises it and <b>fights it off fast</b>. That is why you had jabs as a baby. One small prick, years of protection!',
- draw:()=>[['1. Vaccine','shows a harmless copy of the germ',`<rect x="-6" y="-30" width="12" height="40" rx="3" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><line x1="0" y1="10" x2="0" y2="26" stroke="${C.ink}" stroke-width="2.5"/><rect x="-10" y="-34" width="20" height="6" fill="${C.ink}"/>`],['2. Body learns','white cells remember its shape',`<circle r="18" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/>${virusI(0,0,.4)}`],['3. Real germ','body recognises it',virusI(0,0,1)],['4. Fast fight','germ beaten before you get sick',`<circle r="18" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><path d="M-8 0 l6 6 l10 -12" stroke="${C.good}" stroke-width="4" fill="none" stroke-linecap="round"/>`]]
+ draw:()=>[['1. Vaccine','shows a harmless copy of the germ',`<rect x="-6" y="-30" width="12" height="40" rx="3" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><line x1="0" y1="10" x2="0" y2="26" stroke="${C.ink}" stroke-width="2.5"/><rect x="-10" y="-34" width="20" height="6" fill="${C.ink}"/>`],['2. Body learns','white cells remember its shape',`<circle r="18" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/>${virusI(0,0,.4)}`],['3. Real germ','body recognises it',virusI(0,0,1)],['4. Fast fight','germ beaten before you get very sick',`<circle r="18" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><path d="M-8 0 l6 6 l10 -12" stroke="${C.good}" stroke-width="4" fill="none" stroke-linecap="round"/>`]]
   .map(([n,d,ic],k)=>G(box(24+k*150,60,140,200,'#fff',16)+`<g transform="translate(${94+k*150} 120)">${ic}</g>`+T(94+k*150,185,n,'sm mid','style="font-weight:800"')+wr(94+k*150,210,d,16,'sm mid mut',16),'a-pop',.1+k*.25)).join('')+[0,1,2].map(k=>G(arrow(166+k*150,160,172+k*150,160,C.accent),'a-fade',.4+k*.25)).join('')+G(T(320,320,'Vaccines have saved millions of lives.','lab mid acc'),'a-fade',1.3)},
 
+{part:'learn',title:'How scientists study microbes',say:'In the <b>1670s</b>, <b>Antonie van Leeuwenhoek</b> made his own tiny microscopes and became the first person to see bacteria. He called them "little animals"! Today scientists also <b>grow</b> microbes on a jelly called <b>agar</b>. Each dot, called a <b>colony</b>, grew from just <b>one</b> cell into millions.',
+ draw:()=>G(scopeI(90,170,1.4)+T(90,280,'1670s','lab mid acc')+T(90,302,'Leeuwenhoek\'s','sm mid')+T(90,320,'"little animals"','sm mid'),'a-pop',.1)
+  +G(plateI(320,170,95,[[-50,-30,10,'#F7F0D6'],[-20,40,14,'#F4C6CC'],[30,-50,8,'#F7F0D6'],[50,20,16,'#FFE7A0'],[-60,30,7,'#F4C6CC'],[10,0,9,'#F7F0D6'],[20,60,6,'#FFE7A0'],[-30,-62,6,'#FFE7A0']].map(([a,b,r,c])=>`<circle cx="${a}" cy="${b}" r="${r}" fill="${c}" stroke="#A88F5A" stroke-width="1.5"/>`).join('')),'a-pop',.6)+G(T(320,295,'agar plate','sm mid','style="font-weight:800"')+T(320,316,'1 colony = millions of cells','sm mid mut'),'a-fade',1)
+  +G(box(436,40,190,200,'#E6F6EA',16)+T(450,66,'Try at home','sm acc','style="font-weight:800"')+wr(450,92,'With a grown-up: seal a slice of bread in a zip bag. Watch mould grow for a week. Then bin the bag UNOPENED.',20,'sm',19),'a-pop',1.6)},
+
 {part:'try',title:'Friend or foe?',say:'',draw:()=>`<g class="play"></g>`,
- mount:a=>{const Q=[['yeast making bread rise','friend'],['flu virus','foe'],['tummy bacteria digesting food','friend'],['green mould on bread','foe'],['bacteria turning milk into yoghurt','friend'],['soil microbes rotting leaves','friend'],['germs on unwashed hands','foe']];let r=0,busy=false;
-  const show=()=>{busy=false;const [s,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 7`,'sm mid mut')+`<g transform="translate(320 150)">${ans==='foe'&&s.includes('virus')?virusI(0,0,1.4):s.includes('mould')?mushroomI(0,0,1.2):germI(0,0,1.4,ans==='friend'?C.leaf:C.berry)}</g>`+box(60,220,520,70,'#fff',16)+wr(320,262,s,44,'lab mid',24);
-   a.ui.innerHTML='';[['Friend 😊','friend'],['Foe 😠','foe']].forEach(([l,v])=>a.btn(l,b=>{if(busy)return;if(v===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(v==='friend'?'<b>Friend!</b> Helpful microbes do jobs for us.':'<b>Foe!</b> This one can make us sick. Keep it away.');a.later(show,1400)}else a.win('<b>All sorted!</b> Most microbes are friends; a few are foes to keep away.')}else{b.classList.add('no');a.say('Does this microbe help us, or make us sick?')}},'go'));
+ mount:a=>{const Q=[['yeast making bread rise','friend',yeastI(0,0,1.8)],['flu virus','foe',virusI(0,0,1.4)],['gut bacteria helping digest food','friend',rodI(0,0,1.6)],['mould growing on old bread','foe',mouldI(0,0,1.6)],['bacteria turning milk into yoghurt','friend',germI(0,0,1.4)],['ocean algae making oxygen','friend',algaeI(0,0,1.8)],['germs on unwashed hands','foe',germI(0,0,1.4,C.berry)]];let r=0,busy=false;
+  const show=()=>{busy=false;const [s,ans,ic]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of ${Q.length}`,'sm mid mut')+`<g transform="translate(320 140)">${ic}</g>`+box(60,220,520,70,'#fff',16)+wr(320,262,s,44,'lab mid',24);
+   a.ui.innerHTML='';[['Friend 😊','friend'],['Foe 😠','foe']].forEach(([l,v])=>a.btn(l,b=>{if(busy)return;if(v===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(v==='friend'?'<b>Friend!</b> Helpful microbes do jobs for us.':'<b>Foe!</b> This one can make us sick or spoil food. Keep it away.');a.later(show,1400)}else a.win('<b>All sorted!</b> Most microbes are friends; a few are foes to keep away.')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.say('Does this microbe help us, or make us sick?')}},'go'));
    a.say('Is this microbe a <b>friend</b> or a <b>foe</b>?')};show();}},
+
+{part:'try',title:'Double trouble',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{let n=0;const draw=()=>{const c=2**n,min=n*20,t=`${Math.floor(min/60)} h ${min%60} min`;let g='';
+   if(c<=64){for(let k=0;k<c;k++)g+=rodI(140+(k%8)*52,96+Math.floor(k/8)*28,.55,C.leaf,(k*37)%30-15);}
+   else if(c<=512){for(let k=0;k<c;k++)g+=`<circle cx="${130+(k%32)*12}" cy="${92+Math.floor(k/32)*13}" r="4.5" fill="${C.leaf}"/>`;}
+   else g=T(320,200,c.toLocaleString(),'big mid','style="font-size:64px;fill:'+C.leaf+'"')+T(320,240,'bacteria from ONE cell!','lab mid');
+   a.q('.play').innerHTML=T(320,40,`Time: ${t}`,'lab mid acc')+T(320,66,`${c.toLocaleString()} bacteri${c===1?'um':'a'}`,'sm mid')+g+T(320,370,'In warm food, some bacteria split in two every 20 minutes.','sm mid mut')};
+  draw();a.say('Start with <b>one</b> bacterium on some warm food. Every 20 minutes, each one <b>splits in two</b>. Tap to watch!');
+  const b1=a.btn('+20 minutes',()=>{if(n<9){n++;draw();a.say(`After ${n*20} minutes: <b>${(2**n).toLocaleString()}</b> bacteria.`+(n===9?' Now jump ahead!':''))}},'go');
+  a.btn('Jump to 7 hours',()=>{n=21;draw();a.win('<b>2,097,152 bacteria</b> from just one, in 7 hours! That\'s why warm food spoils fast, and why the fridge (which slows them down) is so useful.')});}},
+
+{part:'try',title:'Will antibiotics help?',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>{const Q=[['a cold','virus'],['strep throat','bacteria'],['the flu','virus'],['an infected cut','bacteria'],['chickenpox','virus']];let r=0,busy=false;
+  const show=()=>{busy=false;const [s,c]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of ${Q.length}`,'sm mid mut')+G(kidI(200,250,C.berry),'a-pop')+G(pillI(420,160,1.6),'a-pop',.2)+T(320,320,`Mei has ${s}.`,'h mid')+T(320,352,'Will antibiotics help?','lab mid acc');
+   a.ui.innerHTML='';[['Yes, they can help','bacteria'],['No, they won\'t help','virus']].forEach(([l,v])=>a.btn(l,b=>{if(busy)return;if(v===c){busy=true;b.classList.add('ok');r++;const why=c==='virus'?`${s[0].toUpperCase()+s.slice(1)} is caused by a <b>virus</b>, so antibiotics won't help. Rest, water, and time!`:`${s[0].toUpperCase()+s.slice(1)} is caused by <b>bacteria</b>, so a doctor may give antibiotics.`;if(r<Q.length){a.confetti();a.say(why);a.later(show,2200)}else a.win(why+' <b>You know the difference!</b>')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.say('Is it caused by a virus or by bacteria? Antibiotics only work on bacteria.')}},'go'));
+   a.say('Antibiotics only fight <b>bacteria</b>. Will they help Mei?')};show();}},
 
 {part:'try',title:'Germ spread simulator',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{let sick=new Set([0]),wash=false,round=0;const N=12;const pos=[...Array(N)].map((_,i)=>[90+(i%6)*92,140+Math.floor(i/6)*120]);
@@ -301,33 +496,40 @@ const S=[
 
 {part:'try',title:'Safe or spoiled?',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const Q=[['milk left on the table all day in the sun','spoiled'],['chicken cooked until steaming hot','safe'],['bread with green fuzzy spots','spoiled'],['apples kept in the fridge','safe'],['rice left uncovered overnight with flies on it','spoiled'],['yoghurt from the fridge, before its date','safe']];let r=0,busy=false;
-  const show=()=>{busy=false;const [s,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 6`,'sm mid mut')+box(60,100,520,110,'#fff',16)+wr(320,150,s,44,'h mid',30)+otter(560,392,.5);
-   a.ui.innerHTML='';[['Safe to eat','safe'],['Spoiled: bin it','spoiled']].forEach(([l,v])=>a.btn(l,b=>{if(busy)return;if(v===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(v==='safe'?'<b>Safe!</b> Cold or hot keeps germs away.':'<b>Spoiled!</b> Warm, uncovered or mouldy food is full of germs.');a.later(show,1400)}else a.win('<b>Food safety expert!</b> Cold, hot, covered, or in the bin.')}else{b.classList.add('no');a.say('Think: was it kept cold or cooked hot? Covered? Any mould?')}},'go'));
+  const show=()=>{busy=false;const [s,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 6`,'sm mid mut')+box(60,80,520,130,'#fff',16)+wr(320,135,s,30,'h mid',34)+otter(560,392,.5);
+   a.ui.innerHTML='';[['Safe to eat','safe'],['Spoiled: bin it','spoiled']].forEach(([l,v])=>a.btn(l,b=>{if(busy)return;if(v===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(v==='safe'?'<b>Safe!</b> Cold or properly cooked keeps germs in check.':'<b>Spoiled!</b> Warm, uncovered or mouldy food can be full of germs.');a.later(show,1400)}else a.win('<b>Food safety expert!</b> Cold, hot, covered, or in the bin.')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.say('Think: was it kept cold or cooked hot? Covered? Any mould?')}},'go'));
    a.say('Is this food <b>safe</b> or <b>spoiled</b>?')};show();}},
 
 {part:'check',title:'Quiz 1',say:'Which microbe makes bread rise?',
  draw:()=>`<g transform="translate(320 200)"><path d="M-60 20 q0 -60 60 -60 q60 0 60 60 v20 h-120z" fill="#E3B66B" stroke="${C.ink}" stroke-width="3"/>${[-30,-10,10,30].map(x=>`<circle cx="${x}" cy="${-10+Math.abs(x)/4}" r="6" fill="#F3E3C3"/>`).join('')}</g>`,
  quiz:{options:['yeast','virus','mould'],answer:'yeast',why:'<b>Yeast</b> is a fungus that makes gas bubbles, so the dough puffs up.',hint:'It is a helpful fungus.'}},
-
-{part:'check',title:'Quiz 2',say:'How long should you scrub your hands with soap?',
- draw:()=>handI(320,200,1.6)+[[-50,-60],[0,-70],[50,-50],[-40,40],[40,40]].map(([dx,dy])=>soapB(320+dx,200+dy,1.2)).join(''),
+{part:'check',title:'Quiz 2',say:'Which is the SMALLEST kind of microbe?',
+ draw:()=>G(yeastI(200,200,1.8)+germI(330,200,1.1)+virusI(440,200,.6),'a-pop',.1)+T(320,300,'?','big mid acc'),
+ quiz:{options:['yeast','bacteria','viruses'],answer:'viruses',why:'<b>Viruses</b> are the smallest. They are about 20 times smaller than a typical bacterium.',hint:'Remember the grain of sand!'}},
+{part:'check',title:'Quiz 3',say:'How long should you scrub your hands with soap?',
+ draw:()=>handI(320,210,1.5)+[[-50,-60],[0,-70],[50,-50],[-40,40],[40,40]].map(([dx,dy])=>soapB(320+dx,200+dy,1.2)).join(''),
  quiz:{options:['2 seconds','20 seconds','20 minutes'],answer:'20 seconds',why:'<b>20 seconds</b>: about the time it takes to sing Happy Birthday twice.',hint:'Sing Happy Birthday twice!'}},
-
-{part:'check',title:'Quiz 3',say:'Which of these is NOT a way germs spread?',
+{part:'check',title:'Quiz 4',say:'Which of these is NOT a way germs spread?',
  draw:()=>kidI(240,230,C.sky)+[0,1,2].map(k=>virusI(290+k*22,195+(k%2)*12,.3)).join('')+kidI(400,230,C.leaf),
  quiz:{options:['sneezing','sharing cups','reading a book'],answer:'reading a book',why:'Germs spread through coughs, sneezes, dirty hands and shared cups. Reading is safe!',hint:'Which one has nothing to do with touching or breathing on others?'}},
-
-{part:'check',title:'Quiz 4',say:'Why does your body get a fever when you are sick?',
- draw:()=>kidI(320,230,C.berry)+`<rect x="360" y="150" width="14" height="70" rx="7" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><rect x="364" y="170" width="6" height="46" rx="3" fill="${C.bad}"/><circle cx="367" cy="222" r="7" fill="${C.bad}"/>`,
- quiz:{options:['to help you sleep','to slow down the germs','because it is hot outside'],answer:'to slow down the germs',why:'Heating up makes it harder for germs to grow, so the body turns up the temperature to <b>slow the germs down</b>.',hint:'It is part of the fight-back.'}},
-
-{part:'check',title:'Quiz 5',say:'A vaccine helps your body by...',
+{part:'check',title:'Quiz 5',say:'Zack has a cold. Will antibiotics cure it?',
+ draw:()=>G(kidI(260,240,C.berry)+pillI(400,180,1.6),'a-pop',.1),
+ quiz:{options:['Yes, always','No: a cold is caused by a virus','Only if he takes lots'],answer:'No: a cold is caused by a virus',why:'Antibiotics only fight <b>bacteria</b>. A cold is a <b>virus</b>, so rest, water and time help instead.',hint:'What causes a cold: bacteria or a virus?'}},
+{part:'check',title:'Quiz 6',say:'What shape is Streptococcus?',
+ draw:()=>G([0,1,2,3,4,5,6].map(k=>cocI(170+k*50,200+Math.sin(k*1.1)*24,18,C.berry)).join(''),'a-pop',.1),
+ quiz:{options:['chains of balls','rods','spirals'],answer:'chains of balls',why:'Streptococcus = "twisted chain of berries": round cocci stuck together in chains.',hint:'Coccus means berry.'}},
+{part:'check',title:'Quiz 7',say:'A vaccine helps your body by…',
  draw:()=>`<g transform="translate(320 200) scale(1.6)"><rect x="-6" y="-30" width="12" height="40" rx="3" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><line x1="0" y1="10" x2="0" y2="26" stroke="${C.ink}" stroke-width="2.5"/><rect x="-10" y="-34" width="20" height="6" fill="${C.ink}"/></g>`,
  quiz:{options:['teaching it to recognise a germ','making it taller','giving it more bones'],answer:'teaching it to recognise a germ',why:'A vaccine shows your white blood cells a harmless copy, so they <b>recognise and fight</b> the real germ fast.',hint:'It is like a wanted poster for germs.'}},
 
-{part:'check',title:'You did it!',say:'Super! You know the three kinds of <b>microbes</b>, which are <b>friends</b> and <b>foes</b>, how to <b>wash hands</b> and keep <b>food safe</b>, and how <b>vaccines</b> train your body. Next: how living things share a home!',
- draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+germI(120,230,1)+mushroomI(520,230,1),'a-pop',.3)+T(320,60,'Microbe superstar!','h mid acc'),
- mount:a=>a.later(()=>a.confetti(),400)}
+{part:'boss',title:'Baddie wants to spread lies!',who:'baddie',say:BD+'Mwahaha! Microbes are my favourite. I\'m going to fill your head with <b>germy lies</b>. Let\'s see if you can catch them!',
+ draw:()=>G(baddie(320,385,2.2),'a-drop',.1)+G(otter(70,390,.8,{still:true}),'a-fade',.6)+[germI(520,120,.8,C.berry),virusI(580,200,.6),germI(110,130,.6)].map((g,k)=>G(g,'a-pop',.8+k*.2)).join('')},
+boss('Lie #1: antibiotics',{lines:['Got a cold? Take antibiotics!','They kill cold viruses!'],claim:'Got a cold? Take antibiotics! They kill cold viruses!',options:['No! Antibiotics only work on bacteria, not viruses.','Yes, they cure colds.','No! Antibiotics are vitamins.'],answer:'No! Antibiotics only work on bacteria, not viruses.',why:'A cold is a <b>virus</b>. Antibiotics fight <b>bacteria</b> only, and using them when not needed helps bacteria resist them.',taunt:'Mwahaha! Pills for every sniffle!',hint:'What kind of microbe causes a cold?',art:pillI(440,300,1.6)}),
+boss('Lie #2: the fridge',{lines:['Put food in the fridge','and ALL the germs die!'],claim:'Put food in the fridge and all the germs die!',options:['No! Cold only slows germs down. Heat kills them.','Yes, the fridge kills germs.','No! The fridge makes germs grow faster.'],answer:'No! Cold only slows germs down. Heat kills them.',why:'The fridge <b>slows</b> germs down, so food lasts longer. Proper <b>cooking</b> (heat) is what kills most germs.',taunt:'Hehehe! Frozen germs are dead germs!',hint:'Does the fridge kill germs or just slow them?'}),
+boss('Lie #3: the hardest one',{lines:['Mould is a plant, so it makes','its own food from sunlight!'],claim:'Mould is a plant, so it makes its own food from sunlight!',options:['No! Mould is a fungus. It feeds on the food it grows on.','Yes, mould is a plant.','No! Mould is a virus.'],answer:'No! Mould is a fungus. It feeds on the food it grows on.',why:'Mould is a <b>fungus</b>. It has no green parts and can\'t use sunlight. It eats the bread or fruit it grows on, which is why it grows even in a dark cupboard.',taunt:'Mwahaha! Mould is basically broccoli!',hint:'Does mould need sunlight? Where does it grow?',art:mouldI(440,320,1.8)}),
+{part:'boss',title:'You did it!',say:'Super! You know the four kinds of <b>microbe</b>, how small they are, their <b>shapes</b>, which are <b>friends</b> and <b>foes</b>, how to <b>wash hands</b> and keep <b>food safe</b>, why <b>antibiotics</b> don\'t cure colds, and how <b>vaccines</b> train your body. Next: how living things share a home!',
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+germI(120,230,1)+yeastI(520,230,1.3)+baddie(560,380,.6,{busted:true}),'a-pop',.3)+T(320,60,'Microbe superstar!','h mid acc'),
+ mount:a=>a.later(()=>a.win(),400)}
 ];
 
 

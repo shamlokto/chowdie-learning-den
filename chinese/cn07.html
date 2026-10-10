@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Chinese 7: 我的身体和心情</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">P2 Chinese · 7 · 华文</p>
+      <h1>我的身体和心情</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Chinese with Chowdie and Wala: body parts, feelings, polite words and feeling unwell. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  qz.options.forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+/* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
+  const pool=vs.filter(ok); if(!pool.length) return null;
+  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
+  const base=loc.length?loc:pool;
+  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
+  const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
+ }catch(e){} }
+try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
+  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+   },'lie'))}};
+}
+/* shared helpers for P2 Chinese decks 3+ */
+PARTS.learn='学一学 Learn';PARTS.try='玩一玩 Play';PARTS.check='考考你 Quiz';
+document.querySelectorAll('.parts button').forEach(b=>{if(PARTS[b.dataset.part])b.textContent=PARTS[b.dataset.part]});
+const shk=b=>{b.classList.remove('no');void b.offsetWidth;b.classList.add('no')};
+/* icon card with a Chinese word */
+const wcard=(x,y,w,h,ic,zh,py,en,d=0,sz=26)=>G(box(x,y,w,h,'#fff',14)+`<g transform="translate(${x+w/2} ${y+h*.36})">${ic}</g>`+zhw(x+w/2,y+h*.72,zh,py,en,sz),'a-pop',d);
+/* sentence-building game */
+function tiles(a,rounds,intro,who='wala'){let r=0,got=[];const NM=who==='wala'?WL:CH;const show=()=>{const R=rounds[r];got=[];
+   a.q('.play').innerHTML=T(320,40,`${r+1} of ${rounds.length}`,'sm mid mut')+box(40,70,560,90,'#FFF4D6',16)+`<g class="built"></g>`+T(320,200,R.en,'lab mid acc')+G(wala(560,392,.95,{still:true}),'')+G(otter(80,392,.95,{still:true}),'');
+   const upd=()=>{a.q('.built').innerHTML=T(320,128,got.join('')+(got.length===R.w.length?'':' ＿'),'zh mid','style="font-size:30px"')};upd();
+   a.ui.innerHTML='';[...R.w].map((w,k)=>[w,k]).sort(()=>Math.random()-.5).forEach(([w])=>a.btn(w,b=>{if(b.disabled)return;if(w===R.w[got.length]){got.push(w);b.disabled=true;b.classList.add('ok');a.hear(w);upd();
+     if(got.length===R.w.length){r++;if(r<rounds.length){a.confetti();a.as(who,NM+'<b>对了！</b> '+R.w.join('')+' Next one!');a.later(show,2000)}else a.win(NM+'<b>太棒了！</b> <i class="py">Tài bàng le!</i> You built every sentence!')}}
+     else{shk(b);a.as(who,NM+R.hint)}},'zhb'));};
+  show();a.as(who,intro);}
+/* multiple-choice rounds game. R: [{stage:()=>svg, options:[], answer, ok, hint, hear}] */
+function rounds(a,R,intro,who='otter'){let r=0,busy=false;const NM=who==='wala'?WL:CH;
+  const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+Q.stage();
+   a.ui.innerHTML='';[...Q.options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');if(Q.hear)a.hear(Q.hear);r++;
+     if(r<R.length){a.confetti();a.as(who,NM+'<b>对了！</b> '+(Q.ok||''));a.later(show,1900)}else a.win(NM+'<b>太棒了！</b> '+(Q.ok||''))}else{shk(b);a.as(who,NM+(Q.hint||'Try again!'))}},'zhb'))};
+  show();a.as(who,intro);}
+const bossIntro=(title,txt)=>({part:'boss',title,who:'baddie',say:BD+txt,
+  draw:()=>G(baddie(320,385,2.2),'a-drop',.1)+G(otter(70,390,.8,{still:true})+wala(570,390,.8,{still:true}),'a-fade',.6)+G(box(150,22,340,46,'#FBEFF4',23)+T(320,52,'Catch every lie he tells!','lab mid','style="fill:#6B2D5C"'),'a-pop',1.2)});
+const finale=(title,zh,py,en,txt,banner)=>({part:'boss',title,who:'wala',say:WL+txt,
+  draw:()=>G(baddie(320,388,1.1,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(50,80,26)+star(590,80,26),'a-pop',.8)+zhw(320,95,zh,py,en,44)+(banner?T(320,190,banner,'lab mid acc'):''),
+  mount:a=>a.later(()=>a.win(),600)});
+/* little icons */
+const pencilI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(-30)"><rect x="-34" y="-7" width="56" height="14" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M22 -7 l14 7 l-14 7z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 -2 l4 2 l-4 2z" fill="${C.ink}"/><rect x="-42" y="-7" width="8" height="14" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const bagI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 -24 q0 -12 14 -12 q14 0 14 12" fill="none" stroke="${C.ink}" stroke-width="4"/><rect x="-28" y="-24" width="56" height="52" rx="12" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><rect x="-18" y="2" width="36" height="18" rx="5" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const eraserI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-22" y="-12" width="44" height="24" rx="5" fill="#F4A3A8" stroke="${C.ink}" stroke-width="2.5"/><rect x="2" y="-12" width="20" height="24" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const rulerI2=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-38" y="-9" width="76" height="18" rx="2" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[-30,-20,-10,0,10,20,30].map(t=>`<line x1="${t}" y1="-9" x2="${t}" y2="${t%20?-3:1}" stroke="${C.ink}" stroke-width="1.5"/>`).join('')}</g>`;
+const bookI2=(x,y,s=1,col=C.sky)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 -20 q15 -8 30 0 q15 -8 30 0 v40 q-15 -8 -30 0 q-15 -8 -30 0z" fill="${col}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><line x1="0" y1="-20" x2="0" y2="20" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const deskI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-40" y="-14" width="80" height="12" rx="3" fill="#C98B55" stroke="${C.ink}" stroke-width="2.5"/><path d="M-32 -2 v30 M32 -2 v30" stroke="${C.ink}" stroke-width="4"/></g>`;
+const chairI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-16 -34 v36 M16 -34 v36" stroke="${C.ink}" stroke-width="4"/><rect x="-18" y="-36" width="36" height="16" rx="3" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><rect x="-20" y="0" width="40" height="8" rx="2" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 8 v18 M16 8 v18" stroke="${C.ink}" stroke-width="4"/></g>`;
+const bottleI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="-34" width="12" height="8" rx="2" fill="${C.ink}"/><rect x="-14" y="-26" width="28" height="52" rx="8" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2.5"/><rect x="-14" y="-4" width="28" height="12" fill="${C.leaf}" opacity=".7"/></g>`;
+const ballI2=(x,y,r=16)=>`<g transform="translate(${x} ${y})"><circle r="${r}" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M${-r} 0 q${r} ${-r*.6} ${2*r} 0" fill="none" stroke="#fff" stroke-width="2.5"/></g>`;
+/* P2 Chinese 7: 我的身体和心情 — body parts, what they do, feelings, polite words, feeling unwell */
+const bodyKid=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})">
+ <path d="M-14 -10 v-60 M14 -10 v-60" stroke="${C.ink}" stroke-width="0"/>
+ <rect x="-24" y="-60" width="18" height="58" rx="8" fill="#2F5D50" stroke="${C.ink}" stroke-width="2.5"/><rect x="6" y="-60" width="18" height="58" rx="8" fill="#2F5D50" stroke="${C.ink}" stroke-width="2.5"/>
+ <ellipse cx="-16" cy="0" rx="16" ry="8" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="16" cy="0" rx="16" ry="8" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/>
+ <path d="M-30 -130 q-26 30 -30 64" stroke="#F2D2B0" stroke-width="14" fill="none" stroke-linecap="round"/><path d="M30 -130 q26 30 30 64" stroke="#F2D2B0" stroke-width="14" fill="none" stroke-linecap="round"/>
+ <circle cx="-60" cy="-62" r="10" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><circle cx="60" cy="-62" r="10" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/>
+ <path d="M-34 -136 q34 -16 68 0 v80 h-68z" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>
+ <circle cx="-44" cy="-196" r="11" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><circle cx="44" cy="-196" r="11" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/>
+ <circle cy="-196" r="44" fill="#F2D2B0" stroke="${C.ink}" stroke-width="3"/><path d="M-44 -204 q4 -40 44 -40 q40 0 44 40 q-20 -18 -44 -16 q-24 -2 -44 16z" fill="#4A3222" stroke="${C.ink}" stroke-width="2"/>
+ <circle cx="-15" cy="-196" r="5" fill="${C.ink}"/><circle cx="15" cy="-196" r="5" fill="${C.ink}"/><path d="M0 -190 q-6 10 2 12" stroke="${C.ink}" stroke-width="2.5" fill="none"/><path d="M-12 -172 q12 10 24 0" stroke="${C.ink}" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="-26" cy="-180" r="6" fill="#F4A3A8"/><circle cx="26" cy="-180" r="6" fill="#F4A3A8"/></g>`;
+const feel=(t)=>{const m={kaixin:['M-12 8 q12 12 24 0','',C.sun],nanguo:['M-12 14 q12 -10 24 0','<path d="M-14 0 q-2 8 2 10" stroke="'+C.sky+'" stroke-width="3" fill="none"/>',C.sky],shengqi:['M-12 12 q12 -6 24 0','<path d="M-18 -16 l12 6 M18 -16 l-12 6" stroke="'+C.ink+'" stroke-width="3"/>',C.bad],haipa:['','<ellipse cy="12" rx="6" ry="8" fill="'+C.ink+'"/><path d="M-26 -8 l-6 -6 M26 -8 l6 -6" stroke="'+C.ink+'" stroke-width="2"/>','#C9B8F0'],lei:['M-8 12 h16','<path d="M-16 -6 h10 M6 -6 h10" stroke="'+C.ink+'" stroke-width="3"/><text x="22" y="-18" class="sm" style="font-size:12px">z z</text>','#C9D3D8']}[t];
+  return `<circle r="28" fill="${m[2]}" stroke="${C.ink}" stroke-width="3"/>${t==='lei'?'':`<circle cx="-10" cy="-6" r="3.5" fill="${C.ink}"/><circle cx="10" cy="-6" r="3.5" fill="${C.ink}"/>`}${m[0]?`<path d="${m[0]}" stroke="${C.ink}" stroke-width="3" fill="none" stroke-linecap="round"/>`:''}${m[1]}`};
+const FEEL=[['kaixin','开心','kāixīn','happy'],['nanguo','难过','nánguò','sad'],['shengqi','生气','shēngqì','angry'],['haipa','害怕','hàipà','scared'],['lei','累','lèi','tired']];
+const BP=[['头','tóu','head',0,-230,-160,-262],['眼睛','yǎnjing','eyes',15,-196,160,-236],['耳朵','ěrduo','ears',-44,-196,-160,-196],['鼻子','bízi','nose',2,-186,160,-176],['嘴巴','zuǐba','mouth',0,-172,-160,-130],['手','shǒu','hand',60,-62,160,-84],['肚子','dùzi','tummy',0,-90,-160,-64],['脚','jiǎo','foot',16,0,160,-14]];
+const kiteI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 l22 30 l-22 30 l-22 -30z" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/><path d="M0 -30 v60 M-22 0 h44" stroke="${C.ink}" stroke-width="1.5"/><path d="M0 30 q8 14 -4 22 q-10 10 4 20" stroke="${C.ink}" stroke-width="2" fill="none"/></g>`;
+const S=[
+{part:'learn',title:'My body 我的身体',say:CH+'Let\'s learn our body! <b>头</b> head, <b>眼睛</b> eyes, <b>耳朵</b> ears, <b>鼻子</b> nose, <b>嘴巴</b> mouth, <b>手</b> hands, <b>肚子</b> tummy and <b>脚</b> feet. Tap each label to hear it, then point to that part on yourself!',
+ draw:()=>G(bodyKid(320,380,1.3),'a-pop',.1)+BP.map(([z,p,e,px,py,lx,ly],k)=>{const X=320+px*1.3,Y=380+py*1.3,LX=320+lx,LY=380+ly;return G(`<line x1="${X}" y1="${Y}" x2="${LX+(lx<0?40:-40)}" y2="${LY-8}" stroke="${C.accent}" stroke-width="2"/><circle cx="${X}" cy="${Y}" r="4" fill="${C.accent}"/>`+zhw(LX+(lx<0?-6:6),LY-8,z,p,'',24),'a-fade',.4+k*.15)}).join('')},
+
+{part:'learn',title:'What do they do? 用来做什么？',who:'wala',say:WL+'We use our body to do things! 我用<b>眼睛</b>看 "I look with my eyes". 我用<b>耳朵</b>听 "I listen with my ears". 我用<b>鼻子</b>闻 "I smell with my nose". 我用<b>嘴巴</b>吃东西, 我用<b>手</b>写字, 我用<b>脚</b>走路!',
+ draw:()=>[['我用眼睛看。','Wǒ yòng yǎnjing kàn.','look','👀'],['我用耳朵听。','Wǒ yòng ěrduo tīng.','listen','👂'],['我用鼻子闻。','Wǒ yòng bízi wén.','smell','👃'],['我用嘴巴吃东西。','Wǒ yòng zuǐba chī dōngxi.','eat','👄'],['我用手写字。','Wǒ yòng shǒu xiězì.','write','✋'],['我用脚走路。','Wǒ yòng jiǎo zǒulù.','walk','🦶']]
+  .map(([z,p,e,em],k)=>{const x=20+(k%2)*304,y=14+Math.floor(k/2)*124;return G(box(x,y,292,112,'#fff',14)+T(x+40,y+66,em,'h mid','style="font-size:36px"')+zhw(x+170,y+48,z,p,e,21),'a-pop',.1+k*.15)}).join('')},
+
+{part:'learn',title:'Feelings 心情',say:CH+'How do you feel today? <b>开心</b> happy, <b>难过</b> sad, <b>生气</b> angry, <b>害怕</b> scared, <b>累</b> tired. Say it like this: 我很开心！"I am very happy!" Ask a friend: 你今天心情怎么样？"How do you feel today?"',
+ draw:()=>FEEL.map(([f,z,p,e],k)=>wcard(14+k*124,30,116,190,`<g transform="scale(1.3)">${feel(f)}</g>`,z,p,e,.1+k*.15,26)).join('')
+  +dlg(30,250,0,'你今天心情怎么样？','Nǐ jīntiān xīnqíng zěnmeyàng?','','l',1,'otter')+dlg(610,310,0,'我很开心！','Wǒ hěn kāixīn!','','r',1.5,'wala')},
+
+{part:'learn',title:'Why so sad? 为什么难过？',who:'wala',say:WL+'I was sad today. Chowdie asked 你为什么很难过？"Why are you sad?" I said 因为我的风筝不见了 "Because my kite is gone." Chowdie said 别难过，我帮你找！"Don\'t be sad, I\'ll help you find it!" Good friends help each other.',
+ draw:()=>dlg(30,10,0,'你为什么很难过？','Nǐ wèishénme hěn nánguò?','','l',.1,'otter')+dlg(610,88,0,'因为我的风筝不见了。','Yīnwèi wǒ de fēngzheng bú jiàn le.','','r',.8,'wala')+dlg(30,166,0,'别难过，我帮你找！','Bié nánguò, wǒ bāng nǐ zhǎo!','','l',1.5,'otter')
+  +G(otter(110,398,.75,{still:true})+wala(540,398,.75,{still:true}),'a-pop',.2)+G(`<g transform="translate(580 280)">${feel('nanguo')}</g>`,'a-pop',.9)+G(treeI?treeI(330,380,1.1):'','a-pop',1.6)+G(kiteI(350,262,.7),'a-pop',2)},
+
+{part:'learn',title:'Polite words 礼貌用语',say:CH+'Polite words come in pairs! When someone says <b>谢谢</b> (thank you), reply <b>不客气</b> (you\'re welcome). When someone says <b>对不起</b> (sorry), reply <b>没关系</b> (it\'s OK). Use <b>请</b> (please) when you ask, and <b>再见</b> to say goodbye.',
+ draw:()=>[['谢谢','xièxie','thank you','不客气','bú kèqi','you\'re welcome'],['对不起','duìbuqǐ','sorry','没关系','méi guānxi','it\'s OK'],['请','qǐng','please','再见','zàijiàn','goodbye']]
+  .map(([a,ap,ae,b,bp,be],k)=>{const y=20+k*122;return G(box(20,y,600,110,'#fff',16)+`<g transform="translate(70 ${y+76})">${otter(0,0,.5,{still:true})}</g>`+zhw(200,y+48,a,ap,ae,30)+(k<2?arrow(300,y+56,350,y+56,C.accent)+`<g transform="translate(570 ${y+80})">${wala(0,0,.45,{still:true})}</g>`:'')+zhw(440,y+48,b,bp,be,30),'a-pop',.1+k*.35)}).join('')},
+
+{part:'learn',title:'Feeling unwell 生病了',who:'wala',say:WL+'Sometimes we feel sick. 我<b>头痛</b> "I have a headache". 我<b>肚子痛</b> "I have a tummy ache". 我<b>发烧</b>了 "I have a fever". Then we tell a grown-up and <b>去看医生</b>: go and see the doctor. Remember the microbes lesson? Wash your hands!',
+ draw:()=>[['我头痛。','Wǒ tóu tòng.','My head hurts.',`<circle r="26" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-30 -20 l-8 -8 M30 -20 l8 -8 M0 -32 v-10" stroke="${C.bad}" stroke-width="3"/><path d="M-10 12 q10 -6 20 0" stroke="${C.ink}" stroke-width="2.5" fill="none"/><circle cx="-9" cy="-4" r="3" fill="${C.ink}"/><circle cx="9" cy="-4" r="3" fill="${C.ink}"/>`],['我肚子痛。','Wǒ dùzi tòng.','My tummy hurts.',`<ellipse r="26" rx="24" ry="28" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-8 -6 l6 6 l-6 6 M6 -6 l6 6 l-6 6" stroke="${C.bad}" stroke-width="3" fill="none"/>`],['我发烧了。','Wǒ fāshāo le.','I have a fever.',`<rect x="-6" y="-34" width="12" height="50" rx="6" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><rect x="-3" y="-20" width="6" height="34" rx="3" fill="${C.bad}"/><circle cy="20" r="9" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/>`],['去看医生。','Qù kàn yīshēng.','Go to the doctor.',`<rect x="-26" y="-26" width="52" height="52" rx="10" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><path d="M-6 -16 h12 v10 h10 v12 h-10 v10 h-12 v-10 h-10 v-12 h10z" fill="${C.bad}"/>`]]
+  .map(([z,p,e,ic],k)=>wcard(20+(k%2)*304,16+Math.floor(k/2)*186,292,174,ic,z,p,e,.1+k*.2,28)).join('')},
+
+{part:'try',title:'Point to it! 指一指',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>rounds(a,[0,1,3,4,5,7].map(i=>{const [z,p,e,px,py]=BP[i];return {stage:()=>G(bodyKid(240,390,1.25),'')+G(`<circle cx="${240+px*1.25}" cy="${390+py*1.25}" r="14" fill="none" stroke="${C.accent}" stroke-width="4"/><line x1="${240+px*1.25+14}" y1="${390+py*1.25}" x2="470" y2="${390+py*1.25}" stroke="${C.accent}" stroke-width="3" stroke-dasharray="6 5"/>`,'a-pop')+T(520,200,'这是什么？','zh mid','style="font-size:28px"'),options:['头','眼睛','鼻子','嘴巴','手','脚'],answer:z,hear:'这是'+z,ok:`这是${z} (${e}).`,hint:'Follow the orange line!'}}),CH+'Look at the orange circle. 这是什么？ What is this?')},
+
+{part:'try',title:'How do they feel? 心情怎么样？',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>rounds(a,[['shengqi','生气'],['kaixin','开心'],['haipa','害怕'],['nanguo','难过'],['lei','累']].map(([f,z])=>({stage:()=>G(`<g transform="translate(320 170) scale(3.2)">${feel(f)}</g>`,'a-pop')+T(320,330,'他的心情怎么样？','zh mid','style="font-size:28px"'),options:['开心','难过','生气','害怕','累'],answer:z,hear:'他很'+z,ok:'他很'+z+'。',hint:'Look at the eyes, eyebrows and mouth!'})),WL+'Look at each face. How does he feel?','wala')},
+
+{part:'try',title:'Polite replies 怎么回答？',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>rounds(a,[['谢谢！','不客气！',['没关系！','再见！']],['对不起！','没关系！',['不客气！','谢谢！']],['再见！','再见！',['对不起！','请！']],['早上好！','早上好！',['没关系！','不客气！']]].map(([q,ans,w])=>({stage:()=>dlg(320,70,0,q,'','','l',0,'wala')+G(wala(260,392,1.1,{still:true})+otter(470,392,1.1,{still:true}),'')+T(470,190,'?','big mid acc'),options:[ans,...w],answer:ans,hear:ans,ok:`${q} → ${ans}`,hint:'谢谢 → 不客气. 对不起 → 没关系.'})),CH+'Wala says something. What is the polite reply?')},
+
+{part:'check',title:'Quiz 1',who:'wala',say:WL+'What does <b>耳朵</b> mean?',draw:()=>zhw(320,130,'耳朵','ěrduo','',64)+G(`<g transform="translate(320 270)"><circle r="40" fill="#F2D2B0" stroke="${C.ink}" stroke-width="3"/><path d="M-10 -20 q24 -6 22 20 q-2 18 -18 14" stroke="${C.ink}" stroke-width="3" fill="none"/></g>`,'a-pop',.4),
+ quiz:{options:['ears','eyes','nose'],answer:'ears',why:'耳朵 <i class="py">ěrduo</i> = ears. We use them to 听 (listen).',hint:'What do you listen with?'}},
+{part:'check',title:'Quiz 2',say:CH+'Which word means <b>happy</b>?',draw:()=>G(`<g transform="translate(320 170) scale(3)">${feel('kaixin')}</g>`,'a-pop',.1),
+ quiz:{options:['开心','难过','生气'],answer:'开心',why:'开心 <i class="py">kāixīn</i> = happy. 难过 = sad; 生气 = angry.',hint:'开 means open: an open, happy heart 心!'}},
+{part:'check',title:'Quiz 3',who:'wala',say:WL+'Arjun bumps into you and says <b>对不起！</b> What do you reply?',draw:()=>dlg(320,60,0,'对不起！','Duìbuqǐ!','Sorry!','l',.1,'otter')+G(otter(260,392,1.1,{still:true})+wala(470,392,1.1,{still:true}),''),
+ quiz:{options:['没关系！','不客气！','谢谢！'],answer:'没关系！',why:'对不起 (sorry) → <b>没关系</b> (it\'s OK). 不客气 is the reply to 谢谢.',hint:'Which reply means "it\'s OK"?'}},
+{part:'check',title:'Quiz 4',say:CH+'我用＿＿看书。 "I read with my ___."',draw:()=>G(bookI2(320,140,2.2),'a-pop',.1)+T(320,300,'我用＿＿看书。','zh mid','style="font-size:44px"'),
+ quiz:{options:['眼睛','耳朵','脚'],answer:'眼睛',why:'我用<b>眼睛</b>看书: we read with our eyes!',hint:'看 means look.'}},
+
+bossIntro('Baddie has bad manners!','Mwahaha! Manners are boring! I\'m going to teach you ALL the wrong polite words!'),
+boss('Lie #1: thank you',{lines:['When someone says 谢谢,','you reply 对不起! Hehehe!'],claim:'When someone says 谢谢, you reply 对不起!',options:['No! 谢谢 → 不客气 (you\'re welcome).','Yes, say 对不起.','No! Say 再见 and run away.'],answer:'No! 谢谢 → 不客气 (you\'re welcome).',why:'谢谢 (thank you) → <b>不客气</b> (you\'re welcome). 对不起 means sorry.',taunt:'Hehehe! Say sorry for everything!',hint:'What do you say after "thank you"?'}),
+boss('Lie #2: body parts',{lines:['眼睛 yǎnjing is for','LISTENING! Mwahaha!'],claim:'眼睛 is for listening!',options:['No! 眼睛 are eyes for looking. 耳朵 are ears for listening.','Yes, we listen with 眼睛.','No! 眼睛 is for eating.'],answer:'No! 眼睛 are eyes for looking. 耳朵 are ears for listening.',why:'我用<b>眼睛</b>看 (look), 我用<b>耳朵</b>听 (listen).',taunt:'Hehehe! I can hear colours!',hint:'Which body part do you listen with?'}),
+boss('Lie #3: the hardest one',{lines:['If YOU bump into someone,','YOU say 没关系!'],claim:'If you bump into someone, you say 没关系!',options:['No! I say 对不起. The other person says 没关系.','Yes, I say 没关系.','No! I say 谢谢.'],answer:'No! I say 对不起. The other person says 没关系.',why:'If you did it, you say <b>对不起</b> (sorry). The other person replies <b>没关系</b> (it\'s OK).',taunt:'Mwahaha! Bump into everyone and say "no problem"!',hint:'Who should say sorry?'}),
+finale('Baddie learns manners! 谢谢！','谢谢你们！','Xièxie nǐmen!','Thank you, everyone!','太棒了！You learned body parts, 看/听/闻, feelings, polite words and what to say when you\'re sick. 你们真棒！<i class="py">Nǐmen zhēn bàng!</i>'),
+];
+
+
+render();
+</script>
+
+</body></html>

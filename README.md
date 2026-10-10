@@ -6,7 +6,7 @@ Interactive, clickable lesson decks for young learners, starring **Chowdie** the
 
 - **P2 Maths**: 15 decks following the Singapore MOE 2021 Primary 2 syllabus, plus Word Problem Detective and Challenge Quest
 - **P2 English**: 9 decks on grammar, punctuation, vocabulary, reading, writing and Show and Tell
-- **P2 Chinese**: 2 decks (你好！我的家人, 我的一天) with Chowdie and Wala dialogues and tap-to-hear Mandarin
+- **P2 Chinese**: 8 decks (greetings, my day, school, food, weather & festivals, zoo, body & feelings, 看图说话) with Chowdie and Wala dialogues and tap-to-hear Mandarin
 - **Life Science for Kids (ages 6 to 12)**: 8 decks from "What is alive?" to "Think like a scientist"
 - **Misc**: The Disciplined Life (for grown-ups)
 
