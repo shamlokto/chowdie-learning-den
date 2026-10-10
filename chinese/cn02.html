@@ -287,6 +287,7 @@ function baddie(x,y,s=1,o={}){
  .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
  #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
  #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .pyf{font-family:var(--body);font-style:normal} /* Baloo 2 draws macron vowels (ā ē ī ō ū) broken, so pinyin in display text uses the body font */
  .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
  .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
  .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
@@ -375,7 +376,7 @@ const strokes=(x,y,w,P,d0=0)=>`<g transform="translate(${x} ${y}) scale(${w/100}
 const SHI=[['M15 50 H85',70],['M50 12 V90',78]], REN=[['M50 14 Q48 56 14 88',85],['M50 42 Q62 72 88 88',60]], SAN=[['M25 22 H75',50],['M30 50 H70',40],['M14 82 H86',72]], CHUAN=[['M26 16 Q26 62 12 88',76],['M50 22 V78',56],['M78 12 V90',78]];
 const opp=[['大','dà','big',`<circle r="30" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>`,'小','xiǎo','small',`<circle r="12" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>`],
  ['多','duō','many',[-18,0,18,-9,9].map((dx,k)=>`<circle cx="${dx}" cy="${k<3?8:-10}" r="8" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/>`).join(''),'少','shǎo','few',`<circle r="8" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/>`],
- ['长','cháng','long',`<rect x="-40" y="-6" width="80" height="12" rx="6" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/>`,'短','duǎn','short',`<rect x="-14" y="-6" width="28" height="12" rx="6" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/>`],
+ ['长','cháng','long',`<rect x="-32" y="-6" width="64" height="12" rx="6" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/>`,'短','duǎn','short',`<rect x="-14" y="-6" width="28" height="12" rx="6" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/>`],
  ['高','gāo','tall',`<rect x="-10" y="-34" width="20" height="60" rx="4" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>`,'矮','ǎi','short (height)',`<rect x="-10" y="2" width="20" height="24" rx="4" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>`],
  ['快','kuài','fast',`<path d="M-30 0 h50 M-24 -10 h34 M-24 10 h34" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/><path d="M14 -14 l18 14 l-18 14z" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/>`,'慢','màn','slow',`<ellipse rx="22" ry="14" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-6 -6 a8 8 0 1 1 6 8" fill="none" stroke="${C.ink}" stroke-width="2"/>`],
  ['上','shàng','up / on',`<rect x="-26" y="10" width="52" height="8" fill="${C.ink}"/><circle cy="-6" r="12" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/>`,'下','xià','down / under',`<rect x="-26" y="-14" width="52" height="8" fill="${C.ink}"/><circle cy="10" r="12" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/>`]];
@@ -432,7 +433,7 @@ const S=[
 {part:'try',title:'What day is it? 星期几？',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const D=['星期一','星期二','星期三','星期四','星期五','星期六','星期天'];const R=[[0,'明天',1],[4,'明天',5],[5,'明天',6],[2,'昨天',1]];let r=0,busy=false;
   const show=()=>{busy=false;const [t,w,ans]=R[r];a.q('.play').innerHTML=T(320,36,`${r+1} of ${R.length}`,'sm mid mut')+D.map((d,k)=>G(box(26+k*84,70,76,60,k===t?C.sun:'#fff',10)+T(64+k*84,108,d,'zh mid','style="font-size:17px"'),'',0)).join('')
-    +G(zhw(320,200,`今天是${D[t]}，${w}是星期几？`,`Jīntiān shì ${['xīngqīyī','xīngqī\'èr','xīngqīsān','xīngqīsì','xīngqīwǔ','xīngqīliù','xīngqītiān'][t]}, ${w==='明天'?'míngtiān':'zuótiān'} shì xīngqī jǐ?`,'',28),'a-pop')+T(320,290,'今天 jīntiān = today · 明天 míngtiān = tomorrow · 昨天 zuótiān = yesterday','sm mid mut');
+    +G(zhw(320,200,`今天是${D[t]}，${w}是星期几？`,`Jīntiān shì ${['xīngqīyī','xīngqī\'èr','xīngqīsān','xīngqīsì','xīngqīwǔ','xīngqīliù','xīngqītiān'][t]}, ${w==='明天'?'míngtiān':'zuótiān'} shì xīngqī jǐ?`,'',28),'a-pop')+T(320,290,'今天 <tspan class="pyf">jīntiān</tspan> = today · 明天 <tspan class="pyf">míngtiān</tspan> = tomorrow · 昨天 <tspan class="pyf">zuótiān</tspan> = yesterday','sm mid mut');
    a.ui.innerHTML='';[...new Set([D[ans],D[(ans+1)%7],D[(ans+6)%7]])].sort().forEach(x=>a.btn(x,b=>{if(busy)return;if(x===D[ans]){busy=true;b.classList.add('ok');a.hear(w+'是'+x);r++;if(r<R.length){a.confetti();a.say(CH+`<b>对了！</b> ${w}是${x}。`);a.later(show,1800)}else a.win(CH+'<b>太棒了！</b> 今天, 明天, 昨天: you know them all!')}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');a.say(CH+(w==='明天'?'明天 is the NEXT day.':'昨天 is the day BEFORE.'))}},'zhb'))};
   show();a.say(CH+'Use the calendar to work out the day.')}},
 
@@ -440,7 +441,7 @@ const S=[
  quiz:{options:['Good morning','Good night','Goodbye'],answer:'Good morning',why:'早上 is morning, so 早上好 <i class="py">zǎoshang hǎo</i> is good morning. Good night is 晚安.',hint:'早上 is the time the sun comes up.'}},
 {part:'check',title:'Quiz 2',say:CH+'What is the opposite of <b>大</b> (big)?',draw:()=>G(`<circle cx="320" cy="140" r="70" fill="${C.sky}" stroke="${C.ink}" stroke-width="4"/>`,'a-pop',.1)+zhw(320,300,'大','dà','big',60),
  quiz:{options:['小','多','高'],answer:'小',why:'大 <i class="py">dà</i> big ↔ 小 <i class="py">xiǎo</i> small.',hint:'Think of a big ball and a tiny ball.'}},
-{part:'check',title:'Quiz 3',who:'wala',say:WL+'Which radical is in <b>喝</b> (drink)?',draw:()=>G(grid(250,40,140)+zhw(320,145,'喝','hē','drink',104),'a-pop',.1),
+{part:'check',title:'Quiz 3',who:'wala',say:WL+'Which radical is in <b>喝</b> (drink)?',draw:()=>G(grid(250,40,140)+zhw(320,150,'喝','','',104)+T(320,224,'hē','py mid','style="font-size:28px"')+T(320,250,'drink','en mid','style="font-size:16px"'),'a-pop',.1),
  quiz:{options:['氵 water','口 mouth','木 tree'],answer:'口 mouth',why:'喝 has 口 on the left: you drink with your mouth! (Water 氵 is a good guess, but look again.)',hint:'Look at the small box on the left side.'}},
 {part:'check',title:'Quiz 4',say:CH+'今天是星期六。明天是星期几？ Today is Saturday. What is tomorrow?',draw:()=>['一','二','三','四','五','六','天'].map((n,k)=>G(box(26+k*84,120,76,90,k===5?C.sun:'#fff',10)+T(64+k*84,160,'星期','zh mid','style="font-size:16px"')+T(64+k*84,196,n,'zh mid','style="font-size:28px"'),'a-pop',.05*k)).join(''),
  quiz:{options:['星期七','星期天','星期一'],answer:'星期天',why:'After 星期六 comes Sunday: <b>星期天</b> (or 星期日). There is no 星期七!',hint:'Sunday has a special name, not a number.'}},

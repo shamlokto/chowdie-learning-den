@@ -222,7 +222,7 @@ function jug(x,y,w,h,f,max=5,id='w'){ // x,y top-left; f litres
   <clipPath id="cp${id}"><path d="M${x} ${y} L${x+w} ${y} L${x+w-6} ${y+h} L${x+6} ${y+h}z"/></clipPath>
   <path d="M${x} ${y} L${x+w} ${y} L${x+w-6} ${y+h} L${x+6} ${y+h}z" fill="#EEF8FC"/>
   <g clip-path="url(#cp${id})"><rect class="lvl wat" x="${x}" y="${y}" width="${w}" height="${h}" fill="#7CC8EE" style="transform-box:fill-box;transform-origin:bottom;transform:scaleY(${f/max})"/></g>`;
-  for(let k=1;k<=max;k++){const yy=y+h-k*h/max; s+=`<line x1="${x+w-30}" y1="${yy}" x2="${x+w-4}" y2="${yy}" stroke="${C.ink}" stroke-width="2.5"/>`+T(x+w-36,yy+6,k+' ℓ','sm end');}
+  for(let k=1;k<=max;k++){const yy=y+h-k*h/max; s+=(k<max?`<line x1="${x+w-30}" y1="${yy}" x2="${x+w-4}" y2="${yy}" stroke="${C.ink}" stroke-width="2.5"/>`+T(x+w-36,yy+6,k+' ℓ','sm end'):T(x+w-36,yy-8,k+' ℓ','sm end'));} // top mark is the rim, so its label sits above it
   s+=`<path d="M${x-4} ${y} L${x+w+4} ${y} L${x+w-6} ${y+h} L${x+6} ${y+h}z" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>`;
   return s;
 }
@@ -261,7 +261,7 @@ const S=[
   s+=G(`${T(320,210,'1 metre stick','lab mid')}`,'a-fade',.9);
   s+=G(otter(160,380,.9)+T(250,312,'Chowdie is about','lab')+T(250,340,'1 m tall!','h acc'),'a-fade',1.2);
   s+=G(`<path d="M86 270 v108" stroke="${C.accent}" stroke-width="4" stroke-dasharray="6 6"/>${T(80,330,'1 m','lab end acc')}`,'a-fade',1.5);
-  s+=G(`<rect x="430" y="240" width="130" height="140" rx="6" fill="#C9A27A" stroke="${C.ink}" stroke-width="3"/><circle cx="545" cy="315" r="6" fill="${C.ink}"/>${T(495,234,'A door is','sm mid')}${T(495,256,'about 1 m wide','sm mid')}`,'a-fade',1.8);
+  s+=G(`<rect x="430" y="240" width="130" height="140" rx="6" fill="#C9A27A" stroke="${C.ink}" stroke-width="3"/><circle cx="545" cy="315" r="6" fill="${C.ink}"/>${T(495,210,'A door is','sm mid')}${T(495,230,'about 1 m wide','sm mid')}`,'a-fade',1.8);
   return s;}},
 
 {part:'learn',title:'cm or m?',say:'Short things like a pencil, use <b>cm</b>. Long things like a classroom or an MRT train, use <b>m</b>. Ask yourself: <b>is it shorter or longer than a metre stick?</b>',
@@ -325,10 +325,10 @@ const S=[
    [0,1,2].map(k=>`<rect x="${215+k*80}" y="150" width="50" height="40" rx="4" fill="#BFE3F5" stroke="${C.ink}" stroke-width="2"/>`).join('')+`<rect x="295" y="215" width="50" height="65" fill="#C9A27A" stroke="${C.ink}" stroke-width="3"/>`+arrow(190,320,450,320,C.accent)+arrow(450,320,190,320,C.accent)+T(320,355,'length = ?','lab mid'),
  quiz:{options:['cm','m','kg','ℓ'],answer:'m',why:'A classroom is much longer than a metre stick, so we use <b>metres (m)</b>.',hint:'Is a classroom shorter or longer than a metre stick?'}},
 
-{part:'check',title:'Star check 2',say:'Read the scale. What is the mass of the pineapple?',
- draw:()=>dial(320,240,100,10,6,'kg')+`<g transform="translate(320 100)"><path d="M-6 -50 l-14 -26 l18 14 l2 -24 l8 24 l14 -16 l-8 28z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="0" cy="-22" rx="28" ry="34" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/><path d="M-20 -40 l40 36 M-26 -18 l30 28 M20 -42 l-40 36 M26 -20 l-30 28" stroke="#C98A1B" stroke-width="2"/></g>`,
+{part:'check',title:'Star check 2',say:'Read the scale. What is the mass of the watermelon?',
+ draw:()=>dial(320,240,100,10,6,'kg')+melon(320,124,.85),
  mount:spinPointers,
- quiz:{options:['5 kg','6 kg','7 kg'],answer:'6 kg',why:'The pointer stops at <b>6</b>, so the pineapple is <b>6 kg</b>.',hint:'Follow the red pointer to the number it points at.'}},
+ quiz:{options:['5 kg','6 kg','7 kg'],answer:'6 kg',why:'The pointer stops at <b>6</b>, so the watermelon is <b>6 kg</b>.',hint:'Follow the red pointer to the number it points at.'}},
 
 {part:'check',title:'Star check 3',say:'How much water is in the jug?',
  draw:()=>jug(240,60,170,290,4,5,'d')+otter(530,380,.9),

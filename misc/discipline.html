@@ -191,7 +191,7 @@ const S=[
 {part:'learn',title:'Benedict invents the timetable',say:`Around <b>530 CE</b>, Benedict of Nursia wrote a Rule that ran the monastery by the bell: prayer, manual work, reading, meals and sleep, each at its hour. "Idleness is the enemy of the soul," he wrote. The timetable shown is a simplified example; the point is that every activity has a fixed slot, so nobody has to decide each day.`,
  draw:()=>{const segs=[[20,26,C.grape],[2,3,C.sky],[3,6,C.leaf],[6,7,C.sky],[7,11,C.accent],[11,13,C.sun],[13,17,C.accent],[17,18,C.leaf],[18,20,C.sun]];
   let s=segs.map(([a,b,c],k)=>G(seg(192,206,88,148,a,b,c),'a-fade',.05+k*.08)).join('')+T(192,202,'a monastic','sm mid mut')+T(192,220,'day','sm mid mut');
-  [[0,'midnight'],[6,'6 am'],[12,'noon'],[18,'6 pm']].forEach(([h,l])=>{const a=(h/24*360-90)*Math.PI/180;s+=T((192+164*Math.cos(a)).toFixed(0),(211+164*Math.sin(a)).toFixed(0),l,'sm mid mut')});
+  [[0,'midnight'],[6,'6 am'],[12,'noon'],[18,'6 pm']].forEach(([h,l])=>{const a=(h/24*360-90)*Math.PI/180;s+=T((192+168*Math.cos(a)).toFixed(0),(211+(h%12?0:164*Math.sin(a))).toFixed(0),l,'sm mid mut')});
   [['Prayer',C.sky],['Work',C.accent],['Reading',C.leaf],['Meals',C.sun],['Sleep',C.grape]].forEach(([l,c],k)=>s+=`<rect x="380" y="${36+k*26}" width="14" height="14" rx="3" fill="${c}"/>`+T(402,48+k*26,l,'sm'));
   return s+wr(380,198,'"Idleness is the enemy of the soul."',24,'q',24)+T(380,248,'Rule of St Benedict, ch. 48','sm mut')+G(practice(380,270,236,106,'Give recurring work a fixed slot (writing 8–10 am, admin after lunch) so you stop deciding daily.'),'a-fade',.6)}},
 
@@ -242,7 +242,7 @@ const S=[
 
 {part:'learn',title:'Willpower is not a fuel tank',say:`The popular idea that willpower runs out like fuel (<b>ego depletion</b>) failed a 23-lab replication in 2016: the effect was close to <b>zero</b>. Studies that followed people through their day found that those high in self-control report <b>fewer temptations</b> in the first place. They do not resist harder; they arrange life so they need to resist less. Simple <b>if-then plans</b> also had a reliable effect.`,
  draw:()=>{const C3=[['Myth','Willpower runs out like fuel','23 labs, 2,141 people: effect about zero (d = 0.04). Hagger et al., 2016.','#F7E9E6',C.bad],['Finding','Disciplined people meet fewer temptations','They shape their surroundings rather than resist more. Hofmann et al., 2012.',C.tint,C.accent],['Tool','If-then plans work','Medium-to-large effect across 94 tests (d = 0.65). Gollwitzer & Sheeran, 2006.',C.tint2,C.ochre]];
-  return C3.map(([tag,t,b,f,c],k)=>{const x=16+k*206;return G(box(x,16,196,256,f,8)+kicker(x+14,42,tag,'xs','style="fill:'+c+'"')+wr(x+14,76,t,20,'h',28,'style="font-size:21px"')+wr(x+14,184,b,27,'sm',18),'a-fade',.1+k*.2)}).join('')+
+  return C3.map(([tag,t,b,f,c],k)=>{const x=16+k*206;return G(box(x,16,196,256,f,8)+kicker(x+14,42,tag,'xs','style="fill:'+c+'"')+wr(x+14,76,t,15,'h',28,'style="font-size:21px"')+wr(x+14,184,b,27,'sm',18),'a-fade',.1+k*.2)}).join('')+
   G(practice(16,288,608,90,'Spend your effort redesigning your surroundings and writing plans in advance, not gritting your teeth in the moment.',90),'a-fade',.8)}},
 
 /* ===== IF-THEN PLANS ===== */
