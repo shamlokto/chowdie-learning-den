@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P2 Chinese 8: 看图说话</title>
+<title>P1 Chinese 8: 看图说话</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
@@ -103,7 +103,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 <div class="wrap">
   <header>
     <div>
-      <p class="eyebrow">P2 Chinese · 8 · 华文</p>
+      <p class="eyebrow">P1 Chinese · 8 · 华文</p>
       <h1>看图说话</h1>
     </div>
     <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
@@ -126,7 +126,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
     <button id="replay" type="button">Replay</button>
     <button id="next" type="button" class="primary">Next</button>
   </div>
-  <p class="foot">Primary 2 Chinese with Chowdie and Wala: picture talk with 5 questions, 先…然后…最后… and punctuation. Use the arrow keys or the big buttons to move around.</p>
+  <p class="foot">Primary 1 Chinese with Chowdie and Wala: picture talk with 5 questions, 先…然后…最后… and punctuation. Use the arrow keys or the big buttons to move around.</p>
 </div>
 
 <script>
@@ -371,7 +371,7 @@ const shk=b=>{b.classList.remove('no');void b.offsetWidth;b.classList.add('no')}
 /* icon card with a Chinese word */
 const wcard=(x,y,w,h,ic,zh,py,en,d=0,sz=26)=>G(box(x,y,w,h,'#fff',14)+`<g transform="translate(${x+w/2} ${y+h*.36})">${ic}</g>`+zhw(x+w/2,y+h*.72,zh,py,en,sz),'a-pop',d);
 /* sentence-building game */
-function tiles(a,rounds,intro,who='wala'){let r=0,got=[];const NM=who==='wala'?WL:CH;const show=()=>{const R=rounds[r];got=[];
+function tiles(a,rounds,intro,who='wala'){let r=0,got=[];const NM=who==='wala'?WL:(who==='flame'&&typeof FL!=='undefined')?FL:CH;const show=()=>{const R=rounds[r];got=[];
    a.q('.play').innerHTML=T(320,40,`${r+1} of ${rounds.length}`,'sm mid mut')+box(40,70,560,90,'#FFF4D6',16)+`<g class="built"></g>`+T(320,200,R.en,'lab mid acc')+G(wala(560,392,.95,{still:true}),'')+G(otter(80,392,.95,{still:true}),'');
    const upd=()=>{a.q('.built').innerHTML=T(320,128,got.join('')+(got.length===R.w.length?'':' ＿'),'zh mid','style="font-size:30px"')};upd();
    a.ui.innerHTML='';[...R.w].map((w,k)=>[w,k]).sort(()=>Math.random()-.5).forEach(([w])=>a.btn(w,b=>{if(b.disabled)return;if(w===R.w[got.length]){got.push(w);b.disabled=true;b.classList.add('ok');a.hear(w);upd();
@@ -379,7 +379,7 @@ function tiles(a,rounds,intro,who='wala'){let r=0,got=[];const NM=who==='wala'?W
      else{shk(b);a.as(who,NM+R.hint)}},'zhb'));};
   show();a.as(who,intro);}
 /* multiple-choice rounds game. R: [{stage:()=>svg, options:[], answer, ok, hint, hear}] */
-function rounds(a,R,intro,who='otter'){let r=0,busy=false;const NM=who==='wala'?WL:CH;
+function rounds(a,R,intro,who='otter'){let r=0,busy=false;const NM=who==='wala'?WL:(who==='flame'&&typeof FL!=='undefined')?FL:CH;
   const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+Q.stage();
    a.ui.innerHTML='';[...Q.options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');if(Q.hear)a.hear(Q.hear);r++;
      if(r<R.length){a.confetti();a.as(who,NM+'<b>对了！</b> '+(Q.ok||''));a.later(show,1900)}else a.win(NM+'<b>太棒了！</b> '+(Q.ok||''))}else{shk(b);a.as(who,NM+(Q.hint||'Try again!'))}},'zhb'))};
@@ -399,7 +399,7 @@ const deskI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x=
 const chairI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-16 -34 v36 M16 -34 v36" stroke="${C.ink}" stroke-width="4"/><rect x="-18" y="-36" width="36" height="16" rx="3" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><rect x="-20" y="0" width="40" height="8" rx="2" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 8 v18 M16 8 v18" stroke="${C.ink}" stroke-width="4"/></g>`;
 const bottleI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="-34" width="12" height="8" rx="2" fill="${C.ink}"/><rect x="-14" y="-26" width="28" height="52" rx="8" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2.5"/><rect x="-14" y="-4" width="28" height="12" fill="${C.leaf}" opacity=".7"/></g>`;
 const ballI2=(x,y,r=16)=>`<g transform="translate(${x} ${y})"><circle r="${r}" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M${-r} 0 q${r} ${-r*.6} ${2*r} 0" fill="none" stroke="#fff" stroke-width="2.5"/></g>`;
-/* P2 Chinese 8: 看图说话 — 5 questions, describing a picture, 先…然后…最后…, punctuation, reading aloud */
+/* P1 Chinese 8: 看图说话 — 5 questions, describing a picture, 先…然后…最后…, punctuation, reading aloud */
 const kiteI=(x,y,s=1,col=C.berry)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 l22 30 l-22 30 l-22 -30z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><path d="M0 -30 v60 M-22 0 h44" stroke="${C.ink}" stroke-width="1.5"/><path d="M0 30 q8 14 -4 22 q-10 10 4 20" stroke="${C.ink}" stroke-width="2" fill="none"/></g>`;
 const tree8=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-8" y="-40" width="16" height="44" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-66" r="38" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-24" cy="-48" r="22" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="24" cy="-48" r="22" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
 const sun8=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,1,2,3,4,5,6,7].map(k=>`<line x1="${24*Math.cos(k*Math.PI/4)}" y1="${24*Math.sin(k*Math.PI/4)}" x2="${31*Math.cos(k*Math.PI/4)}" y2="${31*Math.sin(k*Math.PI/4)}" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/>`).join('')}</g>`;
@@ -467,12 +467,12 @@ bossIntro('Baddie\'s lazy picture talk!','Mwahaha! Picture talk is EASY. I\'ll s
 boss('Lie #1: lazy answers',{lines:['看图说话? Just say "有风筝。"','and stop! Done! Hehehe!'],claim:'For picture talk, just say "有风筝" and stop!',options:["Answer the 5 questions.", "Just say \"有风筝\".", "Just say the colours you can see."],answer:"Answer the 5 questions.",why:'Use your five fingers: <b>谁、什么时候、在哪里、做什么、心情怎样</b>.',taunt:'Mwahaha! Less talking, more napping!',hint:'Remember the five fingers!',art:kiteI(440,300,1.6)}),
 boss('Lie #2: sequence words',{lines:['先 xiān means LAST!','And 最后 means first!'],claim:'先 means last and 最后 means first!',options:["先 first, 最后 finally", "先 is last, 最后 is first", "先 and 最后 both just mean \"then\"."],answer:"先 first, 最后 finally",why:'<b>先</b> first → <b>然后</b> then → <b>最后</b> finally.',taunt:'Hehehe! Backwards stories are the best!',hint:'Which word goes with the first picture?'}),
 boss('Lie #3: the hardest one',{lines:['End EVERY sentence with ！','"我叫小美！" "你几岁！"'],claim:'End every sentence with an exclamation mark!',options:["你几岁？", "你几岁！", "你几岁。"],answer:"你几岁？",why:'Telling sentence → <b>。</b>. Question → <b>？</b> (你几岁？). Strong feeling → <b>！</b> (哇！).',taunt:'Mwahaha! SHOUT EVERYTHING!',hint:'Is "你几岁" a question?'}),
-finale('P2 Chinese complete! 太棒了！','你们是华文小明星！','Nǐmen shì huáwén xiǎo míngxīng!','You are little Chinese stars!','你们真棒！You finished all eight P2 Chinese decks with Chowdie and me! You can greet people, talk about school, food, weather, festivals, animals, your body and feelings, and do 看图说话. 再见！<i class="py">Zàijiàn!</i>','P2 Chinese series complete'),
+finale('P1 Chinese complete! 太棒了！','你们是华文小明星！','Nǐmen shì huáwén xiǎo míngxīng!','You are little Chinese stars!','你们真棒！You finished all eight P2 Chinese decks with Chowdie and me! You can greet people, talk about school, food, weather, festivals, animals, your body and feelings, and do 看图说话. 再见！<i class="py">Zàijiàn!</i>','P2 Chinese series complete'),
 ];
 
 const DOORKEY='cn08';
 /* Secret door to Baddie Daddy, shown on the final "Baddie beaten" slide */
-const DOORS={'boss-maths':'../maths/daddy-maths.html','boss-eng':'../english/daddy-eng.html','cn08':'../chinese/daddy-cn.html','boss-sci':'../science/daddy-sci.html'};
+const DOORS={'boss-maths':'../maths/daddy-maths.html','boss-eng':'../english/daddy-eng.html','cn08':'../chinese/daddy-cn.html','boss-sci':'../science/daddy-sci.html','boss-p2cn':'../chinese/daddy-p2cn.html','boss-hcl':'../chinese/daddy-hcl.html'};
 (function(){const L=S[S.length-1],d0=L.draw,m0=L.mount;
  L.draw=a=>`<g class="shadow" style="opacity:0;transition:opacity 1.5s"><g style="filter:brightness(0)" opacity=".28">${daddySil(440,400,1.75)}</g>${T(560,120,'?','big mid','style="fill:#4B2A6B"')}</g>`+(d0?d0(a):'');
  L.mount=a=>{if(m0)m0(a);a.later(()=>{const g=a.q('.shadow');if(g)g.style.opacity=1;setWho('baddie');a.say(BD+'Waaah! I\'m telling my <b>DADDY</b>! He\'s much smarter than me… and he doesn\'t always lie!');

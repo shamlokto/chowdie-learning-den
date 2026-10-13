@@ -413,7 +413,8 @@ PARTS.boss='Baddie Daddy';
  .ui .pad output{min-width:140px;padding:6px 16px 2px;border:3px solid var(--ink);border-radius:14px;background:#fff;text-align:center}
  .ui .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}`;document.head.appendChild(st);})();
 /* stage: Daddy on the left, a wrapped speech bubble on the right, optional art below the bubble */
-function wrapLines(t,max){const w=t.split(' '),L=[];let c='';w.forEach(x=>{if((c+' '+x).trim().length>max){L.push(c);c=x}else c=(c+' '+x).trim()});if(c)L.push(c);return L}
+function wrapLines(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduce((n,c)=>n+(CJ.test(c)?1.9:1),0);const toks=t.match(/[⺀-鿿＀-￯　-〿“”]|[^\s⺀-鿿＀-￯　-〿“”]+|\s+/g)||[];const L=[];let c='';
+  toks.forEach(x=>{if(/^\s+$/.test(x)){if(c)c+=' ';return}if(W(c+x)>max&&c.trim()&&!/^[，。！？、：；”）]$/.test(x)){L.push(c.trim());c=x}else c+=x});if(c.trim())L.push(c.trim());return L}
 function daddyStage(text,art='',head='Baddie Daddy says:'){const L=wrapLines(text,34),h=L.length*28+46;
   return G(daddy(118,384,1.45,{point:true}),'a-drop',.05,'data-dd="1"')
    +G(`<path d="M248 18 h364 a16 16 0 0 1 16 16 v${h-32} a16 16 0 0 1 -16 16 h-344 l-28 24 l6 -24 a16 16 0 0 1 -14 -16 v${-(h-32)} a16 16 0 0 1 16 -16z" fill="#F1EAF8" stroke="#4B2A6B" stroke-width="3"/>`

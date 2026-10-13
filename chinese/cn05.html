@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P2 Chinese 5: 天气和节日</title>
+<title>P1 Chinese 5: 天气和节日</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
@@ -103,7 +103,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 <div class="wrap">
   <header>
     <div>
-      <p class="eyebrow">P2 Chinese · 5 · 华文</p>
+      <p class="eyebrow">P1 Chinese · 5 · 华文</p>
       <h1>天气和节日</h1>
     </div>
     <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
@@ -126,7 +126,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
     <button id="replay" type="button">Replay</button>
     <button id="next" type="button" class="primary">Next</button>
   </div>
-  <p class="foot">Primary 2 Chinese with Chowdie and Wala: weather, 因为…所以…, and Singapore festivals. Use the arrow keys or the big buttons to move around.</p>
+  <p class="foot">Primary 1 Chinese with Chowdie and Wala: weather, 因为…所以…, and Singapore festivals. Use the arrow keys or the big buttons to move around.</p>
 </div>
 
 <script>
@@ -399,7 +399,7 @@ const deskI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x=
 const chairI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-16 -34 v36 M16 -34 v36" stroke="${C.ink}" stroke-width="4"/><rect x="-18" y="-36" width="36" height="16" rx="3" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><rect x="-20" y="0" width="40" height="8" rx="2" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 8 v18 M16 8 v18" stroke="${C.ink}" stroke-width="4"/></g>`;
 const bottleI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="-34" width="12" height="8" rx="2" fill="${C.ink}"/><rect x="-14" y="-26" width="28" height="52" rx="8" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2.5"/><rect x="-14" y="-4" width="28" height="12" fill="${C.leaf}" opacity=".7"/></g>`;
 const ballI2=(x,y,r=16)=>`<g transform="translate(${x} ${y})"><circle r="${r}" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M${-r} 0 q${r} ${-r*.6} ${2*r} 0" fill="none" stroke="#fff" stroke-width="2.5"/></g>`;
-/* P2 Chinese 5: 天气和节日 — weather, 热/冷, 因为…所以…, Singapore festivals */
+/* P1 Chinese 5: 天气和节日 — weather, 热/冷, 因为…所以…, Singapore festivals */
 const cloudW=(x,y,s=1,col='#fff')=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 10 q-16 0 -14 -14 q2 -12 16 -10 q4 -18 24 -16 q16 2 18 16 q16 -2 18 12 q0 12 -14 12z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
 const sunW=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="16" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,1,2,3,4,5,6,7].map(k=>`<line x1="${22*Math.cos(k*Math.PI/4)}" y1="${22*Math.sin(k*Math.PI/4)}" x2="${29*Math.cos(k*Math.PI/4)}" y2="${29*Math.sin(k*Math.PI/4)}" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/>`).join('')}</g>`;
 const W={sunny:sunW(0,0,1.1),rain:cloudW(0,-10,1,'#C9D3D8')+[-18,-4,10,24].map(x=>`<line x1="${x}" y1="10" x2="${x-5}" y2="24" stroke="${C.sky}" stroke-width="3" stroke-linecap="round"/>`).join(''),cloudy:cloudW(-6,-4,1,'#C9D3D8')+cloudW(10,8,.8,'#fff'),

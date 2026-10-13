@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P2 Chinese 2: 新年到了 · 过生日</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">P2 Chinese · 2 · 华文</p>
+      <h1>新年到了 · 过生日</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Primary 2 Chinese with Chowdie, Wala and Flamecharge: Chinese New Year, birthdays, dates, …的时候 and 先…再…. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .pyf{font-family:var(--body);font-style:normal} /* Baloo 2 draws macron vowels (ā ē ī ō ū) broken, so pinyin in display text uses the body font */
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+/* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
+  const pool=vs.filter(ok); if(!pool.length) return null;
+  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
+  const base=loc.length?loc:pool;
+  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
+  const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
+ }catch(e){} }
+try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
+  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+   },'lie'))}};
+}
+/**
+ * Hanzi Writer v3.7.3 | https://chanind.github.io/hanzi-writer
+ */
+
+var HanziWriter=function(){"use strict";var t,e,r;const i="undefined"==typeof window?global:window,s=i.performance&&(()=>i.performance.now())||(()=>Date.now()),o=(null===(t=i.requestAnimationFrame)||void 0===t?void 0:t.bind(i))||(t=>setTimeout(()=>t(s()),1e3/60)),n=(null===(e=i.cancelAnimationFrame)||void 0===e?void 0:e.bind(i))||clearTimeout;function a(t){return t[t.length-1]}const h=(t,e)=>t<0?e+t:t;function l(t,e){const r={...t};for(const i in e){const s=t[i],o=e[i];s!==o&&(s&&o&&"object"==typeof s&&"object"==typeof o&&!Array.isArray(o)?r[i]=l(s,o):r[i]=o)}return r}let c=0;function d(){return c++,c}function u(t){return t.reduce((t,e)=>e+t,0)/t.length}function _(t){const e=t.toUpperCase().trim();if(/^#([A-F0-9]{3}){1,2}$/.test(e)){let t=e.substring(1).split("");3===t.length&&(t=[t[0],t[0],t[1],t[1],t[2],t[2]]);const r=""+t.join("");return{r:parseInt(r.slice(0,2),16),g:parseInt(r.slice(2,4),16),b:parseInt(r.slice(4,6),16),a:1}}const r=e.match(/^RGBA?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*(\d*\.?\d+))?\)$/);if(r)return{r:parseInt(r[1],10),g:parseInt(r[2],10),b:parseInt(r[3],10),a:parseFloat(r[4]||1,10)};throw new Error("Invalid color: "+t)}function p(t,e){const r={};for(let i=0;i<e;i++)r[i]=t;return r}function g(t,e){const r={};for(let i=0;i<t;i++)r[i]=e(i);return r}const k=(null===(r=i.navigator)||void 0===r?void 0:r.userAgent)||"",m=k.indexOf("MSIE ")>0||k.indexOf("Trident/")>0||k.indexOf("Edge/")>0,f=()=>{};class v{constructor(t,e,r=f){this._mutationChains=[],this._onStateChange=r,this.state={options:{drawingFadeDuration:e.drawingFadeDuration,drawingWidth:e.drawingWidth,drawingColor:_(e.drawingColor),strokeColor:_(e.strokeColor),outlineColor:_(e.outlineColor),radicalColor:_(e.radicalColor||e.strokeColor),highlightColor:_(e.highlightColor)},character:{main:{opacity:e.showCharacter?1:0,strokes:{}},outline:{opacity:e.showOutline?1:0,strokes:{}},highlight:{opacity:1,strokes:{}}},userStrokes:null};for(let e=0;e<t.strokes.length;e++)this.state.character.main.strokes[e]={opacity:1,displayPortion:1},this.state.character.outline.strokes[e]={opacity:1,displayPortion:1},this.state.character.highlight.strokes[e]={opacity:0,displayPortion:1}}overwriteOnStateChange(t){this._onStateChange=t}updateState(t){const e=l(this.state,t);this._onStateChange(e,this.state),this.state=e}run(t,e={}){const r=t.map(t=>t.scope);return this.cancelMutations(r),new Promise(i=>{const s={_isActive:!0,_index:0,_resolve:i,_mutations:t,_loop:e.loop,_scopes:r};this._mutationChains.push(s),this._run(s)})}_run(t){if(!t._isActive)return;const e=t._mutations;if(t._index>=e.length){if(!t._loop)return t._isActive=!1,this._mutationChains=this._mutationChains.filter(e=>e!==t),void t._resolve({canceled:!1});t._index=0}t._mutations[t._index].run(this).then(()=>{t._isActive&&(t._index++,this._run(t))})}_getActiveMutations(){return this._mutationChains.map(t=>t._mutations[t._index])}pauseAll(){this._getActiveMutations().forEach(t=>t.pause())}resumeAll(){this._getActiveMutations().forEach(t=>t.resume())}cancelMutations(t){for(const e of this._mutationChains)for(const r of e._scopes)for(const i of t)(r.startsWith(i)||i.startsWith(r))&&this._cancelMutationChain(e)}cancelAll(){this.cancelMutations([""])}_cancelMutationChain(t){var e;t._isActive=!1;for(let e=t._index;e<t._mutations.length;e++)t._mutations[e].cancel(this);null===(e=t._resolve)||void 0===e||e.call(t,{canceled:!0}),this._mutationChains=this._mutationChains.filter(e=>e!==t)}}const y=(t,e)=>({x:t.x-e.x,y:t.y-e.y}),C=t=>Math.sqrt(Math.pow(t.x,2)+Math.pow(t.y,2)),S=(t,e)=>C(y(t,e)),w=(t,e=1)=>{const r=10*e;return{x:Math.round(r*t.x)/r,y:Math.round(r*t.y)/r}},P=t=>{let e=t[0];return t.slice(1).reduce((t,r)=>{const i=S(r,e);return e=r,t+i},0)},D=(t,e,r)=>{const i=y(e,t),s=r/C(i);return{x:e.x+s*i.x,y:e.y+s*i.y}},x=t=>{const e=((t,e=30)=>{const r=P(t)/(e-1),i=[t[0]],s=a(t),o=t.slice(1);for(let t=0;t<e-2;t++){let t=a(i),e=r,s=!1;for(;!s;){const r=S(t,o[0]);if(r<e)e-=r,t=o.shift();else{const n=D(t,o[0],e-r);i.push(n),s=!0}}}return i.push(s),i})(t),r={x:u(e.map(t=>t.x)),y:u(e.map(t=>t.y))},i=e.map(t=>y(t,r)),s=Math.sqrt(u([Math.pow(i[0].x,2)+Math.pow(i[0].y,2),Math.pow(a(i).x,2)+Math.pow(a(i).y,2)]));return((t,e=.05)=>{const r=t.slice(0,1);for(const i of t.slice(1)){const t=r[r.length-1],s=S(i,t);if(s>e){const o=Math.ceil(s/e),n=s/o;for(let e=0;e<o;e++)r.push(D(i,t,-1*n*(e+1)))}else r.push(i)}return r})(i.map(t=>({x:t.x/s,y:t.y/s})))};function M(t,e=!1){const r=w(t[0]),i=t.slice(1);let s=`M ${r.x} ${r.y}`;return i.forEach(t=>{const e=w(t);s+=` L ${e.x} ${e.y}`}),e&&(s+="Z"),s}const R=(t,e)=>{const r=(t=>{if(t.length<3)return t;const e=[t[0],t[1]];return t.slice(2).forEach(t=>{const r=e.length,i=y(t,e[r-1]),s=y(e[r-1],e[r-2]);i.y*s.x-i.x*s.y==0&&e.pop(),e.push(t)}),e})(t);if(r.length<2)return r;const i=r[1],s=r[0],o=D(i,s,e),n=r.slice(1);return n.unshift(o),n};class T{constructor(t,e,r,i=!1){this.path=t,this.points=e,this.strokeNum=r,this.isInRadical=i}getStartingPoint(){return this.points[0]}getEndingPoint(){return this.points[this.points.length-1]}getLength(){return P(this.points)}getVectors(){let t=this.points[0];return this.points.slice(1).map(e=>{const r=y(e,t);return t=e,r})}getDistance(t){const e=this.points.map(e=>S(e,t));return Math.min(...e)}getAverageDistance(t){return t.reduce((t,e)=>t+this.getDistance(e),0)/t.length}}class A{constructor(t,e){this.symbol=t,this.strokes=e}}function O({radStrokes:t,strokes:e,medians:r}){return e.map((e,i)=>{const s=r[i].map(t=>{const[e,r]=t;return{x:e,y:r}});return new T(e,s,i,(o=i,(null!==(n=null==t?void 0:t.indexOf(o))&&void 0!==n?n:-1)>=0));var o,n})}const[b,$]=[{x:0,y:-124},{x:1024,y:900}],z=$.x-b.x,L=$.y-b.y;class E{constructor(t){const{padding:e,width:r,height:i}=t;this.padding=e,this.width=r,this.height=i;const s=r-2*e,o=i-2*e,n=s/z,a=o/L;this.scale=Math.min(n,a);const h=e+(s-this.scale*z)/2,l=e+(o-this.scale*L)/2;this.xOffset=-1*b.x*this.scale+h,this.yOffset=-1*b.y*this.scale+l}convertExternalPoint(t){return{x:(t.x-this.xOffset)/this.scale,y:(this.height-this.yOffset-t.y)/this.scale}}}const W=(t,e)=>{const r=(t=>{const e=[];let r=t[0];return t.slice(1).forEach(t=>{e.push(y(t,r)),r=t}),e})(t),i=e.getVectors();return u(r.map(t=>{const e=i.map(e=>{return i=t,((r=e).x*i.x+r.y*i.y)/C(r)/C(i);var r,i});return Math.max(...e)}))>0},H=t=>{if(t.length<2)return t;const[e,...r]=t,i=[e];for(const t of r)s=t,o=i[i.length-1],(s.x!==o.x||s.y!==o.y)&&i.push(t);var s,o;return i},F=[Math.PI/16,Math.PI/32,0,-1*Math.PI/32,-1*Math.PI/16],I=(t,e,r)=>{const i=x(t),s=x(e);let o=1/0;return F.forEach(t=>{const e=((t,e)=>{const r=t.length>=e.length?t:e,i=t.length>=e.length?e:t,s=(t,e,s,o)=>{if(0===t&&0===e)return S(r[0],i[0]);if(t>0&&0===e)return Math.max(s[0],S(r[t],i[0]));const n=o[o.length-1];return 0===t&&e>0?Math.max(n,S(r[0],i[e])):Math.max(Math.min(s[e],s[e-1],n),S(r[t],i[e]))};let o=[];for(let t=0;t<r.length;t++){const e=[];for(let r=0;r<i.length;r++)e.push(s(t,r,o,e));o=e}return o[i.length-1]})(i,((t,e)=>t.map(t=>({x:Math.cos(e)*t.x-Math.sin(e)*t.y,y:Math.sin(e)*t.x+Math.cos(e)*t.y})))(s,t));e<o&&(o=e)}),o<=.4*r},B=(t,e,r)=>{const{leniency:i=1,isOutlineVisible:s=!1,checkBackwards:o=!0,averageDistanceThreshold:n=350}=r,a=e.getAverageDistance(t),h=a<=n*(s||e.strokeNum>0?.5:1)*i;if(!h)return{isMatch:!1,avgDist:a,meta:{isStrokeBackwards:!1}};const l=((t,e,r)=>{const i=S(e.getStartingPoint(),t[0]),s=S(e.getEndingPoint(),t[t.length-1]);return i<=250*r&&s<=250*r})(t,e,i),c=W(t,e),d=I(t,e.points,i),u=((t,e,r)=>r*(P(t)+25)/(e.getLength()+25)>=.35)(t,e,i),_=h&&l&&c&&d&&u;if(o&&!_){if(B([...t].reverse(),e,{...r,checkBackwards:!1}).isMatch)return{isMatch:_,avgDist:a,meta:{isStrokeBackwards:!0}}}return{isMatch:_,avgDist:a,meta:{isStrokeBackwards:!1}}};class q{constructor(t,e,r){this.id=t,this.points=[e],this.externalPoints=[r]}appendPoint(t,e){this.points.push(t),this.externalPoints.push(e)}}class N{constructor(t,e,r={}){this._tick=t=>{if(null!==this._startPauseTime)return;const e=Math.min(1,(t-this._startTime-this._pausedDuration)/this._duration);if(1===e)this._renderState.updateState(this._values),this._frameHandle=void 0,this.cancel(this._renderState);else{const t=V(e),r=j(this._startState,this._values,t);this._renderState.updateState(r),this._frameHandle=o(this._tick)}},this.scope=t,this._valuesOrCallable=e,this._duration=r.duration||0,this._force=r.force,this._pausedDuration=0,this._startPauseTime=null}run(t){return this._values||this._inflateValues(t),0===this._duration&&t.updateState(this._values),0===this._duration||U(t.state,this._values)?Promise.resolve():(this._renderState=t,this._startState=t.state,this._startTime=performance.now(),this._frameHandle=o(this._tick),new Promise(t=>{this._resolve=t}))}_inflateValues(t){let e=this._valuesOrCallable;"function"==typeof this._valuesOrCallable&&(e=this._valuesOrCallable(t.state)),this._values=function(t,e){const r=t.split("."),i={};let s=i;for(let t=0;t<r.length;t++){const i=t===r.length-1?e:{};s[r[t]]=i,s=i}return i}(this.scope,e)}pause(){null===this._startPauseTime&&(this._frameHandle&&n(this._frameHandle),this._startPauseTime=performance.now())}resume(){null!==this._startPauseTime&&(this._frameHandle=o(this._tick),this._pausedDuration+=performance.now()-this._startPauseTime,this._startPauseTime=null)}cancel(t){var e;null===(e=this._resolve)||void 0===e||e.call(this),this._resolve=void 0,n(this._frameHandle||-1),this._frameHandle=void 0,this._force&&(this._values||this._inflateValues(t),t.updateState(this._values))}}function j(t,e,r){const i={};for(const s in e){const o=e[s],n=null==t?void 0:t[s];i[s]="number"==typeof n&&"number"==typeof o&&o>=0?r*(o-n)+n:j(n,o,r)}return i}function U(t,e){for(const r in e){const i=e[r],s=null==t?void 0:t[r];if(i>=0){if(i!==s)return!1}else if(!U(s,i))return!1}return!0}N.Delay=class{constructor(t){this._duration=t,this._startTime=null,this._paused=!1,this.scope="delay."+t}run(){return this._startTime=s(),this._runningPromise=new Promise(t=>{this._resolve=t,this._timeout=setTimeout(()=>this.cancel(),this._duration)}),this._runningPromise}pause(){if(this._paused)return;const t=performance.now()-(this._startTime||0);this._duration=Math.max(0,this._duration-t),clearTimeout(this._timeout),this._paused=!0}resume(){this._paused&&(this._startTime=performance.now(),this._timeout=setTimeout(()=>this.cancel(),this._duration),this._paused=!1)}cancel(){clearTimeout(this._timeout),this._resolve&&this._resolve(),this._resolve=void 0}};const V=t=>-Math.cos(t*Math.PI)/2+.5,Q=(t,e,r)=>[new N(`character.${t}.strokes`,p({opacity:1,displayPortion:1},e.strokes.length),{duration:r,force:!0})],G=(t,e,r)=>[new N("character."+t,{opacity:1,strokes:p({opacity:1,displayPortion:1},e.strokes.length)},{duration:r,force:!0})],X=(t,e,r)=>[new N(`character.${t}.opacity`,0,{duration:r,force:!0}),...Q(t,e,0)],K=(t,e,r)=>[new N("options."+t,e,{duration:r})],Y=(t,e,r)=>{const i=t.strokeNum,s=(t.getLength()+600)/(3*r);return[new N("options.highlightColor",e),new N("character.highlight",{opacity:1,strokes:{[i]:{displayPortion:0,opacity:0}}}),new N("character.highlight.strokes."+i,{displayPortion:1,opacity:1},{duration:s}),new N(`character.highlight.strokes.${i}.opacity`,0,{duration:s,force:!0})]},J=(t,e,r)=>{const i=e.strokeNum,s=(e.getLength()+600)/(3*r);return[new N("character."+t,{opacity:1,strokes:{[i]:{displayPortion:0,opacity:1}}}),new N(`character.${t}.strokes.${i}.displayPortion`,1,{duration:s})]},Z=(t,e,r,i,s)=>{let o=X(t,e,r);return o=o.concat(Q(t,e,0)),o.push(new N("character."+t,{opacity:1,strokes:p({opacity:0},e.strokes.length)},{force:!0})),e.strokes.forEach((e,r)=>{r>0&&o.push(new N.Delay(s)),o=o.concat(J(t,e,i))}),o},tt=t=>(null==t?void 0:t.map(t=>new N("userStrokes."+t,null,{force:!0})))||[];class et{constructor(t,e,r){this._currentStrokeIndex=0,this._mistakesOnStroke=0,this._totalMistakes=0,this._character=t,this._renderState=e,this._isActive=!1,this._positioner=r}startQuiz(t){this._userStrokesIds&&this._renderState.run(tt(this._userStrokesIds)),this._userStrokesIds=[],this._isActive=!0,this._options=t;const e=h(t.quizStartStrokeNum,this._character.strokes.length);return this._currentStrokeIndex=Math.min(e,this._character.strokes.length-1),this._mistakesOnStroke=0,this._totalMistakes=0,this._renderState.run((r=this._character,i=t.strokeFadeDuration,s=this._currentStrokeIndex,[...X("main",r,i),new N("character.highlight",{opacity:1,strokes:p({opacity:0},r.strokes.length)},{force:!0}),new N("character.main",{opacity:1,strokes:g(r.strokes.length,t=>({opacity:t<s?1:0}))},{force:!0})]));var r,i,s}startUserStroke(t){var e;if(!this._isActive)return null;if(this._userStroke)return this.endUserStroke();const r=this._positioner.convertExternalPoint(t),i=d();return this._userStroke=new q(i,r,t),null===(e=this._userStrokesIds)||void 0===e||e.push(i),this._renderState.run(((t,e)=>[new N("quiz.activeUserStrokeId",t,{force:!0}),new N("userStrokes."+t,{points:[e],opacity:1},{force:!0})])(i,r))}continueUserStroke(t){if(!this._userStroke)return Promise.resolve();const e=this._positioner.convertExternalPoint(t);this._userStroke.appendPoint(e,t);const r=this._userStroke.points.slice(0);return this._renderState.run((i=this._userStroke.id,[new N(`userStrokes.${i}.points`,r,{force:!0})]));var i}setPositioner(t){this._positioner=t}endUserStroke(){var t,e,r;if(!this._userStroke)return;if(this._renderState.run((e=this._userStroke.id,r=null!==(t=this._options.drawingFadeDuration)&&void 0!==t?t:300,[new N(`userStrokes.${e}.opacity`,0,{duration:r})])),1===this._userStroke.points.length)return void(this._userStroke=void 0);const{acceptBackwardsStrokes:i,markStrokeCorrectAfterMisses:s}=this._options,o=this._getCurrentStroke(),{isMatch:n,meta:a}=function(t,e,r,i={}){const s=e.strokes,o=H(t.points);if(o.length<2)return{isMatch:!1,meta:{isStrokeBackwards:!1}};const{isMatch:n,meta:a,avgDist:h}=B(o,s[r],i);if(!n)return{isMatch:n,meta:a};const l=s.slice(r+1);let c=h;for(let t=0;t<l.length;t++){const{isMatch:e,avgDist:r}=B(o,l[t],{...i,checkBackwards:!1});e&&r<c&&(c=r)}if(c<h){const t=.6*(c+h)/(2*h),{isMatch:e,meta:n}=B(o,s[r],{...i,leniency:(i.leniency||1)*t});return{isMatch:e,meta:n}}return{isMatch:n,meta:a}}(this._userStroke,this._character,this._currentStrokeIndex,{isOutlineVisible:this._renderState.state.character.outline.opacity>0,leniency:this._options.leniency,averageDistanceThreshold:this._options.averageDistanceThreshold}),h=s&&this._mistakesOnStroke+1>=s;if(n||h||a.isStrokeBackwards&&i)this._handleSuccess(a);else{this._handleFailure(a);const{showHintAfterMisses:t,highlightColor:e,strokeHighlightSpeed:r}=this._options;!1!==t&&this._mistakesOnStroke>=t&&this._renderState.run(Y(o,_(e),r))}this._userStroke=void 0}cancel(){this._isActive=!1,this._userStrokesIds&&this._renderState.run(tt(this._userStrokesIds))}_getStrokeData({isCorrect:t,meta:e}){return{character:this._character.symbol,strokeNum:this._currentStrokeIndex,mistakesOnStroke:this._mistakesOnStroke,totalMistakes:this._totalMistakes,strokesRemaining:this._character.strokes.length-this._currentStrokeIndex-(t?1:0),drawnPath:(r=this._userStroke,{pathString:M(r.externalPoints),points:r.points.map(t=>w(t))}),isBackwards:e.isStrokeBackwards};var r}nextStroke(){if(!this._options)return;const{strokes:t,symbol:e}=this._character,{onComplete:r,highlightOnComplete:i,strokeFadeDuration:s,highlightCompleteColor:o,highlightColor:n,strokeHighlightDuration:a}=this._options;let h=(l="main",c=this._currentStrokeIndex,[new N(`character.${l}.strokes.${c}`,{displayPortion:1,opacity:1},{duration:s,force:!0})]);var l,c;this._mistakesOnStroke=0,this._currentStrokeIndex+=1;this._currentStrokeIndex===t.length&&(this._isActive=!1,null==r||r({character:e,totalMistakes:this._totalMistakes}),i&&(h=h.concat(((t,e,r)=>[new N("options.highlightColor",e),...X("highlight",t),...G("highlight",t,r/2),...X("highlight",t,r/2)])(this._character,_(o||n),2*(a||0))))),this._renderState.run(h)}_handleSuccess(t){if(!this._options)return;const{onCorrectStroke:e}=this._options;null==e||e({...this._getStrokeData({isCorrect:!0,meta:t})}),this.nextStroke()}_handleFailure(t){var e,r;this._mistakesOnStroke+=1,this._totalMistakes+=1,null===(e=(r=this._options).onMistake)||void 0===e||e.call(r,this._getStrokeData({isCorrect:!1,meta:t}))}_getCurrentStroke(){return this._character.strokes[this._currentStrokeIndex]}}function rt(t){return document.createElementNS("http://www.w3.org/2000/svg",t)}function it(t,e,r){t.setAttributeNS(null,e,r)}function st(t,e){Object.keys(e).forEach(r=>it(t,r,e[r]))}function ot(t){var e;null==t||null===(e=t.parentNode)||void 0===e||e.removeChild(t)}class nt{constructor(t){this.stroke=t,this._pathLength=t.getLength()+nt.STROKE_WIDTH/2}_getStrokeDashoffset(t){return.999*this._pathLength*(1-t)}_getColor({strokeColor:t,radicalColor:e}){return e&&this.stroke.isInRadical?e:t}}nt.STROKE_WIDTH=200;class at extends nt{constructor(t){super(t),this._oldProps=void 0}mount(t){this._animationPath=rt("path"),this._clip=rt("clipPath"),this._strokePath=rt("path");const e="mask-"+d();it(this._clip,"id",e),it(this._strokePath,"d",this.stroke.path),this._animationPath.style.opacity="0",it(this._animationPath,"clip-path",function(t){let e="";return window.location&&window.location.href&&(e=window.location.href.replace(/#[^#]*$/,"").replace(/"/gi,"%22")),`url("${e}#${t}")`}(e));const r=R(this.stroke.points,100);return it(this._animationPath,"d",M(r)),st(this._animationPath,{stroke:"#FFFFFF","stroke-width":200..toString(),fill:"none","stroke-linecap":"round","stroke-linejoin":"miter","stroke-dasharray":`${this._pathLength},${this._pathLength}`}),this._clip.appendChild(this._strokePath),t.defs.appendChild(this._clip),t.svg.appendChild(this._animationPath),this}render(t){var e,r;if(t===this._oldProps||!this._animationPath)return;t.displayPortion!==(null===(e=this._oldProps)||void 0===e?void 0:e.displayPortion)&&(this._animationPath.style.strokeDashoffset=this._getStrokeDashoffset(t.displayPortion).toString());const i=this._getColor(t);if(!this._oldProps||i!==this._getColor(this._oldProps)){const{r:t,g:e,b:r,a:s}=i;st(this._animationPath,{stroke:`rgba(${t},${e},${r},${s})`})}t.opacity!==(null===(r=this._oldProps)||void 0===r?void 0:r.opacity)&&(this._animationPath.style.opacity=t.opacity.toString()),this._oldProps=t}}class ht{constructor(t){this._oldProps=void 0,this._strokeRenderers=t.strokes.map(t=>new at(t))}mount(t){const e=t.createSubRenderTarget();this._group=e.svg,this._strokeRenderers.forEach(t=>{t.mount(e)})}render(t){var e,r;if(t===this._oldProps||!this._group)return;const{opacity:i,strokes:s,strokeColor:o,radicalColor:n=null}=t;var a;i!==(null===(e=this._oldProps)||void 0===e?void 0:e.opacity)&&(this._group.style.opacity=i.toString(),m||(0===i?this._group.style.display="none":0===(null===(a=this._oldProps)||void 0===a?void 0:a.opacity)&&this._group.style.removeProperty("display")));const h=!this._oldProps||o!==this._oldProps.strokeColor||n!==this._oldProps.radicalColor;if(h||s!==(null===(r=this._oldProps)||void 0===r?void 0:r.strokes))for(let t=0;t<this._strokeRenderers.length;t++){var l;!h&&null!==(l=this._oldProps)&&void 0!==l&&l.strokes&&s[t]===this._oldProps.strokes[t]||this._strokeRenderers[t].render({strokeColor:o,radicalColor:n,opacity:s[t].opacity,displayPortion:s[t].displayPortion})}this._oldProps=t}}class lt{constructor(){this._oldProps=void 0}mount(t){this._path=rt("path"),t.svg.appendChild(this._path)}render(t){var e,r,i,s;if(this._path&&t!==this._oldProps){if(t.strokeColor!==(null===(e=this._oldProps)||void 0===e?void 0:e.strokeColor)||t.strokeWidth!==(null===(r=this._oldProps)||void 0===r?void 0:r.strokeWidth)){const{r:e,g:r,b:i,a:s}=t.strokeColor;st(this._path,{fill:"none",stroke:`rgba(${e},${r},${i},${s})`,"stroke-width":t.strokeWidth.toString(),"stroke-linecap":"round","stroke-linejoin":"round"})}t.opacity!==(null===(i=this._oldProps)||void 0===i?void 0:i.opacity)&&it(this._path,"opacity",t.opacity.toString()),t.points!==(null===(s=this._oldProps)||void 0===s?void 0:s.points)&&it(this._path,"d",M(t.points)),this._oldProps=t}}destroy(){ot(this._path)}}class ct{constructor(t){this.node=t}addPointerStartListener(t){this.node.addEventListener("mousedown",e=>{t(this._eventify(e,this._getMousePoint))}),this.node.addEventListener("touchstart",e=>{t(this._eventify(e,this._getTouchPoint))})}addPointerMoveListener(t){this.node.addEventListener("mousemove",e=>{t(this._eventify(e,this._getMousePoint))}),this.node.addEventListener("touchmove",e=>{t(this._eventify(e,this._getTouchPoint))})}addPointerEndListener(t){document.addEventListener("mouseup",t),document.addEventListener("touchend",t)}getBoundingClientRect(){return this.node.getBoundingClientRect()}updateDimensions(t,e){this.node.setAttribute("width",""+t),this.node.setAttribute("height",""+e)}_eventify(t,e){return{getPoint:()=>e.call(this,t),preventDefault:()=>t.preventDefault()}}_getMousePoint(t){const{left:e,top:r}=this.getBoundingClientRect();return{x:t.clientX-e,y:t.clientY-r}}_getTouchPoint(t){const{left:e,top:r}=this.getBoundingClientRect();return{x:t.touches[0].clientX-e,y:t.touches[0].clientY-r}}}class dt extends ct{constructor(t,e){super(t),this.svg=t,this.defs=e,"createSVGPoint"in t&&(this._pt=t.createSVGPoint())}static init(t,e="100%",r="100%"){const i="string"==typeof t?document.getElementById(t):t;if(!i)throw new Error("HanziWriter target element not found: "+t);const s=i.nodeName.toUpperCase(),o=(()=>{if("SVG"===s||"G"===s)return i;{const t=rt("svg");return i.appendChild(t),t}})();st(o,{width:e,height:r});const n=rt("defs");return o.appendChild(n),new dt(o,n)}createSubRenderTarget(){const t=rt("g");return this.svg.appendChild(t),new dt(t,this.defs)}_getMousePoint(t){if(this._pt&&(this._pt.x=t.clientX,this._pt.y=t.clientY,"getScreenCTM"in this.node)){var e;const t=this._pt.matrixTransform(null===(e=this.node.getScreenCTM())||void 0===e?void 0:e.inverse());return{x:t.x,y:t.y}}return super._getMousePoint.call(this,t)}_getTouchPoint(t){if(this._pt&&(this._pt.x=t.touches[0].clientX,this._pt.y=t.touches[0].clientY,"getScreenCTM"in this.node)){var e;const t=this._pt.matrixTransform(null===(e=this.node.getScreenCTM())||void 0===e?void 0:e.inverse());return{x:t.x,y:t.y}}return super._getTouchPoint(t)}}var ut={HanziWriterRenderer:class{constructor(t,e){this._character=t,this._positioner=e,this._mainCharRenderer=new ht(t),this._outlineCharRenderer=new ht(t),this._highlightCharRenderer=new ht(t),this._userStrokeRenderers={}}mount(t){const e=t.createSubRenderTarget(),r=e.svg,{xOffset:i,yOffset:s,height:o,scale:n}=this._positioner;it(r,"transform",`translate(${i}, ${o-s}) scale(${n}, ${-1*n})`),this._outlineCharRenderer.mount(e),this._mainCharRenderer.mount(e),this._highlightCharRenderer.mount(e),this._positionedTarget=e}render(t){const{main:e,outline:r,highlight:i}=t.character,{outlineColor:s,radicalColor:o,highlightColor:n,strokeColor:a,drawingWidth:h,drawingColor:l}=t.options;this._outlineCharRenderer.render({opacity:r.opacity,strokes:r.strokes,strokeColor:s}),this._mainCharRenderer.render({opacity:e.opacity,strokes:e.strokes,strokeColor:a,radicalColor:o}),this._highlightCharRenderer.render({opacity:i.opacity,strokes:i.strokes,strokeColor:n});const c=t.userStrokes||{};for(const t in this._userStrokeRenderers){var d;if(!c[t])null===(d=this._userStrokeRenderers[t])||void 0===d||d.destroy(),delete this._userStrokeRenderers[t]}for(const t in c){const e=c[t];if(!e)continue;const r={strokeWidth:h,strokeColor:l,...e};(()=>{if(this._userStrokeRenderers[t])return this._userStrokeRenderers[t];const e=new lt;return e.mount(this._positionedTarget),this._userStrokeRenderers[t]=e,e})().render(r)}}destroy(){ot(this._positionedTarget.svg),this._positionedTarget.defs.innerHTML=""}},createRenderTarget:dt.init};const _t=(t,e)=>{t.beginPath();const r=e[0],i=e.slice(1);t.moveTo(r.x,r.y);for(const e of i)t.lineTo(e.x,e.y);t.stroke()};class pt extends nt{constructor(t,e=!0){super(t),e&&Path2D?this._path2D=new Path2D(this.stroke.path):this._pathCmd=(t=>{const e=t.split(/(^|\s+)(?=[A-Z])/).filter(t=>" "!==t),r=[t=>t.beginPath()];for(const t of e){const[e,...i]=t.split(/\s+/),s=i.map(t=>parseFloat(t));"M"===e?r.push(t=>t.moveTo(...s)):"L"===e?r.push(t=>t.lineTo(...s)):"C"===e?r.push(t=>t.bezierCurveTo(...s)):"Q"===e&&r.push(t=>t.quadraticCurveTo(...s))}return t=>r.forEach(e=>e(t))})(this.stroke.path),this._extendedMaskPoints=R(this.stroke.points,nt.STROKE_WIDTH/2)}render(t,e){if(e.opacity<.05)return;var r;(t.save(),this._path2D)?t.clip(this._path2D):(null===(r=this._pathCmd)||void 0===r||r.call(this,t),t.globalAlpha=0,t.stroke(),t.clip());const{r:i,g:s,b:o,a:n}=this._getColor(e),a=1===n?`rgb(${i},${s},${o})`:`rgb(${i},${s},${o},${n})`,h=this._getStrokeDashoffset(e.displayPortion);t.globalAlpha=e.opacity,t.strokeStyle=a,t.fillStyle=a,t.lineWidth=nt.STROKE_WIDTH,t.lineCap="round",t.lineJoin="round",t.setLineDash([this._pathLength,this._pathLength],h),t.lineDashOffset=h,_t(t,this._extendedMaskPoints),t.restore()}}class gt{constructor(t){this._strokeRenderers=t.strokes.map(t=>new pt(t))}render(t,e){if(e.opacity<.05)return;const{opacity:r,strokeColor:i,radicalColor:s,strokes:o}=e;for(let e=0;e<this._strokeRenderers.length;e++)this._strokeRenderers[e].render(t,{strokeColor:i,radicalColor:s,opacity:o[e].opacity*r,displayPortion:o[e].displayPortion||0})}}function kt(t,e){if(e.opacity<.05)return;const{opacity:r,strokeWidth:i,strokeColor:s,points:o}=e,{r:n,g:a,b:h,a:l}=s;t.save(),t.globalAlpha=r,t.lineWidth=i,t.strokeStyle=`rgba(${n},${a},${h},${l})`,t.lineCap="round",t.lineJoin="round",_t(t,o),t.restore()}class mt extends ct{constructor(t){super(t)}static init(t,e="100%",r="100%"){const i="string"==typeof t?document.getElementById(t):t;if(!i)throw new Error("HanziWriter target element not found: "+t);const s=i.nodeName.toUpperCase(),o=(()=>{if("CANVAS"===s)return i;const t=document.createElement("canvas");return i.appendChild(t),t})();return o.setAttribute("width",e),o.setAttribute("height",r),new mt(o)}getContext(){return this.node.getContext("2d")}}var ft={HanziWriterRenderer:class{constructor(t,e){this.destroy=f,this._character=t,this._positioner=e,this._mainCharRenderer=new gt(t),this._outlineCharRenderer=new gt(t),this._highlightCharRenderer=new gt(t)}mount(t){this._target=t}_animationFrame(t){const{width:e,height:r,scale:i,xOffset:s,yOffset:o}=this._positioner,n=this._target.getContext();n.clearRect(0,0,e,r),n.save(),n.translate(s,r-o),n.transform(1,0,0,-1,0,0),n.scale(i,i),t(n),n.restore(),n.draw&&n.draw()}render(t){const{outline:e,main:r,highlight:i}=t.character,{outlineColor:s,strokeColor:o,radicalColor:n,highlightColor:a,drawingColor:h,drawingWidth:l}=t.options;this._animationFrame(c=>{this._outlineCharRenderer.render(c,{opacity:e.opacity,strokes:e.strokes,strokeColor:s}),this._mainCharRenderer.render(c,{opacity:r.opacity,strokes:r.strokes,strokeColor:o,radicalColor:n}),this._highlightCharRenderer.render(c,{opacity:i.opacity,strokes:i.strokes,strokeColor:a});const d=t.userStrokes||{};for(const t in d){const e=d[t];if(e){kt(c,{strokeWidth:l,strokeColor:h,...e})}}})}},createRenderTarget:mt.init};const vt={charDataLoader:(t,e,r)=>{const i=new XMLHttpRequest;i.overrideMimeType&&i.overrideMimeType("application/json"),i.open("GET",(t=>`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/${t}.json`)(t),!0),i.onerror=t=>{r(i,t)},i.onreadystatechange=()=>{4===i.readyState&&(200===i.status?e(JSON.parse(i.responseText)):0!==i.status&&r&&r(i))},i.send(null)},onLoadCharDataError:null,onLoadCharDataSuccess:null,showOutline:!0,showCharacter:!0,renderer:"svg",width:0,height:0,padding:20,strokeAnimationSpeed:1,strokeFadeDuration:400,strokeHighlightDuration:200,strokeHighlightSpeed:2,delayBetweenStrokes:1e3,delayBetweenLoops:2e3,strokeColor:"#555",radicalColor:null,highlightColor:"#AAF",outlineColor:"#DDD",drawingColor:"#333",leniency:1,showHintAfterMisses:3,highlightOnComplete:!0,highlightCompleteColor:null,markStrokeCorrectAfterMisses:!1,acceptBackwardsStrokes:!1,quizStartStrokeNum:0,averageDistanceThreshold:350,drawingFadeDuration:300,drawingWidth:4,strokeWidth:2,outlineWidth:2,rendererOverride:{}};class yt{constructor(t){this._loadCounter=0,this._isLoading=!1,this.loadingFailed=!1,this._options=t}_debouncedLoad(t,e){const r=t=>{var r;e===this._loadCounter&&(null===(r=this._resolve)||void 0===r||r.call(this,t))},i=t=>{var r;e===this._loadCounter&&(null===(r=this._reject)||void 0===r||r.call(this,t))},s=this._options.charDataLoader(t,r,i);s&&("then"in s?s.then(r).catch(i):r(s))}_setupLoadingPromise(){return new Promise((t,e)=>{this._resolve=t,this._reject=e}).then(t=>{var e,r;return this._isLoading=!1,null===(e=(r=this._options).onLoadCharDataSuccess)||void 0===e||e.call(r,t),t}).catch(t=>{if(this._isLoading=!1,this.loadingFailed=!0,this._options.onLoadCharDataError)return void this._options.onLoadCharDataError(t);if(t instanceof Error)throw t;const e=new Error("Failed to load char data for "+this._loadingChar);throw e.reason=t,e})}loadCharData(t){this._loadingChar=t;const e=this._setupLoadingPromise();return this.loadingFailed=!1,this._isLoading=!0,this._loadCounter++,this._debouncedLoad(t,this._loadCounter),e}}class Ct{constructor(t,e={}){const{HanziWriterRenderer:r,createRenderTarget:i}="canvas"===e.renderer?ft:ut,s=e.rendererOverride||{};this._renderer={HanziWriterRenderer:s.HanziWriterRenderer||r,createRenderTarget:s.createRenderTarget||i},this.target=this._renderer.createRenderTarget(t,e.width,e.height),this._options=this._assignOptions(e),this._loadingManager=new yt(this._options),this._setupListeners()}static create(t,e,r){const i=new Ct(t,r);return i.setCharacter(e),i}static loadCharacterData(t,e={}){const r=(()=>{const{_loadingManager:r,_loadingOptions:i}=Ct;return(null==r?void 0:r._loadingChar)===t&&i===e?r:new yt({...vt,...e})})();return Ct._loadingManager=r,Ct._loadingOptions=e,r.loadCharData(t)}static getScalingTransform(t,e,r=0){const i=new E({width:t,height:e,padding:r});return{x:i.xOffset,y:i.yOffset,scale:i.scale,transform:(s=`\n        translate(${i.xOffset}, ${i.height-i.yOffset})\n        scale(${i.scale}, ${-1*i.scale})\n      `,s.replace(/^\s+/,"").replace(/\s+$/,"")).replace(/\s+/g," ")};var s}showCharacter(t={}){return this._options.showCharacter=!0,this._withData(()=>{var e;return null===(e=this._renderState)||void 0===e?void 0:e.run(G("main",this._character,"number"==typeof t.duration?t.duration:this._options.strokeFadeDuration)).then(e=>{var r;return null===(r=t.onComplete)||void 0===r||r.call(t,e),e})})}hideCharacter(t={}){return this._options.showCharacter=!1,this._withData(()=>{var e;return null===(e=this._renderState)||void 0===e?void 0:e.run(X("main",this._character,"number"==typeof t.duration?t.duration:this._options.strokeFadeDuration)).then(e=>{var r;return null===(r=t.onComplete)||void 0===r||r.call(t,e),e})})}animateCharacter(t={}){return this.cancelQuiz(),this._withData(()=>{var e;return null===(e=this._renderState)||void 0===e?void 0:e.run(Z("main",this._character,this._options.strokeFadeDuration,this._options.strokeAnimationSpeed,this._options.delayBetweenStrokes)).then(e=>{var r;return null===(r=t.onComplete)||void 0===r||r.call(t,e),e})})}animateStroke(t,e={}){return this.cancelQuiz(),this._withData(()=>{var r;return null===(r=this._renderState)||void 0===r?void 0:r.run(((t,e,r,i)=>{const s=e.strokes[r];return[new N("character."+t,r=>{const i=r.character[t],s={opacity:1,strokes:{}};for(let t=0;t<e.strokes.length;t++)s.strokes[t]={opacity:i.opacity*i.strokes[t].opacity};return s}),...J(t,s,i)]})("main",this._character,h(t,this._character.strokes.length),this._options.strokeAnimationSpeed)).then(t=>{var r;return null===(r=e.onComplete)||void 0===r||r.call(e,t),t})})}highlightStroke(t,e={}){return this._withData(()=>{var r,i;if(this._character&&this._renderState)return this._renderState.run(Y((r=this._character.strokes,i=t,r[h(i,r.length)]),_(this._options.highlightColor),this._options.strokeHighlightSpeed)).then(t=>{var r;return null===(r=e.onComplete)||void 0===r||r.call(e,t),t})})}async loopCharacterAnimation(){return this.cancelQuiz(),this._withData(()=>this._renderState.run(((t,e,r,i,s,o)=>{const n=Z(t,e,r,i,s);return n.push(new N.Delay(o)),n})("main",this._character,this._options.strokeFadeDuration,this._options.strokeAnimationSpeed,this._options.delayBetweenStrokes,this._options.delayBetweenLoops),{loop:!0}))}pauseAnimation(){return this._withData(()=>{var t;return null===(t=this._renderState)||void 0===t?void 0:t.pauseAll()})}resumeAnimation(){return this._withData(()=>{var t;return null===(t=this._renderState)||void 0===t?void 0:t.resumeAll()})}showOutline(t={}){return this._options.showOutline=!0,this._withData(()=>{var e;return null===(e=this._renderState)||void 0===e?void 0:e.run(G("outline",this._character,"number"==typeof t.duration?t.duration:this._options.strokeFadeDuration)).then(e=>{var r;return null===(r=t.onComplete)||void 0===r||r.call(t,e),e})})}hideOutline(t={}){return this._options.showOutline=!1,this._withData(()=>{var e;return null===(e=this._renderState)||void 0===e?void 0:e.run(X("outline",this._character,"number"==typeof t.duration?t.duration:this._options.strokeFadeDuration)).then(e=>{var r;return null===(r=t.onComplete)||void 0===r||r.call(t,e),e})})}updateDimensions({width:t,height:e,padding:r}){if(void 0!==t&&(this._options.width=t),void 0!==e&&(this._options.height=e),void 0!==r&&(this._options.padding=r),this.target.updateDimensions(this._options.width,this._options.height),this._character&&this._renderState&&this._hanziWriterRenderer&&this._positioner){this._hanziWriterRenderer.destroy();const t=this._initAndMountHanziWriterRenderer(this._character);this._renderState.overwriteOnStateChange(e=>t.render(e)),t.render(this._renderState.state),this._quiz&&this._quiz.setPositioner(this._positioner)}}updateColor(t,e,r={}){var i;let s=[];const o=_((()=>"radicalColor"!==t||e?e:this._options.strokeColor)());this._options[t]=e;const n=null!==(i=r.duration)&&void 0!==i?i:this._options.strokeFadeDuration;return s=s.concat(K(t,o,n)),"radicalColor"!==t||e||(s=s.concat(K(t,null,0))),this._withData(()=>{var t;return null===(t=this._renderState)||void 0===t?void 0:t.run(s).then(t=>{var e;return null===(e=r.onComplete)||void 0===e||e.call(r,t),t})})}quiz(t={}){return this._withData(async()=>{this._character&&this._renderState&&this._positioner&&(this.cancelQuiz(),this._quiz=new et(this._character,this._renderState,this._positioner),this._options={...this._options,...t},this._quiz.startQuiz(this._options))})}skipQuizStroke(){this._quiz&&this._quiz.nextStroke()}cancelQuiz(){this._quiz&&(this._quiz.cancel(),this._quiz=void 0)}setCharacter(t){return this.cancelQuiz(),this._char=t,this._hanziWriterRenderer&&this._hanziWriterRenderer.destroy(),this._renderState&&this._renderState.cancelAll(),this._hanziWriterRenderer=null,this._withDataPromise=this._loadingManager.loadCharData(t).then(e=>{if(!e||this._loadingManager.loadingFailed)return;this._character=function(t,e){const r=O(e);return new A(t,r)}(t,e),this._renderState=new v(this._character,this._options,t=>r.render(t));const r=this._initAndMountHanziWriterRenderer(this._character);r.render(this._renderState.state)}),this._withDataPromise}_initAndMountHanziWriterRenderer(t){const{width:e,height:r,padding:i}=this._options;this._positioner=new E({width:e,height:r,padding:i});const s=new this._renderer.HanziWriterRenderer(t,this._positioner);return s.mount(this.target),this._hanziWriterRenderer=s,s}async getCharacterData(){if(!this._char)throw new Error("setCharacter() must be called before calling getCharacterData()");return await this._withData(()=>this._character)}_assignOptions(t){const e={...vt,...t};return t.strokeAnimationDuration&&!t.strokeAnimationSpeed&&(e.strokeAnimationSpeed=500/t.strokeAnimationDuration),t.strokeHighlightDuration&&!t.strokeHighlightSpeed&&(e.strokeHighlightSpeed=500/e.strokeHighlightDuration),t.highlightCompleteColor||(e.highlightCompleteColor=e.highlightColor),this._fillWidthAndHeight(e)}_fillWidthAndHeight(t){const e={...t};if(e.width&&!e.height)e.height=e.width;else if(e.height&&!e.width)e.width=e.height;else if(!e.width&&!e.height){const{width:t,height:r}=this.target.getBoundingClientRect(),i=Math.min(t,r);e.width=i,e.height=i}return e}_withData(t){if(this._loadingManager.loadingFailed)throw Error("Failed to load character data. Call setCharacter and try again.");return this._withDataPromise?this._withDataPromise.then(()=>{if(!this._loadingManager.loadingFailed)return t()}):Promise.resolve().then(t)}_setupListeners(){this.target.addPointerStartListener(t=>{this._quiz&&(t.preventDefault(),this._quiz.startUserStroke(t.getPoint()))}),this.target.addPointerMoveListener(t=>{this._quiz&&(t.preventDefault(),this._quiz.continueUserStroke(t.getPoint()))}),this.target.addPointerEndListener(()=>{var t;null===(t=this._quiz)||void 0===t||t.endUserStroke()})}}return Ct._loadingManager=null,Ct._loadingOptions=null,Ct}();
+
+/* shared helpers for P2 Chinese decks 3+ */
+PARTS.learn='学一学 Learn';PARTS.try='玩一玩 Play';PARTS.check='考考你 Quiz';
+document.querySelectorAll('.parts button').forEach(b=>{if(PARTS[b.dataset.part])b.textContent=PARTS[b.dataset.part]});
+const shk=b=>{b.classList.remove('no');void b.offsetWidth;b.classList.add('no')};
+/* icon card with a Chinese word */
+const wcard=(x,y,w,h,ic,zh,py,en,d=0,sz=26)=>G(box(x,y,w,h,'#fff',14)+`<g transform="translate(${x+w/2} ${y+h*.36})">${ic}</g>`+zhw(x+w/2,y+h*.72,zh,py,en,sz),'a-pop',d);
+/* sentence-building game */
+function tiles(a,rounds,intro,who='wala'){let r=0,got=[];const NM=who==='wala'?WL:(who==='flame'&&typeof FL!=='undefined')?FL:CH;const show=()=>{const R=rounds[r];got=[];
+   a.q('.play').innerHTML=T(320,40,`${r+1} of ${rounds.length}`,'sm mid mut')+box(40,70,560,90,'#FFF4D6',16)+`<g class="built"></g>`+T(320,200,R.en,'lab mid acc')+G(wala(560,392,.95,{still:true}),'')+G(otter(80,392,.95,{still:true}),'');
+   const upd=()=>{a.q('.built').innerHTML=T(320,128,got.join('')+(got.length===R.w.length?'':' ＿'),'zh mid','style="font-size:30px"')};upd();
+   a.ui.innerHTML='';[...R.w].map((w,k)=>[w,k]).sort(()=>Math.random()-.5).forEach(([w])=>a.btn(w,b=>{if(b.disabled)return;if(w===R.w[got.length]){got.push(w);b.disabled=true;b.classList.add('ok');a.hear(w);upd();
+     if(got.length===R.w.length){r++;if(r<rounds.length){a.confetti();a.as(who,NM+'<b>对了！</b> '+R.w.join('')+' Next one!');a.later(show,2000)}else a.win(NM+'<b>太棒了！</b> <i class="py">Tài bàng le!</i> You built every sentence!')}}
+     else{shk(b);a.as(who,NM+R.hint)}},'zhb'));};
+  show();a.as(who,intro);}
+/* multiple-choice rounds game. R: [{stage:()=>svg, options:[], answer, ok, hint, hear}] */
+function rounds(a,R,intro,who='otter'){let r=0,busy=false;const NM=who==='wala'?WL:(who==='flame'&&typeof FL!=='undefined')?FL:CH;
+  const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+Q.stage();
+   a.ui.innerHTML='';[...Q.options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');if(Q.hear)a.hear(Q.hear);r++;
+     if(r<R.length){a.confetti();a.as(who,NM+'<b>对了！</b> '+(Q.ok||''));a.later(show,1900)}else a.win(NM+'<b>太棒了！</b> '+(Q.ok||''))}else{shk(b);a.as(who,NM+(Q.hint||'Try again!'))}},'zhb'))};
+  show();a.as(who,intro);}
+const bossIntro=(title,txt)=>({part:'boss',title,who:'baddie',say:BD+txt,
+  draw:()=>G(baddie(320,385,2.2),'a-drop',.1)+G(otter(70,390,.8,{still:true})+wala(570,390,.8,{still:true}),'a-fade',.6)+G(box(150,22,340,46,'#FBEFF4',23)+T(320,52,'Catch every lie he tells!','lab mid','style="fill:#6B2D5C"'),'a-pop',1.2)});
+const finale=(title,zh,py,en,txt,banner)=>({part:'boss',title,who:'wala',say:WL+txt,
+  draw:()=>G(baddie(320,388,1.1,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(50,80,26)+star(590,80,26),'a-pop',.8)+zhw(320,95,zh,py,en,44)+(banner?T(320,190,banner,'lab mid acc'):''),
+  mount:a=>a.later(()=>a.win(),600)});
+/* little icons */
+const pencilI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(-30)"><rect x="-34" y="-7" width="56" height="14" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M22 -7 l14 7 l-14 7z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 -2 l4 2 l-4 2z" fill="${C.ink}"/><rect x="-42" y="-7" width="8" height="14" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const bagI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 -24 q0 -12 14 -12 q14 0 14 12" fill="none" stroke="${C.ink}" stroke-width="4"/><rect x="-28" y="-24" width="56" height="52" rx="12" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><rect x="-18" y="2" width="36" height="18" rx="5" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const eraserI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-22" y="-12" width="44" height="24" rx="5" fill="#F4A3A8" stroke="${C.ink}" stroke-width="2.5"/><rect x="2" y="-12" width="20" height="24" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const rulerI2=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-38" y="-9" width="76" height="18" rx="2" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[-30,-20,-10,0,10,20,30].map(t=>`<line x1="${t}" y1="-9" x2="${t}" y2="${t%20?-3:1}" stroke="${C.ink}" stroke-width="1.5"/>`).join('')}</g>`;
+const bookI2=(x,y,s=1,col=C.sky)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 -20 q15 -8 30 0 q15 -8 30 0 v40 q-15 -8 -30 0 q-15 -8 -30 0z" fill="${col}" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><line x1="0" y1="-20" x2="0" y2="20" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const deskI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-40" y="-14" width="80" height="12" rx="3" fill="#C98B55" stroke="${C.ink}" stroke-width="2.5"/><path d="M-32 -2 v30 M32 -2 v30" stroke="${C.ink}" stroke-width="4"/></g>`;
+const chairI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-16 -34 v36 M16 -34 v36" stroke="${C.ink}" stroke-width="4"/><rect x="-18" y="-36" width="36" height="16" rx="3" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><rect x="-20" y="0" width="40" height="8" rx="2" fill="${C.accent}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 8 v18 M16 8 v18" stroke="${C.ink}" stroke-width="4"/></g>`;
+const bottleI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="-34" width="12" height="8" rx="2" fill="${C.ink}"/><rect x="-14" y="-26" width="28" height="52" rx="8" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2.5"/><rect x="-14" y="-4" width="28" height="12" fill="${C.leaf}" opacity=".7"/></g>`;
+const ballI2=(x,y,r=16)=>`<g transform="translate(${x} ${y})"><circle r="${r}" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M${-r} 0 q${r} ${-r*.6} ${2*r} 0" fill="none" stroke="#fff" stroke-width="2.5"/></g>`;
+/* ===== Flamecharge the Phoenix: spelling and 听写 champion ===== */
+/* origin = feet centre, ~150 tall at s=1 (crest included) */
+function flame(x,y,s=1,o={}){
+  const ink=C.ink,red='#E8552B',org='#FF8A3D',yel='#FFC83D',belly='#FFE7A8',dk='#C2410C',bk='#FFB020';
+  const wingR=o.wave?`<path d="M24 -60 q20 -34 50 -58 l-4 12 l12 -6 l-6 12 l13 -3 l-8 11 l12 1 l-11 9 l9 5 q-22 10 -42 34z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><path d="M34 -66 q12 -18 28 -30" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
+   :o.pencil?`<path d="M24 -62 q30 0 36 28 l-9 -3 l2 10 l-9 -5 l-1 9 l-8 -7 q-4 4 -12 -2z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><g transform="translate(58 -34) rotate(-35)"><rect x="-6" y="-34" width="12" height="40" fill="${C.sky}" stroke="${ink}" stroke-width="2.5"/><path d="M-6 6 l6 12 l6 -12z" fill="#F2D2B0" stroke="${ink}" stroke-width="2"/><rect x="-6" y="-40" width="12" height="7" fill="${C.berry}" stroke="${ink}" stroke-width="2"/></g>`
+   :`<path d="M24 -62 q28 6 34 40 l-9 -5 l0 11 l-8 -7 l-3 10 l-6 -9 q-4 2 -8 -4z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`;
+  const wingL=`<path d="M-24 -62 q-28 6 -34 40 l9 -5 l0 11 l8 -7 l3 10 l6 -9 q4 2 8 -4z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <g class="${o.still?'':'flick'}"><path d="M-14 -12 q-46 12 -64 -10 q22 4 30 -10 q-26 -6 -32 -30 q22 18 36 10 q-12 -14 -8 -34 q14 28 34 38z" fill="${red}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-20 -16 q-30 6 -44 -8 q18 2 26 -10 q-14 -8 -16 -22 q14 14 30 14z" fill="${yel}"/></g>
+  <path d="M0 -76 q34 2 32 38 q-2 36 -32 38 q-30 -2 -32 -38 q-2 -36 32 -38z" fill="${org}" stroke="${ink}" stroke-width="3"/>
+  <path d="M0 -66 q20 2 20 30 q-2 26 -20 28 q-18 -2 -20 -28 q0 -28 20 -30z" fill="${belly}"/>
+  <path d="M-10 -46 l5 5 l5 -5 l5 5 l5 -5 M-10 -30 l5 5 l5 -5 l5 5 l5 -5" stroke="${yel}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M-14 -2 v7 M14 -2 v7" stroke="#D9A21B" stroke-width="5" stroke-linecap="round"/>
+  <path d="M-25 12 q2 -8 11 -7 q9 -1 11 7 M-14 5 v7 M3 12 q2 -8 11 -7 q9 -1 11 7 M14 5 v7" stroke="#D9A21B" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M-25 12 l-2 4 M-3 12 l2 4 M-14 12 v4 M3 12 l-2 4 M25 12 l2 4 M14 12 v4" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>
+  ${wingL}${wingR}
+  <g class="${o.still?'':'flick'}" style="transform-origin:0px -118px"><path d="M-22 -108 q-14 -14 -30 -14 q12 -6 22 -4 q-16 -14 -20 -30 q16 10 26 18 q-4 -18 4 -34 q6 20 16 26 q4 -14 16 -20 q-4 18 0 30 q10 -8 22 -6 q-12 8 -16 22z" fill="${red}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-12 -112 q-6 -14 -2 -26 q6 12 12 14 q2 -10 10 -16 q-2 14 2 24z" fill="${yel}"/></g>
+  <path d="M0 -122 q32 0 32 30 q0 16 -10 26 q-10 8 -22 8 q-12 0 -22 -8 q-10 -10 -10 -26 q0 -30 32 -30z" fill="${org}" stroke="${ink}" stroke-width="3"/>
+  <path d="M-30 -96 q-12 4 -16 12 q10 -2 16 0 M30 -96 q12 4 16 12 q-10 -2 -16 0" fill="${org}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M-22 -88 q4 16 22 22 q18 -6 22 -22 q-10 6 -22 6 q-12 0 -22 -6z" fill="${belly}"/>
+  <circle cx="-12" cy="-94" r="7" fill="${yel}" stroke="${ink}" stroke-width="2"/><circle cx="12" cy="-94" r="7" fill="${yel}" stroke="${ink}" stroke-width="2"/>
+  <circle cx="-11" cy="-93" r="4.6" fill="${ink}"/><circle cx="11" cy="-93" r="4.6" fill="${ink}"/>
+  <circle cx="-9.5" cy="-95" r="1.8" fill="#fff"/><circle cx="12.5" cy="-95" r="1.8" fill="#fff"/>
+  <path d="M-24 -106 q10 -2 18 6 M24 -106 q-10 -2 -18 6" stroke="${dk}" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="-22" cy="-80" rx="5" ry="3" fill="#F4A3A8" opacity=".85"/><ellipse cx="22" cy="-80" rx="5" ry="3" fill="#F4A3A8" opacity=".85"/>
+  <path d="M-9 -88 q9 -6 18 0 q2 10 -4 18 q-3 4 -5 9 q-2 -5 -5 -9 q-6 -8 -4 -18z" fill="${bk}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M-4 -70 q4 3 8 0 q-2 5 -4 9 q-2 -4 -4 -9z" fill="#B45309"/>
+  <path d="M-5 -84 h1 M4 -84 h1" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>
+  </g></g>`;
+}
+FACES.flame=()=>flame(50,132,.68,{still:true});
+VOICE.flame={en:[1.0,1.35],zh:[.82,1.3],pref:VFEM};
+const FL='<b class="fl">Flamecharge:</b> ';
+(function(){const st=document.createElement('style');st.textContent=`
+ .bubble b.fl{color:#C2410C} .flick{animation:flick 1.3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+ @keyframes flick{50%{transform:scale(1.06,.94) rotate(-2deg)}} @media (prefers-reduced-motion: reduce){.flick{animation:none}}
+ .ui button.tile{min-width:52px;font-size:26px;text-transform:lowercase}
+ .ui .slots{display:flex;gap:6px;justify-content:center;width:100%;flex-wrap:wrap}
+ .ui .slots span{min-width:40px;height:52px;border-bottom:4px solid var(--ink);font-family:var(--display);font-weight:800;font-size:32px;text-align:center;line-height:56px}
+ .ui .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}
+ .ui button.opt{font-size:20px} .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:26px;min-width:64px}`;document.head.appendChild(st);})();
+const shk2=b=>{b.classList.remove('no');void b.offsetWidth;b.classList.add('no')};
+const shuf2=x=>[...x].sort(()=>Math.random()-.5);
+/* ---- hanzi stroke writer (library inlined; stroke data loaded per character from the CDN) ---- */
+const HWDATA='https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/';
+function hwBox(x,y,w,cls){return `<rect x="${x}" y="${y}" width="${w}" height="${w}" fill="#fff" stroke="${C.bad}" stroke-width="2"/><path d="M${x} ${y+w/2} h${w} M${x+w/2} ${y} v${w} M${x} ${y} l${w} ${w} M${x+w} ${y} l${-w} ${w}" stroke="${C.bad}" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/><svg class="${cls}" x="${x}" y="${y}" width="${w}" height="${w}" viewBox="0 0 ${w} ${w}"></svg>`}
+function hwMake(el,ch,w,opt={}){if(typeof HanziWriter==='undefined')return null;
+  try{return HanziWriter.create(el,ch,Object.assign({width:w,height:w,padding:6,showOutline:true,strokeColor:'#1F3A4A',outlineColor:'#E3E8EB',strokeAnimationSpeed:1.1,delayBetweenStrokes:260,
+    charDataLoader:(c,ok,bad)=>{fetch(HWDATA+encodeURIComponent(c)+'.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(ok).catch(()=>{fallback(el,c,w);bad&&bad()})}},opt))}catch(e){fallback(el,ch,w);return null}}
+function fallback(el,c,w){el.innerHTML=`<text x="${w/2}" y="${w*.78}" text-anchor="middle" style="font-family:'Noto Sans SC','Noto Sans CJK SC',sans-serif;font-size:${w*.8}px;fill:#1F3A4A">${c}</text>`}
+/* ---- generic multiple-choice rounds ---- */
+function pick(a,R,intro,who='flame'){let r=0,busy=false;const NM=who==='flame'?FL:CH;
+  const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+Q.stage();if(Q.say)a.hear(Q.say);
+   a.ui.innerHTML='';if(Q.say)a.btn('🔊 Hear it',()=>a.hear(Q.say));shuf2(Q.options).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');r++;
+     if(r<R.length){a.confetti();a.as(who,NM+'<b>Yes!</b> '+(Q.ok||''));a.later(show,1900)}else a.win(NM+'<b>Blazing!</b> '+(Q.ok||''))}else{shk2(b);a.as(who,NM+(Q.hint||'Look again carefully!'))}},Q.cls||'opt'))};
+  show();a.as(who,intro);}
+/* ---- hear-and-spell with letter tiles ---- */
+function spellTiles(a,W,intro){let r=0,got='',miss=0,done=false;const decoy='aeiourstlnmcdkbhpwy';
+  const show=()=>{done=false;got='';miss=0;const {w,s}=W[r];const extra=shuf2([...decoy].filter(c=>!w.includes(c))).slice(0,2);const tiles=shuf2([...w,...extra]);
+   a.q('.play').innerHTML=T(320,30,`${r+1} of ${W.length}`,'sm mid mut')+G(flame(110,370,1.35,{pencil:true}),'')+G(box(250,70,360,110,'#FFF4D6',18)+T(430,112,'Listen, then spell the word.','lab mid')+T(430,146,s?'"'+s+'"':'','sm mid mut'),'a-pop');
+   const say=()=>a.hear(w+'. '+(s||'')+'. '+w);say();
+   a.ui.innerHTML='';const sl=document.createElement('div');sl.className='slots';a.ui.appendChild(sl);const upd=()=>{sl.innerHTML=[...w].map((_,i)=>`<span>${got[i]||''}</span>`).join('')};upd();
+   const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+   const used=[];tiles.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='tile';b.textContent=c;b.onclick=()=>{if(done||b.disabled||got.length>=w.length)return;got+=c;used.push(b);b.disabled=true;upd()};row.appendChild(b)});
+   a.btn('🔊 Again',say);a.btn('⌫',()=>{if(done||!used.length)return;got=got.slice(0,-1);used.pop().disabled=false;upd()});
+   a.btn('Check ✓',b=>{if(done)return;if(got===w){done=true;b.classList.add('ok');r++;if(r<W.length){a.confetti();a.as('flame',FL+`<b>${w}</b>: perfect! 🔥`);a.later(show,1800)}else a.win(FL+'<b>Spelling superstar!</b> Every word spelt right.')}
+     else{miss++;shk2(b);if(miss>=2){a.as('flame',FL+`Nearly! It's spelt <b>${[...w].join('-')}</b>. Try once more.`)}else a.as('flame',FL+'Not quite. Listen again and check each sound.')}},'go');};
+  show();a.as('flame',intro);}
+/* shared 听写 helpers: 田字格 pad, stroke tracing, 听写 rounds (needs flamelib + HanziWriter) */
+const ZF='style="font-family:\'Noto Sans SC\',\'Noto Sans CJK SC\',sans-serif"';
+const zt=(x,y,s,sz,fill=C.ink,ex='')=>T(x,y,s,'zh mid',`style="font-size:${sz}px;fill:${fill}" ${ex}`);
+(function(){const st=document.createElement('style');st.textContent=`
+ .ui canvas.pad{background:#fff;border:3px solid var(--ink);border-radius:14px;touch-action:none;cursor:crosshair;max-width:100%}
+ .ui .padwrap{width:100%;display:flex;justify-content:center}`;document.head.appendChild(st);})();
+/* a 田字格 pad the child writes on with finger / mouse */
+function makePad(n){const c=document.createElement('canvas');const box=130;c.width=box*n;c.height=box;c.className='pad';c.style.width=(box*n)+'px';
+  const x=c.getContext('2d');const grid=()=>{x.clearRect(0,0,c.width,c.height);x.strokeStyle='#E0574F';x.lineWidth=1.5;
+   for(let k=0;k<n;k++){x.setLineDash([]);x.strokeRect(k*box+1,1,box-2,box-2);x.setLineDash([5,5]);x.globalAlpha=.45;x.beginPath();
+    x.moveTo(k*box,box/2);x.lineTo(k*box+box,box/2);x.moveTo(k*box+box/2,0);x.lineTo(k*box+box/2,box);x.moveTo(k*box,0);x.lineTo(k*box+box,box);x.moveTo(k*box+box,0);x.lineTo(k*box,box);x.stroke();x.globalAlpha=1}x.setLineDash([])};
+  grid();let down=false;const pt=e=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]};
+  c.addEventListener('pointerdown',e=>{down=true;c.setPointerCapture(e.pointerId);const[p,q]=pt(e);x.strokeStyle='#1F3A4A';x.lineWidth=7;x.lineCap='round';x.lineJoin='round';x.beginPath();x.moveTo(p,q);x.lineTo(p+.1,q+.1);x.stroke();c.dataset.ink='1'});
+  c.addEventListener('pointermove',e=>{if(!down)return;const[p,q]=pt(e);x.lineTo(p,q);x.stroke()});
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>c.addEventListener(t,()=>{down=false}));
+  c.clear=()=>{grid();delete c.dataset.ink};return c}
+
+/* trace game: HanziWriter quiz mode, checks every stroke */
+function traceGame(a,chars,intro){let r=0,w=null,miss=0;
+  const show=()=>{miss=0;const ch=chars[r];
+   a.q('.play').innerHTML=T(320,28,`${r+1} of ${chars.length}`,'sm mid mut')+G(flame(100,380,1.25,{pencil:true}),'')+hwBox(250,44,290,'hwt')+T(395,370,ch[1],'py mid','style="font-size:20px"');
+   const el=a.q('svg.hwt');a.hear(ch[0]);
+   w=hwMake(el,ch[0],290,{showOutline:true,showCharacter:false,showHintAfterMisses:2,highlightOnComplete:true,drawingWidth:26});
+   a.ui.innerHTML='';a.btn('🔊 '+ch[0],()=>a.hear(ch[0]));
+   a.btn('👀 Show me',()=>{if(!w)return;w.hideCharacter();w.animateCharacter({onComplete:()=>{w.hideCharacter();startQuiz()}})});
+   a.btn('Skip ⏭',()=>next(false));
+   const startQuiz=()=>{if(!w)return;w.quiz({onMistake:()=>{miss++;if(miss===2)a.as('flame',FL+'Look at the <b>glowing</b> stroke: that one comes next!')},onComplete:()=>next(true)})};
+   if(w)startQuiz();else a.as('flame',FL+'I need the internet to load the strokes. Tap <b>Skip</b> to carry on.');};
+  const next=good=>{r++;if(r<chars.length){if(good){a.confetti();a.as('flame',FL+'<b>写得好！</b> <i class="py">Xiě de hǎo!</i> Every stroke in the right order!')}a.later(show,good?1600:200)}
+   else a.win(FL+'<b>太棒了！</b> You traced every character. Your strokes are on fire! 🔥')};
+  show();a.as('flame',intro);}
+
+/* 听写: hear a 词语, write it on the pad, then reveal and self-mark */
+function tingxie(a,W,intro){let r=0,score=0,miss=[];
+  const show=()=>{const it=W[r],n=[...it.w].length,bw=Math.min(150,480/n);
+   const say=()=>a.hear(it.w+'。'+it.s+'。'+it.w);
+   a.q('.play').innerHTML=T(320,28,`听写 ${r+1} / ${W.length}`,'lab mid acc')+G(flame(90,380,1.2,{pencil:true}),'')
+    +G(box(190,52,420,70,'#FFF4D6',16)+T(400,84,'Listen, then write the 词语 below.','lab mid')+T(400,108,'Tap 🔊 to hear it again','sm mid mut'),'a-pop')
+    +`<g class="ans" style="opacity:0">${[...it.w].map((c,k)=>hwBox(400-n*bw/2+k*bw+4,150,bw-8,'hwa'+k)).join('')}${T(400,150+bw+28,it.p,'py mid','style="font-size:20px"')}</g>`;
+   say();a.ui.innerHTML='';const wrap=document.createElement('div');wrap.className='padwrap';const pad=makePad(n);wrap.appendChild(pad);a.ui.appendChild(wrap);
+   a.btn('🔊 Again',say);a.btn('🧽 Clear',()=>pad.clear());
+   a.btn('Check ✓',b=>{a.q('.ans').style.opacity=1;a.q('.ans').style.transition='opacity .4s';
+     [...it.w].forEach((c,k)=>{const wr=hwMake(a.q('svg.hwa'+k),c,bw-8,{showCharacter:false,showOutline:true});if(wr)a.later(()=>wr.animateCharacter(),k*1400)});
+     a.as('flame',FL+`It's <b>${it.w}</b> <i class="py">${it.p}</i>. Compare with yours. Did you get <b>every stroke</b> right?`);
+     a.ui.innerHTML='';a.ui.appendChild(wrap);a.btn('✓ I got it!',()=>{score++;nx()},'go');a.btn('✗ Not yet',()=>{miss.push(it.w);nx()})},'go');};
+  const nx=()=>{r++;if(r<W.length){a.confetti();show();a.as('flame',FL+'Next 词语! Listen carefully.')}
+   else{a.q('.play').innerHTML=G(flame(140,380,1.6,{wave:true}),'a-pop')+T(420,120,`${score} / ${W.length}`,'big mid acc')+T(420,170,'词语 correct','lab mid')+(miss.length?T(420,230,'Practise again:','lab mid')+zt(420,280,miss.join('、'),34):T(420,240,'满分！ Full marks!','h mid acc'));
+    a.ui.innerHTML='';if(miss.length){a.btn('🔁 Try the missed ones',()=>{W=W.filter(x=>miss.includes(x.w));r=0;score=0;miss=[];show()},'go')}
+    a.win(FL+(miss.length?`You got <b>${score}</b>. Write the missed ones three times each, then try again!`:'<b>满分！</b> A perfect 听写. You\'re blazing! 🔥'))}};
+  show();a.as('flame',intro);}
+
+/* P2 Chinese helpers: emoji icons, dialogue scenes, vocab grids, Flamecharge's 听写 corner (needs cnlib, flamelib, txlib) */
+const em=(e,s=46,ex='')=>T(0,s*.36,e,'mid',`style="font-size:${s}px" ${ex}`);
+const NMS={w:['wala',WL],c:['otter',CH],f:['flame',FL]};
+const castDraw=(k,x,s=.72)=>k==='w'?wala(x,398,s,{still:true}):k==='c'?otter(x,398,s,{still:true}):flame(x,398,s*.95,{still:true});
+/* dialogue scene: up to 3 lines [who,zh,py,en]; L = left speaker, R = right speaker */
+function talk(title,L,R,lines,say,extra=''){const who=lines[0][0];return {part:'learn',title,who:NMS[who][0],say:NMS[who][1]+say,
+  draw:()=>extra+G(castDraw(L,74)+castDraw(R,566),'a-pop',.1)+lines.map(([k,z,p,e],i)=>{const left=k===L;return dlg(left?22:618,12+i*98,0,z,p,e,left?'l':'r',.4+i*.7,NMS[k][0])}).join('')}}
+/* vocab grid of 6 (3x2) or 8 (4x2) emoji word cards */
+function vgrid(L){const c=L.length>6?4:3,w=c===4?140:192,h=178;return L.map(([e,z,p,en],k)=>wcard(20+(k%c)*(w+12+(c===3?2:0)),14+Math.floor(k/c)*190,w,h,em(e,52),z,p,en,.1+k*.08,z.length>3?22:26)).join('')}
+const vocab=(title,who,say,L)=>({part:'learn',title,who:NMS[who][0],say:NMS[who][1]+say,draw:()=>vgrid(L)});
+/* Flamecharge's 听写 corner: 4 two-character words in 田字格 that animate when tapped, plus a tip */
+function corner(words,tip,say){return {part:'learn',title:'Flamecharge\'s 听写 corner',who:'flame',say:FL+say,
+  draw:()=>G(flame(82,392,1,{pencil:true}),'a-pop',.1)+words.map(([z,p,e],k)=>{const x=190+(k%2)*220,y=14+Math.floor(k/2)*128,n=[...z].length,b=n>2?56:76;
+    return G(`<g class="tap crn" data-k="${k}" data-zh="${z}">`+[...z].map((c,j)=>hwBox(x+j*(b+4),y,b,`hwc${k}_${j}`)).join('')+T(x+n*(b+4)/2,y+b+20,p+' · '+e,'sm mid')+`</g>`,'a-pop',.2+k*.15)}).join('')
+   +G(box(184,272,440,110,'#FFF4D6',16)+prose(404,302,tip,52,'sm mid',22),'a-pop',.9),
+  mount:a=>{const W=words.map(([z],k)=>[...z].map((c,j)=>hwMake(a.q(`svg.hwc${k}_${j}`),c,[...z].length>2?56:76,{showCharacter:true,strokeAnimationSpeed:1.4,delayBetweenStrokes:120,padding:4})));
+   a.qa('.crn').forEach(g=>g.addEventListener('click',()=>{const ws=W[+g.dataset.k];let t=0;ws.forEach(w=>{if(!w)return;a.later(()=>{w.hideCharacter();w.animateCharacter()},t);t+=1500})}))}}}
+const traceSlide=(chars,intro)=>({part:'try',title:'描一描 Trace with Flamecharge',who:'flame',say:'',draw:()=>`<g class="play"></g>`,mount:a=>traceGame(a,chars,FL+(intro||'Write each character stroke by stroke. Wrong strokes won\'t stick!'))});
+const txSlide=(W,intro)=>({part:'try',title:'听写 with Flamecharge',who:'flame',say:'',draw:()=>`<g class="play"></g>`,mount:a=>tingxie(a,W,FL+(intro||'Listen, write the 词语 on the pad, then tap <b>Check</b> and mark yourself honestly!'))});
+/* picture → word rounds from a vocab list */
+const picRounds=(title,who,L,q,intro,n=6)=>({part:'try',title,who:NMS[who][0],say:'',draw:()=>`<g class="play"></g>`,
+  mount:a=>rounds(a,L.slice(0,n).map(([e,z],k)=>{const others=L.filter(x=>x[1]!==z);const o=[z,others[(k+1)%others.length][1],others[(k+3)%others.length][1]];
+   return {stage:()=>G(`<g transform="translate(320 160)">${em(e,130)}</g>`,'a-pop')+T(320,330,q,'zh mid','style="font-size:28px"'),options:o,answer:z,hear:z,ok:z+'！',hint:'Look at the picture again, and read each word.'}}),NMS[who][1]+intro,NMS[who][0])});
+/* fill-the-gap rounds: [sentence with ＿, answer, [wrong…], english] */
+const gapRounds=(title,who,R,intro,hint)=>({part:'try',title,who:NMS[who][0],say:'',draw:()=>`<g class="play"></g>`,
+  mount:a=>rounds(a,R.map(([s,ans,bad,en])=>({stage:()=>G(box(40,90,560,120,'#fff',18)+T(320,160,s,'zh mid','style="font-size:'+(s.length>12?30:38)+'px"'),'a-pop')+T(320,260,en,'lab mid mut'),options:[ans,...bad],answer:ans,hear:s.replace(/＿+/,ans),ok:s.replace(/＿+/,ans),hint})),NMS[who][1]+intro,NMS[who][0])});
+/* a big sentence pattern card */
+const patCard=(x,y,w,h,z,p,e,d=0,fill='#fff',sz=26)=>G(`<g class="tap" data-zh="${z.replace(/<[^>]+>/g,'')}">`+box(x,y,w,h,fill,16)+T(x+w/2,y+h/2+(e?-8:2),z,'zh mid',`style="font-size:${sz}px"`)+T(x+w/2,y+h/2+(e?15:24),p,'py mid','style="font-size:14px"')+(e?T(x+w/2,y+h/2+34,e,'en mid','style="font-size:13px"'):'')+`</g>`,'a-pop',d);
+/* P2 Chinese 2: 新年到了 · 过生日 — Chinese New Year, greetings, …的时候, birthdays, dates, 先…再… */
+const NY=[['🧧','红包','hóngbāo','red packet'],['🍊','橘子','júzi','mandarin orange'],['🏮','灯笼','dēnglong','lantern'],['🎆','烟花','yānhuā','fireworks'],['🍲','团圆饭','tuányuánfàn','reunion dinner'],['🥮','年糕','niángāo','New Year cake'],['🦁','舞狮','wǔshī','lion dance'],['👘','新衣服','xīn yīfu','new clothes']];
+const BD2=[['🎂','蛋糕','dàngāo','cake'],['🕯️','蜡烛','làzhú','candle'],['🎁','礼物','lǐwù','present'],['🎈','气球','qìqiú','balloon'],['🎵','生日歌','shēngrì gē','birthday song'],['🙏','许愿','xǔyuàn','make a wish']];
+const MON=['一','二','三','四','五','六','七','八','九','十','十一','十二'];
+const cn=n=>n<=10?['','一','二','三','四','五','六','七','八','九','十'][n]:n<20?'十'+['','一','二','三','四','五','六','七','八','九'][n-10]:['','','二十','三十'][Math.floor(n/10)]+(n%10?['','一','二','三','四','五','六','七','八','九'][n%10]:'');
+const cal=(m,d,x=320,y=170,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-70" y="-74" width="140" height="150" rx="14" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="-70" y="-74" width="140" height="44" rx="14" fill="${C.bad}"/><rect x="-70" y="-44" width="140" height="14" fill="${C.bad}"/>${T(0,-42,m+'月','zh mid','style="font-size:26px;fill:#fff"')}${T(0,40,d,'big mid','style="font-size:64px"')}</g>`;
+const S=[
+talk('新年到了！','w','c',[['w','新年到了！新年快乐！','Xīnnián dào le! Xīnnián kuàilè!','New Year is here! Happy New Year!'],['c','恭喜发财！红包拿来！','Gōngxǐ fācái! Hóngbāo ná lái!','May you be rich! Red packet, please!'],['w','哈哈！你真调皮！','Hāha! Nǐ zhēn tiáopí!','Haha! You\'re so cheeky!']],
+ '新年到了！<i class="py">Xīnnián dào le!</i> Chinese New Year is here! We say <b>新年快乐</b> Happy New Year and <b>恭喜发财</b> may you be rich. Chowdie is being cheeky: 红包拿来 means "hand over the red packet"!'),
+vocab('New Year things 新年','c','Let\'s get ready for New Year! <b>红包</b> red packet, <b>橘子</b> oranges, <b>灯笼</b> lantern, <b>烟花</b> fireworks, <b>团圆饭</b> reunion dinner, <b>年糕</b> New Year cake, <b>舞狮</b> lion dance, and <b>新衣服</b> new clothes!',NY),
+{part:'learn',title:'去拜年 Visiting at New Year',who:'wala',say:WL+'At New Year we <b>拜年</b> <i class="py">bàinián</i>: visit family and friends. We bring <b>一对橘子</b> (a pair of oranges) and say good wishes: <b>新年快乐</b>, <b>恭喜发财</b>, <b>身体健康</b> (good health), <b>万事如意</b> (may all go well). Then we get <b>红包</b>!',
+ draw:()=>G(box(20,20,250,200,'#FFF0E6',18)+`<g transform="translate(110 120)">${em('🍊',70)}</g><g transform="translate(180 120)">${em('🍊',70)}</g>`+zhw(145,186,'一对橘子','yí duì júzi','a pair of oranges',24),'a-pop',.1)
+  +[['新年快乐！','Xīnnián kuàilè!','Happy New Year!'],['恭喜发财！','Gōngxǐ fācái!','May you be rich!'],['身体健康！','Shēntǐ jiànkāng!','Good health!'],['万事如意！','Wànshì rúyì!','May all go well!']].map(([z,p,e],k)=>patCard(290+(k%2)*168,20+Math.floor(k/2)*104,158,96,z,p,e,.3+k*.2,'#FFE7E2',22)).join('')
+  +G(box(20,240,600,140,'#fff',18)+`<g transform="translate(90 312)">${em('🧧',80)}</g>`+T(370,290,'谢谢！祝您新年快乐！','zh mid','style="font-size:30px"')+T(370,320,'Xièxie! Zhù nín xīnnián kuàilè!','py mid')+T(370,346,'Say thank you with both hands!','en mid'),'a-pop',1.2)},
+{part:'learn',title:'…的时候 When…',who:'otter',say:CH+'<b>…的时候</b> <i class="py">de shíhou</i> means "when…". 过年<b>的时候</b>，我们穿新衣服。"When it\'s New Year, we wear new clothes." 过年的时候，我们吃团圆饭。过年的时候，我们去拜年。',
+ draw:()=>G(box(20,16,600,80,'#FFF4D6',16)+T(320,58,'过年的时候，我们……','zh mid','style="font-size:32px"')+T(320,84,'Guònián de shíhou, wǒmen…','py mid'),'a-pop',.1)
+  +[['👘','穿新衣服。','chuān xīn yīfu'],['🍲','吃团圆饭。','chī tuányuánfàn'],['🙇','去拜年。','qù bàinián'],['🦁','看舞狮。','kàn wǔshī']].map(([e,z,p],k)=>{const x=20+(k%2)*304,y=112+Math.floor(k/2)*136;return G(`<g class="tap" data-zh="过年的时候，我们${z}">`+box(x,y,292,124,'#fff',16)+`<g transform="translate(${x+56} ${y+62})">${em(e,58)}</g>`+T(x+180,y+64,z,'zh mid','style="font-size:28px"')+T(x+180,y+92,p,'py mid')+`</g>`,'a-pop',.3+k*.2)}).join('')},
+talk('今天是我的生日！','c','w',[['c','今天是我的生日！我八岁了！','Jīntiān shì wǒ de shēngrì! Wǒ bā suì le!','It\'s my birthday! I\'m eight!'],['w','祝你生日快乐！','Zhù nǐ shēngrì kuàilè!','Happy birthday to you!'],['w','这是送给你的礼物。','Zhè shì sòng gěi nǐ de lǐwù.','This is a present for you.']],
+ '今天是我的生日！<i class="py">Jīntiān shì wǒ de shēngrì!</i> Today is my birthday! Wala says <b>祝你生日快乐</b> and gives me a <b>礼物</b>. When you get a present, say 谢谢!'),
+vocab('Birthday party 生日会','w','Party time! <b>蛋糕</b> cake, <b>蜡烛</b> candles, <b>礼物</b> presents, <b>气球</b> balloons, the <b>生日歌</b> birthday song, and <b>许愿</b> make a wish!',BD2),
+{part:'learn',title:'几月几日？ Dates',who:'otter',say:CH+'Months are easy: 一月 is January, 二月 February… all the way to <b>十二月</b> December! For the day, say the number + <b>日</b> (or 号 when you speak). 我的生日是<b>五月二十日</b>: my birthday is 20 May. 你的生日是几月几日？',
+ draw:()=>MON.map((m,k)=>`<g class="tap" data-zh="${m}月">`+box(20+(k%6)*100,16+Math.floor(k/6)*72,92,62,k===4?'#FFE7E2':'#fff',12)+T(66+(k%6)*100,56+Math.floor(k/6)*72,m+'月','zh mid','style="font-size:'+(m.length>1?22:26)+'px"')+`</g>`).join('')
+  +G(cal('五','20',150,270,1)+box(260,190,360,170,'#FFF4D6',18)+T(440,240,'我的生日是','zh mid','style="font-size:28px"')+T(440,288,'五月二十日。','zh mid','style="font-size:36px;fill:#B9471A"')+T(440,320,'Wǒ de shēngrì shì wǔ yuè èrshí rì.','py mid')+T(440,344,'(We also say 五月二十号 hào.)','sm mid mut'),'a-pop',.6)},
+{part:'learn',title:'先…再… First… then…',who:'wala',say:WL+'<b>先…再…</b> <i class="py">xiān… zài…</i> means "first… then…". <b>先</b>许愿，<b>再</b>吹蜡烛。First make a wish, then blow out the candles! <b>先</b>唱生日歌，<b>再</b>切蛋糕。First sing the birthday song, then cut the cake.',
+ draw:()=>[['🙏','先许愿，','xiān xǔyuàn,'],['🕯️','再吹蜡烛。','zài chuī làzhú.'],['🎵','先唱生日歌，','xiān chàng shēngrì gē,'],['🎂','再切蛋糕。','zài qiē dàngāo.']].map(([e,z,p],k)=>{const x=20+(k%2)*310,y=20+Math.floor(k/2)*180;
+  return G(`<g class="tap" data-zh="${z}">`+box(x,y,290,160,k%2?'#E6F6EA':'#FFF4D6',16)+T(x+36,y+40,k%2?'2':'1','big mid acc')+`<g transform="translate(${x+145} ${y+62})">${em(e,62)}</g>`+T(x+145,y+124,z,'zh mid','style="font-size:26px"')+T(x+145,y+148,p,'py mid')+`</g>`,'a-pop',.2+k*.3)}).join('')+T(320,198,'→','big mid')+T(320,378,'→','big mid')},
+corner([['新年','xīnnián','New Year'],['快乐','kuàilè','happy'],['礼物','lǐwù','present'],['蛋糕','dàngāo','cake']],'快 has 忄 (竖心旁, the heart radical): a happy heart! 礼 has 礻 (one dot), not the clothes radical 衤 (two dots).','听写 tip: <b>快乐</b>: 快 has <b>忄</b>, the heart radical, because happiness is a feeling. And <b>礼</b> has <b>礻</b> with ONE dot. Remember: 衤 two dots is for clothes!'),
+picRounds('这是什么？','c',[...NY.slice(0,4),...BD2.slice(0,4)],'这是什么？','这是什么？ Pick the right word!',7),
+{part:'try',title:'几月几日？ Read the date',who:'otter',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>rounds(a,[[5,20],[12,25],[2,10],[8,9],[10,1],[6,12]].map(([m,d])=>{const ans=MON[m-1]+'月'+cn(d)+'日';const sw=MON[d<=12?d-1:0]+'月'+cn(m)+'日';const w2=MON[m-1]+'月'+cn(d===20?2:d===12?21:d+10)+'日';
+  return {stage:()=>G(cal(MON[m-1],String(d),320,180,1.4),'a-pop')+T(320,345,'这是几月几日？','zh mid','style="font-size:26px"'),options:[ans,sw===ans?MON[(m)%12]+'月'+cn(d)+'日':sw,w2],answer:ans,hear:ans,ok:ans+'。',hint:'Month first (the red top), then the day number.'}}),CH+'Read the calendar. 这是几月几日？')},
+gapRounds('先…再…','w',[['先许愿，＿吹蜡烛。','再',['先','了'],'First make a wish, then blow the candles.'],['＿洗手，再吃饭。','先',['再','了'],'First wash your hands, then eat.'],['过年＿时候，我们去拜年。','的',['了','再'],'When it\'s New Year, we visit relatives.'],['我们带一＿橘子去拜年。','对',['条','顶'],'We bring a pair of oranges.']],'Fill the gap!','先 = first, 再 = then. 一对 = a pair.'),
+{part:'try',title:'Build a sentence 排一排',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>tiles(a,[{w:['先','许愿','，','再','吹','蜡烛','。'],en:'First make a wish, then blow out the candles.',hint:'先 comes before 再.'},{w:['过年','的时候','，','我们','去','拜年','。'],en:'At New Year, we go visiting.',hint:'Start with 过年的时候.'},{w:['我的','生日','是','五月','二十日','。'],en:'My birthday is 20 May.',hint:'Month before day.'}],WL+'Tap the words in order!')},
+traceSlide([['年','nián'],['快','kuài'],['乐','lè'],['礼','lǐ']]),
+{part:'check',title:'考考你 1',who:'wala',say:WL+'What do we bring when we 拜年?',draw:()=>G(`<g transform="translate(320 170)">${em('🙇',120)}</g>`,'a-pop',.1)+T(320,320,'去拜年，带什么？','zh mid','style="font-size:34px"'),
+ quiz:{options:['一对橘子','一个蛋糕','一顶帽子'],answer:'一对橘子',why:'We bring <b>一对橘子</b>, a pair of mandarin oranges, when we 拜年.',hint:'Orange and round, and comes in a pair!'}},
+{part:'check',title:'考考你 2',who:'otter',say:CH+'Which comes FIRST at a birthday?',draw:()=>G(`<g transform="translate(320 170)">${em('🎂',130)}</g>`,'a-pop',.1),
+ quiz:{options:['先许愿','先吹蜡烛','先吃完蛋糕'],answer:'先许愿',why:'<b>先许愿，再吹蜡烛</b>: make a wish first, then blow!',hint:'You wish while the candles are still lit.'}},
+{part:'check',title:'考考你 3',who:'otter',say:CH+'这是几月几日？',draw:()=>G(cal('十二','25',320,190,1.5),'a-pop',.1),
+ quiz:{options:['十二月二十五日','二十五月十二日','十二月十五日'],answer:'十二月二十五日',why:'Month first: <b>十二月</b> (December), then day: <b>二十五日</b>. It\'s Christmas!',hint:'The red top shows the month.'}},
+{part:'check',title:'考考你 4',who:'flame',say:FL+'Which radical does <b>快</b> have?',draw:()=>G(flame(130,380,1.3,{pencil:true}),'a-pop',.1)+zt(430,240,'快',140),
+ quiz:{options:['忄','扌','讠'],answer:'忄',why:'快 has <b>忄</b> 竖心旁, the heart radical. 快乐 is a happy heart!',hint:'Happy is a feeling. Feelings live in the heart.'}},
+bossIntro('Baddie\'s party!','Mwahaha! New Year AND my birthday! I want ALL the red packets. Listen to my party rules… hehehe.'),
+boss('Lie #1: New Year wishes',{lines:['When you 拜年, say','"生日快乐!" Hehehe!'],claim:'When you visit at New Year, say 生日快乐！',options:['新年快乐','生日快乐','慢走再见'],answer:'新年快乐',why:'At New Year we say <b>新年快乐</b> and <b>恭喜发财</b>. 生日快乐 is for birthdays!',taunt:'Mwahaha! Every day is MY birthday!',hint:'Is it a birthday or New Year?',art:`<g transform="translate(440 300)">${em('🧧',110)}</g>`}),
+boss('Lie #2: the months',{lines:['十二月 is the FIRST month','of the year. Hehehe!'],claim:'十二月 is the first month of the year!',options:['一月','十二月','十月'],answer:'一月',why:'<b>一月</b> (January) is the first month. 十二月 is the twelfth and last!',taunt:'Hehehe! Count backwards, silly!',hint:'Which number means "one"?',art:cal('一','1',440,290,1)}),
+boss('Lie #3: the radical',{lines:['礼物 has 衤, the clothes','radical. Presents are clothes!'],claim:'礼 has 衤, the clothes radical!',options:['礻 (one dot)','衤 (two dots)','忄 (heart)'],answer:'礻 (one dot)',why:'<b>礼</b> has <b>礻</b> with ONE dot. 衤 with two dots is for clothes like 裤 and 裙.',taunt:'Mwahaha! I only give socks as presents!',hint:'Count the dots on the left of 礼.',art:zt(440,300,'礼',100)}),
+finale('Baddie is beaten! 太好了！','新年快乐！','Xīnnián kuàilè!','Happy New Year!','太棒了！You learned New Year words, 拜年 wishes, …的时候, birthday words, dates and 先…再…!'),
+];
+
+
+render();
+</script>
+
+</body></html>
