@@ -126,7 +126,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
     <button id="replay" type="button">Replay</button>
     <button id="next" type="button" class="primary">Next</button>
   </div>
-  <p class="foot">P2 听写 lists with Flamecharge: one list for each P2 Chinese deck and Higher Chinese, with a writing pad and stroke tracing. Use the arrow keys or the big buttons to move around.</p>
+  <p class="foot">P2 听写 with Flamecharge: 11 P2 lists, 2 P1 review lists, 3 Higher Chinese lists and a mixed challenge, with a writing pad. Use the arrow keys or the big buttons to move around.</p>
 </div>
 
 <script>
@@ -566,16 +566,26 @@ const LISTS=[
  ['听写 4: 天气 · 水','p2',L('晴天|qíngtiān|今天是晴天;下雨|xià yǔ|外面下雨了;雨伞|yǔsǎn|带雨伞;天气|tiānqì|天气很好;洗澡|xǐzǎo|我每天洗澡;喝水|hē shuǐ|多喝水;刷牙|shuāyá|早上要刷牙;如果|rúguǒ|如果下雨，我就带雨伞')],
  ['听写 5: 宠物 · 朋友','p2',L('宠物|chǒngwù|你想养什么宠物;小狗|xiǎo gǒu|一只小狗;小猫|xiǎo māo|一只小猫;金鱼|jīnyú|一条金鱼;朋友|péngyou|我们是好朋友;对不起|duìbuqǐ|对不起，我错了;没关系|méi guānxi|没关系;谢谢|xièxie|谢谢您')],
  ['听写 6: 夜市 · 新加坡','p2',L('夜市|yèshì|我们去夜市;热闹|rènao|夜市真热闹;好玩|hǎowán|新加坡真好玩;小吃|xiǎochī|好吃的小吃;玩具|wánjù|我买了玩具;游戏|yóuxì|我们玩游戏;周末|zhōumò|这个周末;公园|gōngyuán|去公园')],
+ ['听写 7: 艺术家 · 开放日','p2',L('艺术家|yìshùjiā|我想当艺术家;画画|huàhuà|我喜欢画画;颜色|yánsè|你喜欢什么颜色;作品|zuòpǐn|这是我的作品;开放日|kāifàngrì|今天是学校开放日;参观|cānguān|爸爸妈妈来学校参观;表演|biǎoyǎn|我们上台表演;介绍|jièshào|我来介绍我的学校')],
+ ['听写 8: 游戏 · 读书','p2',L('游戏|yóuxì|你玩过这个游戏吗;比赛|bǐsài|我们来比赛;赢了|yíng le|我们赢了;输了|shū le|输了也没关系;规则|guīzé|大家要遵守游戏规则;图书馆|túshūguǎn|我去图书馆借书;故事|gùshi|这个故事很好看;世界|shìjiè|书里有一个很大的世界')],
+ ['听写 9: 感谢 · 帮助','p2',L('感谢|gǎnxiè|感谢我周围的人;帮助|bāngzhù|谢谢你帮助我;周围|zhōuwéi|我周围有很多好人;医生|yīshēng|医生帮我们看病;司机|sījī|巴士司机很友善;打扫|dǎsǎo|清洁工人打扫课室;辛苦|xīnkǔ|您辛苦了;礼貌|lǐmào|我们要有礼貌')],
+ ['听写 10: 小侦探','p2',L('侦探|zhēntàn|我是小侦探;发现|fāxiàn|我发现了一个秘密;秘密|mìmì|这是我们的秘密;仔细|zǐxì|我仔细地看一看;奇怪|qíguài|这件事很奇怪;找到|zhǎodào|我找到了铅笔;脚印|jiǎoyìn|地上有小脚印;原来|yuánlái|原来是小猫')],
+ ['听写 11: 生日会 · 好吃的','p2',L('邀请|yāoqǐng|我邀请朋友来我家;生日会|shēngrìhuì|我的生日会很热闹;好吃|hǎochī|这些菜真好吃;鸡饭|jīfàn|我最爱吃鸡饭;蔬菜|shūcài|我们要多吃蔬菜;水果|shuǐguǒ|我爱吃水果;味道|wèidào|这个味道很好;健康|jiànkāng|多运动，身体健康')],
+ ['复习 A: P1 好词 (家人 · 学校)','p2',L('爸爸|bàba|我的爸爸很高;妈妈|māma|妈妈爱我;哥哥|gēge|哥哥会打篮球;姐姐|jiějie|姐姐在看书;学校|xuéxiào|我的学校很大;老师|lǎoshī|老师好;同学|tóngxué|我和同学一起玩;书包|shūbāo|我的书包是蓝色的')],
+ ['复习 B: P1 好词 (一天 · 生活)','p2',L('早上|zǎoshang|我早上七点起床;晚上|wǎnshang|晚上我九点睡觉;星期|xīngqī|今天星期几;吃饭|chīfàn|我们一起吃饭;喜欢|xǐhuan|我喜欢唱歌;动物|dòngwù|动物园里有很多动物;身体|shēntǐ|多运动，身体好;天气|tiānqì|今天天气很好')],
  ['高华听写 A: 阅读好词','hcl',L('害羞|hàixiū|她有点儿害羞;着急|zháojí|小华心里很着急;同学|tóngxué|班上来了新同学;忽然|hūrán|天上忽然下起了大雨;人山人海|rénshān-rénhǎi|夜市里人山人海;五颜六色|wǔyán-liùsè|五颜六色的花;大吃一惊|dàchī-yìjīng|我大吃一惊;安静|ānjìng|图书馆很安静')],
- ['高华听写 B: 写话好词','hcl',L('彩虹|cǎihóng|天上有一道彩虹;星星|xīngxing|一颗亮晶晶的星星;风筝|fēngzheng|我们去放风筝;舒服|shūfu|小猫睡得很舒服;野餐|yěcān|我们去公园野餐;认真|rènzhēn|他认真地写字;勇敢|yǒnggǎn|哥哥很勇敢;最后|zuìhòu|最后，我们回家了')]];
+ ['高华听写 B: 写话好词','hcl',L('彩虹|cǎihóng|天上有一道彩虹;星星|xīngxing|一颗亮晶晶的星星;风筝|fēngzheng|我们去放风筝;舒服|shūfu|小猫睡得很舒服;野餐|yěcān|我们去公园野餐;认真|rènzhēn|他认真地写字;勇敢|yǒnggǎn|哥哥很勇敢;最后|zuìhòu|最后，我们回家了')],
+ ['高华听写 C: 四字词语 · AABB','hcl',L('一心一意|yìxīn-yíyì|他一心一意地画画;自言自语|zìyán-zìyǔ|弟弟一个人在自言自语;七上八下|qīshàng-bāxià|考试前，我的心七上八下;高高兴兴|gāogāo-xìngxìng|我们高高兴兴地上学;干干净净|gāngān-jìngjìng|房间打扫得干干净净;认认真真|rènrèn-zhēnzhēn|他认认真真地写字;整整齐齐|zhěngzhěng-qíqí|书本摆得整整齐齐;五颜六色|wǔyán-liùsè|天上有五颜六色的气球')]];
 const listCard=(it)=>G(flame(90,392,1.05,{pencil:true}),'a-pop',.1)+G(box(190,14,430,368,'#FFFDF6',18)+it[2].map((x,k)=>`<g class="tap" data-zh="${x.w}">`+T(260+(k%2)*200,70+Math.floor(k/2)*84,x.w,'zh','style="font-size:'+(x.w.length>3?24:30)+'px"')+T(260+(k%2)*200,96+Math.floor(k/2)*84,x.p,'py')+`</g>`).join(''),'a-pop',.2);
 const S=[
-{part:'learn',title:'P2 听写 with Flamecharge',who:'flame',say:FL+'Welcome to P2 听写 practice! There\'s a list for each <b>P2 Chinese</b> deck, plus two <b>Higher Chinese</b> lists. For each list: first <b>look</b> at the words, then do the <b>听写</b>. Write on the pad, tap Check, and mark yourself honestly!',
+{part:'learn',title:'P2 听写 with Flamecharge',who:'flame',say:FL+'Welcome to P2 听写 practice! There are 11 P2 lists, 2 P1 review lists, 3 <b>Higher Chinese</b> lists and a mixed challenge. For each list: first <b>look</b> at the words, then do the <b>听写</b>. Write on the pad, tap Check, and mark yourself honestly!',
  draw:()=>G(`<circle cx="320" cy="250" r="150" fill="#FFE7A8" opacity=".6"/>`,'a-pop',0)+G(flame(320,385,1.9,{wave:true}),'a-pop',.2)+G(otter(80,392,.75,{wave:true})+wala(560,392,.75,{wave:true}),'a-fade',.6)+G(zhw(110,90,'听写','tīngxiě','',48),'a-drop',.8)},
 {part:'learn',title:'How to practise 怎么练',who:'wala',say:WL+'My routine: <b>1.</b> Read the list out loud. <b>2.</b> Tap each word to hear it, and look at the radical. <b>3.</b> Do the 听写. <b>4.</b> Write each wrong word three times, then try the missed ones again. That\'s how I got 满分!',
  draw:()=>G(wala(100,392,1.1,{wave:true}),'a-pop',.1)+[['👀','Read the list'],['👂','Listen to each word'],['✍️','Do the 听写'],['🔁','Fix and try again']].map(([e,t],k)=>{const y=20+k*90;return G(box(220,y,400,78,['#FFE7A8','#DDF1FA','#FDE2E2','#E6F6EA'][k],14)+`<g transform="translate(262 ${y+39})">${em(e,36)}</g>`+T(310,y+48,(k+1)+'. '+t,'lab'),'a-pop',.3+k*.2)}).join('')},
 ...LISTS.flatMap(it=>[{part:it[1]==='p2'?'try':'check',title:it[0]+' · 看一看',who:'flame',say:FL+'Here is the list. Tap each word to hear it. Look closely at every stroke before we start!',draw:()=>listCard(it)},
  {part:it[1]==='p2'?'try':'check',title:it[0],who:'flame',say:'',draw:()=>`<g class="play"></g>`,mount:a=>tingxie(a,shuf2(it[2]),FL+'Listen, write the 词语 on the pad, then tap <b>Check</b>!')}]),
+{part:'try',title:'听写挑战 Mixed challenge',who:'flame',say:'',draw:()=>`<g class="play"></g>`,
+ mount:a=>tingxie(a,shuf2(LISTS.filter(x=>x[1]==='p2').flatMap(x=>x[2])).slice(0,10),FL+'<b>Challenge!</b> Ten 词语 picked at random from ALL the P2 lists. Tap <b>Replay</b> for a new mix!')},
 {part:'check',title:'听写小冠军！',who:'flame',say:FL+'<b>太棒了！</b> Keep practising a list every day. For your school\'s own list, use <b>My Word Lists</b> in the Spelling Nest!',
  draw:()=>G(flame(320,385,1.65,{wave:true}),'a-pop',.1)+G(star(140,100,36)+star(500,100,36),'a-pop',.5)+zt(320,70,'听写小冠军！',40,'#C2410C')+G(otter(80,392,.7,{wave:true})+wala(560,392,.7,{wave:true}),'a-pop',.6),mount:a=>a.later(()=>a.win(),500)}];
 
