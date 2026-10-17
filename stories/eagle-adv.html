@@ -470,16 +470,16 @@ const EG='<b class="eg">Flame:</b> ';
 
 /* ===== Storybook helpers: chapters, scenery, the Rain Tree / Treeman, challenge pages ===== */
 /* chapters replace the Learn / Try / Check nav */
-const CHAP=[['c1','1 · Sky Gate','#5BB8E8'],['c2','2 · Phoenix Peak','#FF7A45'],['c3','3 · Whisper Stream','#2E8BC0'],['c4','4 · Sun Meadow','#E0A800'],['c5','5 · The Treeman','#4FAE63'],['c6','6 · Dinner at the Den','#B9471A']];
-(function(){CHAP.forEach(([k,l])=>PARTS[k]=l);const nav=document.querySelector('.parts');nav.innerHTML=CHAP.map(([k,l])=>`<button type="button" data-part="${k}">${l}</button>`).join('');
+function setChapters(CHAP){CHAP.forEach(([k,l])=>PARTS[k]=l);const nav=document.querySelector('.parts');nav.innerHTML=CHAP.map(([k,l])=>`<button type="button" data-part="${k}">${l}</button>`).join('');
  nav.querySelectorAll('button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
  const st=document.createElement('style');st.textContent=CHAP.map(([k,,c])=>`.tag.${k}{background:${c}} #dots button.${k}{border-color:${c}} #dots button.${k}.done{background:${c}}`).join('')+
  `.ui button.opt{font-size:19px;max-width:100%;white-space:normal;line-height:1.25} .ui button.zh{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
   .ui .keys{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:100%} .ui .keys button{min-width:52px;padding:6px 10px 3px}
   .ui .ans{min-width:110px;text-align:center;font-family:var(--display);font-weight:800;font-size:30px;border:3px solid var(--ink);border-radius:14px;background:#fff;padding:2px 14px 0}
-  .ui button.pickd{background:var(--sun)}`;document.head.appendChild(st);})();
+  .ui button.pickd{background:var(--sun)}`;document.head.appendChild(st);}
 const CAST={eagle:[eagle,EG],flame:[flame,FL],wala:[wala,WL],otter:[otter,CH],baddie:[baddie,BD]};
-const castAt=(w,x,y=392,s=1,o={})=>w==='eagle'?eagle(x,y,s*.95,o):w==='flame'?flame(x,y,s*.95,o):w==='wala'?wala(x,y,s,o):w==='otter'?otter(x,y,s,o):baddie(x,y,s,o);
+const CASTDRAW={};
+const castAt=(w,x,y=392,s=1,o={})=>CASTDRAW[w]?CASTDRAW[w](x,y,s,o):w==='eagle'?eagle(x,y,s*.95,o):w==='flame'?flame(x,y,s*.95,o):w==='wala'?wala(x,y,s,o):w==='otter'?otter(x,y,s,o):baddie(x,y,s,o);
 /* ---- scenery ---- */
 const sky=(top='#BFE6F7',bot='#FFF8E8')=>`<defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient></defs><rect width="640" height="400" fill="url(#skyg)"/>`;
 const cloud=(x,y,s=1,f='#fff')=>`<g transform="translate(${x} ${y}) scale(${s})" opacity=".95"><ellipse cx="0" cy="0" rx="46" ry="22" fill="${f}"/><ellipse cx="-30" cy="6" rx="28" ry="16" fill="${f}"/><ellipse cx="32" cy="6" rx="30" ry="16" fill="${f}"/><ellipse cx="6" cy="-14" rx="26" ry="18" fill="${f}"/></g>`;
@@ -512,7 +512,7 @@ const pg=(part,title,who,say,draw,extra={})=>Object.assign({part,title,who,say:C
 function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduce((n,c)=>n+(CJ.test(c)?1.9:1),0);const toks=t.match(/[⺀-鿿＀-￯　-〿“”]|[^\s⺀-鿿＀-￯　-〿“”]+|\s+/g)||[];const L=[];let c='';
   toks.forEach(x=>{if(/^\s+$/.test(x)){if(c)c+=' ';return}if(W(c+x)>max&&c.trim()&&!/^[，。！？、：；”）]$/.test(x)){L.push(c.trim());c=x}else c+=x});if(c.trim())L.push(c.trim());return L}
 /* challenge card: presenter on the left, question scroll on the right */
-const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0']};
+const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0'],science:['🔬 Science','#3E9A52']};
 function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
   return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
    +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
@@ -542,6 +542,9 @@ function story(part,title,who,cap,scene,say,extra={}){const hb=extra.bag!=null,L
   draw:()=>scene()+G(`<rect x="16" y="12" width="${extra.capw||608}" height="${L.length*24+20}" rx="12" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="2.5" opacity=".96"/>`+L.map((l,k)=>T(30,38+k*24,l,'sm','style="font-size:16px;font-style:italic"')).join(''),'a-fade',.1)+(hb?bag(extra.bag):'')},extra)}
 
 /* Flame the Eagle Adventure: a storybook with P2 Maths, English and 华文 challenges spread through the story */
+/* chapters */
+const CHAP=[['c1','1 · Sky Gate','#5BB8E8'],['c2','2 · Phoenix Peak','#FF7A45'],['c3','3 · Whisper Stream','#2E8BC0'],['c4','4 · Sun Meadow','#E0A800'],['c5','5 · The Treeman','#4FAE63'],['c6','6 · Dinner at the Den','#B9471A']];
+setChapters(CHAP);
 const tri=(x,y)=>[1,2,3,4,5].map((n,r)=>[...Array(n)].map((_,k)=>`<circle cx="${x+(k-(n-1)/2)*26}" cy="${y+r*24}" r="9" fill="#FFC83D" stroke="#C88A00" stroke-width="2"/>`).join('')).join('')+T(x,y+5*24+12,'1, 3, 6, 10, 15, ?','lab mid');
 const nest=(x,y,n)=>`<g transform="translate(${x} ${y})"><ellipse rx="40" ry="14" fill="#B07A3E" stroke="#1F3A4A" stroke-width="2.5"/>${[...Array(n)].map((_,k)=>`<ellipse cx="${-18+k*12}" cy="-10" rx="7" ry="9" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="2"/>`).join('')}</g>`;
 const scroll=(lines)=>G(`<rect x="150" y="166" width="340" height="${lines.length*46+70}" rx="16" fill="#FFF3D6" stroke="#8A5A2B" stroke-width="4"/>`+T(320,206,'🗺️ The Mission','h mid','style="fill:#8A5A2B"')+lines.map((l,k)=>T(176,254+k*44,l,'lab')).join(''),'a-pop',.4);
