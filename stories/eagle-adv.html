@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flame the Eagle Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Storybook · P2 Maths · English · 华文</p>
+      <h1>Flame the Eagle Adventure</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">A storybook adventure with Wala, Flamecharge and Flame the Eagle: save the Old Rain Tree with P2 Maths, English and 华文 challenges. Use the arrow keys or the big buttons to move around.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .pyf{font-family:var(--body);font-style:normal} /* Baloo 2 draws macron vowels (ā ē ī ō ū) broken, so pinyin in display text uses the body font */
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+/* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
+  const pool=vs.filter(ok); if(!pool.length) return null;
+  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
+  const base=loc.length?loc:pool;
+  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
+  const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
+ }catch(e){} }
+try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
+  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+   },'lie'))}};
+}
+
+/* ===== Flamecharge the Phoenix: spelling and 听写 champion ===== */
+/* origin = feet centre, ~150 tall at s=1 (crest included) */
+function flame(x,y,s=1,o={}){
+  const ink=C.ink,red='#E8552B',org='#FF8A3D',yel='#FFC83D',belly='#FFE7A8',dk='#C2410C',bk='#FFB020';
+  const wingR=o.wave?`<path d="M24 -60 q20 -34 50 -58 l-4 12 l12 -6 l-6 12 l13 -3 l-8 11 l12 1 l-11 9 l9 5 q-22 10 -42 34z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><path d="M34 -66 q12 -18 28 -30" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
+   :o.pencil?`<path d="M24 -62 q30 0 36 28 l-9 -3 l2 10 l-9 -5 l-1 9 l-8 -7 q-4 4 -12 -2z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><g transform="translate(58 -34) rotate(-35)"><rect x="-6" y="-34" width="12" height="40" fill="${C.sky}" stroke="${ink}" stroke-width="2.5"/><path d="M-6 6 l6 12 l6 -12z" fill="#F2D2B0" stroke="${ink}" stroke-width="2"/><rect x="-6" y="-40" width="12" height="7" fill="${C.berry}" stroke="${ink}" stroke-width="2"/></g>`
+   :`<path d="M24 -62 q28 6 34 40 l-9 -5 l0 11 l-8 -7 l-3 10 l-6 -9 q-4 2 -8 -4z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`;
+  const wingL=`<path d="M-24 -62 q-28 6 -34 40 l9 -5 l0 11 l8 -7 l3 10 l6 -9 q4 2 8 -4z" fill="${org}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <g class="${o.still?'':'flick'}"><path d="M-14 -12 q-46 12 -64 -10 q22 4 30 -10 q-26 -6 -32 -30 q22 18 36 10 q-12 -14 -8 -34 q14 28 34 38z" fill="${red}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-20 -16 q-30 6 -44 -8 q18 2 26 -10 q-14 -8 -16 -22 q14 14 30 14z" fill="${yel}"/></g>
+  <path d="M0 -76 q34 2 32 38 q-2 36 -32 38 q-30 -2 -32 -38 q-2 -36 32 -38z" fill="${org}" stroke="${ink}" stroke-width="3"/>
+  <path d="M0 -66 q20 2 20 30 q-2 26 -20 28 q-18 -2 -20 -28 q0 -28 20 -30z" fill="${belly}"/>
+  <path d="M-10 -46 l5 5 l5 -5 l5 5 l5 -5 M-10 -30 l5 5 l5 -5 l5 5 l5 -5" stroke="${yel}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M-14 -2 v7 M14 -2 v7" stroke="#D9A21B" stroke-width="5" stroke-linecap="round"/>
+  <path d="M-25 12 q2 -8 11 -7 q9 -1 11 7 M-14 5 v7 M3 12 q2 -8 11 -7 q9 -1 11 7 M14 5 v7" stroke="#D9A21B" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M-25 12 l-2 4 M-3 12 l2 4 M-14 12 v4 M3 12 l-2 4 M25 12 l2 4 M14 12 v4" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>
+  ${wingL}${wingR}
+  <g class="${o.still?'':'flick'}" style="transform-origin:0px -118px"><path d="M-22 -108 q-14 -14 -30 -14 q12 -6 22 -4 q-16 -14 -20 -30 q16 10 26 18 q-4 -18 4 -34 q6 20 16 26 q4 -14 16 -20 q-4 18 0 30 q10 -8 22 -6 q-12 8 -16 22z" fill="${red}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-12 -112 q-6 -14 -2 -26 q6 12 12 14 q2 -10 10 -16 q-2 14 2 24z" fill="${yel}"/></g>
+  <path d="M0 -122 q32 0 32 30 q0 16 -10 26 q-10 8 -22 8 q-12 0 -22 -8 q-10 -10 -10 -26 q0 -30 32 -30z" fill="${org}" stroke="${ink}" stroke-width="3"/>
+  <path d="M-30 -96 q-12 4 -16 12 q10 -2 16 0 M30 -96 q12 4 16 12 q-10 -2 -16 0" fill="${org}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M-22 -88 q4 16 22 22 q18 -6 22 -22 q-10 6 -22 6 q-12 0 -22 -6z" fill="${belly}"/>
+  <circle cx="-12" cy="-94" r="7" fill="${yel}" stroke="${ink}" stroke-width="2"/><circle cx="12" cy="-94" r="7" fill="${yel}" stroke="${ink}" stroke-width="2"/>
+  <circle cx="-11" cy="-93" r="4.6" fill="${ink}"/><circle cx="11" cy="-93" r="4.6" fill="${ink}"/>
+  <circle cx="-9.5" cy="-95" r="1.8" fill="#fff"/><circle cx="12.5" cy="-95" r="1.8" fill="#fff"/>
+  <path d="M-24 -106 q10 -2 18 6 M24 -106 q-10 -2 -18 6" stroke="${dk}" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="-22" cy="-80" rx="5" ry="3" fill="#F4A3A8" opacity=".85"/><ellipse cx="22" cy="-80" rx="5" ry="3" fill="#F4A3A8" opacity=".85"/>
+  <path d="M-9 -88 q9 -6 18 0 q2 10 -4 18 q-3 4 -5 9 q-2 -5 -5 -9 q-6 -8 -4 -18z" fill="${bk}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M-4 -70 q4 3 8 0 q-2 5 -4 9 q-2 -4 -4 -9z" fill="#B45309"/>
+  <path d="M-5 -84 h1 M4 -84 h1" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>
+  </g></g>`;
+}
+FACES.flame=()=>flame(50,132,.68,{still:true});
+VOICE.flame={en:[1.0,1.35],zh:[.82,1.3],pref:VFEM};
+const FL='<b class="fl">Flamecharge:</b> ';
+(function(){const st=document.createElement('style');st.textContent=`
+ .bubble b.fl{color:#C2410C} .flick{animation:flick 1.3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+ @keyframes flick{50%{transform:scale(1.06,.94) rotate(-2deg)}} @media (prefers-reduced-motion: reduce){.flick{animation:none}}
+ .ui button.tile{min-width:52px;font-size:26px;text-transform:lowercase}
+ .ui .slots{display:flex;gap:6px;justify-content:center;width:100%;flex-wrap:wrap}
+ .ui .slots span{min-width:40px;height:52px;border-bottom:4px solid var(--ink);font-family:var(--display);font-weight:800;font-size:32px;text-align:center;line-height:56px}
+ .ui .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}
+ .ui button.opt{font-size:20px} .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:26px;min-width:64px}`;document.head.appendChild(st);})();
+const shk2=b=>{b.classList.remove('no');void b.offsetWidth;b.classList.add('no')};
+const shuf2=x=>[...x].sort(()=>Math.random()-.5);
+/* ---- hanzi stroke writer (library inlined; stroke data loaded per character from the CDN) ---- */
+const HWDATA='https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/';
+function hwBox(x,y,w,cls){return `<rect x="${x}" y="${y}" width="${w}" height="${w}" fill="#fff" stroke="${C.bad}" stroke-width="2"/><path d="M${x} ${y+w/2} h${w} M${x+w/2} ${y} v${w} M${x} ${y} l${w} ${w} M${x+w} ${y} l${-w} ${w}" stroke="${C.bad}" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/><svg class="${cls}" x="${x}" y="${y}" width="${w}" height="${w}" viewBox="0 0 ${w} ${w}"></svg>`}
+function hwMake(el,ch,w,opt={}){if(typeof HanziWriter==='undefined')return null;
+  try{return HanziWriter.create(el,ch,Object.assign({width:w,height:w,padding:6,showOutline:true,strokeColor:'#1F3A4A',outlineColor:'#E3E8EB',strokeAnimationSpeed:1.1,delayBetweenStrokes:260,
+    charDataLoader:(c,ok,bad)=>{fetch(HWDATA+encodeURIComponent(c)+'.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(ok).catch(()=>{fallback(el,c,w);bad&&bad()})}},opt))}catch(e){fallback(el,ch,w);return null}}
+function fallback(el,c,w){el.innerHTML=`<text x="${w/2}" y="${w*.78}" text-anchor="middle" style="font-family:'Noto Sans SC','Noto Sans CJK SC',sans-serif;font-size:${w*.8}px;fill:#1F3A4A">${c}</text>`}
+/* ---- generic multiple-choice rounds ---- */
+function pick(a,R,intro,who='flame'){let r=0,busy=false;const NM=who==='flame'?FL:CH;
+  const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+Q.stage();if(Q.say)a.hear(Q.say);
+   a.ui.innerHTML='';if(Q.say)a.btn('🔊 Hear it',()=>a.hear(Q.say));shuf2(Q.options).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');r++;
+     if(r<R.length){a.confetti();a.as(who,NM+'<b>Yes!</b> '+(Q.ok||''));a.later(show,1900)}else a.win(NM+'<b>Blazing!</b> '+(Q.ok||''))}else{shk2(b);a.as(who,NM+(Q.hint||'Look again carefully!'))}},Q.cls||'opt'))};
+  show();a.as(who,intro);}
+/* ---- hear-and-spell with letter tiles ---- */
+function spellTiles(a,W,intro){let r=0,got='',miss=0,done=false;const decoy='aeiourstlnmcdkbhpwy';
+  const show=()=>{done=false;got='';miss=0;const {w,s}=W[r];const extra=shuf2([...decoy].filter(c=>!w.includes(c))).slice(0,2);const tiles=shuf2([...w,...extra]);
+   a.q('.play').innerHTML=T(320,30,`${r+1} of ${W.length}`,'sm mid mut')+G(flame(110,370,1.35,{pencil:true}),'')+G(box(250,70,360,110,'#FFF4D6',18)+T(430,112,'Listen, then spell the word.','lab mid')+T(430,146,s?'"'+s+'"':'','sm mid mut'),'a-pop');
+   const say=()=>a.hear(w+'. '+(s||'')+'. '+w);say();
+   a.ui.innerHTML='';const sl=document.createElement('div');sl.className='slots';a.ui.appendChild(sl);const upd=()=>{sl.innerHTML=[...w].map((_,i)=>`<span>${got[i]||''}</span>`).join('')};upd();
+   const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+   const used=[];tiles.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='tile';b.textContent=c;b.onclick=()=>{if(done||b.disabled||got.length>=w.length)return;got+=c;used.push(b);b.disabled=true;upd()};row.appendChild(b)});
+   a.btn('🔊 Again',say);a.btn('⌫',()=>{if(done||!used.length)return;got=got.slice(0,-1);used.pop().disabled=false;upd()});
+   a.btn('Check ✓',b=>{if(done)return;if(got===w){done=true;b.classList.add('ok');r++;if(r<W.length){a.confetti();a.as('flame',FL+`<b>${w}</b>: perfect! 🔥`);a.later(show,1800)}else a.win(FL+'<b>Spelling superstar!</b> Every word spelt right.')}
+     else{miss++;shk2(b);if(miss>=2){a.as('flame',FL+`Nearly! It's spelt <b>${[...w].join('-')}</b>. Try once more.`)}else a.as('flame',FL+'Not quite. Listen again and check each sound.')}},'go');};
+  show();a.as('flame',intro);}
+
+/* ===== Flame the Eagle (Flamecharge's friend): bald-eagle look, red scarf, flight goggles ===== */
+function eagle(x,y,s=1,o={}){const ink=C.ink,br='#7A4A2A',dk='#5A3418',wh='#FFFFFF',yl='#F5B700',red='#D93A2B';
+  const wingR=o.wave?`<path d="M26 -62 q24 -40 58 -60 l-6 13 l13 -5 l-7 12 l13 -2 l-9 11 l12 2 l-12 8 q-22 12 -48 32z" fill="${br}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`
+   :o.point?`<path d="M26 -60 q34 -8 62 -2 l-10 7 l12 4 l-12 5 l8 7 q-30 2 -58 6z" fill="${br}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`
+   :`<path d="M26 -64 q26 8 30 44 l-9 -6 l-1 11 l-8 -8 l-4 10 l-6 -10 q-4 2 -6 -4z" fill="${br}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-16 -10 l-20 22 l10 -2 l2 10 l8 -8 l6 8 l4 -10 l8 4z" fill="${wh}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M0 -78 q34 2 34 40 q-2 38 -34 40 q-32 -2 -34 -40 q0 -38 34 -40z" fill="${br}" stroke="${ink}" stroke-width="3"/>
+  <path d="M0 -66 q18 2 18 28 q-2 26 -18 28 q-16 -2 -18 -28 q0 -26 18 -28z" fill="#9A6440"/>
+  <path d="M-10 -44 q5 4 10 0 q5 4 10 0 M-10 -30 q5 4 10 0 q5 4 10 0" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-14 -2 v7 M14 -2 v7" stroke="${yl}" stroke-width="5" stroke-linecap="round"/>
+  <path d="M-25 12 q2 -8 11 -7 q9 -1 11 7 M3 12 q2 -8 11 -7 q9 -1 11 7" stroke="${yl}" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M-25 12 l-2 4 M-3 12 l2 4 M3 12 l-2 4 M25 12 l2 4" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>
+  <path d="M-26 -64 q-26 8 -30 44 l9 -6 l1 11 l8 -8 l4 10 l6 -10 q4 2 6 -4z" fill="${br}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>${wingR}
+  <path d="M-22 -76 q22 12 44 0 l4 10 q-26 12 -52 0z" fill="${red}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M14 -70 l16 22 l-12 -2 z" fill="${red}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M0 -128 q30 0 31 28 q0 18 -12 26 q-8 6 -19 6 q-11 0 -19 -6 q-12 -8 -12 -26 q1 -28 31 -28z" fill="${wh}" stroke="${ink}" stroke-width="3"/>
+  <path d="M-24 -116 q-10 -10 -4 -18 q4 8 10 8 M20 -122 q8 -10 18 -8 q-6 4 -8 10" fill="${wh}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <g transform="translate(0 -122)"><rect x="-26" y="-4" width="52" height="7" rx="3" fill="#6B5B4B"/><circle cx="-11" cy="-2" r="9" fill="#9AD3F0" stroke="${ink}" stroke-width="2.5"/><circle cx="11" cy="-2" r="9" fill="#9AD3F0" stroke="${ink}" stroke-width="2.5"/><path d="M-14 -5 l4 -2 M8 -5 l4 -2" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+  <circle cx="-11" cy="-100" r="6.5" fill="${yl}" stroke="${ink}" stroke-width="2"/><circle cx="11" cy="-100" r="6.5" fill="${yl}" stroke="${ink}" stroke-width="2"/>
+  <circle cx="-10" cy="-99.5" r="4" fill="${ink}"/><circle cx="10" cy="-99.5" r="4" fill="${ink}"/><circle cx="-8.6" cy="-101" r="1.5" fill="#fff"/><circle cx="11.4" cy="-101" r="1.5" fill="#fff"/>
+  <path d="M-21 -109 l13 4 M21 -109 l-13 4" stroke="${ink}" stroke-width="4" stroke-linecap="round"/>
+  <path d="M-10 -94 q10 -6 20 0 q6 12 -2 22 q-3 4 -4 9 q-4 -6 -8 -10 q-8 -8 -6 -21z" fill="${yl}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M-4 -74 q4 3 8 1 q-2 6 -3 10 q-3 -5 -5 -11z" fill="#C88A00"/>
+  </g></g>`}
+FACES.eagle=()=>eagle(50,138,.62,{still:true});
+VOICE.eagle={en:[.98,.95],zh:[.82,.95],pref:VMALE};
+const EG='<b class="eg">Flame:</b> ';
+(function(){const st=document.createElement('style');st.textContent='.bubble b.eg{color:#7A4A2A}';document.head.appendChild(st)})();
+
+/* ===== Storybook helpers: chapters, scenery, the Rain Tree / Treeman, challenge pages ===== */
+/* chapters replace the Learn / Try / Check nav */
+const CHAP=[['c1','1 · Sky Gate','#5BB8E8'],['c2','2 · Phoenix Peak','#FF7A45'],['c3','3 · Whisper Stream','#2E8BC0'],['c4','4 · Sun Meadow','#E0A800'],['c5','5 · The Treeman','#4FAE63'],['c6','6 · Dinner at the Den','#B9471A']];
+(function(){CHAP.forEach(([k,l])=>PARTS[k]=l);const nav=document.querySelector('.parts');nav.innerHTML=CHAP.map(([k,l])=>`<button type="button" data-part="${k}">${l}</button>`).join('');
+ nav.querySelectorAll('button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+ const st=document.createElement('style');st.textContent=CHAP.map(([k,,c])=>`.tag.${k}{background:${c}} #dots button.${k}{border-color:${c}} #dots button.${k}.done{background:${c}}`).join('')+
+ `.ui button.opt{font-size:19px;max-width:100%;white-space:normal;line-height:1.25} .ui button.zh{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+  .ui .keys{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:100%} .ui .keys button{min-width:52px;padding:6px 10px 3px}
+  .ui .ans{min-width:110px;text-align:center;font-family:var(--display);font-weight:800;font-size:30px;border:3px solid var(--ink);border-radius:14px;background:#fff;padding:2px 14px 0}
+  .ui button.pickd{background:var(--sun)}`;document.head.appendChild(st);})();
+const CAST={eagle:[eagle,EG],flame:[flame,FL],wala:[wala,WL],otter:[otter,CH],baddie:[baddie,BD]};
+const castAt=(w,x,y=392,s=1,o={})=>w==='eagle'?eagle(x,y,s*.95,o):w==='flame'?flame(x,y,s*.95,o):w==='wala'?wala(x,y,s,o):w==='otter'?otter(x,y,s,o):baddie(x,y,s,o);
+/* ---- scenery ---- */
+const sky=(top='#BFE6F7',bot='#FFF8E8')=>`<defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient></defs><rect width="640" height="400" fill="url(#skyg)"/>`;
+const cloud=(x,y,s=1,f='#fff')=>`<g transform="translate(${x} ${y}) scale(${s})" opacity=".95"><ellipse cx="0" cy="0" rx="46" ry="22" fill="${f}"/><ellipse cx="-30" cy="6" rx="28" ry="16" fill="${f}"/><ellipse cx="32" cy="6" rx="30" ry="16" fill="${f}"/><ellipse cx="6" cy="-14" rx="26" ry="18" fill="${f}"/></g>`;
+const grass=(y=330,c='#9ED48A')=>`<path d="M0 ${y} q160 -24 320 0 t320 0 V400 H0z" fill="${c}"/>`;
+const sun=(x,y,r=34)=>`<g transform="translate(${x} ${y})">${[...Array(10)].map((_,k)=>`<line x1="0" y1="${-r-8}" x2="0" y2="${-r-20}" stroke="#FFC83D" stroke-width="5" stroke-linecap="round" transform="rotate(${k*36})"/>`).join('')}<circle r="${r}" fill="#FFD95A" stroke="#E0A800" stroke-width="3"/></g>`;
+const gate=(x=320)=>`<g transform="translate(${x} 0)"><path d="M-120 330 v-180 q120 -110 240 0 v180" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round"/><path d="M-120 330 v-180 q120 -110 240 0 v180" fill="none" stroke="#9AD3F0" stroke-width="6" stroke-dasharray="2 14" stroke-linecap="round"/>${cloud(-120,330,.9)}${cloud(120,330,.9)}${cloud(0,62,.8)}</g>`;
+const peak=()=>`<path d="M-20 400 L200 150 L300 230 L420 110 L660 400z" fill="#C9B79C" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/><path d="M380 156 L420 110 L462 160 q-20 10 -40 0 q-20 10 -42 -4z" fill="#fff"/><ellipse cx="420" cy="140" rx="46" ry="14" fill="#B07A3E" stroke="#1F3A4A" stroke-width="3"/>`;
+const stream=(dirty=false)=>`<path d="M0 300 q160 -40 320 0 t320 0 V360 q-160 40 -320 0 t-320 0z" fill="${dirty?'#8FA39A':'#7CC8F0'}" stroke="#1F3A4A" stroke-width="3"/>`+(dirty?'':`<path d="M60 318 q20 -6 40 0 M300 330 q20 -6 40 0 M520 316 q20 -6 40 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>`);
+const junk=()=>[[90,320,'🥤'],[170,332,'🥫'],[260,318,'🧴'],[380,336,'🥤'],[470,322,'🥫'],[560,330,'🛍️']].map(([x,y,e])=>T(x,y,e,'mid','style="font-size:30px"')).join('');
+const flowers=(n=9,y=350)=>[...Array(n)].map((_,k)=>{const x=30+k*(580/(n-1));return `<g transform="translate(${x} ${y+(k%2)*14})"><line y1="0" y2="-26" stroke="#3E8A3E" stroke-width="3"/><circle cy="-30" r="9" fill="${['#FFC83D','#F4A3A8','#fff'][k%3]}" stroke="#1F3A4A" stroke-width="2"/><circle cy="-30" r="3.5" fill="#E0A800"/></g>`}).join('');
+const sunflower=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><line y1="0" y2="-60" stroke="#3E8A3E" stroke-width="5"/>${[...Array(12)].map((_,k)=>`<ellipse cx="0" cy="-82" rx="6" ry="14" fill="#FFC83D" stroke="#C88A00" stroke-width="1.5" transform="rotate(${k*30} 0 -66)"/>`).join('')}<circle cy="-66" r="12" fill="#7A4A2A"/></g>`;
+const den=()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/><path d="M40 300 v-150 q0 -40 40 -40 h80 q40 0 40 40 v150" fill="#7CC8F0" stroke="#1F3A4A" stroke-width="3"/><path d="M120 110 v190 M40 200 h160" stroke="#1F3A4A" stroke-width="3"/>${T(120,180,'☾','mid','style="font-size:40px;fill:#FFE7A8"')}<rect x="460" y="90" width="120" height="90" rx="8" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/>${T(520,148,"Chowdie's Den",'sm mid','style="font-weight:800"')}`;
+const table=()=>`<ellipse cx="320" cy="300" rx="230" ry="46" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/>`+[['🥟',230,292],['🍜',320,286],['🥗',410,292],['🍗',270,312],['🍉',370,314]].map(([e,x,y])=>T(x,y,e,'mid','style="font-size:34px"')).join('');
+/* the Rain Tree: 0 healthy, 1 wilting, 2 Treeman (awake, cross), 3 healed and blossoming */
+function rainTree(x,y,s=1,st=0){const leaf=st===0?'#4FAE63':st===1?'#9DBA6A':st===2?'#8A8F6A':'#4FAE63',bark='#8A5A2B';
+  const face=st===0?'':st===1?`<path d="M-26 -120 q8 -6 16 0 M10 -120 q8 -6 16 0" stroke="#1F3A4A" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M-12 -90 q12 -8 24 0" stroke="#1F3A4A" stroke-width="4" fill="none" stroke-linecap="round"/>`
+   :st===2?`<path d="M-32 -132 l20 8 M32 -132 l-20 8" stroke="#1F3A4A" stroke-width="6" stroke-linecap="round"/><circle cx="-18" cy="-116" r="9" fill="#FFE27A" stroke="#1F3A4A" stroke-width="3"/><circle cx="18" cy="-116" r="9" fill="#FFE27A" stroke="#1F3A4A" stroke-width="3"/><circle cx="-18" cy="-116" r="3.5" fill="#1F3A4A"/><circle cx="18" cy="-116" r="3.5" fill="#1F3A4A"/><path d="M-20 -86 q20 -14 40 0 q-20 6 -40 0z" fill="#3B2412" stroke="#1F3A4A" stroke-width="3"/>`
+   :`<path d="M-26 -122 q8 6 16 0 M10 -122 q8 6 16 0" stroke="#1F3A4A" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M-14 -96 q14 14 28 0" stroke="#1F3A4A" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="-30" cy="-104" rx="7" ry="4" fill="#F4A3A8"/><ellipse cx="30" cy="-104" rx="7" ry="4" fill="#F4A3A8"/>`;
+  const arms=st===2?`<path d="M-40 -150 q-50 -10 -80 -60 M-80 -190 l-20 -6 M-100 -205 l-4 -18" stroke="${bark}" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M40 -150 q50 -10 80 -60 M80 -190 l20 -6 M100 -205 l4 -18" stroke="${bark}" stroke-width="16" fill="none" stroke-linecap="round"/>`:'';
+  const feet=st===2?`<path d="M-50 0 q-20 -4 -36 4 M-30 0 q-6 6 -20 10 M30 0 q6 6 20 10 M50 0 q20 -4 36 4" stroke="${bark}" stroke-width="12" fill="none" stroke-linecap="round"/>`:`<path d="M-50 0 q-30 4 -50 0 M50 0 q30 4 50 0" stroke="${bark}" stroke-width="10" fill="none" stroke-linecap="round"/>`;
+  const fall=st===1||st===2?[[-130,-60],[120,-30],[-90,-10],[150,-90]].map(([a,b])=>`<ellipse cx="${a}" cy="${b}" rx="9" ry="5" fill="#C8A64A" transform="rotate(30 ${a} ${b})"/>`).join(''):'';
+  const bloom=st===3?[...Array(14)].map((_,k)=>`<circle cx="${Math.cos(k*2.4)*(70+k*6)}" cy="${-250+Math.sin(k*2.4)*(40+k*2)}" r="7" fill="#F4A3C8" stroke="#1F3A4A" stroke-width="1.5"/>`).join(''):'';
+  return `<g transform="translate(${x} ${y}) scale(${s})">${st===2?'<g class="a-wig" style="transform-origin:0 0">':'<g>'}${feet}<path d="M-46 0 q10 -80 6 -170 h80 q-4 90 6 170z" fill="${bark}" stroke="#1F3A4A" stroke-width="3"/>${arms}
+   <ellipse cx="0" cy="-250" rx="${st===1||st===2?160:180}" ry="${st===1||st===2?70:84}" fill="${leaf}" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="-90" cy="-232" rx="70" ry="44" fill="${leaf}" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="90" cy="-232" rx="70" ry="44" fill="${leaf}" stroke="#1F3A4A" stroke-width="3"/>
+   ${bloom}${face}${fall}</g></g>`}
+/* mission bag of treasures in the top-right corner */
+const bag=(n,x=470)=>G(`<g transform="translate(${x-470} 0)"><rect x="470" y="10" width="160" height="44" rx="22" fill="#fff" stroke="#1F3A4A" stroke-width="2.5" opacity=".95"/>`+['💧','🌻','🎵'].map((e,k)=>T(510+k*40,42,e,'mid',`style="font-size:24px;opacity:${k<n?1:.18}"`)).join('')+'</g>','a-pop',.2);
+/* ---- page builders ---- */
+const pg=(part,title,who,say,draw,extra={})=>Object.assign({part,title,who,say:CAST[who][1]+say,draw},extra);
+function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduce((n,c)=>n+(CJ.test(c)?1.9:1),0);const toks=t.match(/[⺀-鿿＀-￯　-〿“”]|[^\s⺀-鿿＀-￯　-〿“”]+|\s+/g)||[];const L=[];let c='';
+  toks.forEach(x=>{if(/^\s+$/.test(x)){if(c)c+=' ';return}if(W(c+x)>max&&c.trim()&&!/^[，。！？、：；”）]$/.test(x)){L.push(c.trim());c=x}else c+=x});if(c.trim())L.push(c.trim());return L}
+/* challenge card: presenter on the left, question scroll on the right */
+const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0']};
+function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
+  return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
+   +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
+let CHN=0;
+const praise=['Brilliant!','Super brain!','You got it!','Amazing!','Wonderful!','Spot on!'];
+const winCh=(a,who,why)=>{a.win(CAST[who][1]+'<b>'+praise[Math.floor(Math.random()*praise.length)]+'</b> '+why)};
+const missCh=(a,who,hint,b)=>{if(b){b.classList.remove('no');void b.offsetWidth;b.classList.add('no')}a.as(who,CAST[who][1]+'Not quite! '+hint)};
+function mc(part,who,subj,title,{q,options,answer,why,hint,art='',zh=false,bg=null}){const n=++CHN;return {part,title,who,say:CAST[who][1]+q,_ans:answer,draw:()=>chStage(who,subj,q,art,n,bg),
+  mount:a=>{let done=false;shuf2(options).forEach(o=>a.btn(o,b=>{if(done)return;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winCh(a,who,why)}else missCh(a,who,hint,b)},zh?'zh':'opt'))}}}
+function num(part,who,subj,title,{q,answer,unit='',why,hint,art='',bg=null}){const n=++CHN;return {part,title,who,say:CAST[who][1]+q,_ans:String(answer),draw:()=>chStage(who,subj,q,art,n,bg),
+  mount:a=>{let v='',done=false;const box=document.createElement('div');box.className='ans';box.textContent='?';a.ui.appendChild(box);if(unit){const u=document.createElement('span');u.textContent=unit;u.style.cssText='font-family:var(--display);font-weight:800;font-size:22px;align-self:center';a.ui.appendChild(u)}
+   const keys=document.createElement('div');keys.className='keys';a.ui.appendChild(keys);const upd=()=>box.textContent=v||'?';
+   [...'1234567890'].forEach(d=>{const b=document.createElement('button');b.type='button';b.textContent=d;b.onclick=()=>{if(done||v.length>=4)return;v+=d;upd()};keys.appendChild(b)});
+   const bk=document.createElement('button');bk.type='button';bk.textContent='⌫';bk.onclick=()=>{if(done)return;v=v.slice(0,-1);upd()};keys.appendChild(bk);
+   a.btn('Check ✓',b=>{if(done||!v)return;if(v===String(answer)){done=true;b.classList.add('ok');box.style.background='#DFF3E3';winCh(a,who,why)}else{missCh(a,who,hint,b);v='';upd()}},'go')}}}
+function multi(part,who,subj,title,{q,options,correct,why,hint,art='',zh=true,bg=null}){const n=++CHN;return {part,title,who,say:CAST[who][1]+q+' <i>Tap ALL the right ones, then Check.</i>',_ans:correct,draw:()=>chStage(who,subj,q,art,n,bg),
+  mount:a=>{const sel=new Set();let done=false;shuf2(options).forEach(o=>a.btn(o,b=>{if(done)return;sel.has(o)?(sel.delete(o),b.classList.remove('pickd')):(sel.add(o),b.classList.add('pickd'))},zh?'zh':'opt'));
+   a.btn('Check ✓',b=>{if(done)return;const ok=sel.size===correct.length&&correct.every(c=>sel.has(c));if(ok){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winCh(a,who,why)}
+     else{const right=[...sel].filter(c=>correct.includes(c)).length;missCh(a,who,`You have ${right} right${sel.size>right?' and '+(sel.size-right)+' wrong':''}. There are ${correct.length} to find. `+hint,b)}},'go')}}}
+function order(part,who,subj,title,{q,items,why,hint,art='',zh=true,joiner='',bg=null}){const n=++CHN;return {part,title,who,say:CAST[who][1]+q+' <i>Tap them in the right order.</i>',_ans:items,draw:()=>chStage(who,subj,q,art,n,bg)+`<g class="built"></g>`,
+  mount:a=>{let got=[],done=false;const upd=()=>{const t=got.join(joiner);a.q('.built').innerHTML=G(`<rect x="196" y="296" width="428" height="54" rx="14" fill="#fff" stroke="#1F3A4A" stroke-width="2.5"/>`+T(410,332,t||'…','zh mid',`style="font-size:${t.length>16?18:24}px"`),'')};upd();
+   shuf2(items.map((w,k)=>[w,k])).forEach(([w,k])=>a.btn(w,b=>{if(done||b.disabled)return;if(w===items[got.length]){got.push(w);b.disabled=true;b.classList.add('ok');upd();if(got.length===items.length){done=true;winCh(a,who,why)}}else missCh(a,who,hint,b)},zh?'zh':'opt'));
+   a.btn('↺',()=>{if(done)return;got=[];[...a.ui.children].forEach(x=>{if(x.textContent!=='↺'){x.disabled=false;x.classList.remove('ok')}});upd()})}}}
+
+/* story page: scene + a parchment caption at the top (the storybook text) */
+function story(part,title,who,cap,scene,say,extra={}){const hb=extra.bag!=null,L=wrapT(cap,hb?44:58);if(hb)extra.capw=446;return Object.assign({part,title,who,say:CAST[who][1]+say,
+  draw:()=>scene()+G(`<rect x="16" y="12" width="${extra.capw||608}" height="${L.length*24+20}" rx="12" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="2.5" opacity=".96"/>`+L.map((l,k)=>T(30,38+k*24,l,'sm','style="font-size:16px;font-style:italic"')).join(''),'a-fade',.1)+(hb?bag(extra.bag):'')},extra)}
+
+/* Flame the Eagle Adventure: a storybook with P2 Maths, English and 华文 challenges spread through the story */
+const tri=(x,y)=>[1,2,3,4,5].map((n,r)=>[...Array(n)].map((_,k)=>`<circle cx="${x+(k-(n-1)/2)*26}" cy="${y+r*24}" r="9" fill="#FFC83D" stroke="#C88A00" stroke-width="2"/>`).join('')).join('')+T(x,y+5*24+12,'1, 3, 6, 10, 15, ?','lab mid');
+const nest=(x,y,n)=>`<g transform="translate(${x} ${y})"><ellipse rx="40" ry="14" fill="#B07A3E" stroke="#1F3A4A" stroke-width="2.5"/>${[...Array(n)].map((_,k)=>`<ellipse cx="${-18+k*12}" cy="-10" rx="7" ry="9" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="2"/>`).join('')}</g>`;
+const scroll=(lines)=>G(`<rect x="150" y="166" width="340" height="${lines.length*46+70}" rx="16" fill="#FFF3D6" stroke="#8A5A2B" stroke-width="4"/>`+T(320,206,'🗺️ The Mission','h mid','style="fill:#8A5A2B"')+lines.map((l,k)=>T(176,254+k*44,l,'lab')).join(''),'a-pop',.4);
+const S=[
+/* ---------- Chapter 1: the Sky Gate ---------- */
+story('c1','Off to Phoenix Peak!','wala','One sunny Saturday, Wala the Koala packed her favourite leaf snacks. "I\'m off to visit Flamecharge on Phoenix Peak!" "Have fun, and be back for dinner!" called Chowdie.',
+ ()=>sky()+sun(560,110)+cloud(120,120,.8)+grass(320)+`<path d="M420 330 q0 -120 90 -120 q90 0 90 120z" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/><path d="M490 330 v-60 q20 -20 40 0 v60" fill="#7A4A2A" stroke="#1F3A4A" stroke-width="3"/>`+T(510,252,"Chowdie's Den",'sm mid','style="font-weight:800;fill:#fff"')+G(otter(380,394,.9,{wave:true}),'a-pop',.3)+G(wala(170,394,1,{wave:true}),'a-pop',.5),
+ 'One sunny Saturday, Wala packed her favourite leaf snacks. "I\'m off to visit Flamecharge on Phoenix Peak!" "Have fun, and be back for dinner!" called Chowdie. Tap <b>Next</b> to turn the page.'),
+story('c1','The Sky Gate','eagle','High above the clouds stood the shimmering Sky Gate. WHOOSH! Down swooped an eagle with goggles and a bright red scarf. "HALT! Nobody visits Flamecharge without passing MY tests!"',
+ ()=>sky('#9FD8F2','#E8F6FC')+cloud(80,330,1.2)+cloud(560,340,1.3)+gate(330)+G(wala(150,392,.95,{still:true}),'a-pop',.3)+G(eagle(460,370,1.25,{wave:true}),'a-drop',.5),
+ 'HALT! I am <b>Flame the Eagle</b>, guardian of the Sky Gate and Flamecharge\'s best friend. Nobody visits her without passing MY three tests!'),
+story('c1','Meet Flame the Eagle','eagle','"I can spot a mouse from a kilometre away, and I check answers just as carefully! Three tests: one Maths, one English and one 华文. Get all three right and the gate will open."',
+ ()=>sky('#9FD8F2','#E8F6FC')+gate(330)+G(eagle(320,390,1.6,{point:true}),'a-pop',.2)+G(`<g transform="translate(110 250)">${T(0,0,'🔢','mid','style="font-size:52px"')}</g><g transform="translate(110 320)">${T(0,0,'🔤','mid','style="font-size:52px"')}</g><g transform="translate(530 290)">${T(0,0,'🀄','mid','style="font-size:52px"')}</g>`,'a-pop',.7),
+ 'I can spot a mouse from a kilometre away, and I check answers just as carefully! Three tests: one <b>Maths</b>, one <b>English</b> and one <b>华文</b>. Ready, little koala?'),
+num('c1','eagle','maths','Test 1: the eagle eggs',{q:'I have 3 nests. Each nest has 4 eggs. 5 eggs have already hatched. How many eggs have NOT hatched yet?',answer:7,unit:'eggs',
+ art:nest(300,330,4)+nest(410,330,4)+nest(520,330,4),why:'3 nests × 4 eggs = 12 eggs. 12 − 5 = <b>7</b> eggs still waiting to hatch.',hint:'First find how many eggs there are altogether, then take away the ones that hatched.'}),
+mc('c1','eagle','english','Test 2: the right sentence',{q:'Only ONE of these sentences is correct. Which one?',
+ options:['Wala and I are going to see Flamecharge.','Wala and me is going to see Flamecharge.','Me and Wala are going to sees Flamecharge.','Wala and I am going to see Flamecharge.'],answer:'Wala and I are going to see Flamecharge.',
+ why:'<b>Wala and I are going</b>: we say "I am going", not "me is going", and two people take <b>are</b>.',hint:'Cover up "Wala and". Would you say "me is going" or "I am going"?'}),
+multi('c1','eagle','chinese','Test 3: birds of a feather',{q:'Tap ALL the characters that have the bird part 鸟 in them. Careful: some only LOOK like birds!',options:['鸡','鸭','鹅','鸣','鸽','乌','岛','马'],correct:['鸡','鸭','鹅','鸣','鸽'],
+ why:'鸡 鸭 鹅 鸽 are birds, and 鸣 (to chirp) = 口 + 鸟. <b>乌</b> (crow) is missing a stroke, the eye, because a crow is so black you can\'t see it! <b>岛</b> hides a 山 underneath, and 马 is a horse.',hint:'Look closely: does it have ALL of 鸟, including the little dot inside?'}),
+story('c1','The gate opens!','eagle','"Three out of three!" Flame bowed his head, and the Sky Gate swung open with a sound like wind chimes. "You may pass… and I\'m coming with you. Flamecharge is my best friend!"',
+ ()=>sky('#9FD8F2','#E8F6FC')+gate(330)+`<rect x="230" y="160" width="200" height="170" fill="#FFF8D6" opacity=".7"/>`+G(wala(270,392,.95,{wave:true}),'a-pop',.2)+G(eagle(420,390,1.15,{wave:true}),'a-pop',.4)+G(star(140,200,24)+star(540,180,24)+star(330,120,20),'a-pop',.6),
+ '"Three out of three!" Flame bowed his head, and the Sky Gate swung open. "You may pass… and I\'m coming with you!" said Flame.'),
+/* ---------- Chapter 2: Phoenix Peak ---------- */
+story('c2','Phoenix Peak','flame','On top of Phoenix Peak, Flamecharge was waiting by her warm, glowing nest. "Wala! You passed Flame\'s tests? He\'s the toughest quizmaster in the whole sky!"',
+ ()=>sky('#FFD9A8','#FFF3E0')+peak()+G(flame(420,128,.75,{wave:true}),'a-pop',.2)+G(wala(160,392,.95,{wave:true})+eagle(290,390,.95,{still:true}),'a-pop',.4),
+ 'Wala! You passed Flame\'s tests? He\'s the toughest quizmaster in the whole sky! Welcome to Phoenix Peak!'),
+mc('c2','flame','english','Flamecharge\'s welcome riddle',{q:'Before we have tea, my welcome riddle! Which word is spelt correctly?',options:['beautiful','beatiful','beautifull','beutiful'],answer:'beautiful',
+ why:'<b>b-e-a-u-t-i-f-u-l</b>. Say it the spelling way: "be-a-u-ti-ful", with just ONE L at the end.',hint:'Sound out every part: b-e-a-u… And how many Ls does "-ful" have?'}),
+story('c2','A creaky groan','flame','Suddenly, a long, creaky GROAN rolled across the valley. Below them, the Old Rain Tree was drooping. Its leaves were falling… and two sleepy eyes were opening in its trunk!',
+ ()=>sky('#E9D6B8','#FFF3E0')+grass(330,'#B9C98A')+rainTree(420,392,.78,1)+G(flame(110,392,.8,{still:true})+wala(200,392,.8,{still:true})+eagle(270,392,.75,{still:true}),'a-pop',.3),
+ 'GROOOAN… Look! The Old Rain Tree is drooping. Its leaves are falling… and two sleepy eyes are opening in its trunk!'),
+story('c2','The mission','flame','"Oh no!" said Flamecharge. "When a tree is sad and thirsty for too long, it turns into a grumpy TREEMAN! If that happens, the birds and squirrels lose their home. We must heal it before sunset!"',
+ ()=>sky('#E9D6B8','#FFF3E0')+scroll(['💧 Crystal Water from Whisper Stream','🌻 Golden Seeds from Sun Meadow','🎵 The Song of Kind Words'])+G(flame(80,392,.85,{still:true}),'a-pop',.2)+G(eagle(570,392,.8,{still:true}),'a-pop',.3),
+ 'When a tree is sad and thirsty for too long, it turns into a grumpy <b>Treeman</b>! To heal it we need three treasures: <b>Crystal Water</b>, <b>Golden Seeds</b>, and the <b>Song of Kind Words</b>.',{bag:0}),
+mc('c2','eagle','maths','Beat the sunset',{q:'It is 2:30 pm now. The sun sets at 7:00 pm. How much time do we have to save the tree?',options:['4 h 30 min','5 h 30 min','3 h 30 min','4 h'],answer:'4 h 30 min',bg:0,
+ art:T(400,300,'2:30 → 7:00','big mid','style="font-size:44px"'),why:'2:30 → 6:30 is <b>4 hours</b>, and 6:30 → 7:00 is <b>30 minutes</b>: 4 h 30 min.',hint:'Count whole hours first: 3:30, 4:30, 5:30, 6:30… then the minutes left.'}),
+/* ---------- Chapter 3: Whisper Stream ---------- */
+story('c3','Whisper Stream','eagle','They flew to Whisper Stream… but the water was grey and full of rubbish! Muddy crocodile footprints led into the bushes. "BADDIE VAMPIRE!" growled Flame.',
+ ()=>sky('#C9D6D2','#EEF2EE')+grass(270,'#A9C79A')+stream(true)+junk()+T(560,388,'🐾 🐾 🐾','mid','style="font-size:20px;opacity:.6"')+G(eagle(110,280,.85,{still:true})+wala(220,286,.8,{still:true})+flame(330,284,.8,{still:true}),'a-pop',.3),
+ 'The stream is grey and full of rubbish! And look: muddy crocodile footprints. <b>BADDIE VAMPIRE!</b>',{bag:0}),
+num('c3','eagle','maths','Clean-up crew',{q:'There are 36 bottles and 24 cans in the stream. I can carry 10 pieces of rubbish on each trip. How many trips to clear ALL of it?',answer:6,unit:'trips',bg:0,
+ art:T(410,320,'🥤 × 36   🥫 × 24','mid','style="font-size:30px"'),why:'36 + 24 = 60 pieces. 60 ÷ 10 = <b>6 trips</b>.',hint:'Add up ALL the rubbish first, then make groups of 10.'}),
+multi('c3','flame','chinese','Wake the Crystal Water',{q:'To wake the Crystal Water, tap ALL the characters with the water radical 氵!',options:['河','海','洗','清','渴','喝','汤','林'],correct:['河','海','洗','清','渴','汤'],bg:0,
+ why:'河 海 洗 清 渴 汤 all have <b>氵</b>. 渴 (thirsty) has 氵 because you need water! But <b>喝</b> (drink) has 口, and 林 has 木.',hint:'Look only at the LEFT side. Don\'t guess from the meaning!'}),
+mc('c3','wala','english','Fix Baddie\'s sign',{q:'Baddie left a messy sign by the stream. Help me write it properly! Which sign is correct?',
+ options:["Don't throw rubbish in the stream.","Dont throw rubbish in the stream.","Don't throw rubish in the stream.","Don't throw rubbish in the streem."],answer:"Don't throw rubbish in the stream.",bg:0,
+ why:"<b>Don't</b> needs an apostrophe (do not), <b>rubbish</b> has two Bs, and <b>stream</b> is s-t-r-e-a-m.",hint:'Check three things: the apostrophe, the double letters and the "ea" sound.'}),
+story('c3','Treasure 1: Crystal Water!','wala','The stream sparkled clean and blue again. A shining drop rose out of the water and floated into Wala\'s paws: the Crystal Water! "One treasure down, two to go!"',
+ ()=>sky('#BFE6F7','#FFF8E8')+grass(270)+stream(false)+G(`<g transform="translate(320 170)"><circle r="40" fill="#BFE6F7" opacity=".6"/>${T(0,18,'💧','mid','style="font-size:56px"')}</g>`,'a-pop',.4)+G(eagle(110,280,.85,{wave:true})+wala(220,286,.8,{wave:true})+flame(520,284,.8,{wave:true}),'a-pop',.2),
+ 'The stream sparkles again! And look: the <b>Crystal Water</b>! One treasure down, two to go!',{bag:1}),
+/* ---------- Chapter 4: Sun Meadow ---------- */
+story('c4','Sun Meadow','flame','At Sun Meadow, golden sunflowers grew in a magic triangle. A wooden sign said: "Only clever friends may pick the Golden Seeds. Solve the meadow\'s puzzles!"',
+ ()=>sky('#FFE9A8','#FFF8E8')+sun(560,90)+grass(300,'#B8DC7E')+[90,160,230,300,370,440].map((x,k)=>sunflower(x,330+(k%2)*10,.8)).join('')+G(flame(530,392,.85,{still:true})+wala(600,392,.7,{still:true}),'a-pop',.3),
+ 'Sun Meadow! The sign says: only clever friends may pick the <b>Golden Seeds</b>. Let\'s solve the meadow\'s puzzles!',{bag:1}),
+num('c4','flame','maths','The sunflower triangle',{q:'The sunflowers grow in rows: 1, 3, 6, 10, 15… How many sunflowers are in the NEXT row?',answer:21,unit:'sunflowers',bg:1,
+ art:tri(410,170),why:'Each row grows by one more: +2, +3, +4, +5, so next is <b>+6</b>. 15 + 6 = <b>21</b>.',hint:'Find the jumps: 1 → 3 is +2, 3 → 6 is +3… what comes next?'}),
+num('c4','eagle','maths','The meadow gate',{q:'The meadow gate opens at 2:15 pm. We arrived at 1:50 pm. How many minutes must we wait?',answer:25,unit:'minutes',bg:1,
+ art:T(410,300,'1:50 → 2:15','big mid','style="font-size:44px"'),why:'1:50 → 2:00 is 10 minutes, 2:00 → 2:15 is 15 minutes. 10 + 15 = <b>25 minutes</b>.',hint:'Jump to 2:00 first, then on to 2:15.'}),
+mc('c4','wala','chinese','因为…所以…',{q:'Sun Meadow is SO sunny! 因为太阳很大，所以…… Which ending makes sense?',options:['我们戴上帽子，多喝水。','我们穿上外套和手套。','我们打开雨伞去躲雨。','我们关上灯，去睡觉。'],answer:'我们戴上帽子，多喝水。',zh:true,bg:1,
+ why:'因为太阳很大，所以<b>我们戴上帽子，多喝水</b>. Sun means caps and water!',hint:'What do you do on a very hot, sunny day?'}),
+mc('c4','flame','english','Why did the seeds glow?',{q:'Read: "The Golden Seeds only glow when someone is kind. Flame helped a little bee out of a puddle, and the seeds began to glow." Why did they glow?',
+ options:['Because Flame did something kind.','Because the little bee was golden.','Because it suddenly started to rain.','Because Flame flew there very fast.'],answer:'Because Flame did something kind.',bg:1,
+ why:'The clue is in the first sentence: the seeds glow <b>when someone is kind</b>, and Flame was kind to the bee.',hint:'Read the FIRST sentence again: when do the seeds glow?'}),
+story('c4','Treasure 2: Golden Seeds!','eagle','The sunflowers bowed, and a shower of glowing Golden Seeds fell into Flame\'s talons. "Two treasures! Now… back to the tree, FAST!"',
+ ()=>sky('#FFE9A8','#FFF8E8')+sun(560,90)+grass(300,'#B8DC7E')+[90,160,230,300,370,440].map((x,k)=>sunflower(x,330+(k%2)*10,.8)).join('')+G(`<g transform="translate(320 180)">${T(0,18,'🌻','mid','style="font-size:64px"')}</g>`,'a-pop',.4)+G(eagle(530,392,.9,{wave:true}),'a-pop',.2),
+ 'The <b>Golden Seeds</b>! Two treasures! Now… back to the tree, FAST!',{bag:2}),
+/* ---------- Chapter 5: the Treeman ---------- */
+story('c5','The TREEMAN!','wala','When they got back, the Old Rain Tree had pulled up its roots! It was a GRUMPY TREEMAN, stomping and groaning. And behind a rock, laughing, was… Baddie Vampire!',
+ ()=>sky('#B9B3C9','#EDE6F0')+grass(330,'#9DB08A')+rainTree(320,392,.78,2)+G(baddie(560,394,.8,{point:true}),'a-drop',.5)+G(wala(80,392,.75,{still:true}),'a-pop',.3),
+ 'The Old Rain Tree pulled up its roots! It\'s a grumpy <b>TREEMAN</b>! And behind that rock… Baddie Vampire!',{bag:2}),
+Object.assign(boss('Baddie\'s lie #1',{lines:['Trees don\'t need water or','sunlight. They eat RUBBISH!'],claim:'Trees don\'t need water or sunlight. They eat rubbish! That\'s why I fed it my rubbish!',options:['Trees need water and sunlight','Trees eat rubbish and plastic','Trees only need some rubbish'],answer:'Trees need water and sunlight',
+ why:'Plants need <b>water</b>, <b>sunlight</b> and air to make their own food. Rubbish makes them sick!',taunt:'Mwahaha! Yummy plastic salad!',hint:'What do plants need to grow?',art:rainTree(460,392,.42,2)}),{part:'c5'}),
+Object.assign(boss('Baddie\'s lie #2',{lines:['I took 15 of your 40 seeds','and gave 5 back. You have 20!'],claim:'I took 15 of your 40 Golden Seeds and gave 5 back. So you only have 20 left! Hehehe!',options:['30 seeds','20 seeds','25 seeds'],answer:'30 seeds',
+ why:'40 − 15 = 25. Then he gave back 5: 25 + 5 = <b>30 seeds</b>. Baddie can\'t count!',taunt:'Hehehe! Maths is for nerds!',hint:'Take away the 15 first, then ADD the 5 he gave back.',art:T(440,300,'🌻 40','big mid')}),{part:'c5'}),
+story('c5','The Song of Kind Words','flame','Busted twice, Baddie ran off into the bushes. "Now the last treasure," said Flamecharge. "The Song of Kind Words. We must sing to the tree in 华文 AND in English!"',
+ ()=>sky('#B9B3C9','#EDE6F0')+grass(330,'#9DB08A')+rainTree(440,392,.72,2)+G(flame(90,392,.85,{wave:true})+wala(190,392,.8,{still:true})+eagle(270,392,.75,{still:true}),'a-pop',.3)+T(330,180,'🎵','mid','style="font-size:48px"'),
+ 'Baddie ran away! Now the last treasure: the <b>Song of Kind Words</b>. We must sing to the tree in 华文 AND in English!',{bag:2}),
+order('c5','wala','chinese','Kind words in 华文',{q:'Build Wala\'s kind words for the tree, in the right order: "Big tree, thank you for giving us a home."',items:['大树','，','谢谢你','给','我们','一个','家','。'],bg:2,
+ why:'<b>大树，谢谢你给我们一个家。</b> The tree\'s branches shook gently. It was listening!',hint:'Start by calling the tree: 大树，… then 谢谢你….'}),
+order('c5','eagle','english','Kind words in English',{q:'Now Flame\'s line in English. Put the words in order!',items:['Thank','you','for','giving','us','a','home!'],zh:false,joiner:' ',bg:2,
+ why:'<b>"Thank you for giving us a home!"</b> The Treeman\'s grumpy eyebrows began to soften.',hint:'It starts with "Thank you…".'}),
+num('c5','flame','mix','The healing',{q:'Last step! The tree has 5 big branches. Each branch needs 3 Golden Seeds and 2 drops of Crystal Water. How many seeds AND drops altogether?',answer:25,unit:'',bg:3,
+ art:T(410,320,'🌿 × 5','big mid'),why:'Each branch needs 3 + 2 = 5 treasures. 5 branches × 5 = <b>25</b>. (Or 15 seeds + 10 drops = 25!)',hint:'Work out what ONE branch needs, then do it for all 5 branches.'}),
+story('c5','The tree is healed!','wala','The Treeman stopped stomping. It let out a long, happy sigh, pushed its roots back into the earth… and burst into pink flowers! "Thank you, little friends. Visit me any time."',
+ ()=>sky('#FFD9C2','#FFF3E0')+grass(330)+rainTree(320,392,.78,3)+G(wala(80,392,.8,{wave:true})+flame(560,392,.8,{wave:true}),'a-pop',.3)+G(star(90,120,22)+star(560,110,22),'a-pop',.7),
+ 'The tree is healed! It pushed its roots back into the earth and burst into pink flowers. "Thank you, little friends. Visit me any time."',{bag:3,mount:a=>a.later(()=>a.confetti(),600)}),
+/* ---------- Chapter 6: Dinner at Chowdie's Den ---------- */
+story('c6','Flying home','eagle','The sun was setting as the friends flew home, with Wala riding on Flame\'s back! "WHEEE!" At the den, Chowdie was waving a big wooden spoon. "Just in time for dinner!"',
+ ()=>sky('#FFB38A','#FFE3C2')+sun(560,250,40)+cloud(150,140,.8,'#FFE3D6')+`<g transform="translate(330 300) rotate(-6)">${eagle(0,0,1,{wave:true})}${wala(0,-118,.42,{wave:true})}</g>`+G(flame(140,250,.6,{wave:true}),'a-pop',.3)+grass(340,'#B8C98A')+G(otter(560,394,.75,{wave:true}),'a-pop',.5),
+ 'The sun is setting, and Wala is riding on Flame\'s back! WHEEE! And there\'s Chowdie, waving his big wooden spoon. "Just in time for dinner!"'),
+num('c6','otter','maths','Sharing the dumplings',{q:'I made 30 dumplings! Then Baddie knocked on the door to say sorry, so now 5 friends are eating. If we share them equally, how many does each friend get?',answer:6,unit:'dumplings',
+ art:T(410,320,'🥟 × 30','big mid'),why:'30 ÷ 5 = <b>6 dumplings</b> each. Even Baddie gets 6, because he said sorry!',hint:'Share 30 into 5 equal groups. 5 × ? = 30'}),
+mc('c6','wala','chinese','Dinner chat',{q:'Fill in the gaps: 我们一＿吃饭，一＿聊天。',options:['边','起','样','定'],answer:'边',zh:true,
+ art:T(410,320,'我们一＿吃饭，一＿聊天。','zh mid','style="font-size:26px"'),why:'<b>一边…一边…</b>: two things at the same time. 我们一边吃饭，一边聊天!',hint:'Which word means doing two things at the same time?'}),
+mc('c6','wala','english','Wala\'s diary',{q:'Wala writes in her diary: "Today we ___ all the way to the Old Rain Tree." Which word is right?',options:['flew','flied','flyed','flown'],answer:'flew',
+ art:T(410,320,'📔','mid','style="font-size:64px"'),why:'The past tense of fly is <b>flew</b>: fly → flew → (have) flown.',hint:'It\'s a special past tense, like "go → went".'}),
+story('c6','The End','otter','And so, full of dumplings and stories, the friends laughed until the stars came out. Even Baddie said thank you. "Same time next Saturday?" asked Flame. "YES!" shouted everyone. THE END.',
+ ()=>den()+table()+G(otter(110,394,.75,{still:true})+wala(200,394,.72,{still:true})+flame(450,394,.7,{still:true})+eagle(530,394,.68,{still:true})+baddie(605,394,.55,{still:true}),'a-pop',.2)+G(star(330,200,26),'a-pop',.8)+T(330,250,'THE END','h mid','style="fill:#B9471A"'),
+ 'And so, full of dumplings and stories, the friends laughed until the stars came out. "Same time next Saturday?" asked Flame. "YES!" shouted everyone. <b>THE END.</b> You solved every challenge: what a brain!',{mount:a=>a.later(()=>a.win(),700)}),
+];
+
+
+
+render();
+</script>
+
+</body></html>
