@@ -543,7 +543,7 @@ function story(part,title,who,cap,scene,say,extra={}){const hb=extra.bag!=null,L
 
 /* ===== Writing challenges: the child writes, a live checklist ticks off as they go ===== */
 const wcount=t=>(t.trim().match(/[A-Za-z']+/g)||[]).length;
-const sents=t=>t.replace(/\s+/g,' ').split(/(?<=[.!?]["”']?)\s+/).map(s=>s.trim()).filter(s=>/[A-Za-z]/.test(s));
+const sents=t=>t.replace(/\s+/g,' ').split(/(?<=[.!?])\s+|(?<=[.!?]["”'])\s+(?=["“']?[A-Z])/).map(s=>s.trim()).filter(s=>/[A-Za-z]/.test(s));
 const rx=w=>new RegExp('(^|[^A-Za-z])'+w.replace(/ /g,'\\s+')+'($|[^A-Za-z])','i');
 const CK={
  words:n=>({label:`At least ${n} words`,test:t=>wcount(t)>=n,live:t=>` (${wcount(t)} so far)`}),
@@ -553,9 +553,13 @@ const CK={
  bigI:()=>({label:'"I" is always a capital letter',test:t=>t.trim().length>0&&!/(^|[^A-Za-z'])i($|[^A-Za-z'])/.test(t)}),
  has:(ws,label)=>({label,test:t=>ws.some(w=>rx(w).test(t))}),
  all:(ws,label)=>({label,test:t=>ws.every(w=>rx(w).test(t))}),
+ re:(r,label)=>({label,test:t=>r.test(t)}),
+ starts:(ws,label)=>({label,test:t=>ws.some(x=>t.trim().toLowerCase().startsWith(x.toLowerCase()))}),
+ quotes:(n,label)=>({label:label||(n>1?`At least ${n} lines of speech in speech marks`:'Speech inside speech marks “ ”'),test:t=>(t.match(/["“][^"”]{2,}[.!?,]["”]/g)||[]).length>=n}),
  not:(ws,label)=>({label,test:t=>t.trim().length>0&&!ws.some(w=>rx(w).test(t))}),
 };
 const TIMEW=['yesterday','today','tomorrow','morning','afternoon','evening','night','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday','weekend','holiday','one day','last week','after school','before school','last',"o'clock"];
+const DESCW=['blue','calm','rough','sparkling','huge','wavy','salty','cold','warm','deep','shiny','stormy','grey','green','bright','gentle','noisy','quiet','windy','beautiful','dark','wide','clear','foamy','tiny','big','golden','soft','loud'];
 const FEELW=['happy','sad','proud','excited','scared','afraid','nervous','worried','angry','surprised','glad','pleased','delighted','upset','shy','calm','thrilled','disappointed','grateful','relieved'];
 (function(){const st=document.createElement('style');st.textContent=`.ui textarea.wr{width:100%;box-sizing:border-box;min-height:150px;font:inherit;font-size:20px;line-height:1.5;padding:10px 12px;border:3px solid var(--ink);border-radius:14px;background:#fff;color:var(--ink);resize:vertical}
  .ui .ck{width:100%;display:flex;flex-direction:column;gap:4px;background:#FFF8EC;border:2px dashed #C9B79C;border-radius:12px;padding:8px 12px;font-size:16px}
