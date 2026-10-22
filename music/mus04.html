@@ -702,6 +702,28 @@ function dclaim(title,{claim,truth,fix=[],answer,why,art='',play}){return {part:
    if(play)a.btn('🔊 Play',()=>play(a),'play');
    const t=a.btn('✅ True',b=>{if(done)return;truth?(b.classList.add('ok'),fin()):wrong(b)},'opt'),l=a.btn('❌ Lie!',b=>{if(done)return;if(truth)return wrong(b);b.classList.add('ok');t.disabled=true;l.disabled=true;
      a.as('mommy',MM+'Yes, it\'s a lie! Now tell Baddie Daddy the <b>truth</b>:');shf(fix).forEach(f=>a.btn(f,bb=>{if(done)return;if(f===answer){bb.classList.add('ok');fin()}else{shk(bb);a.as('mommy',MM+'Hmm, that\'s not the truth either. Try again!')}},'opt'))},'opt')}}}
+/* ===== Exam practice (ABRSM Grade 5 online-exam style) ===== */
+PARTS.exam='Exam practice';
+(function(){const nav=document.querySelector('.parts');if(nav&&!nav.querySelector('[data-part="exam"]')){const b=document.createElement('button');b.type='button';b.dataset.part='exam';b.textContent='Exam practice';b.onclick=()=>go(S.findIndex(s=>s.part==='exam'));nav.appendChild(b)}
+ const st=document.createElement('style');st.textContent=`.tag.exam{background:#B3243A} .dots button.exam:not(.done):not([aria-current="true"]){background:#F8D7DE;border-color:#B3243A}
+ .parts button[data-part="exam"]{border-color:#B3243A;color:#B3243A} .parts button[data-part="exam"][aria-current="true"]{background:#B3243A;color:#fff} .ui button.abcd{min-width:72px;font-size:24px}`;document.head.appendChild(st)})();
+let EXN=0;const EXRES={};
+/* the question card at the top of the stage; returns [svg, y where the art can start] */
+function exHead(n,q){const L=mwrap(q,50),h=L.length*27+26;return [`<rect width="640" height="400" fill="#FBF7F2"/><rect x="14" y="12" width="612" height="${h}" rx="14" fill="#fff" stroke="#1F3A4A" stroke-width="2.5"/><rect x="26" y="22" width="52" height="28" rx="8" fill="#B3243A"/>`+T(52,42,'Q'+n,'sm mid','style="fill:#fff;font-weight:800"')
+  +L.map((l,k)=>T(90,42+k*27,l,'lab','style="font-size:19px"')).join(''),12+h+10]}
+const stripTags=s=>s.replace(/<[^>]+>/g,'');
+/* ex(title,{q, art:(y0)=>svg, options, answer, why, hint, play, who}) */
+function ex(title,{q,art,options,answer,why,hint,play,who='mommy',cls='opt'}){const n=++EXN;return {part:'exam',title,who,say:NAMES[who]+q,_ans:answer,
+  draw:()=>{const [h,y0]=exHead(n,stripTags(q));return h+(art?art(y0):'')},
+  mount:a=>{let done=false;if(play)a.btn('🔊 Play',()=>play(a),'play');shf(options).forEach(o=>a.btn(o,b=>{if(done)return;if(!(n in EXRES))EXRES[n]=o===answer;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>{if(!x.classList.contains('play'))x.disabled=true});a.win(NAMES[who]+'<b>Correct!</b> '+why)}else{shk(b);a.as(who,NAMES[who]+'<b>Not quite.</b> '+hint)}},cls))}}}
+/* picture options A–D: cards = [fn(x,y,w,h)=>svg ...], answer = index */
+function exPick(title,{q,cards,answer,why,hint,play,who='mommy',ref}){const L='ABCD';const o=ex(title,{q,options:cards.map((_,k)=>L[k]),answer:L[answer],why,hint,play,who,cls:'abcd',
+  art:y0=>{let pre='';if(ref){pre=ref(y0);y0+=92}const H=(392-y0-8)/2;return cards.map((f,k)=>{const x=14+(k%2)*310,y=y0+Math.floor(k/2)*(H+8);return `<rect x="${x}" y="${y}" width="302" height="${H}" rx="12" fill="#fff" stroke="#B7D8CF" stroke-width="2"/><circle cx="${x+20}" cy="${y+20}" r="14" fill="#1F3A4A"/>`+T(x+20,y+26,L[k],'sm mid','style="fill:#fff;font-weight:800"')+f(x,y,302,H)}).join('')+pre}});return o}
+const exTF=(title,o)=>ex(title,Object.assign({options:['True','False'],cls:'abcd'},o));
+/* staff placed inside a card (x,y,w,h) */
+const cardStaff=(x,y,w,h,clef,o={})=>Staff(x+36,y+h/2-(o.sp||10)*2+(o.dy||0),w-52,Object.assign({clef,sp:10},o));
+/* chords in a key: degree 0..6, inversion 0/1/2 ; minor keys use the harmonic minor */
+function triad(t,minor,deg,inv=0){const sc=scale(t,minor?'harmonic':'major').slice(0,7),up=p=>spell(p,7,12),ext=[...sc,...sc.map(up),...sc.map(p=>up(up(p)))];const r=[ext[deg],ext[deg+2],ext[deg+4]];for(let i=0;i<inv;i++)r.push(up(r.shift()));return r}
 
 /* Grade 5 Music Theory 4: Time and Rhythm */
 const fanfare=()=>playSeq([['F3',.5],['Bb3',.5],['D4',.5],['F4',1.5]],120,'brass');
@@ -797,6 +819,28 @@ dclaim('Daddy\'s claim 3',{claim:'In compound time, a duplet means three notes i
 {part:'boss',title:'Right on time!',who:'mommy',say:MM+'You keep time better than Baddie Daddy\'s golden watch! Next: <b>chords and cadences</b>, the harmony that makes music sing. 🎺',
  draw:()=>mroom()+G(mommy(200,388,1.5,{trombone:true}),'a-pop',.1)+G(flame(440,388,1.1,{wave:true}),'a-pop',.3)+G(daddy(580,388,.8,{busted:true}),'a-fade',.5),mount:a=>{a.later(()=>{fanfare();a.win()},600)}},
 ];
+
+/* Exam practice 4: time and rhythm (ABRSM Grade 5 standard) */
+(function(){
+const row=(items,y0,o={})=>rowCard(items,Object.assign({x:60,w:520,y:y0+48,u:o.u||46},o));
+const crow=(items,ts,u=34)=>(x,y,w,h)=>{const s=Staff(x+36,y+h/2-14,w-52,{clef:'treble',sp:8,time:ts});return s.svg+rhythm(s,s.start+6,items,u)};
+const E=[
+{part:'exam',title:'Exam practice',who:'mommy',say:MM+'Exam-style rhythm! Grade 5 loves <b>unusual time signatures</b> (4/2, 12/4, 9/16), <b>irregular time</b> (5/8, 7/8), <b>quintuplets and sextuplets</b>, double dots, and correct grouping.',
+ draw:()=>mroom()+G(mommy(170,388,1.3,{baton:true}),'a-pop',.1)+G(box(330,70,280,200,'#fff',18)+T(470,120,'📝 Grade 5','h mid')+T(470,160,'time & rhythm','lab mid mut')+T(470,210,'12 questions','lab mid acc'),'a-pop',.3)},
+ex('Minim beats',{q:'Which time signature fits this complete bar?',art:y0=>row(['h','h','h','h'],y0,{u:58}),options:['4/2','4/4','2/2','2/4'],answer:'4/2',cls:'abcd',why:'Four minim beats in a bar: 4/2 (simple quadruple).',hint:'What is the beat here, and how many beats are there?',play:()=>rplay(['h','h','h','h'],120)}),
+ex('Dotted-minim beats',{q:'Which time signature fits this complete bar?',art:y0=>row(['h.','h.','h.','h.'],y0,{u:40}),options:['12/4','12/8','4/2','3/2'],answer:'12/4',cls:'abcd',why:'Four dotted-minim beats = 12 crotchets: 12/4 (compound quadruple).',hint:'Each beat is a dotted minim (3 crotchets). How many crotchets altogether?',play:()=>rplay(['h.','h.','h.','h.'],160)}),
+ex('Semiquaver groups',{q:'Which time signature fits this complete bar?',art:y0=>row([{beam:['16','16','16']},{beam:['16','16','16']},{beam:['16','16','16']}],y0,{u:52}),options:['9/16','9/8','3/4','3/8'],answer:'9/16',cls:'abcd',why:'Nine semiquavers grouped in threes: 9/16 (compound triple, dotted-quaver beats).',hint:'Count the semiquavers, and look at how they are grouped.'}),
+exPick('Grouping in 5/8',{q:'Which bar of 5/8 is NOT grouped correctly?',cards:[crow([{beam:['8','8','8']},{beam:['8','8']}],'5/8'),crow([{beam:['8','8']},{beam:['8','8','8']}],'5/8'),crow([{beam:['8','8','8','8']},'8'],'5/8'),crow(['q.','q'],'5/8',46)],answer:2,why:'5/8 is grouped 3 + 2 or 2 + 3. Four quavers then one (4 + 1) hides the beats.',hint:'5/8 splits into a group of 3 and a group of 2.'}),
+ex('Quintuplets',{q:'In 2/4, a group of FIVE semiquavers marked "5" (a quintuplet) takes the time of…',art:y0=>row([{beam:['16','16','16','16','16'],tup:'5'},'q'],y0,{u:44,time:'2/4'}),options:['one crotchet','five semiquavers','one minim','one quaver'],answer:'one crotchet',why:'A semiquaver quintuplet squeezes 5 semiquavers into the time of 4 semiquavers: one crotchet beat.',hint:'Normally, how many semiquavers fit in a crotchet?'}),
+ex('Sextuplets',{q:'In 3/4, a group of SIX semiquavers marked "6" (a sextuplet) takes the time of…',art:y0=>row([{beam:['16','16','16','16','16','16'],tup:'6'},'q','q'],y0,{u:40,time:'3/4'}),options:['one crotchet','one dotted crotchet','one minim','six quavers'],answer:'one crotchet',why:'Six semiquavers in the time of four: one crotchet beat.',hint:'It squeezes 6 notes into the time of 4 semiquavers.'}),
+ex('Double-dotted crotchet',{q:'How many DEMISEMIQUAVERS (32nd notes) are equal to a double-dotted crotchet?',art:y0=>{const s=Staff(280,y0+60,80,{clef:'none',sp:16});return nt(s,300,'A4','q',{dot:2,stem:'u'})},options:['14','12','16','7'],answer:'14',cls:'abcd',why:'A crotchet = 8 demisemiquavers. The first dot adds 4 and the second adds 2: 8 + 4 + 2 = 14.',hint:'How many demisemiquavers in a crotchet? Then add half, then a quarter.'}),
+ex('Triplets to compound',{q:'A bar of 2/4 is made of quaver TRIPLETS only. Which time signature would let you write it WITHOUT triplets?',art:y0=>row([{beam:['8','8','8'],tup:'3'},{beam:['8','8','8'],tup:'3'}],y0,{u:50,time:'2/4'}),options:['6/8','3/4','6/4','2/2'],answer:'6/8',cls:'abcd',why:'Two beats each split into three: that\'s compound duple, 6/8.',hint:'Two beats, each divided into three quavers…'}),
+ex('Compound with semiquavers',{q:'Which time signature is compound QUADRUPLE with a DOTTED-QUAVER beat?',art:y0=>T(320,y0+100,'? / 16','big mid acc'),options:['12/16','12/8','4/16','6/16'],answer:'12/16',cls:'abcd',why:'Four dotted-quaver beats = 12 semiquavers: 12/16.',hint:'A dotted quaver = 3 semiquavers. Four of them = ?'}),
+exTF('Rests rule 1',{q:'True or false: a semibreve rest can fill a whole bar of 3/8.',art:y0=>row(['rw'],y0,{time:'3/8',u:60}),answer:'True',why:'A semibreve rest is used for a whole bar of silence in almost any time signature, including 3/8.',hint:'Remember the special whole-bar rest rule.'}),
+exTF('Rests rule 2',{q:'True or false: in 4/4, a minim rest may be written on beats 2 and 3.',art:y0=>row(['q','rh','q'],y0,{time:'4/4',u:60}),answer:'False',why:'In 4/4 a minim rest may only start on beat 1 or beat 3. On beats 2–3 it hides the middle of the bar: write two crotchet rests.',hint:'Can a rest cross the middle of a 4/4 bar?'}),
+ex('Irregular beats',{q:'How many quaver beats are there in each bar of 7/8, and how are they usually grouped?',art:y0=>row([{beam:['8','8']},{beam:['8','8']},{beam:['8','8','8']}],y0,{time:'7/8',u:46}),options:['7, in groups of 2 + 2 + 3','3, as dotted crotchets','6, in groups of 3 + 3','7, as one group of 7'],answer:'7, in groups of 2 + 2 + 3',why:'7/8 has seven quavers grouped in uneven 2s and 3s.',hint:'Irregular time mixes groups of 2 and 3.'}),
+];
+const k=S.findIndex(s=>s.part==='boss');S.splice(k,0,...E);})();
 
 
 

@@ -702,6 +702,28 @@ function dclaim(title,{claim,truth,fix=[],answer,why,art='',play}){return {part:
    if(play)a.btn('🔊 Play',()=>play(a),'play');
    const t=a.btn('✅ True',b=>{if(done)return;truth?(b.classList.add('ok'),fin()):wrong(b)},'opt'),l=a.btn('❌ Lie!',b=>{if(done)return;if(truth)return wrong(b);b.classList.add('ok');t.disabled=true;l.disabled=true;
      a.as('mommy',MM+'Yes, it\'s a lie! Now tell Baddie Daddy the <b>truth</b>:');shf(fix).forEach(f=>a.btn(f,bb=>{if(done)return;if(f===answer){bb.classList.add('ok');fin()}else{shk(bb);a.as('mommy',MM+'Hmm, that\'s not the truth either. Try again!')}},'opt'))},'opt')}}}
+/* ===== Exam practice (ABRSM Grade 5 online-exam style) ===== */
+PARTS.exam='Exam practice';
+(function(){const nav=document.querySelector('.parts');if(nav&&!nav.querySelector('[data-part="exam"]')){const b=document.createElement('button');b.type='button';b.dataset.part='exam';b.textContent='Exam practice';b.onclick=()=>go(S.findIndex(s=>s.part==='exam'));nav.appendChild(b)}
+ const st=document.createElement('style');st.textContent=`.tag.exam{background:#B3243A} .dots button.exam:not(.done):not([aria-current="true"]){background:#F8D7DE;border-color:#B3243A}
+ .parts button[data-part="exam"]{border-color:#B3243A;color:#B3243A} .parts button[data-part="exam"][aria-current="true"]{background:#B3243A;color:#fff} .ui button.abcd{min-width:72px;font-size:24px}`;document.head.appendChild(st)})();
+let EXN=0;const EXRES={};
+/* the question card at the top of the stage; returns [svg, y where the art can start] */
+function exHead(n,q){const L=mwrap(q,50),h=L.length*27+26;return [`<rect width="640" height="400" fill="#FBF7F2"/><rect x="14" y="12" width="612" height="${h}" rx="14" fill="#fff" stroke="#1F3A4A" stroke-width="2.5"/><rect x="26" y="22" width="52" height="28" rx="8" fill="#B3243A"/>`+T(52,42,'Q'+n,'sm mid','style="fill:#fff;font-weight:800"')
+  +L.map((l,k)=>T(90,42+k*27,l,'lab','style="font-size:19px"')).join(''),12+h+10]}
+const stripTags=s=>s.replace(/<[^>]+>/g,'');
+/* ex(title,{q, art:(y0)=>svg, options, answer, why, hint, play, who}) */
+function ex(title,{q,art,options,answer,why,hint,play,who='mommy',cls='opt'}){const n=++EXN;return {part:'exam',title,who,say:NAMES[who]+q,_ans:answer,
+  draw:()=>{const [h,y0]=exHead(n,stripTags(q));return h+(art?art(y0):'')},
+  mount:a=>{let done=false;if(play)a.btn('🔊 Play',()=>play(a),'play');shf(options).forEach(o=>a.btn(o,b=>{if(done)return;if(!(n in EXRES))EXRES[n]=o===answer;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>{if(!x.classList.contains('play'))x.disabled=true});a.win(NAMES[who]+'<b>Correct!</b> '+why)}else{shk(b);a.as(who,NAMES[who]+'<b>Not quite.</b> '+hint)}},cls))}}}
+/* picture options A–D: cards = [fn(x,y,w,h)=>svg ...], answer = index */
+function exPick(title,{q,cards,answer,why,hint,play,who='mommy',ref}){const L='ABCD';const o=ex(title,{q,options:cards.map((_,k)=>L[k]),answer:L[answer],why,hint,play,who,cls:'abcd',
+  art:y0=>{let pre='';if(ref){pre=ref(y0);y0+=92}const H=(392-y0-8)/2;return cards.map((f,k)=>{const x=14+(k%2)*310,y=y0+Math.floor(k/2)*(H+8);return `<rect x="${x}" y="${y}" width="302" height="${H}" rx="12" fill="#fff" stroke="#B7D8CF" stroke-width="2"/><circle cx="${x+20}" cy="${y+20}" r="14" fill="#1F3A4A"/>`+T(x+20,y+26,L[k],'sm mid','style="fill:#fff;font-weight:800"')+f(x,y,302,H)}).join('')+pre}});return o}
+const exTF=(title,o)=>ex(title,Object.assign({options:['True','False'],cls:'abcd'},o));
+/* staff placed inside a card (x,y,w,h) */
+const cardStaff=(x,y,w,h,clef,o={})=>Staff(x+36,y+h/2-(o.sp||10)*2+(o.dy||0),w-52,Object.assign({clef,sp:10},o));
+/* chords in a key: degree 0..6, inversion 0/1/2 ; minor keys use the harmonic minor */
+function triad(t,minor,deg,inv=0){const sc=scale(t,minor?'harmonic':'major').slice(0,7),up=p=>spell(p,7,12),ext=[...sc,...sc.map(up),...sc.map(p=>up(up(p)))];const r=[ext[deg],ext[deg+2],ext[deg+4]];for(let i=0;i<inv;i++)r.push(up(r.shift()));return r}
 
 /* Grade 5 Music Theory 1: Clefs and Notes (Mommy the Elephant and Flamecharge) */
 const fanfare=()=>playSeq([['F3',.5],['Bb3',.5],['D4',.5],['F4',1.5]],120,'brass');
@@ -796,6 +818,29 @@ dclaim('Daddy\'s claim 3',{claim:'Trombones only ever read the treble clef.',tru
 {part:'boss',title:'Lies caught!',who:'mommy',say:MM+'You caught Baddie Daddy! You can read <b>four clefs</b>, <b>ledger lines</b> and <b>enharmonic</b> notes. Next time: keys and scales! 🎺',
  draw:()=>mroom()+G(mommy(200,388,1.5,{trombone:true}),'a-pop',.1)+G(flame(440,388,1.1,{wave:true}),'a-pop',.3)+G(daddy(580,388,.8,{busted:true}),'a-fade',.5),mount:a=>{a.later(()=>{fanfare();a.win()},600)}},
 ];
+
+/* Exam practice 1: clefs, notes, enharmonics (ABRSM Grade 5 standard) */
+(function(){
+const one=(clef,p,o={})=>(x,y,w,h)=>{const s=cardStaff(x,y,w,h,clef,o);return s.svg+nt(s,s.start+(x+w-s.start)/2-10,p,'w')+(o.lab?T(x+w/2,y+h-10,o.lab,'sm mid mut'):'')};
+const tune=(clef,ps)=>(x,y,w,h)=>{const s=cardStaff(x,y,w,h,clef);return s.svg+ps.map((p,k)=>nt(s,s.start+16+k*50,p,'q')).join('')};
+const big=(clef,p,y0,o={})=>{const s=Staff(180,y0+40,280,{clef,sp:14,key:o.key||0});return s.svg+nt(s,s.start+90,p,'w')+T(320,y0+170,(o.lab||clef[0].toUpperCase()+clef.slice(1)+' clef'),'sm mid mut')};
+const E=[
+{part:'exam',title:'Exam practice',who:'mommy',say:MM+'Now for the REAL thing! These questions are written like the <b>ABRSM Grade 5 online exam</b>: tricky clefs, double sharps and flats, and notes in disguise. Take your time, and read every clef carefully.',
+ draw:()=>mroom()+G(mommy(170,388,1.3,{baton:true}),'a-pop',.1)+G(box(330,70,280,200,'#fff',18)+T(470,120,'📝 Grade 5','h mid')+T(470,160,'exam-style questions','lab mid mut')+T(470,210,'12 questions','lab mid acc'),'a-pop',.3)},
+exPick('Same pitch?',{q:'Which card shows a note at the SAME pitch as this tenor-clef note?',ref:y0=>{const s=Staff(200,y0+18,240,{clef:'tenor',sp:11});return s.svg+nt(s,s.start+80,'A3','w',{col:C.berry})},cards:[one('alto','A3'),one('bass','A2'),one('treble','A4'),one('alto','C4')],answer:0,why:'Tenor-clef A3 = alto-clef A3: the space just below the alto middle line.',hint:'Work out the pitch first (A below middle C), then find it in each clef.',play:()=>playSeq([['A3',1.5]])}),
+ex('Ledger lines in the tenor clef',{q:'Name this note in the tenor clef.',art:y0=>big('tenor','C5',y0),options:['C','B','D','A'],answer:'C',why:'Tenor top line = E. Then F (space), G (1st ledger), A, B (2nd ledger), C above it.',hint:'Start from the top line (E) and count up the ledger lines.',play:()=>playSeq([['C5',1.5]])}),
+ex('Enharmonic 1',{q:'Which note is enharmonic to E𝄪 (E double sharp)?',art:y0=>big('treble','Ex4',y0),options:['F♯','F','G','E♯'],answer:'F♯',why:'E𝄪 = E raised by 2 semitones: E → F → F♯.',hint:'Raise E by two semitones.',play:()=>playSeq([['Ex4',1.5]])}),
+ex('Enharmonic 2',{q:'Which note is enharmonic to A♭?',art:y0=>big('bass','Ab3',y0),options:['G♯','B𝄫','F𝄪','A♯'],answer:'G♯',why:'A♭ and G♯ are the same black key. (B𝄫 = A and F𝄪 = G.)',hint:'Find the black key between G and A.'}),
+exPick('Octave lower',{q:'Which shows this treble-clef tune exactly ONE OCTAVE LOWER in the bass clef?',cards:[tune('treble',['G4','A4','B4']),tune('bass',['G3','A3','B3']),tune('bass',['G2','A2','B2']),tune('bass',['E3','F3','G3'])],answer:1,why:'G4 A4 B4 one octave lower is G3 A3 B3: in the bass clef that\'s the top line, space and line above.',hint:'Card A is the original. Which card is the same notes one octave down?',play:()=>playSeq([['G4',1],['A4',1],['B4',1],['G3',1],['A3',1],['B3',1]],110)}),
+ex('Double flat',{q:'Name this note in the tenor clef.',art:y0=>big('tenor','Dbb4',y0),options:['D𝄫','B𝄫','C𝄫','E𝄫'],answer:'D𝄫',why:'The top space of the tenor clef is D, so this is D double flat (it sounds like C).',hint:'Tenor-clef spaces are E G B D.',play:()=>playSeq([['Dbb4',1.5]])}),
+ex('Semitones',{q:'How many semitones are there from F𝄪 up to A♯?',art:y0=>pairCard('treble','Fx4','A#4',{y:y0+30,sp:14}),options:['3','2','4','1'],answer:'3',cls:'abcd',why:'F𝄪 sounds as G. G → G♯ → A → A♯ = 3 semitones.',hint:'Change F𝄪 into its everyday name first.',play:()=>playSeq([['Fx4',1],['A#4',1.5]])}),
+exTF('True or false 1',{q:'True or false: B♯3 and C4 are the same pitch.',art:y0=>pairCard('treble','B#3','C4',{y:y0+30,sp:14}),answer:'True',why:'B♯ is one semitone above B, which is C. They are enharmonic.',hint:'Raise B by a semitone.',play:()=>playSeq([['B#3',1],['C4',1]])}),
+exTF('True or false 2',{q:'True or false: the top line of the tenor clef is G.',art:y0=>big('tenor','E4',y0,{lab:'tenor clef: which note is the top line?'}),answer:'False',why:'Tenor-clef lines are D F A C E, so the top line is E.',hint:'The 4th line is middle C. What\'s one line higher?'}),
+ex('Who reads it?',{q:'Which of these instruments might read music in the TENOR clef?',art:y0=>big('tenor','A3',y0),options:['Bassoon','Viola','Flute','Trumpet'],answer:'Bassoon',why:'Bassoon, cello and trombone use the tenor clef for their higher notes.',hint:'It\'s a low woodwind instrument that sometimes plays high.'}),
+ex('A semitone higher',{q:'Which note is ONE SEMITONE HIGHER than E♯?',art:y0=>big('treble','E#5',y0),options:['F♯','F','G','E'],answer:'F♯',why:'E♯ sounds as F. One semitone higher is F♯.',hint:'First turn E♯ into its everyday name.'}),
+exPick('Highest note',{q:'Which of these four notes is the HIGHEST?',cards:[one('treble','G4',{lab:'treble'}),one('alto','B4',{lab:'alto'}),one('tenor','A4',{lab:'tenor'}),one('bass','C4',{lab:'bass'})],answer:1,why:'A = G4, B = B4, C = A4, D = C4 (middle C). The alto-clef B4 is the highest.',hint:'Work out the real pitch in every clef, with octave numbers.'}),
+];
+const k=S.findIndex(s=>s.part==='boss');S.splice(k,0,...E);})();
 
 
 

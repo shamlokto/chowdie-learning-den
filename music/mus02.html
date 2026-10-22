@@ -702,6 +702,28 @@ function dclaim(title,{claim,truth,fix=[],answer,why,art='',play}){return {part:
    if(play)a.btn('🔊 Play',()=>play(a),'play');
    const t=a.btn('✅ True',b=>{if(done)return;truth?(b.classList.add('ok'),fin()):wrong(b)},'opt'),l=a.btn('❌ Lie!',b=>{if(done)return;if(truth)return wrong(b);b.classList.add('ok');t.disabled=true;l.disabled=true;
      a.as('mommy',MM+'Yes, it\'s a lie! Now tell Baddie Daddy the <b>truth</b>:');shf(fix).forEach(f=>a.btn(f,bb=>{if(done)return;if(f===answer){bb.classList.add('ok');fin()}else{shk(bb);a.as('mommy',MM+'Hmm, that\'s not the truth either. Try again!')}},'opt'))},'opt')}}}
+/* ===== Exam practice (ABRSM Grade 5 online-exam style) ===== */
+PARTS.exam='Exam practice';
+(function(){const nav=document.querySelector('.parts');if(nav&&!nav.querySelector('[data-part="exam"]')){const b=document.createElement('button');b.type='button';b.dataset.part='exam';b.textContent='Exam practice';b.onclick=()=>go(S.findIndex(s=>s.part==='exam'));nav.appendChild(b)}
+ const st=document.createElement('style');st.textContent=`.tag.exam{background:#B3243A} .dots button.exam:not(.done):not([aria-current="true"]){background:#F8D7DE;border-color:#B3243A}
+ .parts button[data-part="exam"]{border-color:#B3243A;color:#B3243A} .parts button[data-part="exam"][aria-current="true"]{background:#B3243A;color:#fff} .ui button.abcd{min-width:72px;font-size:24px}`;document.head.appendChild(st)})();
+let EXN=0;const EXRES={};
+/* the question card at the top of the stage; returns [svg, y where the art can start] */
+function exHead(n,q){const L=mwrap(q,50),h=L.length*27+26;return [`<rect width="640" height="400" fill="#FBF7F2"/><rect x="14" y="12" width="612" height="${h}" rx="14" fill="#fff" stroke="#1F3A4A" stroke-width="2.5"/><rect x="26" y="22" width="52" height="28" rx="8" fill="#B3243A"/>`+T(52,42,'Q'+n,'sm mid','style="fill:#fff;font-weight:800"')
+  +L.map((l,k)=>T(90,42+k*27,l,'lab','style="font-size:19px"')).join(''),12+h+10]}
+const stripTags=s=>s.replace(/<[^>]+>/g,'');
+/* ex(title,{q, art:(y0)=>svg, options, answer, why, hint, play, who}) */
+function ex(title,{q,art,options,answer,why,hint,play,who='mommy',cls='opt'}){const n=++EXN;return {part:'exam',title,who,say:NAMES[who]+q,_ans:answer,
+  draw:()=>{const [h,y0]=exHead(n,stripTags(q));return h+(art?art(y0):'')},
+  mount:a=>{let done=false;if(play)a.btn('🔊 Play',()=>play(a),'play');shf(options).forEach(o=>a.btn(o,b=>{if(done)return;if(!(n in EXRES))EXRES[n]=o===answer;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>{if(!x.classList.contains('play'))x.disabled=true});a.win(NAMES[who]+'<b>Correct!</b> '+why)}else{shk(b);a.as(who,NAMES[who]+'<b>Not quite.</b> '+hint)}},cls))}}}
+/* picture options A–D: cards = [fn(x,y,w,h)=>svg ...], answer = index */
+function exPick(title,{q,cards,answer,why,hint,play,who='mommy',ref}){const L='ABCD';const o=ex(title,{q,options:cards.map((_,k)=>L[k]),answer:L[answer],why,hint,play,who,cls:'abcd',
+  art:y0=>{let pre='';if(ref){pre=ref(y0);y0+=92}const H=(392-y0-8)/2;return cards.map((f,k)=>{const x=14+(k%2)*310,y=y0+Math.floor(k/2)*(H+8);return `<rect x="${x}" y="${y}" width="302" height="${H}" rx="12" fill="#fff" stroke="#B7D8CF" stroke-width="2"/><circle cx="${x+20}" cy="${y+20}" r="14" fill="#1F3A4A"/>`+T(x+20,y+26,L[k],'sm mid','style="fill:#fff;font-weight:800"')+f(x,y,302,H)}).join('')+pre}});return o}
+const exTF=(title,o)=>ex(title,Object.assign({options:['True','False'],cls:'abcd'},o));
+/* staff placed inside a card (x,y,w,h) */
+const cardStaff=(x,y,w,h,clef,o={})=>Staff(x+36,y+h/2-(o.sp||10)*2+(o.dy||0),w-52,Object.assign({clef,sp:10},o));
+/* chords in a key: degree 0..6, inversion 0/1/2 ; minor keys use the harmonic minor */
+function triad(t,minor,deg,inv=0){const sc=scale(t,minor?'harmonic':'major').slice(0,7),up=p=>spell(p,7,12),ext=[...sc,...sc.map(up),...sc.map(p=>up(up(p)))];const r=[ext[deg],ext[deg+2],ext[deg+4]];for(let i=0;i<inv;i++)r.push(up(r.shift()));return r}
 
 /* Grade 5 Music Theory 2: Keys and Scales */
 const fanfare=()=>playSeq([['F3',.5],['Bb3',.5],['D4',.5],['F4',1.5]],120,'brass');
@@ -791,6 +813,30 @@ dclaim('Daddy\'s claim 4',{claim:'The relative minor of G major is E minor.',tru
 {part:'boss',title:'Keys unlocked!',who:'mommy',say:MM+'Brilliant! You know your <b>key signatures</b>, <b>scales</b> and <b>degree names</b>. Next time we measure the gaps between notes: <b>intervals</b>! 🎺',
  draw:()=>mroom()+G(mommy(200,388,1.5,{trombone:true}),'a-pop',.1)+G(flame(440,388,1.1,{wave:true}),'a-pop',.3)+G(daddy(580,388,.8,{busted:true}),'a-fade',.5),mount:a=>{a.later(()=>{fanfare();a.win()},600)}},
 ];
+
+/* Exam practice 2: keys and scales (ABRSM Grade 5 standard) */
+(function(){
+const ks=(clef,k,y0)=>{const s=Staff(200,y0+40,240,{clef,sp:14,key:k});return s.svg};
+const notes=(ps,y0,o={})=>{const s=Staff(20,y0+46,600,{clef:o.clef||'treble',sp:12,key:o.key||0,B:o.B}),g=(580-s.start)/ps.length;return s.svg+ps.map((p,k)=>nt(s,s.start+k*g,p,'w',{acc:o.accs?o.accs[k]:undefined})).join('')};
+const E=[
+{part:'exam',title:'Exam practice',who:'mommy',say:MM+'Exam time! Grade 5 uses keys with up to <b>six sharps or flats</b>, including F♯ major, G♭ major, D♯ minor and E♭ minor, plus tricky leading notes like C𝄪. Ready?',
+ draw:()=>mroom()+G(mommy(170,388,1.3,{baton:true}),'a-pop',.1)+G(box(330,70,280,200,'#fff',18)+T(470,120,'📝 Grade 5','h mid')+T(470,160,'keys & scales','lab mid mut')+T(470,210,'13 questions','lab mid acc'),'a-pop',.3)},
+ex('Six sharps',{q:'Which MINOR key has this key signature?',art:y0=>ks('treble',6,y0),options:['D♯ minor','F♯ minor','C♯ minor','G♯ minor'],answer:'D♯ minor',why:'Six sharps = F♯ major, and its relative minor is D♯ minor.',hint:'Find the major key first (a semitone above the last sharp), then go down 3 semitones.'}),
+ex('Six flats',{q:'Which MAJOR key has this key signature?',art:y0=>ks('bass',-6,y0),options:['G♭ major','D♭ major','E♭ major','C♭ major'],answer:'G♭ major',why:'Six flats: the second-last flat is G♭, so G♭ major.',hint:'The major key is the second-last flat.'}),
+ex('A double-sharp leading note',{q:'What is the LEADING NOTE of D♯ harmonic minor?',art:y0=>notes(scale('D#4','harmonic'),y0),options:['C𝄪','C♯','D','B♯'],answer:'C𝄪',why:'D♯ minor already has C♯ in its key signature. Raising it for the harmonic minor gives C𝄪.',hint:'Find the 7th note of D♯ minor, then raise it by a semitone.',play:()=>playNotes(scale('D#4','harmonic'),.5,160)}),
+ex('C♯ melodic minor',{q:'In C♯ MELODIC minor going UP, which notes are raised (compared with the key signature)?',art:y0=>notes(scale('C#4','melodicUp'),y0),options:['A♯ and B♯','A and B','B♯ only','A♯ and B'],answer:'A♯ and B♯',why:'C♯ minor has 4 sharps. Going up, the 6th (A) and 7th (B) are raised: A♯ and B♯.',hint:'Melodic minor going up: raise the 6th AND the 7th.',play:()=>playNotes(scale('C#4','melodicUp'),.5,160)}),
+ex('Submediant',{q:'Which note is the SUBMEDIANT of E♭ minor?',art:y0=>ks('treble',-6,y0),options:['C♭','C','B♭','D♭'],answer:'C♭',why:'E♭ minor: E♭ F G♭ A♭ B♭ C♭ D♭. The 6th note (submediant) is C♭.',hint:'E♭ minor has six flats, including C♭. Count to the 6th note.'}),
+ex('Mediant',{q:'Which note is the MEDIANT of F♯ major?',art:y0=>ks('treble',6,y0),options:['A♯','A','G♯','B'],answer:'A♯',why:'F♯ G♯ A♯: the 3rd note is A♯.',hint:'Mediant = 3rd degree.'}),
+ex('Supertonic',{q:'Which note is the SUPERTONIC of G♭ major?',art:y0=>ks('bass',-6,y0),options:['A♭','A','G','B♭'],answer:'A♭',why:'G♭ major: G♭ A♭ B♭… The supertonic (2nd) is A♭.',hint:'Supertonic = 2nd degree.'}),
+ex('Which clef?',{q:'The clef is hidden. Which clef would make this the scale of E MAJOR?',art:y0=>{const ps=scale('E4');return notes(ps,y0,{clef:'none',B:CLEFB.alto})},options:['Alto clef','Treble clef','Bass clef','Tenor clef'],answer:'Alto clef',why:'The scale starts on the 4th line. In the alto clef the 4th line is E, and the sharps fall on F, G, C and D: E major!',hint:'Try each clef: what is the first note? Do the sharps fit E major (F♯ C♯ G♯ D♯)?'}),
+ex('Transposing a key signature',{q:'A tune in E major is transposed UP a minor 3rd. What is the new key signature?',art:y0=>ks('treble',4,y0),options:['1 sharp','4 flats','2 sharps','3 sharps'],answer:'1 sharp',why:'E up a minor 3rd is G. G major has 1 sharp (F♯).',hint:'E → F♯ → G is a minor 3rd (3 semitones, 3 letters).'}),
+ex('Transposing down',{q:'A tune in C minor is transposed DOWN a major 2nd. What is the new key?',art:y0=>ks('treble',-3,y0),options:['B♭ minor','B minor','A♯ minor','D minor'],answer:'B♭ minor',why:'C down a major 2nd is B♭ (2 semitones, 2 letters), so B♭ minor (5 flats).',hint:'Count down 2 letters AND 2 semitones from C.'}),
+exTF('Enharmonic keys',{q:'True or false: the scales of D♯ minor and E♭ minor sound exactly the same.',art:y0=>ks('treble',6,y0)+'',answer:'True',why:'D♯ and E♭ are the same note, so the scales sound the same: they are enharmonic keys.',hint:'Are D♯ and E♭ the same key on the piano?'}),
+exTF('Chromatic scale check',{q:'True or false: this chromatic scale (going up from E) is written correctly.',art:y0=>notes(['E4','F4','F#4','Fx4','G#4','A4','A#4','B4','C5','C#5','D5','D#5','E5'],y0,{}),answer:'False',why:'It uses the letter F three times (F, F♯, F𝄪). A chromatic scale may use each letter name at most twice in a row.',hint:'Count how many times each letter name appears.',play:()=>playNotes(['E4','F4','F#4','Fx4','G#4','A4','A#4','B4','C5','C#5','D5','D#5','E5'],.4,170)}),
+ex('Name the key',{q:'There is no key signature. Which key is this tune in?',art:y0=>{const s=Staff(20,y0+46,600,{clef:'treble',sp:12,time:'4/4'}),ps=['G4','Bb4','D5','C5','Bb4','A4','F#4','G4'];return s.svg+ps.map((p,k)=>nt(s,s.start+12+k*60+(k>3?16:0),p,k===7?'h':'q')).join('')+bar(s,s.start+4*60+4)+bar(s,620,'end')},
+ options:['G minor','B♭ major','D minor','E♭ major'],answer:'G minor',why:'B♭ suggests G minor or B♭ major. The F♯ is the raised leading note of G minor, and the tune ends on G.',hint:'Look for a raised note: it is often the leading note of a minor key.',play:()=>playSeq([['G4',1],['Bb4',1],['D5',1],['C5',1],['Bb4',1],['A4',1],['F#4',1],['G4',2]],110)}),
+];
+const k=S.findIndex(s=>s.part==='boss');S.splice(k,0,...E);})();
 
 
 
