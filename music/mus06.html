@@ -37,7 +37,7 @@ h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,
   padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
 .tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
 h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
-#stage{display:block;width:100%;height:auto;border-radius:16px;background:var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:linear-gradient(rgba(243,248,241,.55),rgba(243,248,241,.55)),url(../img/music-stage.webp) center/cover,var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
 .ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .ui:empty{display:none}
 .ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
@@ -657,7 +657,7 @@ function noteCard(clef,p,o={}){const sp=o.sp||16,x=o.x??170,y=o.y??96,w=o.w??300
 function pairCard(clef,p1,p2,o={}){const sp=o.sp||16,x=o.x??150,y=o.y??96,w=o.w??340,s=Staff(x,y,w,{clef,sp,key:o.key||0}),m=s.start+(x+w-s.start)/2-sp;
   if(o.harm){const d=parseP(p2).dia-parseP(p1).dia,off=d===1?sp*1.2:0;return s.svg+nt(s,m,p1,'w')+nt(s,m+off,p2,'w',{acc:parseP(p2).acc||false,col:o.col})}
   return s.svg+nt(s,m-sp*2.2,p1,'w')+nt(s,m+sp*2.2,p2,'w')}
-const mroom=()=>`<rect width="640" height="400" fill="#F4F0FB"/>`+['♪','♫','♩','♬'].map((c,k)=>T(40+k*170,60+(k%2)*300,c,'mid','style="font-size:40px;fill:#DCD3F2"')).join('');
+const mroom=()=>`<rect width="640" height="400" fill="#F4F0FB" fill-opacity=".5"/>`+['♪','♫','♩','♬'].map((c,k)=>T(40+k*170,60+(k%2)*300,c,'mid','style="font-size:40px;fill:#DCD3F2"')).join('');
 /* ---- deck helpers ---- */
 (function(){const st=document.createElement('style');st.textContent=`
  #stage .pk{cursor:pointer} #stage .pk:hover{filter:brightness(.93)} .ui button.opt{font-size:20px;max-width:100%;white-space:normal;line-height:1.25} .ui button.play{background:#E9E4FA}
