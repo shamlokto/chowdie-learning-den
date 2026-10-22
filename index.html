@@ -81,8 +81,9 @@
 
     /* ================= HERO HEADER ================= */
     .hero-wrapper {
-      background: linear-gradient(180deg, #38BDF8 0%, #818CF8 55%, #FFF9EB 100%);
-      padding: 2.2rem 1.25rem 3rem;
+      /* painted Singapore riverside park (generated with Gemini); the gradient shows until it loads */
+      background: url(img/hero-park.webp) center 62% / cover no-repeat, linear-gradient(180deg, #BFE6F5 0%, #E3F1E4 60%, #FFF9EB 100%);
+      padding: 2.2rem 1.25rem 9rem;
       position: relative;
       overflow: hidden;
       border-bottom: 4px dashed #FCD34D;
@@ -90,6 +91,7 @@
 
     /* Floating decorative clouds & stars */
     .sky-decor {
+      display: none;
       position: absolute;
       pointer-events: none;
       opacity: 0.85;
