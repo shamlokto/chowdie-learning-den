@@ -1,81 +1,850 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Chowdie's Learning Den</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* Layout: subject tabs (dropdown on phones) + search, one subject panel at a time; boss levels set apart */
-:root{color-scheme:light;--bg:#F3F5F1;--paper:#FFFFFF;--ink:#1F3A4A;--muted:#58707D;--line:#D5DED9;--display:"Baloo 2","Trebuchet MS",sans-serif;--body:"Atkinson Hyperlegible",Verdana,sans-serif}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#141B20;--paper:#1C252C;--ink:#E7ECEE;--muted:#9FB0B8;--line:#2F3B43;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#141B20;--paper:#1C252C;--ink:#E7ECEE;--muted:#9FB0B8;--line:#2F3B43;color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
-.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:flex;flex-direction:column;gap:22px}
-h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,44px);line-height:1.05}
-.lead{margin:6px 0 0;color:var(--muted);max-width:60ch}
-.shelf{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
-.tabs{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
-.tabs button{font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 6px 6px;border-radius:14px;border:2px solid var(--line);background:var(--paper);color:var(--ink);min-width:0}
-.tabs button:hover{border-color:var(--c)}
-.tabs button[aria-selected="true"]{background:var(--c);border-color:var(--c);color:#fff}
-.tabs .em{font-size:24px;line-height:1.2}.tabs .lab{font-family:var(--display);font-weight:800;font-size:15px;line-height:1.15;text-align:center}.tabs .n{font-size:12px;opacity:.75}
-.pick{display:none;font:inherit;font-family:var(--display);font-weight:800;font-size:18px;padding:10px 12px;border-radius:14px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);width:100%}
-.find{display:flex;gap:8px;align-items:center}
-.find input{flex:1;font:inherit;padding:9px 12px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink);min-width:0}
-.find input:focus{outline:none;border-color:var(--ink)}
-.find .clear{font:inherit;border:0;background:none;color:var(--muted);cursor:pointer;font-size:14px}
-.ph{margin:0;font-family:var(--display);font-weight:800;font-size:30px;color:var(--c)}
-.panel{display:flex;flex-direction:column;gap:22px}
-.js .panel{display:none}.js .panel.on{display:flex}
-.subs{display:flex;gap:8px;flex-wrap:wrap}
-.jump{font-family:var(--display);font-weight:700;font-size:15px;color:var(--c);border:2px solid var(--c);border-radius:999px;padding:3px 14px 1px;text-decoration:none}
-.jump:hover{background:var(--c);color:#fff}
-section{border-left:6px solid var(--c);padding-left:16px;display:flex;flex-direction:column;gap:10px;scroll-margin-top:190px}
-.sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-h3{margin:0;font-family:var(--display);font-weight:800;font-size:24px;color:var(--c)}
-.count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.blurb{margin:0;color:var(--muted);font-size:15px;max-width:70ch}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-.card{display:flex;flex-direction:column;gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-decoration:none;color:inherit;min-width:0;position:relative}
-a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
-.bossrow{display:flex;flex-direction:column;gap:6px;margin-top:4px}
-.bl{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8A2A4A}
-.card.boss{background:#FBEFF4;border-color:#E9C3D3}
-:root[data-theme="dark"] .card.boss{background:#2C1E26;border-color:#4A2E3B}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .card.boss{background:#2C1E26;border-color:#4A2E3B}}
-.t{font-family:var(--display);font-weight:700;font-size:17px;line-height:1.2}
-.d{font-size:13.5px;color:var(--muted)}
-.soon{opacity:.55;border-style:dashed}
-.tag{position:absolute;top:10px;right:10px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.hide{display:none!important}
-.none{margin:0;color:var(--muted);font-style:italic}
-.foot{font-size:13px;color:var(--muted)}
-@media (max-width:700px){.tabs{display:none}.pick{display:block}section{scroll-margin-top:140px}}
+    :root {
+      --bg-sky: #FFF9EB;
+      --bg-dots: #F3E5C8;
+      --ink-dark: #1E293B;
+      --ink-soft: #475569;
+      --card-bg: #FFFFFF;
 
-/* hero: the three characters, drawn on a fixed picture-book card */
-.hero{background:#FFFDF6;color:#1F3A4A;border:3px solid #1F3A4A;border-radius:22px;box-shadow:0 6px 0 #1F3A4A;overflow:hidden}
-.hero svg{display:block;width:100%;height:auto;background:linear-gradient(#E3F3FA,#FFFDF6 85%)}
-.cast{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:3px solid #1F3A4A}
-.cast div{padding:12px 16px 14px;min-width:0}
-.cast div{border-top:2px dashed #B7D8CF}.cast div:nth-child(-n+3){border-top:0}.cast div:not(:nth-child(3n+1)){border-left:2px dashed #B7D8CF}
-.cast b{display:block;font-family:var(--display);font-size:22px;line-height:1.1}
-.cast span{font-size:14.5px;color:#58707D}
-.cast a{color:#B3243A;font-weight:700}
-.cast .c1 b{color:#B9471A}.cast b.by{display:inline;font-family:inherit;font-size:inherit;color:#C2410C}.cast .c4 b{color:#C2410C}.cast .c5 b{color:#7A4A2A}.cast .c2 b{color:#C2410C}.cast .c3 b{color:#B3243A}.cast .c6 b{color:#6A5BA8}
-.hb1,.hb2,.hb3,.hb4,.hb5,.hb6{animation:hbob 2.6s ease-in-out infinite;transform-box:fill-box}
-.hb2{animation-delay:.4s}.hb6{animation-delay:1.6s}.hb4{animation-delay:.8s}.hb5{animation-delay:1.2s}.hb3{animation:hsway 3s ease-in-out infinite;transform-origin:50% 100%}
-@keyframes hbob{50%{transform:translateY(-6px)}}
-@keyframes hsway{25%{transform:rotate(-2deg)}75%{transform:rotate(2deg)}}
-@media (prefers-reduced-motion: reduce){.hb1,.hb2,.hb3,.hb4,.hb5,.hb6{animation:none}}
-@media (max-width:860px){.cast{grid-template-columns:1fr 1fr}.cast div{border-left:0!important;border-top:2px dashed #B7D8CF!important}.cast div:nth-child(even){border-left:2px dashed #B7D8CF!important}.cast div:nth-child(-n+2){border-top:0!important}}
-@media (max-width:560px){.cast{grid-template-columns:1fr}.cast div:nth-child(n){border-left:0!important;border-top:2px dashed #B7D8CF!important}.cast div:nth-child(1){border-top:0!important}}
+      /* Subject Theme Palettes */
+      --maths-main: #2563EB;
+      --maths-light: #EFF6FF;
+      --maths-border: #93C5FD;
+      --maths-lip: #1D4ED8;
+
+      --eng-main: #DB2777;
+      --eng-light: #FDF2F8;
+      --eng-border: #F9A8D4;
+      --eng-lip: #BE185D;
+
+      --cn-main: #DC2626;
+      --cn-light: #FEF2F2;
+      --cn-border: #FCA5A5;
+      --cn-lip: #B91C1C;
+
+      --sci-main: #059669;
+      --sci-light: #ECFDF5;
+      --sci-border: #6EE7B7;
+      --sci-lip: #047857;
+
+      --spell-main: #EA580C;
+      --spell-light: #FFF7ED;
+      --spell-border: #FDBA74;
+      --spell-lip: #C2410C;
+
+      --music-main: #7C3AED;
+      --music-light: #F5F3FF;
+      --music-border: #C4B5FD;
+      --music-lip: #6D28D9;
+
+      --story-main: #0D9488;
+      --story-light: #F0FDFA;
+      --story-border: #5EEAD4;
+      --story-lip: #0F766E;
+
+      --grown-main: #475569;
+      --grown-light: #F8FAFC;
+      --grown-border: #CBD5E1;
+      --grown-lip: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-sky);
+      background-image:
+        radial-gradient(var(--bg-dots) 2px, transparent 2px),
+        radial-gradient(var(--bg-dots) 2px, var(--bg-sky) 2px);
+      background-size: 36px 36px;
+      background-position: 0 0, 18px 18px;
+      color: var(--ink-dark);
+      line-height: 1.5;
+      padding-bottom: 4rem;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    /* ================= HERO HEADER ================= */
+    .hero-wrapper {
+      background: linear-gradient(180deg, #38BDF8 0%, #818CF8 55%, #FFF9EB 100%);
+      padding: 2.2rem 1.25rem 3rem;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 4px dashed #FCD34D;
+    }
+
+    /* Floating decorative clouds & stars */
+    .sky-decor {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.85;
+      animation: floatCloud 8s ease-in-out infinite;
+    }
+    .sky-decor.c1 { top: 18px; left: 5%; width: 110px; animation-delay: 0s; }
+    .sky-decor.c2 { top: 30px; right: 6%; width: 130px; animation-delay: -3s; }
+    .sky-decor.s1 { top: 75px; left: 18%; width: 38px; animation: twinkle 3s ease-in-out infinite; }
+    .sky-decor.s2 { top: 60px; right: 20%; width: 42px; animation: twinkle 3.6s ease-in-out infinite 1s; }
+
+    @keyframes floatCloud {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-8px) translateX(6px); }
+    }
+    @keyframes twinkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+      50% { transform: scale(1.18) rotate(12deg); opacity: 1; }
+    }
+    @keyframes charBob {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    header.hero-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 4px solid #F59E0B;
+      border-bottom-width: 8px;
+      border-radius: 32px;
+      padding: 1.8rem 2rem;
+      text-align: center;
+      box-shadow: 0 18px 36px -10px rgba(30, 41, 59, 0.18);
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      color: #B45309;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      border: 2px solid #F59E0B;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 3px 0 #F59E0B;
+    }
+
+    header.hero-card h1 {
+      font-size: clamp(2.1rem, 4.5vw, 3.2rem);
+      color: #1E293B;
+      line-height: 1.12;
+      margin-bottom: 0.65rem;
+      text-shadow: 0 3px 0 #FDE68A;
+    }
+
+    header.hero-card p {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--ink-soft);
+      max-width: 720px;
+      margin: 0 auto;
+      font-weight: 700;
+    }
+
+    /* ================= CHARACTERS GALLERY ================= */
+    .characters-section {
+      margin-top: -1.5rem;
+      padding: 0 1.25rem;
+    }
+
+    .section-BannerTitle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1.75rem 0 1rem;
+    }
+
+    .section-BannerTitle h2 {
+      font-size: 1.5rem;
+      color: #1E293B;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toggle-crew-btn {
+      background: #FFFFFF;
+      border: 2.5px solid #CBD5E1;
+      border-bottom-width: 5px;
+      border-radius: 999px;
+      padding: 0.4rem 1rem;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .toggle-crew-btn:hover {
+      border-color: #94A3B8;
+      transform: translateY(-2px);
+    }
+    .toggle-crew-btn:active {
+      transform: translateY(2px);
+      border-bottom-width: 2.5px;
+    }
+
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1.15rem;
+      transition: all 0.25s ease;
+    }
+    .char-grid.collapsed {
+      display: none;
+    }
+
+    .char-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 1.15rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      border: 3px solid #E2E8F0;
+      border-bottom-width: 7px;
+      box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.08);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .char-card:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 16px 28px -8px rgba(15, 23, 42, 0.15);
+    }
+
+    .char-card:hover .char-avatar svg {
+      animation: charBob 1.6s ease-in-out infinite;
+    }
+
+    /* Character specific card accents */
+    .char-chowdie { border-color: #F59E0B; background: linear-gradient(135deg, #FFFFFF 65%, #FEF3C7 100%); }
+    .char-wala { border-color: #64748B; background: linear-gradient(135deg, #FFFFFF 65%, #F1F5F9 100%); }
+    .char-flamecharge { border-color: #F97316; background: linear-gradient(135deg, #FFFFFF 65%, #FFEDD5 100%); }
+    .char-flame { border-color: #EAB308; background: linear-gradient(135deg, #FFFFFF 65%, #FEF9C3 100%); }
+    .char-mommy { border-color: #8B5CF6; background: linear-gradient(135deg, #FFFFFF 65%, #EDE9FE 100%); }
+    .char-baddie { border-color: #10B981; background: linear-gradient(135deg, #FFFFFF 60%, #D1FAE5 100%); }
+
+    .char-avatar {
+      width: 92px;
+      height: 92px;
+      flex-shrink: 0;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .char-avatar svg {
+      width: 88px;
+      height: 88px;
+      overflow: visible;
+      filter: drop-shadow(0 4px 5px rgba(0,0,0,0.12));
+    }
+
+    .char-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .char-name-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .char-info b.char-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.18rem;
+      color: #0F172A;
+    }
+
+    .designer-pill {
+      font-size: 0.73rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      background: #F1F5F9;
+      color: #475569;
+      border: 1.5px solid #CBD5E1;
+    }
+    .char-wala .designer-pill, .char-flame .designer-pill { background: #DBEAFE; color: #1E40AF; border-color: #93C5FD; }
+    .char-flamecharge .designer-pill { background: #FCE7F3; color: #9D174D; border-color: #F9A8D4; }
+    .char-mommy .designer-pill { background: #EDE9FE; color: #5B21B6; border-color: #C4B5FD; }
+    .char-baddie .designer-pill { background: #FEE2E2; color: #991B1B; border-color: #FCA5A5; }
+
+    .char-info span.char-desc {
+      display: block;
+      font-size: 0.92rem;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .char-info a {
+      color: #2563EB;
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+    }
+    .char-info a:hover {
+      color: #1D4ED8;
+    }
+
+    /* ================= CONTROLS: TABS & SEARCH ================= */
+    .controls-wrapper {
+      padding: 1.75rem 1.25rem 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: linear-gradient(180deg, rgba(255,249,235,0.98) 80%, rgba(255,249,235,0));
+      backdrop-filter: blur(6px);
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: #FFFFFF;
+      border: 3px solid #E2E8F0;
+      border-bottom-width: 6px;
+      border-radius: 26px;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 12px 24px -8px rgba(15, 23, 42, 0.1);
+    }
+
+    .tabs-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+    }
+
+    .tab-btn {
+      appearance: none;
+      border: 2.5px solid #E2E8F0;
+      border-bottom-width: 5px;
+      background: #F8FAFC;
+      color: #334155;
+      font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 600;
+      padding: 0.55rem 1rem;
+      border-radius: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.14s ease;
+      user-select: none;
+    }
+
+    .tab-btn .count-pill {
+      font-size: 0.78rem;
+      background: rgba(15, 23, 42, 0.08);
+      padding: 0.1rem 0.48rem;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .tab-btn:hover {
+      transform: translateY(-2px);
+      background: #FFFFFF;
+      border-color: #CBD5E1;
+    }
+
+    .tab-btn[aria-selected="true"] {
+      color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px -3px rgba(0, 0, 0, 0.18);
+    }
+    .tab-btn[aria-selected="true"] .count-pill {
+      background: rgba(255, 255, 255, 0.25);
+      color: #FFFFFF;
+    }
+
+    /* Subject-colored Active Tabs */
+    .tab-btn[data-subject="all"][aria-selected="true"] { background: #F59E0B; border-color: #B45309; }
+    .tab-btn[data-subject="maths"][aria-selected="true"] { background: var(--maths-main); border-color: var(--maths-lip); }
+    .tab-btn[data-subject="english"][aria-selected="true"] { background: var(--eng-main); border-color: var(--eng-lip); }
+    .tab-btn[data-subject="chinese"][aria-selected="true"] { background: var(--cn-main); border-color: var(--cn-lip); }
+    .tab-btn[data-subject="science"][aria-selected="true"] { background: var(--sci-main); border-color: var(--sci-lip); }
+    .tab-btn[data-subject="spelling"][aria-selected="true"] { background: var(--spell-main); border-color: var(--spell-lip); }
+    .tab-btn[data-subject="music"][aria-selected="true"] { background: var(--music-main); border-color: var(--music-lip); }
+    .tab-btn[data-subject="stories"][aria-selected="true"] { background: var(--story-main); border-color: var(--story-lip); }
+    .tab-btn[data-subject="grownups"][aria-selected="true"] { background: var(--grown-main); border-color: var(--grown-lip); }
+
+    /* Mobile Select + Search Row */
+    .search-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .mobile-subject-select {
+      display: none;
+      flex: 1;
+      min-width: 180px;
+      padding: 0.7rem 1rem;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 16px;
+      border: 2.5px solid #CBD5E1;
+      border-bottom-width: 5px;
+      background: #F8FAFC;
+      color: #1E293B;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+      min-width: 240px;
+    }
+
+    .search-input-wrap svg.search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: #64748B;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.7rem 2.5rem 0.7rem 2.65rem;
+      font-family: 'Nunito', 'Noto Sans SC', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1E293B;
+      background: #F8FAFC;
+      border: 2.5px solid #CBD5E1;
+      border-radius: 16px;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .search-input:focus {
+      background: #FFFFFF;
+      border-color: #3B82F6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #E2E8F0;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+    .clear-search-btn.visible {
+      display: inline-flex;
+    }
+
+    /* ================= SUBJECT PANELS & DECK CARDS ================= */
+    .main-panels {
+      padding: 1rem 1.25rem;
+    }
+
+    .subject-panel {
+      margin-bottom: 2.5rem;
+      animation: fadeIn 0.25s ease;
+    }
+    .subject-panel[hidden] {
+      display: none !important;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-header-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.9rem 1.35rem;
+      border-radius: 22px;
+      color: #FFFFFF;
+      box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.15);
+    }
+
+    .panel-header-banner h2 {
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    /* Sub-navigation pills inside Chinese panel */
+    .sub-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .sub-nav a {
+      background: #FFFFFF;
+      color: var(--cn-main);
+      border: 2.5px solid var(--cn-border);
+      border-bottom-width: 5px;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .sub-nav a:hover {
+      background: var(--cn-light);
+      transform: translateY(-2px);
+    }
+
+    /* Section Card inside a Subject Panel */
+    .curriculum-section {
+      background: #FFFFFF;
+      border: 3px solid #E2E8F0;
+      border-bottom-width: 7px;
+      border-radius: 28px;
+      padding: 1.6rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 25px -8px rgba(15, 23, 42, 0.07);
+    }
+
+    .section-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .section-top-bar h3 {
+      font-size: 1.45rem;
+      color: #0F172A;
+    }
+
+    .lesson-count-badge {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      background: #F1F5F9;
+      color: #334155;
+      border: 2px solid #CBD5E1;
+    }
+
+    .section-intro {
+      color: var(--ink-soft);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1.35rem;
+    }
+
+    /* Deck Cards Grid */
+    .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .deck-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      background: #FFFFFF;
+      border: 2.5px solid #E2E8F0;
+      border-bottom-width: 6px;
+      border-radius: 20px;
+      padding: 1.1rem 1.2rem;
+      color: var(--ink-dark);
+      transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s ease, border-color 0.16s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deck-card::after {
+      content: "➜";
+      position: absolute;
+      top: 1.05rem;
+      right: 1rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #64748B;
+      transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+
+    .deck-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -6px rgba(15, 23, 42, 0.12);
+    }
+
+    .deck-card:hover::after {
+      transform: translateX(3px);
+    }
+
+    .deck-card:active {
+      transform: translateY(2px);
+      border-bottom-width: 3px;
+    }
+
+    .deck-title {
+      font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
+      font-size: 1.14rem;
+      font-weight: 700;
+      color: #0F172A;
+      padding-right: 2rem;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .deck-desc {
+      font-size: 0.92rem;
+      color: #475569;
+      font-weight: 600;
+      display: block;
+      line-height: 1.42;
+    }
+
+    /* Subject-specific Deck Card Accents */
+    [data-panel="maths"] .panel-header-banner { background: linear-gradient(135deg, #2563EB, #1D4ED8); }
+    [data-panel="maths"] .curriculum-section { border-color: var(--maths-border); }
+    [data-panel="maths"] .deck-card { background: var(--maths-light); border-color: var(--maths-border); border-bottom-color: var(--maths-main); }
+    [data-panel="maths"] .deck-card:hover::after { background: var(--maths-main); color: #FFF; }
+
+    [data-panel="english"] .panel-header-banner { background: linear-gradient(135deg, #DB2777, #BE185D); }
+    [data-panel="english"] .curriculum-section { border-color: var(--eng-border); }
+    [data-panel="english"] .deck-card { background: var(--eng-light); border-color: var(--eng-border); border-bottom-color: var(--eng-main); }
+    [data-panel="english"] .deck-card:hover::after { background: var(--eng-main); color: #FFF; }
+
+    [data-panel="chinese"] .panel-header-banner { background: linear-gradient(135deg, #DC2626, #B91C1C); }
+    [data-panel="chinese"] .curriculum-section { border-color: var(--cn-border); }
+    [data-panel="chinese"] .deck-card { background: var(--cn-light); border-color: var(--cn-border); border-bottom-color: var(--cn-main); }
+    [data-panel="chinese"] .deck-card:hover::after { background: var(--cn-main); color: #FFF; }
+
+    [data-panel="science"] .panel-header-banner { background: linear-gradient(135deg, #059669, #047857); }
+    [data-panel="science"] .curriculum-section { border-color: var(--sci-border); }
+    [data-panel="science"] .deck-card { background: var(--sci-light); border-color: var(--sci-border); border-bottom-color: var(--sci-main); }
+    [data-panel="science"] .deck-card:hover::after { background: var(--sci-main); color: #FFF; }
+
+    [data-panel="spelling"] .panel-header-banner { background: linear-gradient(135deg, #EA580C, #C2410C); }
+    [data-panel="spelling"] .curriculum-section { border-color: var(--spell-border); }
+    [data-panel="spelling"] .deck-card { background: var(--spell-light); border-color: var(--spell-border); border-bottom-color: var(--spell-main); }
+    [data-panel="spelling"] .deck-card:hover::after { background: var(--spell-main); color: #FFF; }
+
+    [data-panel="music"] .panel-header-banner { background: linear-gradient(135deg, #7C3AED, #5B21B6); }
+    [data-panel="music"] .curriculum-section { border-color: var(--music-border); }
+    [data-panel="music"] .deck-card { background: var(--music-light); border-color: var(--music-border); border-bottom-color: var(--music-main); }
+    [data-panel="music"] .deck-card:hover::after { background: var(--music-main); color: #FFF; }
+
+    [data-panel="stories"] .panel-header-banner { background: linear-gradient(135deg, #0D9488, #0F766E); }
+    [data-panel="stories"] .curriculum-section { border-color: var(--story-border); }
+    [data-panel="stories"] .deck-card { background: var(--story-light); border-color: var(--story-border); border-bottom-color: var(--story-main); }
+    [data-panel="stories"] .deck-card:hover::after { background: var(--story-main); color: #FFF; }
+
+    [data-panel="grownups"] .panel-header-banner { background: linear-gradient(135deg, #475569, #334155); }
+    [data-panel="grownups"] .curriculum-section { border-color: var(--grown-border); }
+    [data-panel="grownups"] .deck-card { background: var(--grown-light); border-color: var(--grown-border); border-bottom-color: var(--grown-main); }
+    [data-panel="grownups"] .deck-card:hover::after { background: var(--grown-main); color: #FFF; }
+
+    /* ================= BOSS ARENA STYLING ================= */
+    .boss-arena {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #1E1B4B 0%, #311042 100%);
+      border: 3px solid #A855F7;
+      border-bottom-width: 6px;
+      box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .boss-arena-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #FDE047;
+      background: rgba(253, 224, 71, 0.14);
+      border: 1.5px solid rgba(253, 224, 71, 0.4);
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 0.9rem;
+    }
+
+    .boss-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .boss-arena .deck-card {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 2.5px solid #C084FC !important;
+      border-bottom: 5px solid #9333EA !important;
+      color: #FFFFFF !important;
+      backdrop-filter: blur(4px);
+    }
+
+    .boss-arena .deck-card:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: #F472B6 !important;
+    }
+
+    .boss-arena .deck-card .deck-title {
+      color: #FEF08A !important;
+    }
+
+    .boss-arena .deck-card .deck-desc {
+      color: #E2E8F0 !important;
+    }
+
+    .boss-arena .deck-card::after {
+      background: rgba(254, 240, 138, 0.2);
+      color: #FEF08A;
+      content: "⚔️";
+    }
+
+    /* ================= EMPTY STATE & FOOTER ================= */
+    .empty-state {
+      text-align: center;
+      background: #FFFFFF;
+      border: 3px dashed #CBD5E1;
+      border-radius: 26px;
+      padding: 3rem 1.5rem;
+      margin: 2rem 0;
+      display: none;
+    }
+    .empty-state.visible {
+      display: block;
+    }
+    .empty-state p {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.35rem;
+      color: #475569;
+    }
+
+    footer.site-footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 1.5rem;
+      color: var(--ink-soft);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      .tabs-row {
+        display: none;
+      }
+      .mobile-subject-select {
+        display: block;
+      }
+      header.hero-card {
+        padding: 1.35rem 1.15rem;
+      }
+      .curriculum-section {
+        padding: 1.2rem;
+      }
+    }
+  
+    /* additions: anchors below the sticky bar, keyboard focus, reduced motion, deck-card text wrap */
+    html{color-scheme:light}
+    .curriculum-section{scroll-margin-top:210px}
+    .controls-wrapper{scroll-margin-top:0}
+    .deck-card:focus-visible,.tab-btn:focus-visible,.toggle-crew-btn:focus-visible,.sub-nav a:focus-visible{outline:3px solid #2563EB;outline-offset:3px}
+    .deck-title{overflow-wrap:anywhere}
+    .char-avatar{border-radius:50%}
+    @media (max-width:420px){.char-grid{grid-template-columns:1fr}.char-card{padding:1rem}.char-avatar,.char-avatar svg{width:76px;height:76px}.search-input-wrap{min-width:0}.mobile-subject-select{min-width:0;width:100%}}
+    @media (prefers-reduced-motion: reduce){.sky-decor,.char-card:hover .char-avatar svg,.subject-panel{animation:none!important}.char-card,.deck-card,.tab-btn{transition:none}}
+    .char-avatar,.char-avatar svg{width:108px;height:108px}
+    @media (max-width:768px){.search-row{flex-direction:column;align-items:stretch}.mobile-subject-select,.search-input-wrap{width:100%;min-width:0;flex:none}}
+    @media (max-width:420px){.char-avatar,.char-avatar svg{width:80px;height:80px}}
 </style>
-<div class="wrap">
-<header><h1>Chowdie's Learning Den</h1><p class="lead">Every interactive deck in one place. Kids' decks star Chowdie the otter, Wala the Koala, Flamecharge the Phoenix, Mommy the Elephant and the lying villain Baddie Vampire. Pick a subject below, or search.</p></header>
-<div class="hero" role="region" aria-label="Meet the characters"><svg viewBox="0 0 1530 320" role="img" aria-label="Chowdie the otter, Wala the Koala, Flamecharge the Phoenix, Flame the Eagle, Mommy the Elephant playing her trombone, and Baddie Vampire the crocodile"><ellipse cx="160" cy="300" rx="150" ry="14" fill="#CFE6C4"/><ellipse cx="400" cy="300" rx="110" ry="12" fill="#CFE6C4"/><ellipse cx="640" cy="300" rx="110" ry="12" fill="#FBE3CF"/><ellipse cx="880" cy="300" rx="100" ry="12" fill="#E8DCCF"/><ellipse cx="1130" cy="300" rx="120" ry="12" fill="#E6DDF8"/><ellipse cx="1420" cy="300" rx="110" ry="12" fill="#E7D3E3"/><g class="hb1"><g transform="translate(170 298) scale(1.95)"><g class="">
+<div class="hero-wrapper">
+<svg class="sky-decor c1" viewBox="0 0 120 60" fill="none" aria-hidden="true"><path d="M25 50H95C106 50 114 42 114 31C114 21 106 13 96 13C93 5 85 0 75 0C63 0 53 8 50 19C47 17 43 16 39 16C28 16 20 24 20 35C12 36 6 42 6 50H25Z" fill="white" fill-opacity="0.85"/></svg>
+<svg class="sky-decor c2" viewBox="0 0 120 60" fill="none" aria-hidden="true"><path d="M25 50H95C106 50 114 42 114 31C114 21 106 13 96 13C93 5 85 0 75 0C63 0 53 8 50 19C47 17 43 16 39 16C28 16 20 24 20 35C12 36 6 42 6 50H25Z" fill="white" fill-opacity="0.85"/></svg>
+<svg class="sky-decor s1" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 2L24.5 14.5L38 16L27.5 24.5L30.5 38L20 30.5L9.5 38L12.5 24.5L2 16L15.5 14.5L20 2Z" fill="#FDE047" stroke="#F59E0B" stroke-width="2"/></svg>
+<svg class="sky-decor s2" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 2L24.5 14.5L38 16L27.5 24.5L30.5 38L20 30.5L9.5 38L12.5 24.5L2 16L15.5 14.5L20 2Z" fill="#FDE047" stroke="#F59E0B" stroke-width="2"/></svg>
+<div class="container"><header class="hero-card"><div class="hero-badge">🌟 Singapore MOE primary syllabus · Learn → Try it! → Star check</div><h1>Chowdie&#x27;s Learning Den</h1><p>Every interactive deck in one place. Kids' decks star Chowdie the otter, Wala the Koala, Flamecharge the Phoenix, Mommy the Elephant and the lying villain Baddie Vampire. Pick a subject below, or search.</p></header></div>
+</div>
+<div class="container">
+<div class="characters-section" aria-label="Meet the characters" role="region">
+<div class="section-BannerTitle"><h2>🐾 Meet your learning crew!</h2><button type="button" class="toggle-crew-btn" id="toggleCrewBtn" aria-expanded="true" aria-controls="charGrid">Hide crew ▲</button></div>
+<div class="char-grid" id="charGrid"><div class="char-card char-chowdie"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Chowdie"><defs><clipPath id="cp-otter"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FEF3C7"/><g clip-path="url(#cp-otter)"><g transform="translate(50 126) scale(0.95)"><g class="">
   <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
   <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="#1F3A4A" stroke-width="3"/>
-  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3" transform="rotate(25 -26 -48)"/><path d="M30 -58 q16 -14 12 -32" stroke="#1F3A4A" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3" transform="rotate(25 -26 -48)"/><ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3" transform="rotate(-25 26 -48)"/>
   <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
   <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
@@ -85,11 +854,11 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
   <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="#1F3A4A"/>
   <path d="M-6 -71 q6 6 12 0" stroke="#1F3A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="#1F3A4A" stroke-width="1.5" stroke-linecap="round"/>
-  </g></g></g><g class="hb2"><g transform="translate(400 298) scale(1.75)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#F59E0B" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Chowdie</b><span class="designer-pill">Your guide</span></div><span class="char-desc">An otter and your guide in every deck. His name comes from Chris + Claudie.</span></div></div><div class="char-card char-wala"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Wala the Koala"><defs><clipPath id="cp-wala"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#E0F2FE"/><g clip-path="url(#cp-wala)"><g transform="translate(50 130) scale(0.86)"><g class="">
   <ellipse cx="0" cy="-34" rx="33" ry="36" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="0" cy="-28" rx="20" ry="25" fill="#C9D0D6"/>
   <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
-  <g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="#4FAE63" stroke="#1F3A4A" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="#1F3A4A" stroke-width="1.5"/></g><ellipse cx="-26" cy="-44" rx="9" ry="14" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3" transform="rotate(20 -26 -44)"/><path d="M28 -52 q18 -16 14 -36" stroke="#1F3A4A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="-26" cy="-44" rx="9" ry="14" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3" transform="rotate(20 -26 -44)"/><ellipse cx="26" cy="-44" rx="9" ry="14" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3" transform="rotate(-20 26 -44)"/>
   <circle cx="-36" cy="-104" r="20" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
   <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
   <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="#1F3A4A" stroke-width="2" fill="none" stroke-linecap="round"/>
@@ -101,7 +870,7 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
   <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="#1F3A4A" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
   <path d="M-6 -64 q6 5 12 0" stroke="#1F3A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="#E0574F" stroke="#1F3A4A" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="#E0574F" stroke="#1F3A4A" stroke-width="2"/></g>
-  </g></g></g><g class="hb4"><g transform="translate(640 298) scale(1.62)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#38BDF8" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Wala the Koala</b><span class="designer-pill">By Willis</span></div><span class="char-desc">Chowdie's best friend. She teaches Chinese and is learning English. Designed by <b>Willis</b>.</span></div></div><div class="char-card char-flamecharge"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Flamecharge the Phoenix"><defs><clipPath id="cp-flame"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FFEDD5"/><g clip-path="url(#cp-flame)"><g transform="translate(50 130) scale(0.8)"><g class="">
   <g class=""><path d="M-14 -12 q-46 12 -64 -10 q22 4 30 -10 q-26 -6 -32 -30 q22 18 36 10 q-12 -14 -8 -34 q14 28 34 38z" fill="#E8552B" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <path d="M-20 -16 q-30 6 -44 -8 q18 2 26 -10 q-14 -8 -16 -22 q14 14 30 14z" fill="#FFC83D"/></g>
   <path d="M0 -76 q34 2 32 38 q-2 36 -32 38 q-30 -2 -32 -38 q-2 -36 32 -38z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3"/>
@@ -110,7 +879,7 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
   <path d="M-14 -2 v7 M14 -2 v7" stroke="#D9A21B" stroke-width="5" stroke-linecap="round"/>
   <path d="M-25 12 q2 -8 11 -7 q9 -1 11 7 M-14 5 v7 M3 12 q2 -8 11 -7 q9 -1 11 7 M14 5 v7" stroke="#D9A21B" stroke-width="4.5" fill="none" stroke-linecap="round"/>
   <path d="M-25 12 l-2 4 M-3 12 l2 4 M-14 12 v4 M3 12 l-2 4 M25 12 l2 4 M14 12 v4" stroke="#1F3A4A" stroke-width="3" stroke-linecap="round"/>
-  <path d="M-24 -62 q-28 6 -34 40 l9 -5 l0 11 l8 -7 l3 10 l6 -9 q4 2 8 -4z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/><path d="M24 -60 q20 -34 50 -58 l-4 12 l12 -6 l-6 12 l13 -3 l-8 11 l12 1 l-11 9 l9 5 q-22 10 -42 34z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/><path d="M34 -66 q12 -18 28 -30" stroke="#C2410C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-24 -62 q-28 6 -34 40 l9 -5 l0 11 l8 -7 l3 10 l6 -9 q4 2 8 -4z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/><path d="M24 -62 q28 6 34 40 l-9 -5 l0 11 l-8 -7 l-3 10 l-6 -9 q-4 2 -8 -4z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <g class="" style="transform-origin:0px -118px"><path d="M-22 -108 q-14 -14 -30 -14 q12 -6 22 -4 q-16 -14 -20 -30 q16 10 26 18 q-4 -18 4 -34 q6 20 16 26 q4 -14 16 -20 q-4 18 0 30 q10 -8 22 -6 q-12 8 -16 22z" fill="#E8552B" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <path d="M-12 -112 q-6 -14 -2 -26 q6 12 12 14 q2 -10 10 -16 q-2 14 2 24z" fill="#FFC83D"/></g>
   <path d="M0 -122 q32 0 32 30 q0 16 -10 26 q-10 8 -22 8 q-12 0 -22 -8 q-10 -10 -10 -26 q0 -30 32 -30z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3"/>
@@ -124,7 +893,7 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
   <path d="M-9 -88 q9 -6 18 0 q2 10 -4 18 q-3 4 -5 9 q-2 -5 -5 -9 q-6 -8 -4 -18z" fill="#FFB020" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
   <path d="M-4 -70 q4 3 8 0 q-2 5 -4 9 q-2 -4 -4 -9z" fill="#B45309"/>
   <path d="M-5 -84 h1 M4 -84 h1" stroke="#1F3A4A" stroke-width="2.4" stroke-linecap="round"/>
-  </g></g></g><g class="hb5"><g transform="translate(880 298) scale(1.55)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#EA580C" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Flamecharge the Phoenix</b><span class="designer-pill">By Megan</span></div><span class="char-desc">A fiery phoenix-eagle who is a spelling and 听写 champion. Her feathers burn brightest when you spell a word perfectly! Designed by <b>Megan</b>. Find her in the <a href="#spelling" data-jump-subject="spelling">Spelling Nest</a>.</span></div></div><div class="char-card char-flame"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Flame the Eagle"><defs><clipPath id="cp-eagle"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FEF9C3"/><g clip-path="url(#cp-eagle)"><g transform="translate(50 132) scale(0.78)"><g class="">
   <path d="M-16 -10 l-20 22 l10 -2 l2 10 l8 -8 l6 8 l4 -10 l8 4z" fill="#FFFFFF" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <path d="M0 -78 q34 2 34 40 q-2 38 -34 40 q-32 -2 -34 -40 q0 -38 34 -40z" fill="#7A4A2A" stroke="#1F3A4A" stroke-width="3"/>
   <path d="M0 -66 q18 2 18 28 q-2 26 -18 28 q-16 -2 -18 -28 q0 -26 18 -28z" fill="#9A6440"/>
@@ -143,13 +912,13 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
   <path d="M-21 -109 l13 4 M21 -109 l-13 4" stroke="#1F3A4A" stroke-width="4" stroke-linecap="round"/>
   <path d="M-10 -94 q10 -6 20 0 q6 12 -2 22 q-3 4 -4 9 q-4 -6 -8 -10 q-8 -8 -6 -21z" fill="#F5B700" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
   <path d="M-4 -74 q4 3 8 1 q-2 6 -3 10 q-3 -5 -5 -11z" fill="#C88A00"/>
-  </g></g></g><g class="hb6"><g transform="translate(1120 298) scale(1.55)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#EAB308" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Flame the Eagle</b><span class="designer-pill">By Willis</span></div><span class="char-desc">Flamecharge's best friend and guardian of the Sky Gate. He sets tough tests in <a href="#stories" data-jump-subject="stories">Flame the Eagle Adventure</a>. Designed by <b>Willis</b>.</span></div></div><div class="char-card char-mommy"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Mommy the Elephant"><defs><clipPath id="cp-mommy"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#EDE9FE"/><g clip-path="url(#cp-mommy)"><g transform="translate(50 132) scale(0.78)"><g class="">
   <path d="M30 -24 q16 2 18 16" stroke="#1F3A4A" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M46 -10 l4 6 l-7 -1z" fill="#1F3A4A"/>
   <ellipse cx="0" cy="-36" rx="37" ry="37" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="0" cy="-30" rx="22" ry="24" fill="#CFCAE6"/>
   <rect x="-33" y="-16" width="24" height="18" rx="9" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3"/><rect x="9" y="-16" width="24" height="18" rx="9" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3"/>
   <path d="M-29 1 q3 -5 6 0 M-22 1 q3 -5 6 0 M13 1 q3 -5 6 0 M20 1 q3 -5 6 0" fill="#FFF6EA" stroke="#1F3A4A" stroke-width="1.5"/>
-  <ellipse cx="-29" cy="-42" rx="10" ry="16" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3" transform="rotate(18 -29 -42)"/>
+  <ellipse cx="-29" cy="-42" rx="10" ry="16" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3" transform="rotate(18 -29 -42)"/><ellipse cx="29" cy="-42" rx="10" ry="16" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3" transform="rotate(-18 29 -42)"/>
   <!-- piano-key collar -->
   <path d="M-30 -64 q30 14 60 0 l2 10 q-32 16 -64 0z" fill="#fff" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
   <rect x="-24.5" y="-63.64" width="5" height="7" fill="#1F3A4A"/><rect x="-14.5" y="-59.44" width="5" height="7" fill="#1F3A4A"/><rect x="-2.5" y="-58" width="5" height="7" fill="#1F3A4A"/><rect x="9.5" y="-59.44" width="5" height="7" fill="#1F3A4A"/><rect x="19.5" y="-63.64" width="5" height="7" fill="#1F3A4A"/>
@@ -167,15 +936,11 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
   <path d="M-20 -106 l-5 -4 M-19 -101 l-6 -1 M20 -106 l5 -4 M19 -101 l6 -1" stroke="#1F3A4A" stroke-width="2" stroke-linecap="round"/>
   <ellipse cx="-24" cy="-88" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="24" cy="-88" rx="6" ry="3.5" fill="#F4A3A8"/>
   <path d="M9 -76 q9 9 18 0" stroke="#1F3A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M-9 -84 q-6 22 2 36 q4 4 14 2 l-2 -10 q-6 0 -6 -6 q-2 -10 2 -22z" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
-  <g transform="translate(6 30) rotate(-6 14 -72)"><path d="M10 -76 h96 a6 6 0 0 1 0 12 h-90" fill="none" stroke="#1F3A4A" stroke-width="7" stroke-linecap="round"/><path d="M10 -76 h96 a6 6 0 0 1 0 12 h-90" fill="none" stroke="#F2C14E" stroke-width="3.5" stroke-linecap="round"/>
-   <path d="M28 -76 v-14 h40" fill="none" stroke="#1F3A4A" stroke-width="7" stroke-linejoin="round"/><path d="M28 -76 v-14 h40" fill="none" stroke="#F2C14E" stroke-width="3.5" stroke-linejoin="round"/>
-   <path d="M66 -93 l22 -10 v26 l-22 -10z" fill="#F2C14E" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="88" cy="-90" rx="4" ry="13" fill="#E0A21B" stroke="#1F3A4A" stroke-width="2.5"/>
-   <rect x="2" y="-80" width="9" height="8" rx="2" fill="#E0A21B" stroke="#1F3A4A" stroke-width="2"/></g>
-   <path d="M22 -30 q24 -2 46 -16" stroke="#1F3A4A" stroke-width="19" fill="none" stroke-linecap="round"/><path d="M22 -30 q24 -2 46 -16" stroke="#B9B3D9" stroke-width="13" fill="none" stroke-linecap="round"/>
+    <path d="M-9 -84 q-4 30 4 44 q6 12 18 6 q8 -6 2 -14 q-4 -4 -8 0 q-6 -6 -4 -36z" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
+  
   <!-- pink bow with a little gold treble-clef charm -->
   <g transform="translate(20 -124) rotate(18)"><path d="M0 0 q-16 -14 -20 0 q4 14 20 0z M0 0 q16 -14 20 0 q-4 14 -20 0z" fill="#E5577A" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/><circle r="5" fill="#FFD43B" stroke="#1F3A4A" stroke-width="2"/><path d="M0 -3 q3 0 2 3 q-2 3 -3 0 v6" stroke="#1F3A4A" stroke-width="1.2" fill="none"/></g>
-  </g></g></g><g class="hb3"><g transform="translate(1420 298) scale(1.65)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#8B5CF6" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Mommy the Elephant</b><span class="designer-pill">By Jelly</span></div><span class="char-desc">A music teacher who loves her trombone. She teaches Grade 5 music theory with Flamecharge, and her big ears ALWAYS catch Baddie Daddy's lies. Find her in <a href="#music" data-jump-subject="music">Music Theory</a>. Designed by <b>Jelly</b>.</span></div></div><div class="char-card char-baddie"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Baddie Vampire"><defs><clipPath id="cp-baddie"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#D1FAE5"/><g clip-path="url(#cp-baddie)"><g transform="translate(44 140) scale(0.84)"><g class="">
   <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
   <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
@@ -184,7 +949,7 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
   <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="#4A9440" stroke-width="2"/>
   <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3" transform="rotate(20 -27 -44)"/>
-  <path d="M26 -54 q22 -10 36 -26" stroke="#1F3A4A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="27" cy="-44" rx="8" ry="13" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3" transform="rotate(-20 27 -44)"/>
   <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
   <ellipse cx="0" cy="-92" rx="32" ry="26" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3"/>
   <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
@@ -196,41 +961,44 @@ a.card:hover{border-color:var(--c);box-shadow:0 2px 0 var(--c)}
       <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="#1F3A4A" stroke-width="2" stroke-linejoin="round"/>
       <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="#1F3A4A" stroke-width="1.5" fill="#fff"/>
   <circle cx="-22" cy="-88" r="2" fill="#4A9440"/><circle cx="-14" cy="-82" r="2" fill="#4A9440"/><circle cx="-26" cy="-80" r="2" fill="#4A9440"/>
-  </g></g></g></svg><div class="cast">
-<div class="c1"><b>Chowdie</b><span>An otter and your guide in every deck. His name comes from Chris + Claudie.</span></div>
-<div class="c2"><b>Wala the Koala</b><span>Chowdie's best friend. She teaches Chinese and is learning English. Designed by <b class="by">Willis</b>.</span></div>
-<div class="c4"><b>Flamecharge the Phoenix</b><span>A fiery phoenix-eagle who is a spelling and 听写 champion. Her feathers burn brightest when you spell a word perfectly! Designed by <b class="by">Megan</b>. Find her in the <a href="#spelling-nest">Spelling Nest</a>.</span></div>
-<div class="c5"><b>Flame the Eagle</b><span>Flamecharge's best friend and guardian of the Sky Gate. He sets tough tests in <a href="#stories">Flame the Eagle Adventure</a>. Designed by <b class="by">Willis</b>.</span></div>
-<div class="c6"><b>Mommy the Elephant</b><span>A music teacher who loves her trombone. She teaches Grade 5 music theory with Flamecharge, and her big ears ALWAYS catch Baddie Daddy's lies. Find her in <a href="#music">Music Theory</a>. Designed by <b class="by">Jelly</b>.</span></div>
-<div class="c3"><b>Baddie Vampire</b><span>A sneaky crocodile who always lies. Catch his lies in every Beat Baddie round: <a href="maths/boss-maths.html">Maths</a>, <a href="english/boss-eng.html">English</a>, <a href="science/boss-sci.html">Science</a>.</span></div>
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#059669" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Baddie Vampire</b><span class="designer-pill">Sneaky villain</span></div><span class="char-desc">A sneaky crocodile who always lies. Catch his lies in every Beat Baddie round: <a href="maths/boss-maths.html">Maths</a>, <a href="english/boss-eng.html">English</a>, <a href="science/boss-sci.html">Science</a>.</span></div></div></div>
+</div>
+<div class="controls-wrapper"><div class="controls-bar">
+<div class="tabs-row" aria-label="Subjects" role="tablist"><button type="button" class="tab-btn" role="tab" data-subject="all" aria-selected="true">🌟 All decks <span class="count-pill">80</span></button><button type="button" class="tab-btn" role="tab" data-subject="maths" aria-selected="false">🔢 Maths <span class="count-pill">17</span></button><button type="button" class="tab-btn" role="tab" data-subject="english" aria-selected="false">🔤 English <span class="count-pill">11</span></button><button type="button" class="tab-btn" role="tab" data-subject="chinese" aria-selected="false">🀄 华文 Chinese <span class="count-pill">23</span></button><button type="button" class="tab-btn" role="tab" data-subject="science" aria-selected="false">🔬 Science <span class="count-pill">10</span></button><button type="button" class="tab-btn" role="tab" data-subject="spelling" aria-selected="false">🔥 Spelling &amp; 听写 <span class="count-pill">4</span></button><button type="button" class="tab-btn" role="tab" data-subject="music" aria-selected="false">🎵 Music Theory <span class="count-pill">6</span></button><button type="button" class="tab-btn" role="tab" data-subject="stories" aria-selected="false">📖 Stories <span class="count-pill">8</span></button><button type="button" class="tab-btn" role="tab" data-subject="grownups" aria-selected="false">☕ Grown-ups <span class="count-pill">1</span></button></div>
+<div class="search-row"><select class="mobile-subject-select" aria-label="Choose a subject" id="subjectSelect"><option value="all">🌟 All subjects (80)</option><option value="maths">🔢 Maths (17)</option><option value="english">🔤 English (11)</option><option value="chinese">🀄 华文 Chinese (23)</option><option value="science">🔬 Science (10)</option><option value="spelling">🔥 Spelling &amp; 听写 (4)</option><option value="music">🎵 Music Theory (6)</option><option value="stories">📖 Stories (8)</option><option value="grownups">☕ Grown-ups (1)</option></select>
+<div class="search-input-wrap"><svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+<input type="search" id="deckSearchInput" class="search-input" placeholder="Search any topic (e.g. fractions, 听写, Baddie, scales)…" aria-label="Search decks"><button type="button" class="clear-search-btn" id="clearSearchBtn" aria-label="Clear search">✕</button></div></div>
 </div></div>
-<div class="shelf"><div class="tabs" role="tablist" aria-label="Subjects"><button type="button" role="tab" data-k="maths" style="--c:#FF7A45" aria-selected="false"><span class="em">🔢</span><span class="lab">Maths</span><span class="n">17</span></button><button type="button" role="tab" data-k="english" style="--c:#2E8BC0" aria-selected="false"><span class="em">🔤</span><span class="lab">English</span><span class="n">11</span></button><button type="button" role="tab" data-k="chinese" style="--c:#C2185B" aria-selected="false"><span class="em">🀄</span><span class="lab">华文 Chinese</span><span class="n">23</span></button><button type="button" role="tab" data-k="science" style="--c:#3E9A52" aria-selected="false"><span class="em">🔬</span><span class="lab">Science</span><span class="n">10</span></button><button type="button" role="tab" data-k="spelling" style="--c:#E8552B" aria-selected="false"><span class="em">🔥</span><span class="lab">Spelling & 听写</span><span class="n">4</span></button><button type="button" role="tab" data-k="music" style="--c:#6A5BA8" aria-selected="false"><span class="em">🎵</span><span class="lab">Music Theory</span><span class="n">6</span></button><button type="button" role="tab" data-k="stories" style="--c:#7A4FB0" aria-selected="false"><span class="em">📖</span><span class="lab">Stories</span><span class="n">8</span></button><button type="button" role="tab" data-k="grownups" style="--c:#2F5D50" aria-selected="false"><span class="em">☕</span><span class="lab">Grown-ups</span><span class="n">1</span></button></div>
-<select class="pick" aria-label="Choose a subject"><option value="maths">🔢 Maths (17)</option><option value="english">🔤 English (11)</option><option value="chinese">🀄 华文 Chinese (23)</option><option value="science">🔬 Science (10)</option><option value="spelling">🔥 Spelling & 听写 (4)</option><option value="music">🎵 Music Theory (6)</option><option value="stories">📖 Stories (8)</option><option value="grownups">☕ Grown-ups (1)</option></select>
-<div class="find"><input type="search" placeholder="🔍 Find a deck… (e.g. fractions, 听写, Baddie)" aria-label="Find a deck"><button type="button" class="clear hide">Clear</button></div></div>
-<div class="panel" role="tabpanel" data-k="maths" id="tab-maths"><h2 class="ph" style="--c:#FF7A45">🔢 Maths</h2><section id="p2-maths" style="--c:#FF7A45"><div class="sh"><h3>P2 Maths</h3><span class="count">15 lessons · 2 boss</span></div><p class="blurb">Interactive lessons following the MOE 2021 Primary 2 syllabus. Chowdie the otter narrates. Each deck: Learn → Try it! → Star check.</p><div class="grid"><a class="card" href="maths/p2-deck01.html" data-s="01 numbers to 1000 counting in tens and hundreds, place value, numerals and words"><span class="t">01 Numbers to 1000</span><span class="d">Counting in tens and hundreds, place value, numerals and words</span></a><a class="card" href="maths/p2-deck02.html" data-s="02 compare, order &amp; patterns greater than, less than, ordering, number patterns, odd and even"><span class="t">02 Compare, Order &amp; Patterns</span><span class="d">Greater than, less than, ordering, number patterns, odd and even</span></a><a class="card" href="maths/p2-deck03.html" data-s="03 add &amp; subtract to 1000 column method with regrouping, mental sums"><span class="t">03 Add &amp; Subtract to 1000</span><span class="d">Column method with regrouping, mental sums</span></a><a class="card" href="maths/p2-deck04.html" data-s="04 times tables 2, 5, 10 equal groups, arrays, skip counting"><span class="t">04 Times Tables 2, 5, 10</span><span class="d">Equal groups, arrays, skip counting</span></a><a class="card" href="maths/p2-deck05.html" data-s="05 times tables 3 &amp; 4 building and using the 3 and 4 tables"><span class="t">05 Times Tables 3 &amp; 4</span><span class="d">Building and using the 3 and 4 tables</span></a><a class="card" href="maths/p2-deck06.html" data-s="06 sharing &amp; grouping (÷) the ÷ sign, fact families, multiplication ↔ division"><span class="t">06 Sharing &amp; Grouping (÷)</span><span class="d">The ÷ sign, fact families, multiplication ↔ division</span></a><a class="card" href="maths/p2-deck07.html" data-s="07 fractions of a whole equal parts, naming, comparing and ordering fractions"><span class="t">07 Fractions of a Whole</span><span class="d">Equal parts, naming, comparing and ordering fractions</span></a><a class="card" href="maths/p2-deck08.html" data-s="08 adding fractions adding and subtracting like fractions within one whole"><span class="t">08 Adding Fractions</span><span class="d">Adding and subtracting like fractions within one whole</span></a><a class="card" href="maths/p2-deck09.html" data-s="09 dollars and cents coins and notes, $ and ¢ notation, converting and comparing"><span class="t">09 Dollars and Cents</span><span class="d">Coins and notes, $ and ¢ notation, converting and comparing</span></a><a class="card" href="maths/p2-deck10.html" data-s="10 lengths, masses &amp; litres metres, kilograms and grams, litres; comparing and ordering"><span class="t">10 Lengths, Masses &amp; Litres</span><span class="d">Metres, kilograms and grams, litres; comparing and ordering</span></a><a class="card" href="maths/p2-deck11.html" data-s="11 telling time time to the minute, hours and minutes, converting"><span class="t">11 Telling Time</span><span class="d">Time to the minute, hours and minutes, converting</span></a><a class="card" href="maths/p2-deck12.html" data-s="12 patterns &amp; solids 2d shape patterns and the five 3d shapes"><span class="t">12 Patterns &amp; Solids</span><span class="d">2D shape patterns and the five 3D shapes</span></a><a class="card" href="maths/p2-deck13.html" data-s="13 picture graphs reading picture graphs with scales"><span class="t">13 Picture Graphs</span><span class="d">Reading picture graphs with scales</span></a><a class="card" href="maths/p2-deck14.html" data-s="bonus · word problem detective bar models: read, draw, solve, check"><span class="t">Bonus · Word Problem Detective</span><span class="d">Bar models: read, draw, solve, check</span></a><a class="card" href="maths/p2-challenge.html" data-s="stretch · challenge quest five problem-solving strategies, puzzles and boss-level questions"><span class="t">Stretch · Challenge Quest</span><span class="d">Five problem-solving strategies, puzzles and Boss-level questions</span></a></div><div class="bossrow"><span class="bl">Boss levels</span><div class="grid"><a class="card boss" href="maths/boss-maths.html" data-s="boss · beat baddie baddie vampire tells 14 maths lies. catch and correct them all!"><span class="t">👾 Boss · Beat Baddie</span><span class="d">Baddie Vampire tells 14 maths lies. Catch and correct them all!</span></a><a class="card boss" href="maths/daddy-maths.html" data-s="hidden boss · ??? beat baddie first. then… someone even trickier is waiting. super hard!"><span class="t">🎩 Hidden boss · ???</span><span class="d">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="panel" role="tabpanel" data-k="english" id="tab-english"><h2 class="ph" style="--c:#2E8BC0">🔤 English</h2><section id="p2-english" style="--c:#5BB8E8"><div class="sh"><h3>P2 English</h3><span class="count">9 lessons · 2 boss</span></div><p class="blurb">Interactive lessons following the MOE English Language Syllabus (STELLAR) for Primary 2. Same Learn → Try it! → Star check format. Chowdie teaches his friend Wala English in every deck: help her fix her mistakes!</p><div class="grid"><a class="card" href="english/p2-eng01.html" data-s="01 nouns &amp; articles common and proper nouns, plurals, countable and uncountable, a/an/the"><span class="t">01 Nouns &amp; Articles</span><span class="d">Common and proper nouns, plurals, countable and uncountable, a/an/the</span></a><a class="card" href="english/p2-eng02.html" data-s="02 verbs &amp; tenses present, past, -ing, future with will, subject-verb agreement, can/may/must"><span class="t">02 Verbs &amp; Tenses</span><span class="d">Present, past, -ing, future with will, subject-verb agreement, can/may/must</span></a><a class="card" href="english/p2-eng03.html" data-s="03 describing words adjectives, -er and -est, adverbs, prepositions"><span class="t">03 Describing Words</span><span class="d">Adjectives, -er and -est, adverbs, prepositions</span></a><a class="card" href="english/p2-eng04.html" data-s="04 pronouns &amp; joining words personal, possessive and reflexive pronouns; this/that; and, but, because, so"><span class="t">04 Pronouns &amp; Joining Words</span><span class="d">Personal, possessive and reflexive pronouns; this/that; and, but, because, so</span></a><a class="card" href="english/p2-eng05.html" data-s="05 punctuation power capitals, full stops, ? and !, commas in lists, apostrophes, speech marks"><span class="t">05 Punctuation Power</span><span class="d">Capitals, full stops, ? and !, commas in lists, apostrophes, speech marks</span></a><a class="card" href="english/p2-eng06.html" data-s="06 word power synonyms, antonyms, compound words, phrasal verbs, word-attack strategies"><span class="t">06 Word Power</span><span class="d">Synonyms, antonyms, compound words, phrasal verbs, word-attack strategies</span></a><a class="card" href="english/p2-eng07.html" data-s="07 reading detective big ideas, sequence of events, 5w1h, clues and inference"><span class="t">07 Reading Detective</span><span class="d">Big ideas, sequence of events, 5W1H, clues and inference</span></a><a class="card" href="english/p2-eng08.html" data-s="08 writing workshop personal recounts, sequencing words, five-senses description, instructions, invitations"><span class="t">08 Writing Workshop</span><span class="d">Personal recounts, sequencing words, five-senses description, instructions, invitations</span></a><a class="card" href="english/p2-eng09.html" data-s="09 show and tell speaking clearly with 5w1h, taking turns, listening for details"><span class="t">09 Show and Tell</span><span class="d">Speaking clearly with 5W1H, taking turns, listening for details</span></a></div><div class="bossrow"><span class="bl">Boss levels</span><div class="grid"><a class="card boss" href="english/boss-eng.html" data-s="boss · beat baddie baddie mangles grammar and punctuation. fix his 13 mistakes!"><span class="t">👾 Boss · Beat Baddie</span><span class="d">Baddie mangles grammar and punctuation. Fix his 13 mistakes!</span></a><a class="card boss" href="english/daddy-eng.html" data-s="hidden boss · ??? beat baddie first. then… someone even trickier is waiting. super hard!"><span class="t">🎩 Hidden boss · ???</span><span class="d">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="panel" role="tabpanel" data-k="chinese" id="tab-chinese"><h2 class="ph" style="--c:#C2185B">🀄 华文 Chinese</h2><nav class="subs" aria-label="Jump to"><a href="#p1-chinese" class="jump" style="--c:#D64545">P1 Chinese</a><a href="#p2-chinese" class="jump" style="--c:#B83280">P2 Chinese</a><a href="#higher-chinese" class="jump" style="--c:#7A4FB0">P2 Higher Chinese 高级华文</a></nav><section id="p1-chinese" style="--c:#D64545"><div class="sh"><h3>P1 Chinese</h3><span class="count">8 lessons · 1 boss</span></div><p class="blurb">华文 with Chowdie and Wala, following the MOE Primary 1 lesson themes (family, time, school, food, celebrations, the zoo, feeling unwell). Deck 8 (看图说话) bridges to P2. Tap any Chinese word to hear it.</p><div class="grid"><a class="card" href="chinese/cn01.html" data-s="01 你好！我的家人 greetings, the four tones, family words and measure words"><span class="t">01 你好！我的家人</span><span class="d">Greetings, the four tones, family words and measure words</span></a><a class="card" href="chinese/cn02.html" data-s="02 我的一天 times of day, days of the week, opposites, radicals and stroke order"><span class="t">02 我的一天</span><span class="d">Times of day, days of the week, opposites, radicals and stroke order</span></a><a class="card" href="chinese/cn03.html" data-s="03 我的学校 school things, 支/块/把, position words and school subjects"><span class="t">03 我的学校</span><span class="d">School things, 支/块/把, position words and school subjects</span></a><a class="card" href="chinese/cn04.html" data-s="04 好吃的东西 hawker food and fruit, 喜欢/不喜欢, numbers to 100, 多少钱, 又…又…"><span class="t">04 好吃的东西</span><span class="d">Hawker food and fruit, 喜欢/不喜欢, numbers to 100, 多少钱, 又…又…</span></a><a class="card" href="chinese/cn05.html" data-s="05 天气和节日 weather, 因为…所以…, chinese new year, mid-autumn and singapore festivals"><span class="t">05 天气和节日</span><span class="d">Weather, 因为…所以…, Chinese New Year, Mid-Autumn and Singapore festivals</span></a><a class="card" href="chinese/cn06.html" data-s="06 去动物园 zoo animals, body parts, 只/头/条 and 有的…有的…"><span class="t">06 去动物园</span><span class="d">Zoo animals, body parts, 只/头/条 and 有的…有的…</span></a><a class="card" href="chinese/cn07.html" data-s="07 我的身体和心情 body parts, feelings, polite words and feeling unwell"><span class="t">07 我的身体和心情</span><span class="d">Body parts, feelings, polite words and feeling unwell</span></a><a class="card" href="chinese/cn08.html" data-s="08 看图说话 picture talk with five questions, 先…然后…最后… and punctuation"><span class="t">08 看图说话</span><span class="d">Picture talk with five questions, 先…然后…最后… and punctuation</span></a></div><div class="bossrow"><span class="bl">Boss levels</span><div class="grid"><a class="card boss" href="chinese/daddy-cn.html" data-s="hidden boss · ??? beat baddie first. then… someone even trickier is waiting. super hard!"><span class="t">🎩 Hidden boss · ???</span><span class="d">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section><section id="p2-chinese" style="--c:#B83280"><div class="sh"><h3>P2 Chinese</h3><span class="count">7 lessons · 2 boss</span></div><p class="blurb">Primary 2 华文 with Chowdie, Wala and Flamecharge, following the 二年级 lesson themes. Each deck has dialogues, P2 sentence patterns, a Flamecharge 听写 corner with stroke tracing, games, a quiz and a Baddie round.</p><div class="grid"><a class="card" href="chinese/p2cn01.html" data-s="01 我的衣服小了 · 客人来了 clothes, 穿 and 戴, 了 for change, 件/条/双/顶, being a good host"><span class="t">01 我的衣服小了 · 客人来了</span><span class="d">Clothes, 穿 and 戴, 了 for change, 件/条/双/顶, being a good host</span></a><a class="card" href="chinese/p2cn02.html" data-s="02 新年到了 · 过生日 拜年 wishes, …的时候, birthdays, dates and 先…再…"><span class="t">02 新年到了 · 过生日</span><span class="d">拜年 wishes, …的时候, birthdays, dates and 先…再…</span></a><a class="card" href="chinese/p2cn03.html" data-s="03 你怎么上学 · 在咖啡店 坐/骑/开, kopitiam ordering, 杯/碗/盘/片 and 一共多少钱"><span class="t">03 你怎么上学 · 在咖啡店</span><span class="d">坐/骑/开, kopitiam ordering, 杯/碗/盘/片 and 一共多少钱</span></a><a class="card" href="chinese/p2cn04.html" data-s="04 今天是晴天 · 生活少不了水 weather, 戴 vs 带, 如果…就…, the 青 family and saving water"><span class="t">04 今天是晴天 · 生活少不了水</span><span class="d">Weather, 戴 vs 带, 如果…就…, the 青 family and saving water</span></a><a class="card" href="chinese/p2cn05.html" data-s="05 宠物 · 好朋友 · 谢谢您 pets, feelings, 对不起/没关系, and thanking helpers with 您"><span class="t">05 宠物 · 好朋友 · 谢谢您</span><span class="d">Pets, feelings, 对不起/没关系, and thanking helpers with 您</span></a><a class="card" href="chinese/p2cn06.html" data-s="06 夜市真热闹 · 新加坡真好玩 真 + describing word, 有…也有…, places in singapore"><span class="t">06 夜市真热闹 · 新加坡真好玩</span><span class="d">真 + describing word, 有…也有…, places in Singapore</span></a><a class="card" href="chinese/tx-p2.html" data-s="p2 听写 practice 16 听写 lists (11 p2, 2 p1 review, 3 higher chinese) plus a mixed challenge, with flamecharge"><span class="t">P2 听写 Practice</span><span class="d">16 听写 lists (11 P2, 2 P1 review, 3 Higher Chinese) plus a mixed challenge, with Flamecharge</span></a></div><div class="bossrow"><span class="bl">Boss levels</span><div class="grid"><a class="card boss" href="chinese/boss-p2cn.html" data-s="boss · beat baddie baddie tells 10 lies about p2 华文. catch and correct them all!"><span class="t">👾 Boss · Beat Baddie</span><span class="d">Baddie tells 10 lies about P2 华文. Catch and correct them all!</span></a><a class="card boss" href="chinese/daddy-p2cn.html" data-s="hidden boss · ??? beat baddie first. then… someone even trickier is waiting. super hard!"><span class="t">🎩 Hidden boss · ???</span><span class="d">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section><section id="higher-chinese" style="--c:#7A4FB0"><div class="sh"><h3>P2 Higher Chinese 高级华文</h3><span class="count">3 lessons · 2 boss</span></div><p class="blurb">Higher Chinese (高级华文) stretch for P2 with Flamecharge, Wala and Chowdie: reading comprehension, word treasure and 写话.</p><div class="grid"><a class="card" href="chinese/hcl01.html" data-s="高华 1 阅读理解 reading passages with 谁/什么时候/在哪里/为什么 questions"><span class="t">高华 1 阅读理解</span><span class="d">Reading passages with 谁/什么时候/在哪里/为什么 questions</span></a><a class="card" href="chinese/hcl02.html" data-s="高华 2 词语宝库 四字词语, abb, aabb, 近义词, 反义词 and special measure words"><span class="t">高华 2 词语宝库</span><span class="d">四字词语, ABB, AABB, 近义词, 反义词 and special measure words</span></a><a class="card" href="chinese/hcl03.html" data-s="高华 3 我会写话 看图写话, longer sentences, 的 and 地, story words, punctuation"><span class="t">高华 3 我会写话</span><span class="d">看图写话, longer sentences, 的 and 地, story words, punctuation</span></a></div><div class="bossrow"><span class="bl">Boss levels</span><div class="grid"><a class="card boss" href="chinese/boss-hcl.html" data-s="boss · beat baddie baddie tells 8 higher chinese lies. prove him wrong!"><span class="t">👾 Boss · Beat Baddie</span><span class="d">Baddie tells 8 Higher Chinese lies. Prove him wrong!</span></a><a class="card boss" href="chinese/daddy-hcl.html" data-s="hidden boss · ??? beat baddie first. then… someone even trickier is waiting. super hard!"><span class="t">🎩 Hidden boss · ???</span><span class="d">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="panel" role="tabpanel" data-k="science" id="tab-science"><h2 class="ph" style="--c:#3E9A52">🔬 Science</h2><section id="life-science-for-kids" style="--c:#4FAE63"><div class="sh"><h3>Life Science for Kids</h3><span class="count">8 lessons · 2 boss</span></div><p class="blurb">A series for ages 6–12 with Chowdie the otter. Each deck has a Discover → Experiment → Quiz flow, plus a simple at-home activity.</p><div class="grid"><a class="card" href="science/sci-01.html" data-s="01 what is alive? living vs non-living, the seven life processes, needs of living things"><span class="t">01 What Is Alive?</span><span class="d">Living vs non-living, the seven life processes, needs of living things</span></a><a class="card" href="science/sci-02.html" data-s="02 cells: tiny building blocks cells in plants and animals, what is inside, how to see them"><span class="t">02 Cells: Tiny Building Blocks</span><span class="d">Cells in plants and animals, what is inside, how to see them</span></a><a class="card" href="science/sci-03.html" data-s="03 plants parts of a plant, what seeds need, how plants make food, life cycle"><span class="t">03 Plants</span><span class="d">Parts of a plant, what seeds need, how plants make food, life cycle</span></a><a class="card" href="science/sci-04.html" data-s="04 animals animal groups, what they eat, how they move and stay safe, life cycles"><span class="t">04 Animals</span><span class="d">Animal groups, what they eat, how they move and stay safe, life cycles</span></a><a class="card" href="science/sci-05.html" data-s="05 the human body skeleton and muscles, heart and lungs, digestion, the senses, keeping healthy"><span class="t">05 The Human Body</span><span class="d">Skeleton and muscles, heart and lungs, digestion, the senses, keeping healthy</span></a><a class="card" href="science/sci-06.html" data-s="06 microbes microbe family, sizes and shapes, helpful microbes, germs, antibiotics and vaccines"><span class="t">06 Microbes</span><span class="d">Microbe family, sizes and shapes, helpful microbes, germs, antibiotics and vaccines</span></a><a class="card" href="science/sci-07.html" data-s="07 ecosystems habitats, food chains, singapore&#x27;s mangroves and rainforest, caring for nature"><span class="t">07 Ecosystems</span><span class="d">Habitats, food chains, Singapore&#x27;s mangroves and rainforest, caring for nature</span></a><a class="card" href="science/sci-08.html" data-s="08 think like a scientist asking questions, fair tests, observing and recording, a mini experiment"><span class="t">08 Think Like a Scientist</span><span class="d">Asking questions, fair tests, observing and recording, a mini experiment</span></a></div><div class="bossrow"><span class="bl">Boss levels</span><div class="grid"><a class="card boss" href="science/boss-sci.html" data-s="boss · beat baddie baddie gets science wrong 13 times. prove him wrong!"><span class="t">👾 Boss · Beat Baddie</span><span class="d">Baddie gets science wrong 13 times. Prove him wrong!</span></a><a class="card boss" href="science/daddy-sci.html" data-s="hidden boss · ??? beat baddie first. then… someone even trickier is waiting. super hard!"><span class="t">🎩 Hidden boss · ???</span><span class="d">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="panel" role="tabpanel" data-k="spelling" id="tab-spelling"><h2 class="ph" style="--c:#E8552B">🔥 Spelling & 听写</h2><section id="spelling-nest" style="--c:#E8552B"><div class="sh"><h3>Flamecharge&#x27;s Spelling Nest</h3><span class="count">4 lessons</span></div><p class="blurb">Flamecharge the Phoenix is a spelling and 听写 champion. Learn her tricks, play hear-and-spell games, trace characters stroke by stroke, and practise your own school lists.</p><div class="grid"><a class="card" href="spelling/spell-eng.html" data-s="spelling tricks magic e, letter teams, silent letters, -ing, plurals and hear-and-spell games"><span class="t">Spelling Tricks</span><span class="d">Magic e, letter teams, silent letters, -ing, plurals and hear-and-spell games</span></a><a class="card" href="spelling/tingxie.html" data-s="听写 dojo stroke order, radicals, look-alike and sound-alike characters, tracing and 听写 practice"><span class="t">听写 Dojo</span><span class="d">Stroke order, radicals, look-alike and sound-alike characters, tracing and 听写 practice</span></a><a class="card" href="spelling/wordlists.html" data-s="my word lists type in this week&#x27;s spelling or 听写 list and practise it with flamecharge"><span class="t">My Word Lists</span><span class="d">Type in this week&#x27;s spelling or 听写 list and practise it with Flamecharge</span></a><a class="card" href="chinese/tx-p2.html" data-s="p2 听写 practice 16 听写 lists (11 p2, 2 p1 review, 3 higher chinese) plus a mixed challenge, with flamecharge"><span class="t">P2 听写 Practice</span><span class="d">16 听写 lists (11 P2, 2 P1 review, 3 Higher Chinese) plus a mixed challenge, with Flamecharge</span></a></div></section></div><div class="panel" role="tabpanel" data-k="music" id="tab-music"><h2 class="ph" style="--c:#6A5BA8">🎵 Music Theory</h2><section id="grade-5-music-theory" style="--c:#6A5BA8"><div class="sh"><h3>Grade 5 Music Theory</h3><span class="count">6 lessons</span></div><p class="blurb">Grade 5 music theory (ABRSM style) with Mommy the Elephant, designed by Jelly, and Flamecharge. Every deck plays real notes: tap, listen and play on the keyboard. Each ends with Mommy catching Baddie Daddy&#x27;s lies.</p><div class="grid"><a class="card" href="music/mus01.html" data-s="music 1: clefs and notes treble, bass, alto and tenor clefs, ledger lines, double sharps and flats, and enharmonic notes."><span class="t">Music 1: Clefs and Notes</span><span class="d">Treble, bass, alto and tenor clefs, ledger lines, double sharps and flats, and enharmonic notes.</span></a><a class="card" href="music/mus02.html" data-s="music 2: keys and scales key signatures to six sharps and flats, the circle of fifths, relative minors, harmonic, melodic and chromatic scales, degree names."><span class="t">Music 2: Keys and Scales</span><span class="d">Key signatures to six sharps and flats, the circle of fifths, relative minors, harmonic, melodic and chromatic scales, degree names.</span></a><a class="card" href="music/mus03.html" data-s="music 3: intervals numbers and qualities, augmented and diminished, compound intervals, and ear training."><span class="t">Music 3: Intervals</span><span class="d">Numbers and qualities, augmented and diminished, compound intervals, and ear training.</span></a><a class="card" href="music/mus04.html" data-s="music 4: time and rhythm note values, double dots, simple, compound and irregular time, triplets, duplets, grouping and rests."><span class="t">Music 4: Time and Rhythm</span><span class="d">Note values, double dots, simple, compound and irregular time, triplets, duplets, grouping and rests.</span></a><a class="card" href="music/mus05.html" data-s="music 5: chords and cadences triads i, ii, iv and v, inversions a, b and c, satb, and perfect, imperfect and plagal cadences."><span class="t">Music 5: Chords and Cadences</span><span class="d">Triads I, II, IV and V, inversions a, b and c, SATB, and perfect, imperfect and plagal cadences.</span></a><a class="card" href="music/mus06.html" data-s="music 6: terms, ornaments, instruments italian, french and german terms, ornaments, orchestra families and transposing instruments."><span class="t">Music 6: Terms, Ornaments, Instruments</span><span class="d">Italian, French and German terms, ornaments, orchestra families and transposing instruments.</span></a></div></section></div><div class="panel" role="tabpanel" data-k="stories" id="tab-stories"><h2 class="ph" style="--c:#7A4FB0">📖 Stories</h2><section id="storybook-adventures" style="--c:#7A4FB0"><div class="sh"><h3>Storybook Adventures</h3><span class="count">8 stories</span></div><p class="blurb">Storybooks with brain-teasing challenges hidden in the story: Maths, English, 华文, Science, money wisdom and writing.</p><div class="grid"><a class="card" href="stories/eagle-adv.html" data-s="flame the eagle adventure wala, flamecharge and flame the eagle race to save the old rain tree before it becomes a treeman. 20 challenges!"><span class="t">Flame the Eagle Adventure</span><span class="d">Wala, Flamecharge and Flame the Eagle race to save the Old Rain Tree before it becomes a Treeman. 20 challenges!</span></a><a class="card" href="stories/germ-adv.html" data-s="chowdie and the sugar-coat germ chowdie catches pneumococcus! shrink down with wala, flamecharge and flame to learn about germs, vaccines and antibiotics. 20 challenges!"><span class="t">Chowdie and the Sugar-Coat Germ</span><span class="d">Chowdie catches pneumococcus! Shrink down with Wala, Flamecharge and Flame to learn about germs, vaccines and antibiotics. 20 challenges!</span></a><a class="card" href="stories/money-adv.html" data-s="wala and the golden acorn snowball raise $100 for flame&#x27;s new home with lemonade, while baddie daddy tries to trick everyone. money wisdom from warren buffett and charlie munger, with dollars and cents."><span class="t">Wala and the Golden Acorn Snowball</span><span class="d">Raise $100 for Flame&#x27;s new home with lemonade, while Baddie Daddy tries to trick everyone. Money wisdom from Warren Buffett and Charlie Munger, with dollars and cents.</span></a><a class="card" href="stories/write-adv.html" data-s="flamecharge and the proverb path wise chowdie helps flamecharge win the golden quill using benjamin franklin&#x27;s proverbs. 7 writing tasks with live checklists!"><span class="t">Flamecharge and the Proverb Path</span><span class="d">Wise Chowdie helps Flamecharge win the Golden Quill using Benjamin Franklin&#x27;s proverbs. 7 writing tasks with live checklists!</span></a><a class="card" href="stories/leak-adv.html" data-s="the leaky boat sail to turtle island in a leaky boat! franklin&#x27;s proverbs, 6 writing tasks (instructions, a postcard, a diary), maths and float-or-sink science."><span class="t">The Leaky Boat</span><span class="d">Sail to Turtle Island in a leaky boat! Franklin&#x27;s proverbs, 6 writing tasks (instructions, a postcard, a diary), maths and float-or-sink science.</span></a><a class="card" href="stories/friend-adv.html" data-s="cracked like china baddie&#x27;s fib cracks a friendship, and chowdie helps mend it. 6 writing tasks: speech marks, an apology letter, dialogue and more."><span class="t">Cracked Like China</span><span class="d">Baddie&#x27;s fib cracks a friendship, and Chowdie helps mend it. 6 writing tasks: speech marks, an apology letter, dialogue and more.</span></a><a class="card" href="stories/talent-adv.html" data-s="the cat in gloves practice and courage at the forest talent show. 6 writing tasks (introduction, how-to, opinion, a speech, a recount) and time maths."><span class="t">The Cat in Gloves</span><span class="d">Practice and courage at the Forest Talent Show. 6 writing tasks (introduction, how-to, opinion, a speech, a recount) and time maths.</span></a><a class="card" href="stories/concert-adv.html" data-s="mommy and the grand forest concert after the talent show, mommy the elephant teaches everyone music theory for the grand forest concert, with ben franklin and charlie munger&#x27;s wisdom. her big ears catch every one of baddie daddy&#x27;s lies!"><span class="t">Mommy and the Grand Forest Concert</span><span class="d">After the Talent Show, Mommy the Elephant teaches everyone music theory for the Grand Forest Concert, with Ben Franklin and Charlie Munger&#x27;s wisdom. Her big ears catch every one of Baddie Daddy&#x27;s lies!</span></a></div></section></div><div class="panel" role="tabpanel" data-k="grownups" id="tab-grownups"><h2 class="ph" style="--c:#2F5D50">☕ Grown-ups</h2><section id="misc" style="--c:#2F5D50"><div class="sh"><h3>Misc</h3><span class="count">1 lesson</span></div><p class="blurb">Decks for grown-ups.</p><div class="grid"><a class="card" href="misc/discipline.html" data-s="the disciplined life history of self-discipline, franklin&#x27;s method, habit research, if-then plans, defences against addiction"><span class="t">The Disciplined Life</span><span class="d">History of self-discipline, Franklin&#x27;s method, habit research, if-then plans, defences against addiction</span></a></div></section></div>
-<p class="none hide">No decks match that search.</p>
-<p class="foot">Made with Claude. Kids' decks follow the Singapore MOE primary syllabus.</p>
+<main class="main-panels" id="mainPanels"><div class="subject-panel" role="tabpanel" data-panel="maths" id="tab-maths"><div class="panel-header-banner"><h2>🔢 Maths</h2></div><section class="curriculum-section" id="p2-maths"><div class="section-top-bar"><h3>P2 Maths</h3><span class="lesson-count-badge">15 lessons · 2 boss</span></div><p class="section-intro">Interactive lessons following the MOE 2021 Primary 2 syllabus. Chowdie the otter narrates. Each deck: Learn → Try it! → Star check.</p><div class="deck-grid"><a class="deck-card" href="maths/p2-deck01.html"><span class="deck-title">01 Numbers to 1000</span><span class="deck-desc">Counting in tens and hundreds, place value, numerals and words</span></a><a class="deck-card" href="maths/p2-deck02.html"><span class="deck-title">02 Compare, Order &amp; Patterns</span><span class="deck-desc">Greater than, less than, ordering, number patterns, odd and even</span></a><a class="deck-card" href="maths/p2-deck03.html"><span class="deck-title">03 Add &amp; Subtract to 1000</span><span class="deck-desc">Column method with regrouping, mental sums</span></a><a class="deck-card" href="maths/p2-deck04.html"><span class="deck-title">04 Times Tables 2, 5, 10</span><span class="deck-desc">Equal groups, arrays, skip counting</span></a><a class="deck-card" href="maths/p2-deck05.html"><span class="deck-title">05 Times Tables 3 &amp; 4</span><span class="deck-desc">Building and using the 3 and 4 tables</span></a><a class="deck-card" href="maths/p2-deck06.html"><span class="deck-title">06 Sharing &amp; Grouping (÷)</span><span class="deck-desc">The ÷ sign, fact families, multiplication ↔ division</span></a><a class="deck-card" href="maths/p2-deck07.html"><span class="deck-title">07 Fractions of a Whole</span><span class="deck-desc">Equal parts, naming, comparing and ordering fractions</span></a><a class="deck-card" href="maths/p2-deck08.html"><span class="deck-title">08 Adding Fractions</span><span class="deck-desc">Adding and subtracting like fractions within one whole</span></a><a class="deck-card" href="maths/p2-deck09.html"><span class="deck-title">09 Dollars and Cents</span><span class="deck-desc">Coins and notes, $ and ¢ notation, converting and comparing</span></a><a class="deck-card" href="maths/p2-deck10.html"><span class="deck-title">10 Lengths, Masses &amp; Litres</span><span class="deck-desc">Metres, kilograms and grams, litres; comparing and ordering</span></a><a class="deck-card" href="maths/p2-deck11.html"><span class="deck-title">11 Telling Time</span><span class="deck-desc">Time to the minute, hours and minutes, converting</span></a><a class="deck-card" href="maths/p2-deck12.html"><span class="deck-title">12 Patterns &amp; Solids</span><span class="deck-desc">2D shape patterns and the five 3D shapes</span></a><a class="deck-card" href="maths/p2-deck13.html"><span class="deck-title">13 Picture Graphs</span><span class="deck-desc">Reading picture graphs with scales</span></a><a class="deck-card" href="maths/p2-deck14.html"><span class="deck-title">Bonus · Word Problem Detective</span><span class="deck-desc">Bar models: read, draw, solve, check</span></a><a class="deck-card" href="maths/p2-challenge.html"><span class="deck-title">Stretch · Challenge Quest</span><span class="deck-desc">Five problem-solving strategies, puzzles and Boss-level questions</span></a></div><div class="boss-arena"><span class="boss-arena-label">⚔️ Boss levels</span><div class="boss-grid"><a class="deck-card" href="maths/boss-maths.html"><span class="deck-title">👾 Boss · Beat Baddie</span><span class="deck-desc">Baddie Vampire tells 14 maths lies. Catch and correct them all!</span></a><a class="deck-card" href="maths/daddy-maths.html"><span class="deck-title">🎩 Hidden boss · ???</span><span class="deck-desc">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="subject-panel" role="tabpanel" data-panel="english" id="tab-english"><div class="panel-header-banner"><h2>🔤 English</h2></div><section class="curriculum-section" id="p2-english"><div class="section-top-bar"><h3>P2 English</h3><span class="lesson-count-badge">9 lessons · 2 boss</span></div><p class="section-intro">Interactive lessons following the MOE English Language Syllabus (STELLAR) for Primary 2. Same Learn → Try it! → Star check format. Chowdie teaches his friend Wala English in every deck: help her fix her mistakes!</p><div class="deck-grid"><a class="deck-card" href="english/p2-eng01.html"><span class="deck-title">01 Nouns &amp; Articles</span><span class="deck-desc">Common and proper nouns, plurals, countable and uncountable, a/an/the</span></a><a class="deck-card" href="english/p2-eng02.html"><span class="deck-title">02 Verbs &amp; Tenses</span><span class="deck-desc">Present, past, -ing, future with will, subject-verb agreement, can/may/must</span></a><a class="deck-card" href="english/p2-eng03.html"><span class="deck-title">03 Describing Words</span><span class="deck-desc">Adjectives, -er and -est, adverbs, prepositions</span></a><a class="deck-card" href="english/p2-eng04.html"><span class="deck-title">04 Pronouns &amp; Joining Words</span><span class="deck-desc">Personal, possessive and reflexive pronouns; this/that; and, but, because, so</span></a><a class="deck-card" href="english/p2-eng05.html"><span class="deck-title">05 Punctuation Power</span><span class="deck-desc">Capitals, full stops, ? and !, commas in lists, apostrophes, speech marks</span></a><a class="deck-card" href="english/p2-eng06.html"><span class="deck-title">06 Word Power</span><span class="deck-desc">Synonyms, antonyms, compound words, phrasal verbs, word-attack strategies</span></a><a class="deck-card" href="english/p2-eng07.html"><span class="deck-title">07 Reading Detective</span><span class="deck-desc">Big ideas, sequence of events, 5W1H, clues and inference</span></a><a class="deck-card" href="english/p2-eng08.html"><span class="deck-title">08 Writing Workshop</span><span class="deck-desc">Personal recounts, sequencing words, five-senses description, instructions, invitations</span></a><a class="deck-card" href="english/p2-eng09.html"><span class="deck-title">09 Show and Tell</span><span class="deck-desc">Speaking clearly with 5W1H, taking turns, listening for details</span></a></div><div class="boss-arena"><span class="boss-arena-label">⚔️ Boss levels</span><div class="boss-grid"><a class="deck-card" href="english/boss-eng.html"><span class="deck-title">👾 Boss · Beat Baddie</span><span class="deck-desc">Baddie mangles grammar and punctuation. Fix his 13 mistakes!</span></a><a class="deck-card" href="english/daddy-eng.html"><span class="deck-title">🎩 Hidden boss · ???</span><span class="deck-desc">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="subject-panel" role="tabpanel" data-panel="chinese" id="tab-chinese"><div class="panel-header-banner"><h2>🀄 华文 Chinese</h2></div><nav class="sub-nav" aria-label="Jump to"><a href="#p1-chinese">P1 Chinese</a><a href="#p2-chinese">P2 Chinese</a><a href="#higher-chinese">P2 Higher Chinese 高级华文</a></nav><section class="curriculum-section" id="p1-chinese"><div class="section-top-bar"><h3>P1 Chinese</h3><span class="lesson-count-badge">8 lessons · 1 boss</span></div><p class="section-intro">华文 with Chowdie and Wala, following the MOE Primary 1 lesson themes (family, time, school, food, celebrations, the zoo, feeling unwell). Deck 8 (看图说话) bridges to P2. Tap any Chinese word to hear it.</p><div class="deck-grid"><a class="deck-card" href="chinese/cn01.html"><span class="deck-title">01 你好！我的家人</span><span class="deck-desc">Greetings, the four tones, family words and measure words</span></a><a class="deck-card" href="chinese/cn02.html"><span class="deck-title">02 我的一天</span><span class="deck-desc">Times of day, days of the week, opposites, radicals and stroke order</span></a><a class="deck-card" href="chinese/cn03.html"><span class="deck-title">03 我的学校</span><span class="deck-desc">School things, 支/块/把, position words and school subjects</span></a><a class="deck-card" href="chinese/cn04.html"><span class="deck-title">04 好吃的东西</span><span class="deck-desc">Hawker food and fruit, 喜欢/不喜欢, numbers to 100, 多少钱, 又…又…</span></a><a class="deck-card" href="chinese/cn05.html"><span class="deck-title">05 天气和节日</span><span class="deck-desc">Weather, 因为…所以…, Chinese New Year, Mid-Autumn and Singapore festivals</span></a><a class="deck-card" href="chinese/cn06.html"><span class="deck-title">06 去动物园</span><span class="deck-desc">Zoo animals, body parts, 只/头/条 and 有的…有的…</span></a><a class="deck-card" href="chinese/cn07.html"><span class="deck-title">07 我的身体和心情</span><span class="deck-desc">Body parts, feelings, polite words and feeling unwell</span></a><a class="deck-card" href="chinese/cn08.html"><span class="deck-title">08 看图说话</span><span class="deck-desc">Picture talk with five questions, 先…然后…最后… and punctuation</span></a></div><div class="boss-arena"><span class="boss-arena-label">⚔️ Boss levels</span><div class="boss-grid"><a class="deck-card" href="chinese/daddy-cn.html"><span class="deck-title">🎩 Hidden boss · ???</span><span class="deck-desc">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section><section class="curriculum-section" id="p2-chinese"><div class="section-top-bar"><h3>P2 Chinese</h3><span class="lesson-count-badge">7 lessons · 2 boss</span></div><p class="section-intro">Primary 2 华文 with Chowdie, Wala and Flamecharge, following the 二年级 lesson themes. Each deck has dialogues, P2 sentence patterns, a Flamecharge 听写 corner with stroke tracing, games, a quiz and a Baddie round.</p><div class="deck-grid"><a class="deck-card" href="chinese/p2cn01.html"><span class="deck-title">01 我的衣服小了 · 客人来了</span><span class="deck-desc">Clothes, 穿 and 戴, 了 for change, 件/条/双/顶, being a good host</span></a><a class="deck-card" href="chinese/p2cn02.html"><span class="deck-title">02 新年到了 · 过生日</span><span class="deck-desc">拜年 wishes, …的时候, birthdays, dates and 先…再…</span></a><a class="deck-card" href="chinese/p2cn03.html"><span class="deck-title">03 你怎么上学 · 在咖啡店</span><span class="deck-desc">坐/骑/开, kopitiam ordering, 杯/碗/盘/片 and 一共多少钱</span></a><a class="deck-card" href="chinese/p2cn04.html"><span class="deck-title">04 今天是晴天 · 生活少不了水</span><span class="deck-desc">Weather, 戴 vs 带, 如果…就…, the 青 family and saving water</span></a><a class="deck-card" href="chinese/p2cn05.html"><span class="deck-title">05 宠物 · 好朋友 · 谢谢您</span><span class="deck-desc">Pets, feelings, 对不起/没关系, and thanking helpers with 您</span></a><a class="deck-card" href="chinese/p2cn06.html"><span class="deck-title">06 夜市真热闹 · 新加坡真好玩</span><span class="deck-desc">真 + describing word, 有…也有…, places in Singapore</span></a><a class="deck-card" href="chinese/tx-p2.html"><span class="deck-title">P2 听写 Practice</span><span class="deck-desc">16 听写 lists (11 P2, 2 P1 review, 3 Higher Chinese) plus a mixed challenge, with Flamecharge</span></a></div><div class="boss-arena"><span class="boss-arena-label">⚔️ Boss levels</span><div class="boss-grid"><a class="deck-card" href="chinese/boss-p2cn.html"><span class="deck-title">👾 Boss · Beat Baddie</span><span class="deck-desc">Baddie tells 10 lies about P2 华文. Catch and correct them all!</span></a><a class="deck-card" href="chinese/daddy-p2cn.html"><span class="deck-title">🎩 Hidden boss · ???</span><span class="deck-desc">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section><section class="curriculum-section" id="higher-chinese"><div class="section-top-bar"><h3>P2 Higher Chinese 高级华文</h3><span class="lesson-count-badge">3 lessons · 2 boss</span></div><p class="section-intro">Higher Chinese (高级华文) stretch for P2 with Flamecharge, Wala and Chowdie: reading comprehension, word treasure and 写话.</p><div class="deck-grid"><a class="deck-card" href="chinese/hcl01.html"><span class="deck-title">高华 1 阅读理解</span><span class="deck-desc">Reading passages with 谁/什么时候/在哪里/为什么 questions</span></a><a class="deck-card" href="chinese/hcl02.html"><span class="deck-title">高华 2 词语宝库</span><span class="deck-desc">四字词语, ABB, AABB, 近义词, 反义词 and special measure words</span></a><a class="deck-card" href="chinese/hcl03.html"><span class="deck-title">高华 3 我会写话</span><span class="deck-desc">看图写话, longer sentences, 的 and 地, story words, punctuation</span></a></div><div class="boss-arena"><span class="boss-arena-label">⚔️ Boss levels</span><div class="boss-grid"><a class="deck-card" href="chinese/boss-hcl.html"><span class="deck-title">👾 Boss · Beat Baddie</span><span class="deck-desc">Baddie tells 8 Higher Chinese lies. Prove him wrong!</span></a><a class="deck-card" href="chinese/daddy-hcl.html"><span class="deck-title">🎩 Hidden boss · ???</span><span class="deck-desc">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="subject-panel" role="tabpanel" data-panel="science" id="tab-science"><div class="panel-header-banner"><h2>🔬 Science</h2></div><section class="curriculum-section" id="life-science-for-kids"><div class="section-top-bar"><h3>Life Science for Kids</h3><span class="lesson-count-badge">8 lessons · 2 boss</span></div><p class="section-intro">A series for ages 6–12 with Chowdie the otter. Each deck has a Discover → Experiment → Quiz flow, plus a simple at-home activity.</p><div class="deck-grid"><a class="deck-card" href="science/sci-01.html"><span class="deck-title">01 What Is Alive?</span><span class="deck-desc">Living vs non-living, the seven life processes, needs of living things</span></a><a class="deck-card" href="science/sci-02.html"><span class="deck-title">02 Cells: Tiny Building Blocks</span><span class="deck-desc">Cells in plants and animals, what is inside, how to see them</span></a><a class="deck-card" href="science/sci-03.html"><span class="deck-title">03 Plants</span><span class="deck-desc">Parts of a plant, what seeds need, how plants make food, life cycle</span></a><a class="deck-card" href="science/sci-04.html"><span class="deck-title">04 Animals</span><span class="deck-desc">Animal groups, what they eat, how they move and stay safe, life cycles</span></a><a class="deck-card" href="science/sci-05.html"><span class="deck-title">05 The Human Body</span><span class="deck-desc">Skeleton and muscles, heart and lungs, digestion, the senses, keeping healthy</span></a><a class="deck-card" href="science/sci-06.html"><span class="deck-title">06 Microbes</span><span class="deck-desc">Microbe family, sizes and shapes, helpful microbes, germs, antibiotics and vaccines</span></a><a class="deck-card" href="science/sci-07.html"><span class="deck-title">07 Ecosystems</span><span class="deck-desc">Habitats, food chains, Singapore&#x27;s mangroves and rainforest, caring for nature</span></a><a class="deck-card" href="science/sci-08.html"><span class="deck-title">08 Think Like a Scientist</span><span class="deck-desc">Asking questions, fair tests, observing and recording, a mini experiment</span></a></div><div class="boss-arena"><span class="boss-arena-label">⚔️ Boss levels</span><div class="boss-grid"><a class="deck-card" href="science/boss-sci.html"><span class="deck-title">👾 Boss · Beat Baddie</span><span class="deck-desc">Baddie gets science wrong 13 times. Prove him wrong!</span></a><a class="deck-card" href="science/daddy-sci.html"><span class="deck-title">🎩 Hidden boss · ???</span><span class="deck-desc">Beat Baddie first. Then… someone even trickier is waiting. Super hard!</span></a></div></div></section></div><div class="subject-panel" role="tabpanel" data-panel="spelling" id="tab-spelling"><div class="panel-header-banner"><h2>🔥 Spelling &amp; 听写</h2></div><section class="curriculum-section" id="spelling-nest"><div class="section-top-bar"><h3>Flamecharge&#x27;s Spelling Nest</h3><span class="lesson-count-badge">4 lessons</span></div><p class="section-intro">Flamecharge the Phoenix is a spelling and 听写 champion. Learn her tricks, play hear-and-spell games, trace characters stroke by stroke, and practise your own school lists.</p><div class="deck-grid"><a class="deck-card" href="spelling/spell-eng.html"><span class="deck-title">Spelling Tricks</span><span class="deck-desc">Magic e, letter teams, silent letters, -ing, plurals and hear-and-spell games</span></a><a class="deck-card" href="spelling/tingxie.html"><span class="deck-title">听写 Dojo</span><span class="deck-desc">Stroke order, radicals, look-alike and sound-alike characters, tracing and 听写 practice</span></a><a class="deck-card" href="spelling/wordlists.html"><span class="deck-title">My Word Lists</span><span class="deck-desc">Type in this week&#x27;s spelling or 听写 list and practise it with Flamecharge</span></a><a class="deck-card" href="chinese/tx-p2.html"><span class="deck-title">P2 听写 Practice</span><span class="deck-desc">16 听写 lists (11 P2, 2 P1 review, 3 Higher Chinese) plus a mixed challenge, with Flamecharge</span></a></div></section></div><div class="subject-panel" role="tabpanel" data-panel="music" id="tab-music"><div class="panel-header-banner"><h2>🎵 Music Theory</h2></div><section class="curriculum-section" id="grade-5-music-theory"><div class="section-top-bar"><h3>Grade 5 Music Theory</h3><span class="lesson-count-badge">6 lessons</span></div><p class="section-intro">Grade 5 music theory (ABRSM style) with Mommy the Elephant, designed by Jelly, and Flamecharge. Every deck plays real notes: tap, listen and play on the keyboard. Each ends with Mommy catching Baddie Daddy&#x27;s lies.</p><div class="deck-grid"><a class="deck-card" href="music/mus01.html"><span class="deck-title">Music 1: Clefs and Notes</span><span class="deck-desc">Treble, bass, alto and tenor clefs, ledger lines, double sharps and flats, and enharmonic notes.</span></a><a class="deck-card" href="music/mus02.html"><span class="deck-title">Music 2: Keys and Scales</span><span class="deck-desc">Key signatures to six sharps and flats, the circle of fifths, relative minors, harmonic, melodic and chromatic scales, degree names.</span></a><a class="deck-card" href="music/mus03.html"><span class="deck-title">Music 3: Intervals</span><span class="deck-desc">Numbers and qualities, augmented and diminished, compound intervals, and ear training.</span></a><a class="deck-card" href="music/mus04.html"><span class="deck-title">Music 4: Time and Rhythm</span><span class="deck-desc">Note values, double dots, simple, compound and irregular time, triplets, duplets, grouping and rests.</span></a><a class="deck-card" href="music/mus05.html"><span class="deck-title">Music 5: Chords and Cadences</span><span class="deck-desc">Triads I, II, IV and V, inversions a, b and c, SATB, and perfect, imperfect and plagal cadences.</span></a><a class="deck-card" href="music/mus06.html"><span class="deck-title">Music 6: Terms, Ornaments, Instruments</span><span class="deck-desc">Italian, French and German terms, ornaments, orchestra families and transposing instruments.</span></a></div></section></div><div class="subject-panel" role="tabpanel" data-panel="stories" id="tab-stories"><div class="panel-header-banner"><h2>📖 Stories</h2></div><section class="curriculum-section" id="storybook-adventures"><div class="section-top-bar"><h3>Storybook Adventures</h3><span class="lesson-count-badge">8 stories</span></div><p class="section-intro">Storybooks with brain-teasing challenges hidden in the story: Maths, English, 华文, Science, money wisdom and writing.</p><div class="deck-grid"><a class="deck-card" href="stories/eagle-adv.html"><span class="deck-title">Flame the Eagle Adventure</span><span class="deck-desc">Wala, Flamecharge and Flame the Eagle race to save the Old Rain Tree before it becomes a Treeman. 20 challenges!</span></a><a class="deck-card" href="stories/germ-adv.html"><span class="deck-title">Chowdie and the Sugar-Coat Germ</span><span class="deck-desc">Chowdie catches pneumococcus! Shrink down with Wala, Flamecharge and Flame to learn about germs, vaccines and antibiotics. 20 challenges!</span></a><a class="deck-card" href="stories/money-adv.html"><span class="deck-title">Wala and the Golden Acorn Snowball</span><span class="deck-desc">Raise $100 for Flame&#x27;s new home with lemonade, while Baddie Daddy tries to trick everyone. Money wisdom from Warren Buffett and Charlie Munger, with dollars and cents.</span></a><a class="deck-card" href="stories/write-adv.html"><span class="deck-title">Flamecharge and the Proverb Path</span><span class="deck-desc">Wise Chowdie helps Flamecharge win the Golden Quill using Benjamin Franklin&#x27;s proverbs. 7 writing tasks with live checklists!</span></a><a class="deck-card" href="stories/leak-adv.html"><span class="deck-title">The Leaky Boat</span><span class="deck-desc">Sail to Turtle Island in a leaky boat! Franklin&#x27;s proverbs, 6 writing tasks (instructions, a postcard, a diary), maths and float-or-sink science.</span></a><a class="deck-card" href="stories/friend-adv.html"><span class="deck-title">Cracked Like China</span><span class="deck-desc">Baddie&#x27;s fib cracks a friendship, and Chowdie helps mend it. 6 writing tasks: speech marks, an apology letter, dialogue and more.</span></a><a class="deck-card" href="stories/talent-adv.html"><span class="deck-title">The Cat in Gloves</span><span class="deck-desc">Practice and courage at the Forest Talent Show. 6 writing tasks (introduction, how-to, opinion, a speech, a recount) and time maths.</span></a><a class="deck-card" href="stories/concert-adv.html"><span class="deck-title">Mommy and the Grand Forest Concert</span><span class="deck-desc">After the Talent Show, Mommy the Elephant teaches everyone music theory for the Grand Forest Concert, with Ben Franklin and Charlie Munger&#x27;s wisdom. Her big ears catch every one of Baddie Daddy&#x27;s lies!</span></a></div></section></div><div class="subject-panel" role="tabpanel" data-panel="grownups" id="tab-grownups"><div class="panel-header-banner"><h2>☕ Grown-ups</h2></div><section class="curriculum-section" id="misc"><div class="section-top-bar"><h3>Misc</h3><span class="lesson-count-badge">1 lesson</span></div><p class="section-intro">Decks for grown-ups.</p><div class="deck-grid"><a class="deck-card" href="misc/discipline.html"><span class="deck-title">The Disciplined Life</span><span class="deck-desc">History of self-discipline, Franklin&#x27;s method, habit research, if-then plans, defences against addiction</span></a></div></section></div>
+<div class="empty-state" id="emptyState"><p>🔍 No decks match that search. Try another word!</p></div>
+</main>
+<footer class="site-footer"><p>Made with Claude. Kids' decks follow the Singapore MOE primary syllabus.</p><p>Characters designed by Megan, Willis and Jelly. ✨</p></footer>
 </div>
 <script>
-(function(){document.documentElement.classList.add('js');
-const P=[...document.querySelectorAll('.panel')],T=[...document.querySelectorAll('.tabs button')],S=document.querySelector('.pick'),Q=document.querySelector('.find input'),X=document.querySelector('.find .clear'),N=document.querySelector('.none');
-const keys=P.map(p=>p.dataset.k);let cur=keys[0];
-const show=k=>{if(!keys.includes(k))k=keys[0];cur=k;P.forEach(p=>p.classList.toggle('on',p.dataset.k===k));T.forEach(t=>t.setAttribute('aria-selected',t.dataset.k===k));S.value=k;try{localStorage.setItem('hubTab',k)}catch(e){}};
-T.forEach(t=>t.onclick=()=>{clearQ();show(t.dataset.k);history.replaceState(null,'','#'+t.dataset.k)});
-S.onchange=()=>{clearQ();show(S.value);history.replaceState(null,'','#'+S.value)};
-const fromHash=()=>{const h=decodeURIComponent(location.hash.slice(1));if(!h)return false;if(keys.includes(h)){show(h);return true}
-  const sec=document.getElementById(h);if(sec){const p=sec.closest('.panel');if(p){show(p.dataset.k);setTimeout(()=>sec.scrollIntoView({behavior:'smooth'}),30);return true}}return false};
+(function(){
+const tabs=[...document.querySelectorAll('.tab-btn')],sel=document.getElementById('subjectSelect'),panels=[...document.querySelectorAll('.subject-panel')],
+ q=document.getElementById('deckSearchInput'),clr=document.getElementById('clearSearchBtn'),empty=document.getElementById('emptyState'),tog=document.getElementById('toggleCrewBtn'),grid=document.getElementById('charGrid');
+const keys=['all',...panels.map(p=>p.dataset.panel)];let active='all';
+const store=(k,v)=>{try{v===undefined?0:localStorage.setItem(k,v);return localStorage.getItem(k)}catch(e){return null}};
+const setCrew=c=>{grid.classList.toggle('collapsed',c);tog.setAttribute('aria-expanded',String(!c));tog.textContent=c?'Show crew ▼':'Hide crew ▲'};
+tog.addEventListener('click',()=>{const c=!grid.classList.contains('collapsed');setCrew(c);store('hubCrew',c?'1':'0')});
+if(store('hubCrew')==='1')setCrew(true);
+function filter(){const t=q.value.trim().toLowerCase();clr.classList.toggle('visible',t.length>0);let total=0;
+ panels.forEach(p=>{const mine=active==='all'||active===p.dataset.panel;if(!mine&&!t){p.hidden=true;return}let n=0;
+  p.querySelectorAll('.deck-card').forEach(c=>{const ok=!t||c.textContent.toLowerCase().includes(t);c.style.display=ok?'':'none';if(ok)n++});
+  p.querySelectorAll('.boss-arena').forEach(a=>a.style.display=[...a.querySelectorAll('.deck-card')].some(c=>c.style.display!=='none')?'':'none');
+  p.querySelectorAll('.curriculum-section').forEach(s=>s.style.display=[...s.querySelectorAll('.deck-card')].some(c=>c.style.display!=='none')?'':'none');
+  const sn=p.querySelector('.sub-nav');if(sn)sn.style.display=t?'none':'';p.hidden=n===0;total+=n});
+ empty.classList.toggle('visible',total===0)}
+function pick(k,remember=true){if(!keys.includes(k))k='all';active=k;tabs.forEach(b=>b.setAttribute('aria-selected',String(b.dataset.subject===k)));sel.value=k;if(remember)store('hubTab',k);filter()}
+tabs.forEach(b=>b.addEventListener('click',()=>{pick(b.dataset.subject);history.replaceState(null,'','#'+b.dataset.subject)}));
+sel.addEventListener('change',()=>{pick(sel.value);history.replaceState(null,'','#'+sel.value)});
+q.addEventListener('input',filter);clr.addEventListener('click',()=>{q.value='';q.focus();filter()});
+function fromHash(){const h=decodeURIComponent(location.hash.slice(1));if(!h)return false;if(keys.includes(h)){pick(h);return true}
+ const s=document.getElementById(h);if(s){const p=s.closest('.subject-panel');if(p){pick(p.dataset.panel);setTimeout(()=>s.scrollIntoView({behavior:'smooth'}),40);return true}}return false}
 window.addEventListener('hashchange',fromHash);
-let saved=null;try{saved=localStorage.getItem('hubTab')}catch(e){}
-if(!fromHash())show(saved||keys[0]);
-document.querySelectorAll('.jump').forEach(a=>a.onclick=e=>{e.preventDefault();const s=document.getElementById(a.getAttribute('href').slice(1));if(s)s.scrollIntoView({behavior:'smooth'})});
-function clearQ(){if(!Q.value)return;Q.value='';filter()}
-function filter(){const q=Q.value.trim().toLowerCase();X.classList.toggle('hide',!q);
-  if(!q){document.querySelectorAll('.card,section,.bossrow,.subs').forEach(e=>e.classList.remove('hide'));N.classList.add('hide');show(cur);return}
-  let any=0;P.forEach(p=>{let pn=0;p.querySelectorAll('section').forEach(s=>{let sn=0;s.querySelectorAll('.card').forEach(c=>{const m=c.dataset.s.includes(q);c.classList.toggle('hide',!m);if(m)sn++});
-    s.querySelectorAll('.bossrow').forEach(b=>b.classList.toggle('hide',![...b.querySelectorAll('.card')].some(c=>!c.classList.contains('hide'))));s.classList.toggle('hide',!sn);pn+=sn});
-    p.classList.toggle('on',pn>0);p.querySelector('.subs')?.classList.add('hide');any+=pn});
-  T.forEach(t=>t.setAttribute('aria-selected','false'));N.classList.toggle('hide',any>0)}
-Q.addEventListener('input',filter);X.onclick=()=>{clearQ();Q.focus()};
+document.querySelectorAll('[data-jump-subject]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();pick(a.dataset.jumpSubject);history.replaceState(null,'','#'+a.dataset.jumpSubject);document.querySelector('.controls-wrapper').scrollIntoView({behavior:'smooth'})}));
+document.querySelectorAll('.sub-nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const s=document.getElementById(a.getAttribute('href').slice(1));if(s)s.scrollIntoView({behavior:'smooth'})}));
+if(!fromHash())pick(store('hubTab')||'all',false);
 })();
 </script>
