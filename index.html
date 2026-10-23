@@ -830,6 +830,46 @@
     .char-avatar,.char-avatar svg{width:108px;height:108px}
     @media (max-width:768px){.search-row{flex-direction:column;align-items:stretch}.mobile-subject-select,.search-input-wrap{width:100%;min-width:0;flex:none}}
     @media (max-width:420px){.char-avatar,.char-avatar svg{width:80px;height:80px}}
+
+    /* ================= PAINTED POSTCARDS (picture-book polish) =================
+       A painted paper wash behind the page, painted subject banners from each subject's deck art,
+       cream paper deck cards with a coloured spine. The hub stays a bright picture book in every theme. */
+    :root{--ink:#1F3A4A;--paper:#FFFDF6}
+    body{background:#FFF9EB;background-image:none}
+    body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:#FFF9EB url(img/paper-wash.webp) center/cover no-repeat}
+    .hero-wrapper{border-bottom:0;padding-bottom:10rem}
+    .hero-wrapper::after{content:"";position:absolute;left:0;right:0;bottom:0;height:130px;background:linear-gradient(rgba(255,249,235,0),#FFF9EB 92%);pointer-events:none}
+    header.hero-card{background:rgba(255,253,246,.95);border:3px solid var(--ink);border-bottom-width:3px;box-shadow:0 7px 0 var(--ink),0 26px 44px -16px rgba(31,58,74,.4)}
+    .characters-section{position:relative;z-index:2}
+    .char-card{background:var(--paper);align-items:flex-start}
+    .controls-wrapper{background:linear-gradient(180deg,rgba(255,249,235,.94) 78%,rgba(255,249,235,0))}
+    .controls-bar,.curriculum-section{background:rgba(255,253,246,.92);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+    .panel-header-banner{min-height:170px;align-items:flex-end;padding:1rem 1.4rem;border:3px solid var(--ink);box-shadow:0 6px 0 var(--ink),0 18px 30px -14px rgba(31,58,74,.45);overflow:hidden;
+      background-size:cover!important;background-position:center 68%!important;background-repeat:no-repeat!important}
+    .panel-header-banner h2{font-size:2rem;background:rgba(31,58,74,.38);padding:.15rem .9rem .1rem;border-radius:14px;text-shadow:0 2px 0 rgba(0,0,0,.25);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+    [data-panel="maths"]{--c:var(--maths-main);--wash:37,99,235;--art:url(img/maths-classroom.webp)}
+    [data-panel="english"]{--c:var(--eng-main);--wash:219,39,119;--art:url(img/english-library.webp)}
+    [data-panel="chinese"]{--c:var(--cn-main);--wash:220,38,38;--art:url(img/chinese-garden.webp)}
+    [data-panel="science"]{--c:var(--sci-main);--wash:5,150,105;--art:url(img/sci-garden.webp)}
+    [data-panel="spelling"]{--c:var(--spell-main);--wash:234,88,12;--art:url(img/spelling-nest.webp)}
+    [data-panel="music"]{--c:var(--music-main);--wash:124,58,237;--art:url(img/music-stage.webp)}
+    [data-panel="stories"]{--c:var(--story-main);--wash:13,148,136;--art:url(img/stories-nook.webp)}
+    [data-panel="grownups"]{--c:var(--grown-main);--wash:71,85,105;--art:url(img/grownups-desk.webp)}
+    [data-panel] .panel-header-banner{background-image:linear-gradient(90deg,rgba(var(--wash),.88),rgba(var(--wash),.2) 55%,rgba(var(--wash),0) 80%),var(--art)}
+    [data-panel="spelling"] .panel-header-banner{background-position:center 30%!important}
+    [data-panel="science"] .panel-header-banner{background-position:center 45%!important}
+
+    [data-panel] .deck-card{background:var(--paper);border-color:rgba(31,58,74,.16);border-bottom-color:rgba(31,58,74,.32);border-left:8px solid var(--c)}
+    [data-panel] .deck-card:hover{border-color:rgba(31,58,74,.28);border-left-color:var(--c);box-shadow:0 14px 22px -8px rgba(31,58,74,.22)}
+    .boss-arena{background:linear-gradient(rgba(30,27,75,.8),rgba(49,16,66,.9)),url(img/boss-lair.webp) center/cover;border-color:var(--ink);box-shadow:0 6px 0 var(--ink)}
+    .boss-arena .deck-card{border-left-width:2.5px!important}
+    footer.site-footer{background:rgba(255,253,246,.85);border-radius:20px;max-width:640px;margin-inline:auto}
+    @media (max-width:768px){
+      .panel-header-banner{min-height:118px}
+      .panel-header-banner h2{font-size:1.55rem}
+      .hero-wrapper{padding-bottom:8rem}
+    }
 </style>
 <div class="hero-wrapper">
 <svg class="sky-decor c1" viewBox="0 0 120 60" fill="none" aria-hidden="true"><path d="M25 50H95C106 50 114 42 114 31C114 21 106 13 96 13C93 5 85 0 75 0C63 0 53 8 50 19C47 17 43 16 39 16C28 16 20 24 20 35C12 36 6 42 6 50H25Z" fill="white" fill-opacity="0.85"/></svg>
