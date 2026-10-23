@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Beat Baddie: P2 华文</title>
+<title>Beat Baddie &amp; Daddy: P2 华文</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
@@ -122,7 +122,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
   <header>
     <div>
       <p class="eyebrow">Boss level · P2 Chinese</p>
-      <h1>Beat Baddie: P2 华文</h1>
+      <h1>Beat Baddie &amp; Daddy: P2 华文</h1>
     </div>
     <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
   </header>
@@ -144,7 +144,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
     <button id="replay" type="button">Replay</button>
     <button id="next" type="button" class="primary">Next</button>
   </div>
-  <p class="foot">Boss level for P2 Chinese: catch Baddie Vampire's lies. Use the arrow keys or the big buttons to move around.</p>
+  <p class="foot">Boss level for P2 Chinese. First catch Baddie Vampire's lies, then face the hidden boss, Baddie Daddy. Use the arrow keys or the big buttons to move around.</p>
 </div>
 
 <script>
@@ -370,8 +370,8 @@ function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(4
      +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
    +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
 }
-function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
-  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+function boss(title,{lines,claim,options,answer,why,taunt,hint,hints={},art=''}){
+  return {_ans:answer,options,part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
    mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
      if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
        a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
@@ -379,9 +379,111 @@ function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
        const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
      } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
        a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
-       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+(hints[o]||hint)),2200);}
    },'lie'))}};
 }
+/* ===== Baddie Daddy: the hidden boss. Baddie Vampire's dad. He SOMETIMES lies. ===== */
+/* origin = feet centre, ~170 tall at s=1. o.busted: caught; o.point: arm raised with cane */
+function daddy(x,y,s=1,o={}){
+  const g='#4E8A47',g2='#3E7238',belly='#D2E5A4',ink=C.ink,b=o.busted,cape='#4B2A6B',gold='#E3B23C';
+  const eyes=b?`<path d="M-21 -128 l10 10 M-11 -128 l-10 10 M7 -130 l10 10 M17 -130 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+   :`<ellipse cx="-16" cy="-123" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="-15" cy="-122" rx="1.8" ry="5" fill="${ink}"/>
+     <ellipse cx="13" cy="-125" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="14" cy="-124" rx="1.8" ry="5" fill="${ink}"/>
+     <circle cx="13" cy="-125" r="11" fill="none" stroke="${gold}" stroke-width="3"/><path d="M23 -120 q14 20 4 46" stroke="${gold}" stroke-width="1.5" fill="none"/>`;
+  const brows=b?'':`<path d="M-28 -138 q10 -6 20 2 M2 -140 q10 -8 22 0" stroke="#E9EEF1" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  const hat=`<g transform="${b?'translate(100 134) rotate(-10)':''}"><rect x="-26" y="-182" width="48" height="40" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/><rect x="-26" y="-156" width="48" height="9" fill="${cape}"/><rect x="-38" y="-146" width="72" height="9" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/></g>`;
+  const cane=o.point?`<path d="M30 -60 q24 -12 40 -34" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="72" cy="-96" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><line x1="74" y1="-110" x2="66" y2="-40" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="75" cy="-112" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`
+   :`<ellipse cx="30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 30 -50)"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="40" cy="-46" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z" fill="${cape}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-74 0 h148" stroke="${gold}" stroke-width="5"/><path d="M-30 -78 q-24 34 -30 74 h120 q-6 -40 -30 -74z" fill="#7A3B8F"/>
+  <path d="M-30 -10 q-36 2 -46 -20 q24 6 44 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-40" rx="32" ry="38" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-36" rx="20" ry="28" fill="${belly}"/><path d="M-17 -50 h34 M-19 -37 h38 M-17 -24 h34" stroke="${g2}" stroke-width="2"/>
+  <path d="M-16 -74 l16 10 l16 -10 l-6 14 h-20z" fill="#fff" stroke="${ink}" stroke-width="2"/><path d="M-8 -68 l8 8 l8 -8 l-8 -4z" fill="${b?C.bad:'#B3243A'}" stroke="${ink}" stroke-width="1.5"/>
+  ${b?`<circle cx="6" cy="-30" r="8" fill="none" stroke="${gold}" stroke-width="3"/>`:''}
+  <ellipse cx="-17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -30 -50)"/>${cane}
+  <path d="M-44 -78 l-18 -40 l24 18 l7 -24 l13 33z M44 -78 l18 -40 l-24 18 l-7 -24 l-13 33z" fill="${cape}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-104" rx="36" ry="28" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M12 -112 q52 -4 56 13 q2 16 -54 18z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="62" cy="-106" r="2.3" fill="${ink}"/><circle cx="53" cy="-107" r="2.3" fill="${ink}"/>
+  <path d="M10 -84 q14 10 26 0 q12 10 26 -2 q-6 12 -26 6 q-20 8 -26 -4z" fill="#F4F6F8" stroke="${ink}" stroke-width="2"/>
+  <circle cx="-16" cy="-124" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-126" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${brows}${hat}
+  <circle cx="-24" cy="-98" r="2" fill="${g2}"/><circle cx="-16" cy="-92" r="2" fill="${g2}"/><circle cx="-28" cy="-90" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+FACES.daddy=()=>daddy(36,124,.62,{still:true});
+VOICE.daddy={en:[.8,.35],zh:[.7,.4],pref:VMALE};
+const DD='<b class="dd">Baddie Daddy:</b> ';
+PARTS.boss='Baddie Vampire';PARTS.daddy='Baddie Daddy';
+(function(){const st=document.createElement('style');st.textContent=`
+ .bubble b.dd{color:#4B2A6B} .tag.daddy{background:#4B2A6B} .dots button.daddy:not(.done):not([aria-current="true"]){background:#E4DAF0;border-color:#4B2A6B}
+ .parts button[data-part="daddy"]{border-color:#4B2A6B;color:#4B2A6B} .parts button[data-part="daddy"][aria-current="true"]{background:#4B2A6B;color:#fff}
+ .ui button.opt{font-size:18px;text-align:left;max-width:100%}
+ .ui button.tf{font-size:20px;min-width:220px}
+ .ui button.pick[aria-pressed="true"]{background:var(--sky);color:#fff}
+ .ui button.tok{font-size:20px;min-width:0;padding:6px 12px 3px}
+ .ui button.tok[aria-pressed="true"]{background:var(--bad);color:#fff;text-decoration:line-through}
+ .ui button.key{min-width:58px;font-size:24px}
+ .ui .pad{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:var(--display);font-weight:800;font-size:26px}
+ .ui .pad output{min-width:140px;padding:6px 16px 2px;border:3px solid var(--ink);border-radius:14px;background:#fff;text-align:center}
+ .ui .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}`;document.head.appendChild(st);})();
+/* stage: Daddy on the left, a wrapped speech bubble on the right, optional art below the bubble */
+function wrapLines(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduce((n,c)=>n+(CJ.test(c)?1.9:1),0);const toks=t.match(/[⺀-鿿＀-￯　-〿“”]|[^\s⺀-鿿＀-￯　-〿“”]+|\s+/g)||[];const L=[];let c='';
+  toks.forEach(x=>{if(/^\s+$/.test(x)){if(c)c+=' ';return}if(W(c+x)>max&&c.trim()&&!/^[，。！？、：；”）]$/.test(x)){L.push(c.trim());c=x}else c+=x});if(c.trim())L.push(c.trim());return L}
+function daddyStage(text,art='',head='Baddie Daddy says:'){const L=wrapLines(text,34),h=L.length*28+46;
+  return G(daddy(118,384,1.45,{point:true}),'a-drop',.05,'data-dd="1"')
+   +G(`<path d="M248 18 h364 a16 16 0 0 1 16 16 v${h-32} a16 16 0 0 1 -16 16 h-344 l-28 24 l6 -24 a16 16 0 0 1 -14 -16 v${-(h-32)} a16 16 0 0 1 16 -16z" fill="#F1EAF8" stroke="#4B2A6B" stroke-width="3"/>`
+     +T(266,44,head,'sm','style="fill:#4B2A6B;font-weight:800"')+L.map((l,k)=>T(266,74+k*28,l,'lab')).join(''),'a-pop',.3)
+   +`<g class="stamp"></g>`+(art?`<g transform="translate(0 ${Math.max(0,h-110)})">${G(art,'a-fade',.6)}</g>`:'');}
+const stamp=(a,truth)=>{a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-10 470 ${60})"><rect x="380" y="30" width="180" height="60" rx="10" fill="none" stroke="${truth?C.good:C.bad}" stroke-width="5"/>${T(470,74,truth?'TRUE!':'LIE!','h mid','style="fill:'+(truth?C.good:C.bad)+';font-size:38px;letter-spacing:4px"')}</g>`};
+const bust=a=>{const g=a.q('[data-dd]');if(g)g.innerHTML=daddy(118,384,1.45,{busted:true})};
+const shuf=x=>[...x].sort(()=>Math.random()-.5);
+const nope=(a,taunt,hint)=>{a.as('daddy',DD+(taunt||'Ho ho ho! Wrong, little one.'));a.later(()=>a.as('otter',CH+hint),2300)};
+const winD=(a,why)=>{bust(a);setWho('otter');a.win('<b>You beat him!</b> '+why)};
+/* ---- question types ---- */
+/* 1. Truth or lie, then WHY */
+function tl(title,{claim,truth,reasons,reason,why,hint,hint2,hints={},art='',taunt}){return {_ans:{truth,reason},options:reasons,part:'daddy',title,who:'daddy',say:DD+claim+' <i>Am I telling the truth… or a lie?</i>',draw:()=>daddyStage(claim,art),
+ mount:a=>{let step=1;const s2=()=>{step=2;a.ui.innerHTML='';a.say(CH+`Right, he was ${truth?'telling the <b>truth</b>':'<b>lying</b>'}! Now the hard part: <b>WHY?</b>`);
+   shuf(reasons).forEach(r=>a.btn(r,b=>{if(step!==2)return;if(r===reason){step=3;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,'Ho ho! Right answer, wrong reason. That doesn\'t count!',hints[r]||hint2||hint)}},'opt'))};
+  [['😇 He is telling the TRUTH',true],['😈 He is telling a LIE',false]].forEach(([l,v])=>a.btn(l,b=>{if(step!==1)return;if(v===truth){b.classList.add('ok');stamp(a,truth);a.later(s2,900)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'tf'));}}}
+/* 2. Hard multiple choice (5-6 options) */
+function mc(title,{q,options,answer,why,hint,hints={},art='',taunt}){return {_ans:answer,options,part:'daddy',title,who:'daddy',say:DD+q,draw:()=>daddyStage(q,art),
+ mount:a=>{let done=false;shuf(options).forEach(o=>a.btn(o,b=>{if(done)return;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hints[o]||hint)}},'opt'))}}}
+/* 3. Type the answer on a keypad */
+function num(title,{q,answer,unit='',why,hint,art='',keys=[],taunt}){return {_ans:String(answer),part:'daddy',title,who:'daddy',say:DD+q+' <i>Type your answer.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{let v='',done=false;const pad=document.createElement('div');pad.className='pad';pad.innerHTML=`<output>?</output><span>${unit}</span>`;a.ui.appendChild(pad);
+  const out=pad.querySelector('output'),upd=()=>out.textContent=v||'?';const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  const mk=(l,fn,c='key')=>{const b=document.createElement('button');b.type='button';b.className=c;b.innerHTML=l;b.onclick=()=>fn(b);row.appendChild(b);return b};
+  [...'1234567890',...keys].forEach(k=>mk(k,()=>{if(done||v.length>=7)return;v+=k;upd()}));mk('⌫',()=>{if(done)return;v=v.slice(0,-1);upd()});
+  mk('Check ✓',b=>{if(done||!v)return;if(v===String(answer)){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`${v}${unit?' '+unit:''}? Ho ho ho! Not even close.`,hint)}},'go');}}}
+/* 4. Pick ALL the correct ones */
+function multi(title,{q,options,correct,why,hint,art='',taunt}){return {_ans:correct,options,part:'daddy',title,who:'daddy',say:DD+q+' <i>Pick ALL the right ones, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  shuf(options).forEach(o=>{const b=document.createElement('button');b.type='button';b.className='pick opt';b.innerHTML=o;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(o)?sel.delete(o):sel.add(o);b.setAttribute('aria-pressed',sel.has(o))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=correct.length===sel.size&&correct.every(c=>sel.has(c));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{const wrong=[...sel].filter(x=>!correct.includes(x)).length+correct.filter(x=>!sel.has(x)).length;b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`Ho ho! ${wrong===1?'One choice is':wrong+' choices are'} still wrong.`,hint)}},'go');}}}
+/* 5. Put in order */
+function order(title,{q,items,why,hint,art='',taunt}){return {_ans:items,part:'daddy',title,who:'daddy',say:DD+q+' <i>Tap them in the right order.</i>',draw:()=>daddyStage(q,art)+`<g class="seq"></g>`,
+ mount:a=>{let n=0;const show=()=>{a.q('.seq').innerHTML=items.slice(0,n).map((t,k)=>T(270,250+k*26,(k+1)+'. '+t.replace(/<[^>]+>/g,''),'sm','style="font-weight:800;fill:'+C.good+'"')).join('')};
+  shuf(items).forEach(t=>a.btn(t,b=>{if(b.disabled)return;if(t===items[n]){n++;b.disabled=true;b.classList.add('ok');show();if(n===items.length)winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'opt'));}}}
+/* 6. Tap the mistake(s) */
+function spot(title,{q,tokens,wrong,why,hint,art='',taunt}){return {_ans:wrong,part:'daddy',title,who:'daddy',say:DD+q+' <i>Tap every wrong part, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  tokens.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='tok';b.innerHTML=t;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(i)?sel.delete(i):sel.add(i);b.setAttribute('aria-pressed',sel.has(i))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=wrong.length===sel.size&&wrong.every(i=>sel.has(i));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||(sel.size<wrong.length?'Ho ho! You missed something.':'Ho ho! Some of those were right all along.'),hint)}},'go');}}}
+/* intro, rules and finale */
+const daddyIntro=(subject)=>[{part:'daddy',title:'Who is THAT?',who:'daddy',say:DD+`Ho… ho… ho. So you beat my son, Baddie Vampire? Impressive. I am <b>Baddie Daddy</b>, his father. Unlike my silly son, I don't <i>always</i> lie. <b>Sometimes I tell the truth.</b> Good luck spotting which is which in my super-hard ${subject} challenge.`,
+  draw:()=>G(`<rect x="0" y="0" width="640" height="400" rx="16" fill="#2B1E3A" opacity=".9"/>`,'')+G(daddy(330,388,2.15),'a-drop',.2)+G(baddie(560,392,.8,{still:true})+T(560,250,'"Daddy!"','sm mid','style="fill:#fff"'),'a-pop',1)+G(otter(80,392,.8,{still:true})+T(80,262,'Gulp!','sm mid','style="fill:#fff"'),'a-pop',1.3)+G(T(330,40,'THE HIDDEN BOSS','h mid','style="fill:#E3B23C;letter-spacing:3px"'),'a-fade',.6)},
+ {part:'daddy',title:'How to beat Baddie Daddy',who:'otter',say:CH+'Careful! Daddy <b>sometimes tells the truth</b>. Think first. Then show <b>why</b>. Some questions need a number, some need <b>all</b> the right answers.',
+  draw:()=>[['😇 / 😈','Truth or lie?','then choose WHY'],['1 2 3','Type it','use the keypad'],['✓ ✓ ✗','Pick ALL','maybe more than one'],['✗','Tap the mistake','find every wrong part'],['1→2→3','Put in order','tap in sequence'],['A–E','Tricky choices','up to five options']]
+  .map(([ic,n,d],k)=>{const x=20+(k%3)*204,y=24+Math.floor(k/3)*180;return G(box(x,y,192,166,'#fff',16)+T(x+96,y+60,ic,'h mid','style="fill:#4B2A6B"')+T(x+96,y+104,n,'lab mid')+T(x+96,y+130,d,'sm mid mut'),'a-pop',.1+k*.12)}).join('')}];
+const daddyEnd=(subject)=>({part:'daddy',title:'Baddie Daddy is beaten!',who:'otter',say:CH+`You did it! You out-thought <b>Baddie Daddy</b> himself. You didn't just find answers: you explained <b>why</b>. That's how real ${subject} champions think. Count your stars: every star is a challenge you beat.`,
+ draw:()=>G(daddy(270,388,1.2,{busted:true}),'a-pop',.1)+G(baddie(420,392,.7,{busted:true}),'a-pop',.3)+G(otter(85,392,1.05,{wave:true})+wala(560,392,.95,{wave:true}),'a-pop',.5)+G(star(200,80,34)+star(440,80,34),'a-pop',.8)+T(320,96,'Super brain!','h mid acc'),
+ mount:a=>a.later(()=>a.win(`You beat Baddie Daddy! Stars: <b>${earned.size} of ${S.filter(x=>x._ans!==undefined).length}</b>.`),500)});
 /**
  * Hanzi Writer v3.7.3 | https://chanind.github.io/hanzi-writer
  */
@@ -573,39 +675,96 @@ const gapRounds=(title,who,R,intro,hint)=>({part:'try',title,who:NMS[who][0],say
   mount:a=>rounds(a,R.map(([s,ans,bad,en])=>({stage:()=>G(box(40,90,560,120,'#fff',18)+T(320,160,s,'zh mid','style="font-size:'+(s.length>12?30:38)+'px"'),'a-pop')+T(320,260,en,'lab mid mut'),options:[ans,...bad],answer:ans,hear:s.replace(/＿+/,ans),ok:s.replace(/＿+/,ans),hint})),NMS[who][1]+intro,NMS[who][0])});
 /* a big sentence pattern card */
 const patCard=(x,y,w,h,z,p,e,d=0,fill='#fff',sz=26)=>G(`<g class="tap" data-zh="${z.replace(/<[^>]+>/g,'')}">`+box(x,y,w,h,fill,16)+T(x+w/2,y+h/2+(e?-8:2),z,'zh mid',`style="font-size:${sz}px"`)+T(x+w/2,y+h/2+(e?15:24),p,'py mid','style="font-size:14px"')+(e?T(x+w/2,y+h/2+34,e,'en mid','style="font-size:13px"'):'')+`</g>`,'a-pop',d);
+/* Baddie Daddy: super-hard P2 Chinese (covers P2 Chinese decks 1–6) */
+const big=(z,x=440,y=320,sz=72)=>T(x,y,z,'zh mid',`style="font-size:${sz}px"`);
 /* Beat Baddie: P2 Chinese boss level (covers P2 Chinese decks 1–6) */
 PARTS.learn='怎么玩 How to play';
 document.querySelectorAll('.parts button').forEach(b=>{if(b.dataset.part==='learn')b.textContent=PARTS.learn});
 const zz=(s,y=300,sz=64)=>T(440,y,s,'zh mid',`style="font-size:${sz}px"`);
+/* Combined boss level: P2 Chinese (covers P2 Chinese decks 1–6). Group 1 = Baddie Vampire, Group 2 = Baddie Daddy.
+   Subgroup = the deck topic in each title. Each deck's own end-of-deck round uses a different lie. */
+const emo=(e,sz=110,x=440,y=300)=>`<g transform="translate(${x} ${y})">${em(e,sz)}</g>`;
 const S=[
-{part:'learn',title:'Beat Baddie: P2 华文',who:'otter',say:CH+'Baddie Vampire thinks he knows P2 Chinese. He doesn\'t! He <b>always lies</b> about words, measure words, radicals and sentence patterns. Read his claim and tap the correction. Wala and Flamecharge are here to help. Catch all 10 lies!',
- draw:()=>G(baddie(450,385,2,{point:false}),'a-drop',.1)+G(otter(80,388,1.05,{wave:true})+wala(200,388,1.05,{wave:true}),'a-pop',.4)+G(flame(320,250,.75,{}),'a-pop',.6)+G(box(30,20,300,130,'#fff',18)+T(180,54,'3 steps to beat him','lab mid acc')+T(50,88,'1. Read his claim','lab')+T(50,116,'2. Spot the lie','lab')+T(50,144,'3. Tap the correction','lab'),'a-pop',.8)},
-boss('Lie #1: wearing a watch',{lines:['我穿手表。','You 穿 everything you wear!'],claim:'我穿手表。You 穿 everything you wear!',options:['我戴手表。','我穿手表。','我带手表。'],answer:'我戴手表。',why:'Watches, hats and glasses use <b>戴</b>: 戴手表. 穿 is for clothes you put your body into.',taunt:'Mwahaha! I wear my watch on my tail!',hint:'Do you put your body into a watch?',art:`<g transform="translate(440 300)">${em('⌚',110)}</g>`}),
-boss('Lie #2: a pair',{lines:['一条袜子，一条鞋子！','Socks are long, so 条!'],claim:'一条袜子，一条鞋子！',options:['一双袜子','一条袜子','一件袜子'],answer:'一双袜子',why:'Socks and shoes come in pairs: 一<b>双</b>袜子, 一<b>双</b>鞋子.',taunt:'Hehehe! I only wear one sock.',hint:'How many socks do you wear?',art:`<g transform="translate(440 300)">${em('🧦',110)}</g>`}),
-boss('Lie #3: birthday order',{lines:['先吹蜡烛，再许愿！','Blow first, wish later!'],claim:'先吹蜡烛，再许愿！',options:['先许愿，再吹蜡烛','先吹蜡烛，再许愿','先吃蛋糕，再唱歌'],answer:'先许愿，再吹蜡烛',why:'Make the wish while the candles are lit: <b>先许愿，再吹蜡烛</b>.',taunt:'Mwahaha! My wishes never come true anyway!',hint:'Can you wish on candles that are already out?',art:`<g transform="translate(440 300)">${em('🎂',110)}</g>`}),
-boss('Lie #4: dates',{lines:['六月十二日 is','December the sixth!'],claim:'六月十二日 is the 6th of December!',options:['12 June','6 December','16 February'],answer:'12 June',why:'Month comes first: <b>六月</b> = June, then <b>十二日</b> = the 12th. So 12 June.',taunt:'Hehehe! I read everything backwards.',hint:'In Chinese, the month comes first.',art:zz('六月十二日',300,48)}),
-boss('Lie #5: the bicycle',{lines:['我坐脚车上学。','I sit on it, so it\'s 坐!'],claim:'我坐脚车上学。',options:['骑脚车','坐脚车','开脚车'],answer:'骑脚车',why:'You ride ON a bicycle: <b>骑</b>脚车. 坐 is for sitting inside a bus, MRT or car.',taunt:'Mwahaha! My bicycle has a sofa.',hint:'Bicycles and horses: which verb?',art:`<g transform="translate(440 300)">${em('🚲',110)}</g>`}),
-boss('Lie #6: noodles',{lines:['老板，我要一片面！','Noodles come in slices!'],claim:'老板，我要一片面！',options:['一碗面','一片面','一杯面'],answer:'一碗面',why:'Noodles come in a bowl: 一<b>碗</b>面. 片 is for slices of bread.',taunt:'Hehehe! Slice my noodles thin!',hint:'What do you eat noodles from?',art:`<g transform="translate(440 300)">${em('🍜',110)}</g>`}),
-boss('Lie #7: 如果…就…',{lines:['如果下雨，我们就去游泳！','Rain means swimming time!'],claim:'如果下雨，我们就去游泳！',options:['就带雨伞','就去游泳','就去晒太阳'],answer:'就带雨伞',why:'如果下雨，我们<b>就带雨伞</b>. It\'s not a good time to swim outdoors in the rain.',taunt:'Mwahaha! I love wet weather!',hint:'What do you need when it rains?',art:`<g transform="translate(440 300)">${em('🌧️',110)}</g>`}),
-boss('Lie #8: the 青 family',{lines:['我的眼晴很大。','晴 with 日 is the eye!'],claim:'我的眼晴很大。',options:['眼睛 (目)','眼晴 (日)','眼请 (讠)'],answer:'眼睛 (目)',why:'Eyes use <b>睛</b> with 目 (eye). 晴 with 日 (sun) is for sunny days.',taunt:'Hehehe! My eyes are sunny!',hint:'Which radical means eye?',art:zz('晴 睛',300,72)}),
-boss('Lie #9: polite words',{lines:['Say "您好" to your friends','and "你好" to the principal!'],claim:'您 is for friends, 你 is for the principal!',options:['您 for grown-ups','您 for best friends','您 for your pets'],answer:'您 for grown-ups',why:'<b>您</b> (你 + 心) is the polite "you" for grown-ups: 校长，您好！',taunt:'Mwahaha! Hey principal, you!',hint:'Which one has a heart of respect?',art:zz('您',300,100)}),
-boss('Lie #10: 热闹',{lines:['热 has 灬 because the night','market is cold and quiet!'],claim:'热闹 means cold and quiet!',options:['lively and busy','cold and quiet','hot and empty'],answer:'lively and busy',why:'<b>热闹</b> means lively and busy. 热 has 灬 (fire): warm and full of life!',taunt:'Hehehe! Shhh! It\'s very 热闹.',hint:'Think of the crowds at the night market.',art:zz('热闹',300,72)}),
-{part:'boss',title:'Baddie is defeated!',who:'otter',say:CH+'You caught <b>all 10 lies</b>! 穿 and 戴, 双, 先…再…, dates, 骑 and 坐, 一碗面, 如果…就…, the 青 family, 您 and 热闹. 你们真棒！',
+{part:'learn',title:'Beat Baddie: P2 华文',who:'otter',say:CH+'Baddie Vampire <b>always lies</b> about Chinese. Read his claim. Tap the right Chinese. Wala and Flamecharge will help!',
+ draw:()=>G(baddie(450,385,2,{point:false}),'a-drop',.1)+G(otter(80,388,1.05,{wave:true})+wala(200,388,1.05,{wave:true}),'a-pop',.4)+G(flame(320,250,.75,{}),'a-pop',.6)+G(box(30,20,300,130,'#fff',18)+T(180,54,'3 steps to beat him','lab mid acc')+T(50,88,'1. Read his claim','lab')+T(50,116,'2. Spot the lie','lab')+T(50,144,'3. Tap the fix','lab'),'a-pop',.8)},
+boss('Lie 1 · 穿 or 戴',{lines:['我穿手表。','You 穿 everything!'],claim:'我穿手表。You 穿 everything you wear!',options:['我戴手表。','我穿手表。','我带手表。'],answer:'我戴手表。',
+ why:'Watches, hats and glasses use <b>戴</b>: 戴手表. <b>穿</b> is for clothes you put your body into.',taunt:'Mwahaha! I wear my watch on my tail!',hint:'Do you put your body into a watch?',
+ hints:{'我穿手表。':'穿 is for clothes like 衣服 and 裤子.','我带手表。':'带 means bring. Wearing it on your wrist is 戴.'},art:emo('⌚')}),
+boss('Lie 2 · 量词: a pair',{lines:['一条袜子！','Socks are long, so 条!'],claim:'一条袜子！Socks are long, so 条!',options:['一双袜子','一条袜子','一件袜子'],answer:'一双袜子',
+ why:'Socks and shoes come in pairs: 一<b>双</b>袜子, 一<b>双</b>鞋子.',taunt:'Hehehe! I only wear one sock.',hint:'How many socks do you wear at once?',
+ hints:{'一条袜子':'条 is for long things like 裤子 and 鱼. Socks come in twos!','一件袜子':'件 is for tops like 衣服.'},art:emo('🧦')}),
+boss('Lie 3 · 客人来了',{lines:['客人要回家了。','我说："欢迎！请进！"'],claim:'客人要回家了。我说：欢迎！请进！',options:['慢走！再见！','欢迎！请进！','请坐！请喝茶！'],answer:'慢走！再见！',
+ why:'Guests <b>leaving</b>: 慢走！再见！ Guests <b>arriving</b>: 欢迎！请进！',taunt:'Mwahaha! Come in, go out, same thing!',hint:'Are the guests coming or going?',
+ hints:{'欢迎！请进！':'That is for guests who are ARRIVING.','请坐！请喝茶！':'They are leaving, not sitting down.'},art:emo('🚪')}),
+boss('Lie 4 · 几月几日',{lines:['六月十二日 is','the 6th of December!'],claim:'六月十二日 is the 6th of December!',options:['12 June','6 December','12 December'],answer:'12 June',
+ why:'The month comes first: <b>六月</b> = June. Then <b>十二日</b> = the 12th. So 12 June.',taunt:'Hehehe! I read everything backwards.',hint:'In Chinese, the month comes first.',
+ hints:{'6 December':'That reads it backwards. 六月 is the month.','12 December':'十二月 would be December. Here 六 is next to 月.'},art:zz('六月十二日',300,48)}),
+boss('Lie 5 · 先…再…',{lines:['先吹蜡烛，','再许愿！'],claim:'先吹蜡烛，再许愿！',options:['先许愿，再吹蜡烛','先吹蜡烛，再许愿','先切蛋糕，再许愿','先吃蛋糕，再唱歌'],answer:'先许愿，再吹蜡烛',
+ why:'Make the wish while the candles are lit: <b>先许愿，再吹蜡烛</b>.',taunt:'Mwahaha! My wishes never come true anyway!',hint:'Can you wish on candles that are already out?',
+ hints:{'先吹蜡烛，再许愿':'That is Baddie\'s order. The candles would be out!','先切蛋糕，再许愿':'We cut the cake after the candles.','先吃蛋糕，再唱歌':'We sing first, then eat.'},art:emo('🎂')}),
+boss('Lie 6 · 坐 骑 开',{lines:['我坐脚车上学。','I sit on it, so 坐!'],claim:'我坐脚车上学。I sit on it, so it is 坐!',options:['骑脚车','坐脚车','开脚车','走脚车'],answer:'骑脚车',
+ why:'You ride ON a bicycle: <b>骑</b>脚车. <b>坐</b> is for sitting inside a bus, MRT or car. <b>开</b> is for driving.',taunt:'Mwahaha! My bicycle has a sofa.',hint:'Bicycles and horses: which verb?',
+ hints:{'坐脚车':'坐 is for sitting inside: 坐巴士, 坐地铁.','开脚车':'开 is for driving: 开车.','走脚车':'走 means walk.'},art:emo('🚲')}),
+boss('Lie 7 · 一杯 一碗 一片',{lines:['老板，我要','一碗咖啡！'],claim:'老板，我要一碗咖啡！',options:['一杯咖啡','一碗咖啡','一片咖啡','一条咖啡'],answer:'一杯咖啡',
+ why:'Drinks come in a cup: 一<b>杯</b>咖啡, 一杯美禄. <b>碗</b> is for noodles and rice. <b>片</b> is for bread.',taunt:'Hehehe! Slurp from a bowl!',hint:'What do you drink kopi from?',
+ hints:{'一碗咖啡':'碗 is for 面 and 饭.','一片咖啡':'片 is for slices, like 面包.','一条咖啡':'条 is for long things like 鱼.'},art:emo('☕')}),
+boss('Lie 8 · The 青 family',{lines:['我的眼晴很大。','晴 with 日 is the eye!'],claim:'我的眼晴很大。晴 with 日 is the eye!',options:['眼睛 (目)','眼晴 (日)','眼请 (讠)','眼清 (氵)'],answer:'眼睛 (目)',
+ why:'Eyes use <b>睛</b> with 目 (eye). 晴 with 日 (sun) is a sunny day. 请 with 讠 is please. 清 with 氵 is clear water.',taunt:'Hehehe! My eyes are sunny!',hint:'Which radical means eye?',
+ hints:{'眼晴 (日)':'日 is the sun: 晴天.','眼请 (讠)':'讠 is for words: 请.','眼清 (氵)':'氵 is for water: 清水.'},art:zz('晴 睛',300,72)}),
+boss('Lie 9 · 您',{lines:['Say 您好 to your friends,','and 你好 to the principal!'],claim:'您 is for friends. 你 is for the principal!',options:['您 for grown-ups we respect','您 for best friends','您 for pets','您 for babies'],answer:'您 for grown-ups we respect',
+ why:'<b>您</b> (你 + 心) is the polite "you" for grown-ups: 校长，您好！老师，您辛苦了！',taunt:'Mwahaha! Hey principal, you!',hint:'Which one has a heart of respect?',
+ hints:{'您 for best friends':'Friends get the everyday 你.','您 for pets':'Pets are 你 too, or just their name!','您 for babies':'Babies are little: 你.'},art:zz('您',300,100)}),
+boss('Lie 10 · 夜市真热闹, the hardest one',{lines:['夜市里人很多，','非常安静！'],claim:'夜市里人很多，非常安静！',options:['非常热闹','非常安静','人很少','没有人'],answer:'非常热闹',
+ why:'Lots of people, lights and noise: 夜市<b>真热闹</b>！安静 is the opposite: quiet.',taunt:'Hehehe! Shhh! The crowd is sleeping.',hint:'Lots of people make lots of noise. Which word fits?',
+ hints:{'非常安静':'安静 means quiet. Are crowds quiet?','人很少':'The sentence says 人很多.','没有人':'The sentence says there are lots of people.'},art:emo('🏮')}),
+{part:'boss',_door:true,title:'Baddie is beaten!',who:'otter',say:CH+'You caught <b>all 10 lies</b>! 戴, 双, 慢走, dates, 先…再…, 骑, 一杯, 睛, 您 and 热闹. 你真棒！',
  draw:()=>G(baddie(320,388,1.2,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(320,70,40),'a-pop',.8)+T(320,150,'P2 华文 champion!','h mid acc'),
  mount:a=>a.later(()=>a.win(),600)},
-];
+...daddyIntro('P2 Chinese'),
+tl('Challenge 1 · 双 and 对',{claim:'一双筷子 and 一对橘子 both mean two things that go together.',truth:true,art:emo('🥢 🍊🍊',80),
+ reasons:['双 and 对 both mean a pair.','对 means four, so it is four oranges.','对 means "correct": a correct orange.','双 is only for shoes.'],
+ reason:'双 and 对 both mean a pair.',why:'True! 一<b>双</b>筷子 = a pair of chopsticks. 一<b>对</b>橘子 = a pair of oranges, like the ones we bring at New Year.',hint:'How many chopsticks? How many oranges do we bring when 拜年?',hint2:'Do 双 and 对 mean the same number?'}),
+tl('Challenge 2 · 戴 and 带',{claim:'戴 and 带 sound the same, so you can use either one.',truth:false,
+ reasons:['戴 means wear; 带 means bring.','Same sound means same meaning.','带 means wear; 戴 means bring.','戴 is just more polite.'],
+ reason:'戴 means wear; 带 means bring.',why:'A <b>lie</b>! <b>戴</b>帽子 = wear a hat. <b>带</b>雨伞 = bring an umbrella. Same sound, different meaning.',hint:'Think of 戴帽子 and 带雨伞.',hint2:'Careful: one reason swaps them round.',art:zz('戴 带',320,64)}),
+multi('Challenge 3 · The animal radical',{q:'Which characters have 犭, the animal radical?',options:['狗','猫','狮','猴','鸡','鸟','鱼','猪'],correct:['狗','猫','狮','猴','猪'],
+ why:'狗, 猫, 狮, 猴 and 猪 have <b>犭</b>. 鸡 and 鸟 have 鸟 (bird). 鱼 is a picture of a fish.',hint:'Look at the LEFT side of each one.'}),
+spot('Challenge 4 · Two mistakes',{q:'Find the TWO wrong parts in my sentence!',tokens:['昨天','我','骑','巴士','去','夜市','，','买了','十只','沙爹','。'],wrong:[2,8],
+ why:'It should be: 昨天我<b>坐</b>巴士去夜市，买了十<b>串</b>沙爹。You sit in a bus (坐), and satay comes on sticks (串).',hint:'Check the verb for the bus, and the measure word for satay.'}),
+order('Challenge 5 · 写话 sentence recipe',{q:'Build ONE sentence. Recipe: 时间 → 人物 → 地点 → 做什么 → 心情',items:['星期六晚上，','我和妈妈','在夜市','吃沙爹，','我们很开心。'],
+ why:'<b>星期六晚上</b>(时间)，<b>我和妈妈</b>(人物)<b>在夜市</b>(地点)<b>吃沙爹</b>(做什么)，<b>我们很开心</b>(心情)。Use this recipe for every 写话!',hint:'Read the recipe again. What comes first: when, or who?'}),
+num('Challenge 6 · Kopitiam maths',{q:'一杯美禄两块钱，一片面包一块钱。我要两杯美禄和三片面包。一共多少钱？',answer:7,unit:'块',
+ why:'两杯美禄: 2 + 2 = 4 块. 三片面包: 1 + 1 + 1 = 3 块. 一共 4 + 3 = <b>7 块</b>.',hint:'First the Milo, then the bread, then add.'}),
+mc('Challenge 7 · 有…也有…',{q:'夜市里有好吃的沙爹，＿＿＿。Which ending is right?',options:['也有好玩的游戏。','也有很热。','也是很安静。','也没有人。'],answer:'也有好玩的游戏。',
+ why:'有…<b>也有</b>… lists two things that are there: 有好吃的沙爹，<b>也有好玩的游戏</b>。',hint:'After 也有, name another THING you can find there.',
+ hints:{'也有很热。':'After 也有 we need a thing, not a feeling like 很热.','也是很安静。':'A night market is not quiet, and it should be 也有.','也没有人。':'There are lots of people at a night market.'}}),
+tl('Challenge 8 · 好朋友',{claim:'我和小乐吵架了。我们不说话。我们的心情很好。',truth:false,
+ reasons:['After a quarrel we feel sad, not good.','Quarrels are fun, so we feel good.','People who don\'t talk are always happy.','心情 means the weather.'],
+ reason:'After a quarrel we feel sad, not good.',why:'A <b>lie</b>! After 吵架, friends feel 难过 (sad). That\'s why we say 对不起 and 和好 (make up).',hint:'How do you feel after a quarrel with your best friend?',hint2:'What does 心情 mean?',art:emo('😢',90)}),
+mc('Challenge 9 · Singapore names',{q:'Which place name means "ox-cart water"?',options:['牛车水','鱼尾狮','圣淘沙','小印度','樟宜机场'],answer:'牛车水',
+ why:'<b>牛车水</b> = ox (牛) + cart (车) + water (水). Long ago, ox carts carried water there. Today it is Chinatown!',hint:'Find 牛 (ox), 车 (cart) and 水 (water).',
+ hints:{'鱼尾狮':'That is the Merlion: fish tail + lion.','圣淘沙':'That is Sentosa island.','小印度':'That is Little India.','樟宜机场':'That is Changi Airport.'}}),
+num('Challenge 10 · 要多久？',{q:'我七点十分出门，走路十五分钟到学校。我七点几分到学校？',answer:25,unit:'分',
+ why:'七点十分 + 十五分钟 = 七点<b>二十五</b>分 (7:25).',hint:'10 minutes + 15 minutes = ?'}),
+multi('Challenge 11 · 节约用水',{q:'Which of these SAVE water?',options:['刷牙时关上水龙头','用洗菜的水浇花','洗澡时一直开着水','用杯子装水刷牙','把没喝完的水倒掉','水龙头漏水，马上告诉大人'],correct:['刷牙时关上水龙头','用洗菜的水浇花','用杯子装水刷牙','水龙头漏水，马上告诉大人'],
+ why:'Turn off the tap, reuse water for plants, use a cup, and report leaks. <b>节约用水</b>！',hint:'Which ones let water run away for nothing?'}),
+spot('Challenge 12 · 量词, the hardest one',{q:'Find the TWO wrong measure words!',tokens:['我家','有','一条','狗','、','两只','金鱼','，','我','还有','一件','新衣服','。'],wrong:[2,5],
+ why:'It should be 一<b>只</b>狗 and 两<b>条</b>金鱼. 一件新衣服 is right!',hint:'Dogs use 只. What do fish use?'}),
+daddyEnd('P2 Chinese')];
 
-const DOORKEY='boss-p2cn';
-/* Secret door to Baddie Daddy, shown on the final "Baddie beaten" slide */
-const DOORS={'boss-maths':'../maths/daddy-maths.html','boss-eng':'../english/daddy-eng.html','cn08':'../chinese/daddy-cn.html','boss-sci':'../science/daddy-sci.html','boss-p2cn':'../chinese/daddy-p2cn.html','boss-hcl':'../chinese/daddy-hcl.html'};
-(function(){const L=S[S.length-1],d0=L.draw,m0=L.mount;
+/* ---- one level, two bosses: Baddie Vampire first, then the hidden boss Baddie Daddy ---- */
+function daddySil(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z"/><ellipse cx="0" cy="-40" rx="32" ry="38"/><ellipse cx="0" cy="-104" rx="36" ry="28"/><path d="M12 -112 q52 -4 56 13 q2 16 -54 18z"/><rect x="-26" y="-182" width="48" height="40"/><rect x="-38" y="-146" width="72" height="9"/><circle cx="-16" cy="-124" r="12"/><circle cx="13" cy="-126" r="12"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#000" stroke-width="5"/></g>`}
+(function(){const k=S.findIndex(s=>s._door);if(k<0)return;const L=S[k],d0=L.draw,m0=L.mount;
  L.draw=a=>`<g class="shadow" style="opacity:0;transition:opacity 1.5s"><g style="filter:brightness(0)" opacity=".28">${daddySil(440,400,1.75)}</g>${T(560,120,'?','big mid','style="fill:#4B2A6B"')}</g>`+(d0?d0(a):'');
  L.mount=a=>{if(m0)m0(a);a.later(()=>{const g=a.q('.shadow');if(g)g.style.opacity=1;setWho('baddie');a.say(BD+'Waaah! I\'m telling my <b>DADDY</b>! He\'s much smarter than me… and he doesn\'t always lie!');
-   const b=a.btn('🚪 Who is that shadow?',()=>{const u=DOORS[DOORKEY];window.open(u,u.startsWith('http')?'_blank':'_self')},'go');},2600)};})();
-function daddySil(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z"/><ellipse cx="0" cy="-40" rx="32" ry="38"/><ellipse cx="0" cy="-104" rx="36" ry="28"/><path d="M12 -112 q52 -4 56 13 q2 16 -54 18z"/><rect x="-26" y="-182" width="48" height="40"/><rect x="-38" y="-146" width="72" height="9"/><circle cx="-16" cy="-124" r="12"/><circle cx="13" cy="-126" r="12"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#000" stroke-width="5"/></g>`}
-
-
+   a.btn('🚪 Who is that shadow?',()=>go(S.findIndex(s=>s.part==='daddy')),'go');},2600)};})();
+if(location.hash==='#daddy'){const k=S.findIndex(s=>s.part==='daddy');if(k>0)i=k;}
 render();
+(function(){const nav=document.querySelector('.parts');if(!S.some(s=>s.part==='daddy')||nav.querySelector('[data-part="daddy"]'))return;
+ const b=document.createElement('button');b.type='button';b.dataset.part='daddy';b.textContent='🎩 '+PARTS.daddy;b.onclick=()=>go(S.findIndex(s=>s.part==='daddy'));nav.appendChild(b);
+ const vb=nav.querySelector('[data-part="boss"]');if(vb)vb.textContent='🧛 '+PARTS.boss;
+ b.setAttribute('aria-current',S[i].part==='daddy');})();
+
 </script>
 
 <script id="den-fireworks">
