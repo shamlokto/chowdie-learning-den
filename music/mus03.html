@@ -814,12 +814,8 @@ mq('check','Star check 4','flame',{q:'C up to the D <b>an octave and a step</b> 
 mq('check','Star check 5','mommy',{q:'How many semitones are in a <b>minor 3rd</b>?',art:()=>mroom()+pairCard('treble','A4','C5',{sp:16}),options:['3','4','2','5'],answer:'3',why:'A minor 3rd has 3 semitones (A → B♭ → B → C). A major 3rd has 4.',hint:'Count each key on the keyboard from A to C.',play:()=>hear('A4','C5'),cls:'mus'}),
 
 /* ---------- Mommy vs Baddie Daddy ---------- */
-{part:'boss',title:'Baddie Daddy measures up',who:'daddy',say:DD+'Intervals? I measure everything in gold coins. But fine… let\'s talk about intervals. Believe me, if you dare!',
- draw:()=>mroom()+G(daddy(170,388,1.5,{point:true}),'a-drop',.1)+G(mommy(480,392,1.2,{still:true}),'a-pop',.5)},
-dclaim('Daddy\'s claim 1',{claim:'C up to F sharp is a perfect 4th.',truth:false,fix:['It\'s an augmented 4th.','It\'s a diminished 5th.','It\'s a major 4th.'],answer:'It\'s an augmented 4th.',why:'C to F is a perfect 4th. F♯ makes it one semitone bigger: <b>augmented 4th</b>. (There\'s no such thing as a "major 4th"!)',play:()=>hear('C4','F#4'),art:pairCard('treble','C4','F#4',{x:250,y:206,w:220,sp:11})}),
-dclaim('Daddy\'s claim 2',{claim:'A major 10th is the same as a compound major 3rd.',truth:true,why:'10 − 7 = 3. A major 10th and a compound major 3rd are two names for the same interval.',play:()=>hear('C4','E5')}),
-dclaim('Daddy\'s claim 3',{claim:'E up to B flat is a perfect 5th, my dear.',truth:false,fix:['It\'s a diminished 5th.','It\'s an augmented 5th.','It\'s a minor 4th.'],answer:'It\'s a diminished 5th.',why:'E to B is a perfect 5th. B♭ is a semitone lower, so E to B♭ is a <b>diminished 5th</b>.',play:()=>hear('E4','Bb4'),art:pairCard('treble','E4','Bb4',{x:250,y:206,w:220,sp:11})}),
-{part:'boss',title:'Interval experts!',who:'mommy',say:MM+'Wonderful! You can count, measure AND hear intervals. Next time we\'ll learn about <b>time signatures and rhythm</b>! 🎺',
+dclaim('Daddy\'s claim',{claim:'E up to B flat is a perfect 5th, my dear.',truth:false,fix:['It\'s a diminished 5th.','It\'s an augmented 5th.','It\'s a minor 4th.'],answer:'It\'s a diminished 5th.',why:'E to B is a perfect 5th. B♭ is a semitone lower, so E to B♭ is a <b>diminished 5th</b>.',play:()=>hear('E4','Bb4'),art:pairCard('treble','E4','Bb4',{x:250,y:206,w:220,sp:11})}),
+{part:'boss',title:'Interval experts!',who:'mommy',say:MM+'Wonderful! You can count, measure AND hear intervals.  <br>🎺 <b>Trombone fun fact:</b> in 1st position, just by buzzing differently, a trombone plays B♭, F, B♭, D, F: a <b>perfect 5th</b>, a <b>perfect 4th</b>, a <b>major 3rd</b> and a <b>minor 3rd</b>! Next time we\'ll learn about <b>time signatures and rhythm</b>! 🎺',
  draw:()=>mroom()+G(mommy(200,388,1.5,{trombone:true}),'a-pop',.1)+G(flame(440,388,1.1,{wave:true}),'a-pop',.3)+G(daddy(580,388,.8,{busted:true}),'a-fade',.5),mount:a=>{a.later(()=>{fanfare();a.win()},600)}},
 ];
 

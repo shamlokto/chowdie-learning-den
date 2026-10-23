@@ -611,10 +611,7 @@ traceSlide([['早','zǎo'],['车','chē'],['走','zǒu'],['吃','chī']]),
  quiz:{options:['五块钱','六块钱','三块钱'],answer:'五块钱',why:'2 + 3 = 5: <b>一共五块钱</b>.',hint:'Add them up.'}},
 {part:'check',title:'考考你 4',who:'flame',say:FL+'Which word means <b>breakfast</b>?',draw:()=>G(flame(130,380,1.3,{pencil:true}),'a-pop',.1)+T(430,240,'breakfast','h mid'),
  quiz:{options:['早餐','早上','午餐'],answer:'早餐',why:'<b>早餐</b> zǎocān = breakfast. 早上 is morning; 午餐 is lunch.',hint:'餐 means meal. Which meal is in the morning?'}},
-bossIntro('Baddie\'s kopitiam!','Mwahaha! I own this kopitiam now! I\'m the 老板! Let me take your order… hehehe.'),
-boss('Lie #1: the bus',{lines:['I 骑巴士 to school!','I sit on the roof. Hehehe!'],claim:'I 骑巴士 to school!',options:['坐巴士','骑巴士','开巴士'],answer:'坐巴士',why:'You sit <b>in</b> a bus, so it\'s <b>坐</b>巴士. 骑 is for bicycles and horses!',taunt:'Mwahaha! Bus riding is fun!',hint:'Do you sit inside a bus, or ride on it like a bicycle?',art:`<g transform="translate(440 300)">${em('🚌',110)}</g>`}),
-boss('Lie #2: kaya toast',{lines:['I want 一杯咖椰面包.','A cup of toast! Hehehe!'],claim:'I want 一杯咖椰面包!',options:['两片面包','两杯面包','两碗面包'],answer:'两片面包',why:'Bread comes in slices: <b>片</b>. 杯 is for drinks!',taunt:'Mwahaha! I drink my bread!',hint:'Is toast a drink?',art:`<g transform="translate(440 300)">${em('🍞',110)}</g>`}),
-boss('Lie #3: the bill',{lines:['Milo $2 + toast $3.','一共八块钱! Pay up!'],claim:'Milo $2 and toast $3. 一共八块钱!',options:['五块钱','八块钱','九块钱'],answer:'五块钱',why:'2 + 3 = 5. <b>一共五块钱</b>. Baddie tried to cheat you!',taunt:'Hehehe! Extra $3 for the crocodile tax!',hint:'Add 2 and 3.',art:T(440,300,'$2 + $3','big mid')}),
+boss('Baddie\'s lie: kaya toast',{lines:['I want 两杯咖椰面包.','Two CUPS of toast! Hehehe!'],claim:'I want 两杯咖椰面包!',options:['两片咖椰面包','两杯咖椰面包','两碗咖椰面包'],answer:'两片咖椰面包',why:'Bread comes in slices: <b>片</b>. 杯 is for drinks!',taunt:'Mwahaha! I drink my bread!',hint:'Is toast a drink?',hints:{'两杯咖椰面包':'杯 is for drinks like 美禄.','两碗咖椰面包':'碗 is for 面 and 饭.'},art:`<g transform="translate(440 300)">${em('🍞',110)}</g>`}),
 finale('Baddie is beaten! 太好了！','一共五块钱！','Yígòng wǔ kuài qián!','Five dollars altogether!','太棒了！You learned how to talk about getting to school, 坐/骑/开, kopitiam food, 杯/碗/盘/片, and 一共多少钱!'),
 ];
 
