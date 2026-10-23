@@ -817,12 +817,8 @@ mq('check','Star check 4','flame',{q:'In <b>A minor</b>, chord V is E G♯ B. Wh
 mq('check','Star check 5','mommy',{q:'A phrase ends on chord <b>V</b>. What kind of cadence is it?',art:()=>mroom()+cadCard(CAD.imperfect,['I','V']),options:['Imperfect','Perfect','Plagal','Complete'],answer:'Imperfect',why:'Anything → V is an imperfect cadence. It sounds unfinished, like a comma.',hint:'Does ending on V sound finished or unfinished?',play:()=>pc(CAD.imperfect)}),
 
 /* ---------- Mommy vs Baddie Daddy ---------- */
-{part:'boss',title:'Baddie Daddy\'s grand finale',who:'daddy',say:DD+'Chords? Cadences? I\'ve heard every orchestra in the world from my private box. Let me enlighten you… ho ho ho.',
- draw:()=>mroom()+G(daddy(170,388,1.5,{point:true}),'a-drop',.1)+G(mommy(480,392,1.2,{trombone:true,still:true}),'a-pop',.5)},
-dclaim('Daddy\'s claim 1',{claim:'A perfect cadence goes from chord I to chord V.',truth:false,fix:['A perfect cadence goes from V to I.','A perfect cadence goes from IV to I.','A perfect cadence goes from II to V.'],answer:'A perfect cadence goes from V to I.',why:'I → V ends on V, so that\'s <b>imperfect</b>. A <b>perfect</b> cadence is V → I.',play:()=>pc(CAD.perfect)}),
-dclaim('Daddy\'s claim 2',{claim:'In C major, chord II is a minor chord: D, F and A.',truth:true,why:'D to F is a minor 3rd, so chord II in a major key is minor.',play:()=>playChord(['D4','F4','A4'])}),
-dclaim('Daddy\'s claim 3',{claim:'Ic means chord I with its root in the bass.',truth:false,fix:['Ic has the 5th in the bass.','Ic has the 3rd in the bass.','Ic has no bass note at all.'],answer:'Ic has the 5th in the bass.',why:'a = root, b = 3rd, <b>c = 5th</b> in the bass. In C major, Ic has G in the bass.',art:triCard(['G4','C5','E5'],{x:250,y:200,w:220,sp:11})}),
-{part:'boss',title:'Harmony heroes!',who:'mommy',say:MM+'Perfect, just like a V → I! You can build chords, find inversions and hear cadences. One more deck to go: <b>terms, ornaments, instruments and transposing</b>! 🎺',
+dclaim('Daddy\'s claim',{claim:'A perfect cadence goes from chord I to chord V.',truth:false,fix:['A perfect cadence goes from V to I.','A perfect cadence goes from IV to I.','A perfect cadence goes from II to V.'],answer:'A perfect cadence goes from V to I.',why:'I → V ends on V, so that\'s <b>imperfect</b>. A <b>perfect</b> cadence is V → I.',play:()=>pc(CAD.perfect)}),
+{part:'boss',title:'Harmony heroes!',who:'mommy',say:MM+'Perfect, just like a V → I! You can build chords, find inversions and hear cadences.  <br>🎺 <b>Trombone fun fact:</b> three trombones together can play a whole <b>triad</b>, like chord I, all by themselves. One more deck to go: <b>terms, ornaments, instruments and transposing</b>! 🎺',
  draw:()=>mroom()+G(mommy(200,388,1.5,{trombone:true}),'a-pop',.1)+G(flame(440,388,1.1,{wave:true}),'a-pop',.3)+G(daddy(580,388,.8,{busted:true}),'a-fade',.5),mount:a=>{a.later(()=>{pc(CAD.perfect);a.win()},600)}},
 ];
 

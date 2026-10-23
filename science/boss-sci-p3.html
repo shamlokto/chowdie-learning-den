@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beat Baddie &amp; Daddy: P3 Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a chunky picture-book "stage" card with Chowdie's speech bubble below, big round controls for small fingers.
+   Deliberately one bright light world (a children's picture book), so colours are set explicitly for every host theme. */
+:root{
+  color-scheme:light;
+  --bg:#D9F0EA; --paper:#FFFDF6; --paper2:#F3F8F1; --ink:#1F3A4A; --muted:#58707D; --line:#B7D8CF;
+  --accent:#FF7A45; --accent-ink:#B9471A; --sun:#FFC83D; --sky:#5BB8E8; --leaf:#4FAE63; --berry:#E5577A; --grape:#8E6BD8;
+  --good:#3EA45A; --bad:#E0574F;
+  --display:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(circle at 12px 12px, rgba(31,58,74,.07) 2px, transparent 2.5px);background-size:26px 26px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:18px 36px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{margin:0;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,44px);line-height:1.05;text-wrap:balance}
+.starpill{display:flex;align-items:center;gap:6px;font-family:var(--display);font-weight:800;font-size:20px;background:var(--paper);
+  border:3px solid var(--ink);border-radius:999px;padding:2px 14px 0 8px;box-shadow:0 4px 0 var(--ink)}
+.starpill svg{width:26px;height:26px;margin-top:-2px}
+.starpill.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.parts{display:flex;gap:8px;flex-wrap:wrap}
+.parts button{font-family:var(--display);font-weight:700;font-size:16px;padding:6px 16px 4px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer}
+.parts button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper);border:3px solid var(--ink);border-radius:26px;box-shadow:0 7px 0 var(--ink);padding:14px 14px 12px;
+  display:flex;flex-direction:column;gap:10px;position:relative}
+.scene-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  padding:3px 11px 1px;border-radius:8px;background:var(--sky)}
+.tag.try{background:var(--leaf)} .tag.check{background:var(--accent)}
+h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:1.1;text-wrap:balance}
+#stage{display:block;width:100%;height:auto;border-radius:16px;background:linear-gradient(rgba(243,248,241,.55),rgba(243,248,241,.55)),url(../img/boss-lair.webp) center/cover,var(--paper2);font-family:var(--display);user-select:none;-webkit-user-select:none}
+.ui{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ui:empty{display:none}
+.ui button{font-family:var(--display);font-weight:800;font-size:22px;min-width:64px;padding:8px 18px 4px;border-radius:16px;border:3px solid var(--ink);
+  background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.ui button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ui button.ok{background:var(--good);color:#fff}
+.ui button.no{background:var(--bad);color:#fff;animation:shake .4s}
+.ui button.go{background:var(--sun)}
+.ui button:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.talk{display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:start}
+.talk svg{width:58px;height:58px}
+.bubble{position:relative;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;min-width:0;font-size:18px}
+.bubble::before{content:"";position:absolute;left:-13px;top:16px;border:10px solid transparent;border-right-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff}
+.bubble b{color:var(--accent-ink)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.controls button{font-family:var(--display);font-weight:800;font-size:18px;padding:9px 18px 5px;border-radius:999px;border:3px solid var(--ink);
+  background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.controls button.primary{background:var(--accent);color:#fff}
+.controls button:disabled{opacity:.35;cursor:default;box-shadow:none}
+.controls button[aria-pressed="true"]{background:var(--sun)}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;min-width:0}
+.dots button{width:13px;height:13px;padding:0;border-radius:50%;border:2px solid var(--ink);background:var(--paper);cursor:pointer;box-shadow:none}
+.dots button.try{border-radius:3px} .dots button.check{transform:rotate(45deg);border-radius:2px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.dots button.done{background:var(--sun)}
+button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.foot{font-size:14px;color:var(--muted);margin:0}
+@media (max-width:520px){ .controls .rd span{display:none} .bubble{font-size:16px} }
+
+/* SVG classes */
+#stage text{font-family:var(--display);font-weight:700;fill:var(--ink)}
+#stage .mid{text-anchor:middle} #stage .end{text-anchor:end}
+#stage .big{font-size:44px;font-weight:800} #stage .h{font-size:28px;font-weight:800} #stage .lab{font-size:20px} #stage .sm{font-size:15px}
+#stage .mut{fill:var(--muted)} #stage .acc{fill:var(--accent-ink)} #stage .wht{fill:#fff}
+#stage .tap{cursor:pointer}
+#stage .tap:hover{filter:brightness(1.05)}
+.a-pop{animation:pop .55s cubic-bezier(.2,.8,.3,1.4) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.a-fade{animation:fade .5s ease-out both;animation-delay:var(--d,0s)}
+.a-drop{animation:drop .65s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:var(--d,0s)}
+.a-grow{animation:grow .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:left center}
+.a-rise{animation:rise .8s ease-out both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:bottom center}
+.a-bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box}
+.a-wig{animation:wig 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.spin{transition:transform 1.1s cubic-bezier(.4,.1,.2,1)}
+.tilt{transition:transform .7s cubic-bezier(.3,.6,.3,1.3)}
+.lvl{transition:all .7s ease}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-50px)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes rise{from{transform:scaleY(0)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes wig{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.conf{animation:conf 1.4s ease-in forwards;transform-box:fill-box;transform-origin:center}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion: reduce){ .a-pop,.a-fade,.a-drop,.a-grow,.a-rise,.a-bob,.a-wig,.conf{animation:none} .spin,.tilt,.lvl{transition:none} }
+/* den-polish:start (shared look, generated by tools/den-polish.py) */
+html{background:#EAF5EF}
+body{background:transparent;background-image:none}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:#EAF5EF url(../img/paper-wash.webp) center/cover no-repeat}
+.eyebrow{display:inline-block;background:var(--paper);border:2px solid var(--accent-ink);border-radius:999px;padding:2px 12px 0}
+.stage{box-shadow:0 7px 0 var(--ink),0 26px 40px -18px rgba(31,58,74,.4)}
+.bubble{box-shadow:0 3px 0 rgba(31,58,74,.14)}
+.parts button:not([aria-current="true"]):hover{background:#fff;transform:translateY(-1px)}
+.foot{background:rgba(255,253,246,.8);border-radius:12px;padding:6px 12px;align-self:flex-start}
+@media (max-width:520px){
+ .wrap{padding-top:52px}
+ .controls{gap:8px}
+ .controls .dots{order:-1;flex:1 1 100%;padding:2px 0 4px}
+ .controls>button{font-size:17px;padding:8px 14px 4px}
+ .controls #next{margin-left:auto;padding-inline:20px}
+ .talk{grid-template-columns:44px 1fr;gap:8px} .talk svg{width:44px;height:44px}
+}
+/* den-polish:end */
+</style></head><body>
+<a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Boss level · P3 Science (MOE)</p>
+      <h1>Beat Baddie &amp; Daddy: P3 Science</h1>
+    </div>
+    <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
+  </header>
+  <nav class="parts" aria-label="Parts">
+    <button type="button" data-part="learn">Learn</button>
+    <button type="button" data-part="try">Try it!</button>
+    <button type="button" data-part="check">Star check</button>
+  </nav>
+  <section class="stage" aria-live="polite">
+    <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
+    <div class="ui" id="ui"></div>
+    <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
+  </section>
+  <div class="controls">
+    <button id="prev" type="button">Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Slides"></div>
+    <button id="read" type="button" class="rd" aria-pressed="false" title="Read the words aloud">🔊 <span>Read to me</span></button>
+    <button id="replay" type="button">Replay</button>
+    <button id="next" type="button" class="primary">Next</button>
+  </div>
+  <p class="foot">Boss level for P3 Science, following the MOE syllabus themes: Diversity, Cycles, Systems and Interactions. First catch Baddie Vampire's lies, then face the hidden boss, Baddie Daddy.</p>
+</div>
+
+<script>
+/* ---------- drawing helpers ---------- */
+const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
+const T=(x,y,s,cls='lab',ex='')=>`<text x="${x}" y="${y}" class="${cls}" ${ex}>${s}</text>`;
+const G=(inner,cls='',d=0,ex='')=>`<g class="${cls}" style="--d:${d}s" ${ex}>${inner}</g>`;
+function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
+  const wave=o.wave?`<path d="M30 -58 q16 -14 12 -32" stroke="${C.ink}" stroke-width="3" fill="#9A6A45" stroke-linecap="round"/><ellipse cx="42" cy="-92" rx="8" ry="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>`:`<ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(-25 26 -48)"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="${C.ink}" stroke-width="3" transform="rotate(25 -26 -48)"/>${wave}
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="${C.ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="${C.ink}"/><circle cx="13" cy="-92" r="5.5" fill="${C.ink}"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="${C.ink}"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="${C.ink}" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g>`;
+}
+function bubble(x,y,w,h,txt,cls='lab'){ // speech bubble pointing down-left
+  return `<g><path d="M${x} ${y} h${w} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 h${-w+40} l-22 18 l4 -18 h-${18} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>${T(x+w/2+7,y+h/2+7,txt,cls+' mid')}</g>`;
+}
+function star(x,y,r=16,fill=C.sun){const p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;p.push((x+rr*Math.cos(a)).toFixed(1)+','+(y+rr*Math.sin(a)).toFixed(1))}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>`}
+const box=(x,y,w,h,fill='#fff',r=12,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${C.ink}" stroke-width="3" ${ex}/>`;
+const arrow=(x1,y1,x2,y2,col=C.ink)=>{const a=Math.atan2(y2-y1,x2-x1),h=12;return `<path d="M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)} L${x2} ${y2} L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`};
+
+/* ---------- engine ---------- */
+const PARTS={learn:'Learn',try:'Try it!',check:'Star check'};
+let i=0, earned=new Set(), reading=false, timers=[];
+const $=id=>document.getElementById(id);
+const svg=$('stage'), ui=$('ui'), sayEl=$('say');
+$('face').innerHTML=otter(50,112,.86,{still:true});
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function say(t){ sayEl.innerHTML=t; speak(t); }
+function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
+function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
+  for(let k=0;k<34;k++){const x=320+(Math.random()-.5)*80,y=170, dx=(Math.random()-.5)*640, dy=(Math.random()*.9-.55)*420;
+    s+=`<rect class="conf" x="${x}" y="${y}" width="10" height="14" rx="2" fill="${cols[k%6]}" style="--dx:${dx}px;--dy:${dy}px;--r:${Math.random()*720}deg"/>`}
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.innerHTML=s+`<g class="a-pop">${star(320,120,46)}</g>`; svg.appendChild(g); later(()=>g.remove(),1600); }
+function win(msg){ if(!earned.has(i)){earned.add(i); $('starcount').textContent=earned.size; const p=$('starpill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');} confetti(); if(msg) say(msg); drawDots(); }
+const api={svg,ui,say,win,later,confetti,q:s=>svg.querySelector(s),qa:s=>svg.querySelectorAll(s),
+  btn(label,fn,cls=''){const b=document.createElement('button');b.type='button';b.innerHTML=label;if(cls)b.className=cls;b.onclick=()=>fn(b);ui.appendChild(b);return b;}};
+function mountQuiz(sc){ const qz=sc.quiz; let done=false;
+  [...qz.options].sort(()=>Math.random()-.5).forEach(o=>api.btn(o,b=>{ if(done) return;
+    if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
+    else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
+function render(){
+  timers.forEach(clearTimeout); timers=[]; try{speechSynthesis.cancel()}catch(e){}
+  const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
+  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
+  document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
+  $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
+}
+function drawDots(){ const d=$('dots'); d.innerHTML=''; S.forEach((s,k)=>{const b=document.createElement('button');b.type='button';b.className=s.part+(earned.has(k)?' done':'');
+  b.setAttribute('aria-label',`Slide ${k+1}: ${s.title}`); if(k===i) b.setAttribute('aria-current','true'); b.onclick=()=>{i=k;render()}; d.appendChild(b)}); }
+function go(k){ if(k<0||k>=S.length) return; i=k; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prev').onclick=()=>go(i-1); $('next').onclick=()=>go(i+1); $('replay').onclick=render;
+$('read').onclick=e=>{reading=!reading; e.currentTarget.setAttribute('aria-pressed',reading); if(reading) speak(sayEl.innerHTML); else try{speechSynthesis.cancel()}catch(x){}};
+document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findIndex(s=>s.part===b.dataset.part)));
+document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
+
+/* ---------- deck ---------- */
+/* shared English helpers: word tokens, sentences, speech bubbles */
+const CW=11.5; // approx px per char at 20px Baloo
+function measure(w,size=20){return w.length*CW*size/20+size*.9}
+/* lay out words as tokens; returns {svg, boxes} ; opts: size, maxW, tap(index)->bool, hi:{idx:color}, fill */
+function sentence(x,y,words,{size=20,maxW=600,tap=null,hi={},pad=8,lineH=null,cls='',fillDefault='#fff'}={}){
+  const lh=lineH||size*2.2;let cx=x,cy=y,svg='';const boxes=[];
+  words.forEach((w,i)=>{const bw=measure(w,size);if(cx+bw>x+maxW){cx=x;cy+=lh}
+    const isTap=tap&&tap(i,w),fill=hi[i]||fillDefault,stroke=hi[i]?C.ink:'#C9D3CE';
+    svg+=`<g class="${isTap?'tap tok':'tok'} ${cls}" data-i="${i}"><rect x="${cx}" y="${cy-size*1.1}" width="${bw}" height="${size*1.7}" rx="${size*.4}" fill="${fill}" stroke="${stroke}" stroke-width="2"/><text x="${cx+bw/2}" y="${cy+size*.18}" class="mid" style="font-size:${size}px;font-weight:700">${w}</text></g>`;
+    boxes.push({x:cx,y:cy,w:bw});cx+=bw+pad});
+  return {svg,boxes,endY:cy}}
+/* plain wrapped sentence text (no boxes) */
+function prose(x,y,str,max=50,cls='lab',lh=28,ex=''){const w=str.split(' '),L=[];let c='';w.forEach(t=>{if((c+' '+t).trim().length>max){L.push(c);c=t}else c=(c+' '+t).trim()});L.push(c);return L.map((l,k)=>T(x,y+k*lh,l,cls,ex)).join('')}
+const speech=(x,y,w,h,txt,size=18,max=30)=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+40} ${y+h} l-8 20 l26 -20z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+34}" y="${y+h-3}" width="26" height="6" fill="#fff"/>${prose(x+18,y+34,txt,max,'lab',size*1.35,`style="font-size:${size}px"`)}</g>`;
+const tagPill=(x,y,txt,col=C.sky,w=null)=>{const ww=w||measure(txt,15)+10;return `<rect x="${x}" y="${y}" width="${ww}" height="28" rx="14" fill="${col}"/>`+T(x+ww/2,y+19,txt,'sm mid','style="fill:#fff;font-weight:800"')};
+const blank=(x,y,w=70)=>`<line x1="${x}" y1="${y+6}" x2="${x+w}" y2="${y+6}" stroke="${C.accent}" stroke-width="3"/>`;
+/* small scene props */
+const catI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="10" rx="22" ry="16" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-14" cy="-10" r="14" fill="#F0A868" stroke="${C.ink}" stroke-width="2.5"/><path d="M-24 -18 l-2 -12 l10 6z M-4 -18 l2 -12 l-10 6z" fill="#F0A868" stroke="${C.ink}" stroke-width="2"/><circle cx="-18" cy="-11" r="2" fill="${C.ink}"/><circle cx="-10" cy="-11" r="2" fill="${C.ink}"/><path d="M-16 -6 q2 3 4 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/><path d="M20 6 q14 -10 10 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 6 q14 -10 10 -22" stroke="#F0A868" stroke-width="2.5" fill="none"/></g>`;
+const dogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="10" rx="24" ry="16" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-16" cy="-8" r="15" fill="#C9A27A" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="-28" cy="-6" rx="6" ry="12" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cx="-14" cy="-10" r="2" fill="${C.ink}"/><circle cx="-7" cy="-3" r="3" fill="${C.ink}"/><path d="M26 6 q10 -14 4 -22" stroke="${C.ink}" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M26 6 q10 -14 4 -22" stroke="#C9A27A" stroke-width="2.5" fill="none"/></g>`;
+const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 0 q14 -10 28 0 M0 -14 q-10 14 0 28" stroke="#fff" stroke-width="2.5" fill="none"/></g>`;
+const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
+const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
+const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
+/* quiz helper: multiple-choice over a sentence with blank */
+function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
+/* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
+/* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
+function wala(x,y,s=1,o={}){
+  const fur='#9FA9B3',fur2='#C9D0D6',ink=C.ink;
+  const arm=o.wave?`<path d="M28 -52 q18 -16 14 -36" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="-90" rx="9" ry="10" fill="${fur}" stroke="${ink}" stroke-width="3"/>`
+    :`<ellipse cx="26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(-20 26 -44)"/>`;
+  const leaf=o.leaf===false?'':`<g transform="translate(-30 -40) rotate(-30)"><path d="M0 0 q10 -26 0 -44 q-10 18 0 44z" fill="${C.leaf}" stroke="${ink}" stroke-width="2.5"/><line x1="0" y1="2" x2="0" y2="-40" stroke="${ink}" stroke-width="1.5"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':'a-bob'}">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="${fur2}"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  ${leaf}<ellipse cx="-26" cy="-44" rx="9" ry="14" fill="${fur}" stroke="${ink}" stroke-width="3" transform="rotate(20 -26 -44)"/>${arm}
+  <circle cx="-36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="${ink}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="${fur}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="${fur2}"/>
+  <circle cx="-15" cy="-92" r="5" fill="${ink}"/><circle cx="15" cy="-92" r="5" fill="${ink}"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="${ink}" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="${C.bad}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="${C.bad}" stroke="${ink}" stroke-width="2"/></g>
+  </g></g>`;
+}
+/* Baddie Vampire: a crocodile in a vampire cape. origin = feet centre, ~125 tall at s=1. o.busted = caught lying */
+function baddie(x,y,s=1,o={}){
+  const g='#5DAE4E',g2='#4A9440',belly='#D7E9A6',ink=C.ink,b=o.busted;
+  const eyes=b?`<path d="M-20 -116 l10 10 M-10 -116 l-10 10 M8 -118 l10 10 M18 -118 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    :`<ellipse cx="-15" cy="-111" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="13" cy="-113" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/>
+      <ellipse cx="-14" cy="-110" rx="1.8" ry="5" fill="${ink}"/><ellipse cx="14" cy="-112" rx="1.8" ry="5" fill="${ink}"/>
+      <path d="M-25 -124 l16 6 M23 -126 l-16 6" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  const mouth=b?`<path d="M-2 -76 q10 -6 18 0 q10 6 18 0 q8 -5 14 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 -110 q6 10 0 14 q-6 -4 0 -14z" fill="${C.sky}" stroke="${ink}" stroke-width="1.5"/>`
+    :`<path d="M-6 -78 q30 14 58 -2" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M8 -73 l4 11 l4 -10z M28 -72 l4 11 l4 -11z" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M18 -71 l2 4 l2 -4 M40 -74 l2 4 l2 -4" stroke="${ink}" stroke-width="1.5" fill="#fff"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
+  <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="28" ry="34" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-32" rx="17" ry="25" fill="${belly}"/>
+  <path d="M-15 -44 h30 M-17 -32 h34 M-15 -20 h30" stroke="${g2}" stroke-width="2"/>
+  <ellipse cx="-15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="15" cy="-2" rx="13" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -27 -44)"/>
+  ${o.point?`<path d="M26 -54 q22 -10 36 -26" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="62" cy="-82" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>`:`<ellipse cx="27" cy="-44" rx="8" ry="13" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 27 -44)"/>`}
+  <path d="M-40 -66 l-16 -36 l22 16 l6 -22 l12 30z M40 -66 l16 -36 l-22 16 l-6 -22 l-12 30z" fill="#2B2B3A" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-92" rx="32" ry="26" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M10 -100 q46 -4 50 12 q2 14 -48 16z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="54" cy="-94" r="2.2" fill="${ink}"/><circle cx="46" cy="-95" r="2.2" fill="${ink}"/>
+  <circle cx="-15" cy="-112" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-114" r="11" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${mouth}
+  <circle cx="-22" cy="-88" r="2" fill="${g2}"/><circle cx="-14" cy="-82" r="2" fill="${g2}"/><circle cx="-26" cy="-80" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+/* ---- engine add-ons ---- */
+(function(){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=swap';document.head.appendChild(l);
+ const st=document.createElement('style');st.textContent=`
+ :root{--display:"Baloo 2","Noto Sans SC","Noto Sans CJK SC","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans SC","Noto Sans CJK SC",Verdana,system-ui,sans-serif}
+ .ui button.zhb{font-family:"Noto Sans SC","Noto Sans CJK SC",var(--display);font-size:24px}
+ #stage .zh{font-family:"Noto Sans SC","Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;font-weight:700}
+ #stage .py{font-family:var(--body);font-weight:700;fill:var(--muted)} #stage .en{font-family:var(--body);font-weight:400;fill:var(--muted);font-style:italic}
+ .pyf{font-family:var(--body);font-style:normal} /* Baloo 2 draws macron vowels (ā ē ī ō ū) broken, so pinyin in display text uses the body font */
+ .bubble i.py{font-style:normal;color:var(--muted);font-weight:700} .bubble .zhs{font-family:"Noto Sans SC","Noto Sans CJK SC",sans-serif;font-weight:700}
+ .bubble b.wl{color:#5B6B7A} .bubble b.bd{color:#B3243A}
+ .tag.boss{background:#6B2D5C} .ui button.lie{font-size:18px;text-align:left;max-width:100%}
+ .dots button.boss:not(.done):not([aria-current="true"]){background:#E9D3E5;border-color:#6B2D5C}
+ .parts button[data-part="boss"]{border-color:#6B2D5C;color:#6B2D5C} .parts button[data-part="boss"][aria-current="true"]{background:#6B2D5C;color:#fff}
+ #stage [data-zh]{cursor:pointer}`;document.head.appendChild(st);})();
+const FACES={otter:()=>otter(50,112,.86,{still:true}),wala:()=>wala(50,116,.78,{still:true,leaf:false}),baddie:()=>baddie(38,118,.74,{still:true})};
+let WHO='otter';
+function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
+const CJK=/([⺀-鿿　-〿＀-￯]+)/;
+/* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
+  const pool=vs.filter(ok); if(!pool.length) return null;
+  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
+  const base=loc.length?loc:pool;
+  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
+  const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
+  const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
+  const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
+  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+    u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
+ }catch(e){} }
+try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}
+speak=function(t){ if(reading) speakNow(t); };
+api.as=(w,t)=>{setWho(w); if(t!==undefined) say(t);};
+api.hear=t=>speakNow(t);
+PARTS.boss='Beat Baddie';
+let _charsInit=false; const _render0=render;
+render=function(){
+  if(!_charsInit){_charsInit=true; document.querySelectorAll('.parts button').forEach(b=>{if(!S.some(x=>x.part===b.dataset.part)) b.hidden=true}); if(S.some(s=>s.part==='boss')&&!document.querySelector('.parts [data-part="boss"]')){const b=document.createElement('button');b.type='button';b.dataset.part='boss';b.textContent=PARTS.boss;b.onclick=()=>go(S.findIndex(s=>s.part==='boss'));document.querySelector('.parts').appendChild(b);}}
+  setWho(S[i].who); _render0();
+  svg.querySelectorAll('[data-zh]').forEach(g=>g.addEventListener('click',()=>speakNow(g.dataset.zh,g.dataset.who||WHO)));
+};
+$('replay').onclick=()=>render();
+/* ---- drawing helpers for dialogue ---- */
+/* Chinese word card: hanzi + pinyin (+ English) ; tap to hear */
+const zhw=(x,y,zh,py,en='',sz=34,cls='')=>`<g data-zh="${zh}" class="tap ${cls}">${T(x,y,zh,'zh mid',`style="font-size:${sz}px"`)}${T(x,y+sz*.62,py,'py mid',`style="font-size:${Math.max(13,sz*.44)}px"`)}${en?T(x,y+sz*.62+18,en,'en mid','style="font-size:14px"'):''}</g>`;
+/* dialogue bubble with tail toward the speaker: side 'l' (tail bottom-left) or 'r' (tail bottom-right) */
+const zhLen=(t,cj=24,as=13)=>[...t.replace(/<[^>]+>/g,'')].reduce((n,c)=>n+(/[\u2E80-\u9FFF\uFF00-\uFFEF\u3000-\u303F]/.test(c)?cj:as),0);
+function dlg(x,y,w,zh,py,en,side='l',d=0,who=''){ if(!w){w=Math.max(zhLen(zh),py.length*7.6,(en||'').length*7.2)+40; if(side==='r') x=x-w;} const h=en?92:70, tx=side==='l'?x+30:x+w-30, dir=side==='l'?-1:1;
+  return G(`<g data-zh="${zh.replace(/<[^>]+>/g,'')}" ${who?`data-who="${who}"`:''} class="tap"><path d="M${x+14} ${y} h${w-28} a14 14 0 0 1 14 14 v${h-28} a14 14 0 0 1 -14 14 H${tx+12} l${dir*10} 16 l${-dir*2} -16 H${x+14} a14 14 0 0 1 -14 -14 v${-(h-28)} a14 14 0 0 1 14 -14z" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`
+   +T(x+w/2,y+32,zh,'zh mid','style="font-size:24px"')+T(x+w/2,y+54,py,'py mid','style="font-size:14px"')+(en?T(x+w/2,y+76,en,'en mid','style="font-size:14px"'):'')+`</g>`,'a-pop',d);
+}
+const WL='<b class="wl">Wala:</b> ',CH='<b>Chowdie:</b> ',BD='<b class="bd">Baddie:</b> ';
+/* simple person: feet at (x,y); h = height; girl adds hair bun; old adds grey hair + glasses */
+function kid(x,y,h=100,{girl=false,col=C.sky,old=false,skin='#F2D2B0'}={}){const s=h/100,hair=old?'#C9CED3':'#4A3222';
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-20 0 v-38 q0 -14 20 -14 q20 0 20 14 v38z" fill="${col}" stroke="${C.ink}" stroke-width="3"/>
+  <circle cy="-72" r="22" fill="${skin}" stroke="${C.ink}" stroke-width="3"/><path d="M-22 -76 q2 -20 22 -20 q20 0 22 20 q-10 -10 -22 -8 q-12 -2 -22 8z" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>
+  ${girl?`<circle cx="${old?0:-20}" cy="${old?-98:-90}" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>${old?'':`<circle cx="20" cy="-90" r="9" fill="${hair}" stroke="${C.ink}" stroke-width="2"/>`}`:''}
+  <circle cx="-8" cy="-70" r="2.8" fill="${C.ink}"/><circle cx="8" cy="-70" r="2.8" fill="${C.ink}"/><path d="M-6 -61 q6 5 12 0" stroke="${C.ink}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ${old?`<circle cx="-8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><circle cx="8" cy="-70" r="7" fill="none" stroke="${C.ink}" stroke-width="2"/><line x1="-1" y1="-70" x2="1" y2="-70" stroke="${C.ink}" stroke-width="2"/>`:''}
+  <circle cx="-14" cy="-63" r="3.5" fill="#F4A3A8"/><circle cx="14" cy="-63" r="3.5" fill="#F4A3A8"/></g>`;}
+/* ---- Baddie boss slide: he states a lie (or a hard question with a wrong answer); kids pick the correction ---- */
+const gauge=(x,y,lie=false)=>`<g transform="translate(${x} ${y})"><path d="M-90 0 a90 90 0 0 1 180 0z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M-78 0 a78 78 0 0 1 39 -67.5" fill="none" stroke="${C.good}" stroke-width="14"/><path d="M39 -67.5 a78 78 0 0 1 39 67.5" fill="none" stroke="${C.bad}" stroke-width="14"/><path d="M-39 -67.5 a78 78 0 0 1 78 0" fill="none" stroke="${C.sun}" stroke-width="14"/>`+T(-78,20,'TRUE','sm mid','style="font-size:13px;fill:'+C.good+';font-weight:800"')+T(78,20,'LIE','sm mid','style="font-size:13px;fill:'+C.bad+';font-weight:800"')+`<g class="${lie?'':'a-wig'}" style="transform-origin:0px 0px;transform-box:view-box"><line x1="0" y1="0" x2="${lie?52:0}" y2="${lie?-46:-70}" stroke="${C.ink}" stroke-width="5" stroke-linecap="round"/></g><circle r="8" fill="${C.ink}"/>`+T(0,40,'Lie detector','sm mid mut')+`</g>`;
+function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(440,310)}</g>`;
+  return G(baddie(122,374,1.72,{point:true}),'a-drop',.05,'data-bd="1"')
+   +G(`<path d="M232 26 h380 a16 16 0 0 1 16 16 v${claimLines.length*30+30} a16 16 0 0 1 -16 16 h-360 l-28 26 l6 -26 a16 16 0 0 1 -14 -16 v${-(claimLines.length*30+30)} a16 16 0 0 1 16 -16z" fill="#FBEFF4" stroke="#6B2D5C" stroke-width="3"/>`
+     +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
+   +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
+}
+function boss(title,{lines,claim,options,answer,why,taunt,hint,hints={},art=''}){
+  return {_ans:answer,options,part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+   mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
+     if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
+       a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
+       a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-12 430 70)"><rect x="352" y="44" width="156" height="58" rx="10" fill="none" stroke="${C.bad}" stroke-width="5"/>${T(430,86,'LIE!','h mid','style="fill:'+C.bad+';font-size:38px;letter-spacing:4px"')}</g>`;
+       const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
+     } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+       a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+(hints[o]||hint)),2200);}
+   },'lie'))}};
+}
+/* ===== Baddie Daddy: the hidden boss. Baddie Vampire's dad. He SOMETIMES lies. ===== */
+/* origin = feet centre, ~170 tall at s=1. o.busted: caught; o.point: arm raised with cane */
+function daddy(x,y,s=1,o={}){
+  const g='#4E8A47',g2='#3E7238',belly='#D2E5A4',ink=C.ink,b=o.busted,cape='#4B2A6B',gold='#E3B23C';
+  const eyes=b?`<path d="M-21 -128 l10 10 M-11 -128 l-10 10 M7 -130 l10 10 M17 -130 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+   :`<ellipse cx="-16" cy="-123" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="-15" cy="-122" rx="1.8" ry="5" fill="${ink}"/>
+     <ellipse cx="13" cy="-125" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="14" cy="-124" rx="1.8" ry="5" fill="${ink}"/>
+     <circle cx="13" cy="-125" r="11" fill="none" stroke="${gold}" stroke-width="3"/><path d="M23 -120 q14 20 4 46" stroke="${gold}" stroke-width="1.5" fill="none"/>`;
+  const brows=b?'':`<path d="M-28 -138 q10 -6 20 2 M2 -140 q10 -8 22 0" stroke="#E9EEF1" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  const hat=`<g transform="${b?'translate(100 134) rotate(-10)':''}"><rect x="-26" y="-182" width="48" height="40" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/><rect x="-26" y="-156" width="48" height="9" fill="${cape}"/><rect x="-38" y="-146" width="72" height="9" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/></g>`;
+  const cane=o.point?`<path d="M30 -60 q24 -12 40 -34" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="72" cy="-96" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><line x1="74" y1="-110" x2="66" y2="-40" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="75" cy="-112" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`
+   :`<ellipse cx="30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 30 -50)"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="40" cy="-46" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z" fill="${cape}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-74 0 h148" stroke="${gold}" stroke-width="5"/><path d="M-30 -78 q-24 34 -30 74 h120 q-6 -40 -30 -74z" fill="#7A3B8F"/>
+  <path d="M-30 -10 q-36 2 -46 -20 q24 6 44 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-40" rx="32" ry="38" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-36" rx="20" ry="28" fill="${belly}"/><path d="M-17 -50 h34 M-19 -37 h38 M-17 -24 h34" stroke="${g2}" stroke-width="2"/>
+  <path d="M-16 -74 l16 10 l16 -10 l-6 14 h-20z" fill="#fff" stroke="${ink}" stroke-width="2"/><path d="M-8 -68 l8 8 l8 -8 l-8 -4z" fill="${b?C.bad:'#B3243A'}" stroke="${ink}" stroke-width="1.5"/>
+  ${b?`<circle cx="6" cy="-30" r="8" fill="none" stroke="${gold}" stroke-width="3"/>`:''}
+  <ellipse cx="-17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -30 -50)"/>${cane}
+  <path d="M-44 -78 l-18 -40 l24 18 l7 -24 l13 33z M44 -78 l18 -40 l-24 18 l-7 -24 l-13 33z" fill="${cape}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-104" rx="36" ry="28" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M12 -112 q52 -4 56 13 q2 16 -54 18z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="62" cy="-106" r="2.3" fill="${ink}"/><circle cx="53" cy="-107" r="2.3" fill="${ink}"/>
+  <path d="M10 -84 q14 10 26 0 q12 10 26 -2 q-6 12 -26 6 q-20 8 -26 -4z" fill="#F4F6F8" stroke="${ink}" stroke-width="2"/>
+  <circle cx="-16" cy="-124" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-126" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${brows}${hat}
+  <circle cx="-24" cy="-98" r="2" fill="${g2}"/><circle cx="-16" cy="-92" r="2" fill="${g2}"/><circle cx="-28" cy="-90" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+FACES.daddy=()=>daddy(36,124,.62,{still:true});
+VOICE.daddy={en:[.8,.35],zh:[.7,.4],pref:VMALE};
+const DD='<b class="dd">Baddie Daddy:</b> ';
+PARTS.boss='Baddie Vampire';PARTS.daddy='Baddie Daddy';
+(function(){const st=document.createElement('style');st.textContent=`
+ .bubble b.dd{color:#4B2A6B} .tag.daddy{background:#4B2A6B} .dots button.daddy:not(.done):not([aria-current="true"]){background:#E4DAF0;border-color:#4B2A6B}
+ .parts button[data-part="daddy"]{border-color:#4B2A6B;color:#4B2A6B} .parts button[data-part="daddy"][aria-current="true"]{background:#4B2A6B;color:#fff}
+ .ui button.opt{font-size:18px;text-align:left;max-width:100%}
+ .ui button.tf{font-size:20px;min-width:220px}
+ .ui button.pick[aria-pressed="true"]{background:var(--sky);color:#fff}
+ .ui button.tok{font-size:20px;min-width:0;padding:6px 12px 3px}
+ .ui button.tok[aria-pressed="true"]{background:var(--bad);color:#fff;text-decoration:line-through}
+ .ui button.key{min-width:58px;font-size:24px}
+ .ui .pad{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:var(--display);font-weight:800;font-size:26px}
+ .ui .pad output{min-width:140px;padding:6px 16px 2px;border:3px solid var(--ink);border-radius:14px;background:#fff;text-align:center}
+ .ui .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}`;document.head.appendChild(st);})();
+/* stage: Daddy on the left, a wrapped speech bubble on the right, optional art below the bubble */
+function wrapLines(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduce((n,c)=>n+(CJ.test(c)?1.9:1),0);const toks=t.match(/[⺀-鿿＀-￯　-〿“”]|[^\s⺀-鿿＀-￯　-〿“”]+|\s+/g)||[];const L=[];let c='';
+  toks.forEach(x=>{if(/^\s+$/.test(x)){if(c)c+=' ';return}if(W(c+x)>max&&c.trim()&&!/^[，。！？、：；”）]$/.test(x)){L.push(c.trim());c=x}else c+=x});if(c.trim())L.push(c.trim());return L}
+function daddyStage(text,art='',head='Baddie Daddy says:'){const L=wrapLines(text,34),h=L.length*28+46;
+  return G(daddy(118,384,1.45,{point:true}),'a-drop',.05,'data-dd="1"')
+   +G(`<path d="M248 18 h364 a16 16 0 0 1 16 16 v${h-32} a16 16 0 0 1 -16 16 h-344 l-28 24 l6 -24 a16 16 0 0 1 -14 -16 v${-(h-32)} a16 16 0 0 1 16 -16z" fill="#F1EAF8" stroke="#4B2A6B" stroke-width="3"/>`
+     +T(266,44,head,'sm','style="fill:#4B2A6B;font-weight:800"')+L.map((l,k)=>T(266,74+k*28,l,'lab')).join(''),'a-pop',.3)
+   +`<g class="stamp"></g>`+(art?`<g transform="translate(0 ${Math.max(0,h-110)})">${G(art,'a-fade',.6)}</g>`:'');}
+const stamp=(a,truth)=>{a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-10 470 ${60})"><rect x="380" y="30" width="180" height="60" rx="10" fill="none" stroke="${truth?C.good:C.bad}" stroke-width="5"/>${T(470,74,truth?'TRUE!':'LIE!','h mid','style="fill:'+(truth?C.good:C.bad)+';font-size:38px;letter-spacing:4px"')}</g>`};
+const bust=a=>{const g=a.q('[data-dd]');if(g)g.innerHTML=daddy(118,384,1.45,{busted:true})};
+const shuf=x=>[...x].sort(()=>Math.random()-.5);
+const nope=(a,taunt,hint)=>{a.as('daddy',DD+(taunt||'Ho ho ho! Wrong, little one.'));a.later(()=>a.as('otter',CH+hint),2300)};
+const winD=(a,why)=>{bust(a);setWho('otter');a.win('<b>You beat him!</b> '+why)};
+/* ---- question types ---- */
+/* 1. Truth or lie, then WHY */
+function tl(title,{claim,truth,reasons,reason,why,hint,hint2,hints={},art='',taunt}){return {_ans:{truth,reason},options:reasons,part:'daddy',title,who:'daddy',say:DD+claim+' <i>Am I telling the truth… or a lie?</i>',draw:()=>daddyStage(claim,art),
+ mount:a=>{let step=1;const s2=()=>{step=2;a.ui.innerHTML='';a.say(CH+`Right, he was ${truth?'telling the <b>truth</b>':'<b>lying</b>'}! Now the hard part: <b>WHY?</b>`);
+   shuf(reasons).forEach(r=>a.btn(r,b=>{if(step!==2)return;if(r===reason){step=3;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,'Ho ho! Right answer, wrong reason. That doesn\'t count!',hints[r]||hint2||hint)}},'opt'))};
+  [['😇 He is telling the TRUTH',true],['😈 He is telling a LIE',false]].forEach(([l,v])=>a.btn(l,b=>{if(step!==1)return;if(v===truth){b.classList.add('ok');stamp(a,truth);a.later(s2,900)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'tf'));}}}
+/* 2. Hard multiple choice (5-6 options) */
+function mc(title,{q,options,answer,why,hint,hints={},art='',taunt}){return {_ans:answer,options,part:'daddy',title,who:'daddy',say:DD+q,draw:()=>daddyStage(q,art),
+ mount:a=>{let done=false;shuf(options).forEach(o=>a.btn(o,b=>{if(done)return;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hints[o]||hint)}},'opt'))}}}
+/* 3. Type the answer on a keypad */
+function num(title,{q,answer,unit='',why,hint,art='',keys=[],taunt}){return {_ans:String(answer),part:'daddy',title,who:'daddy',say:DD+q+' <i>Type your answer.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{let v='',done=false;const pad=document.createElement('div');pad.className='pad';pad.innerHTML=`<output>?</output><span>${unit}</span>`;a.ui.appendChild(pad);
+  const out=pad.querySelector('output'),upd=()=>out.textContent=v||'?';const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  const mk=(l,fn,c='key')=>{const b=document.createElement('button');b.type='button';b.className=c;b.innerHTML=l;b.onclick=()=>fn(b);row.appendChild(b);return b};
+  [...'1234567890',...keys].forEach(k=>mk(k,()=>{if(done||v.length>=7)return;v+=k;upd()}));mk('⌫',()=>{if(done)return;v=v.slice(0,-1);upd()});
+  mk('Check ✓',b=>{if(done||!v)return;if(v===String(answer)){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`${v}${unit?' '+unit:''}? Ho ho ho! Not even close.`,hint)}},'go');}}}
+/* 4. Pick ALL the correct ones */
+function multi(title,{q,options,correct,why,hint,art='',taunt}){return {_ans:correct,options,part:'daddy',title,who:'daddy',say:DD+q+' <i>Pick ALL the right ones, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  shuf(options).forEach(o=>{const b=document.createElement('button');b.type='button';b.className='pick opt';b.innerHTML=o;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(o)?sel.delete(o):sel.add(o);b.setAttribute('aria-pressed',sel.has(o))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=correct.length===sel.size&&correct.every(c=>sel.has(c));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{const wrong=[...sel].filter(x=>!correct.includes(x)).length+correct.filter(x=>!sel.has(x)).length;b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`Ho ho! ${wrong===1?'One choice is':wrong+' choices are'} still wrong.`,hint)}},'go');}}}
+/* 5. Put in order */
+function order(title,{q,items,why,hint,art='',taunt}){return {_ans:items,part:'daddy',title,who:'daddy',say:DD+q+' <i>Tap them in the right order.</i>',draw:()=>daddyStage(q,art)+`<g class="seq"></g>`,
+ mount:a=>{let n=0;const show=()=>{a.q('.seq').innerHTML=items.slice(0,n).map((t,k)=>T(270,250+k*26,(k+1)+'. '+t.replace(/<[^>]+>/g,''),'sm','style="font-weight:800;fill:'+C.good+'"')).join('')};
+  shuf(items).forEach(t=>a.btn(t,b=>{if(b.disabled)return;if(t===items[n]){n++;b.disabled=true;b.classList.add('ok');show();if(n===items.length)winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'opt'));}}}
+/* 6. Tap the mistake(s) */
+function spot(title,{q,tokens,wrong,why,hint,art='',taunt}){return {_ans:wrong,part:'daddy',title,who:'daddy',say:DD+q+' <i>Tap every wrong part, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  tokens.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='tok';b.innerHTML=t;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(i)?sel.delete(i):sel.add(i);b.setAttribute('aria-pressed',sel.has(i))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=wrong.length===sel.size&&wrong.every(i=>sel.has(i));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||(sel.size<wrong.length?'Ho ho! You missed something.':'Ho ho! Some of those were right all along.'),hint)}},'go');}}}
+/* intro, rules and finale */
+const daddyIntro=(subject)=>[{part:'daddy',title:'Who is THAT?',who:'daddy',say:DD+`Ho… ho… ho. So you beat my son, Baddie Vampire? Impressive. I am <b>Baddie Daddy</b>, his father. Unlike my silly son, I don't <i>always</i> lie. <b>Sometimes I tell the truth.</b> Good luck spotting which is which in my super-hard ${subject} challenge.`,
+  draw:()=>G(`<rect x="0" y="0" width="640" height="400" rx="16" fill="#2B1E3A" opacity=".9"/>`,'')+G(daddy(330,388,2.15),'a-drop',.2)+G(baddie(560,392,.8,{still:true})+T(560,250,'"Daddy!"','sm mid','style="fill:#fff"'),'a-pop',1)+G(otter(80,392,.8,{still:true})+T(80,262,'Gulp!','sm mid','style="fill:#fff"'),'a-pop',1.3)+G(T(330,40,'THE HIDDEN BOSS','h mid','style="fill:#E3B23C;letter-spacing:3px"'),'a-fade',.6)},
+ {part:'daddy',title:'How to beat Baddie Daddy',who:'otter',say:CH+'Careful! Daddy <b>sometimes tells the truth</b>. Think first. Then show <b>why</b>. Some questions need a number, some need <b>all</b> the right answers.',
+  draw:()=>[['😇 / 😈','Truth or lie?','then choose WHY'],['1 2 3','Type it','use the keypad'],['✓ ✓ ✗','Pick ALL','maybe more than one'],['✗','Tap the mistake','find every wrong part'],['1→2→3','Put in order','tap in sequence'],['A–E','Tricky choices','up to five options']]
+  .map(([ic,n,d],k)=>{const x=20+(k%3)*204,y=24+Math.floor(k/3)*180;return G(box(x,y,192,166,'#fff',16)+T(x+96,y+60,ic,'h mid','style="fill:#4B2A6B"')+T(x+96,y+104,n,'lab mid')+T(x+96,y+130,d,'sm mid mut'),'a-pop',.1+k*.12)}).join('')}];
+const daddyEnd=(subject)=>({part:'daddy',title:'Baddie Daddy is beaten!',who:'otter',say:CH+`You did it! You out-thought <b>Baddie Daddy</b> himself. You didn't just find answers: you explained <b>why</b>. That's how real ${subject} champions think. Count your stars: every star is a challenge you beat.`,
+ draw:()=>G(daddy(270,388,1.2,{busted:true}),'a-pop',.1)+G(baddie(420,392,.7,{busted:true}),'a-pop',.3)+G(otter(85,392,1.05,{wave:true})+wala(560,392,.95,{wave:true}),'a-pop',.5)+G(star(200,80,34)+star(440,80,34),'a-pop',.8)+T(320,96,'Super brain!','h mid acc'),
+ mount:a=>a.later(()=>a.win(`You beat Baddie Daddy! Stars: <b>${earned.size} of ${S.filter(x=>x._ans!==undefined).length}</b>.`),500)});
+/* Baddie Daddy: super-hard Life Science */
+
+/* NEW combined boss level: P3 Science, following the MOE Primary Science syllabus (lower block).
+   Group 1 = Baddie Vampire, Group 2 = Baddie Daddy. Subgroups = MOE themes in each title:
+   Diversity (living things, plants, animals, fungi, bacteria, materials) · Cycles (life cycles) ·
+   Systems (plant parts, digestive system) · Interactions (magnets). */
+PARTS.learn='How to play';
+document.querySelectorAll('.parts button').forEach(b=>{if(b.dataset.part==='learn')b.textContent=PARTS.learn});
+const emo=(e,x=440,y=310,sz=72)=>T(x,y,e,'big mid',`style="font-size:${sz}px"`);
+const S=[
+{part:'learn',title:'How to beat Baddie: P3 Science',say:CH+'Baddie Vampire has read the <b>P3 Science</b> book… upside down. He <b>always lies</b>. Use what you learnt in class to catch him!',
+ draw:()=>G(baddie(450,385,2,{point:false}),'a-drop',.1)+G(otter(130,385,1.4,{wave:true}),'a-pop',.4)+G(box(30,20,300,170,'#fff',18)+T(180,52,'4 big themes','lab mid acc')+T(50,86,'🔎 Diversity','lab')+T(50,114,'🔄 Cycles','lab')+T(50,142,'⚙️ Systems','lab')+T(50,170,'🧲 Interactions','lab'),'a-pop',.8)},
+boss('Diversity · Living things',{lines:['A car moves, so a car','is a living thing!'],claim:'A car moves, so a car is a living thing!',options:['Non-living: it can\'t grow or reproduce.','Living: it moves.','Living: it needs fuel, like food.'],answer:'Non-living: it can\'t grow or reproduce.',
+ why:'Living things <b>grow</b>, <b>reproduce</b>, respond and need food, air and water. A car only moves when we drive it.',taunt:'Mwahaha! My car eats petrol for breakfast!',hint:'Can a car grow bigger, or have baby cars?',
+ hints:{'Living: it moves.':'Moving alone is not enough. Can it grow?','Living: it needs fuel, like food.':'Fuel is not food for growing. Can a car reproduce?'},art:emo('🚗')}),
+boss('Diversity · Plants',{lines:['ALL plants have','flowers!'],claim:'All plants have flowers!',options:['Ferns and mosses have no flowers.','Every plant has flowers.','Only trees have flowers.'],answer:'Ferns and mosses have no flowers.',
+ why:'Plants can be <b>flowering</b> (hibiscus, rice) or <b>non-flowering</b>. Ferns and mosses make <b>spores</b> instead of seeds.',taunt:'Hehehe! I saw a fern flower once… in my dreams.',hint:'Think of a fern. Have you ever seen it flower?',
+ hints:{'Every plant has flowers.':'That is Baddie\'s lie. Think of ferns and mosses.','Only trees have flowers.':'Hibiscus and rice plants flower too, and they are not trees.'},art:emo('🌿')}),
+boss('Diversity · Animals',{lines:['Dolphins live in the sea,','so they breathe with gills!'],claim:'Dolphins live in the sea, so they breathe with gills!',options:['They breathe air with lungs.','They breathe with gills.','They don\'t need to breathe.'],answer:'They breathe air with lungs.',
+ why:'Dolphins are <b>mammals</b>: they come up to breathe air with <b>lungs</b> and feed their young milk.',taunt:'Mwahaha! Blub blub!',hint:'Why do dolphins keep coming up to the surface?',
+ hints:{'They breathe with gills.':'Fish have gills. Dolphins come up for air.','They don\'t need to breathe.':'All animals need air.'},art:emo('🐬')}),
+boss('Diversity · Fungi',{lines:['Fungi make their own food','from sunlight, like plants!'],claim:'Fungi make their own food from sunlight, like plants!',options:['They feed on dead or rotting things.','They make food from sunlight.','They catch insects.'],answer:'They feed on dead or rotting things.',
+ why:'Fungi have no green parts, so they <b>cannot make food</b>. They feed on dead or decaying matter, like bread mould does.',taunt:'Hehehe! Mushrooms love sunbathing!',hint:'Does bread mould need sunlight? It grows in a dark cupboard!',
+ hints:{'They make food from sunlight.':'Fungi have no green parts to use sunlight.','They catch insects.':'Fungi can\'t move to catch anything.'},art:emo('🍄')}),
+boss('Diversity · Bacteria',{lines:['You can see bacteria with','a magnifying glass!'],claim:'You can see bacteria with a magnifying glass!',options:['You need a microscope.','A magnifying glass works.','You can see them with your eyes.','Bacteria are invisible forever.'],answer:'You need a microscope.',
+ why:'Bacteria are far too small for a magnifying glass. Scientists use a <b>microscope</b>.',taunt:'Mwahaha! I see one! It\'s waving!',hint:'Which tool makes things look hundreds of times bigger?',
+ hints:{'A magnifying glass works.':'A magnifying glass only makes things a few times bigger.','You can see them with your eyes.':'They are much too tiny.','Bacteria are invisible forever.':'A microscope can show them.'},art:emo('🔬')}),
+boss('Diversity · Materials',{lines:['Windows are made of glass','because glass is STRONG!'],claim:'Windows are made of glass because glass is strong!',options:['Glass is transparent.','Glass is strong.','Glass is flexible.','Glass is magnetic.'],answer:'Glass is transparent.',
+ why:'We use glass for windows because it is <b>transparent</b>: it lets light through so we can see out.',taunt:'Hehehe! I\'ll play football against your window!',hint:'Why do we want to look through a window?',
+ hints:{'Glass is strong.':'Glass breaks easily! That is not the reason.','Glass is flexible.':'Glass can\'t bend.','Glass is magnetic.':'Glass is not attracted to magnets.'},art:emo('🪟')}),
+boss('Diversity · Waterproof',{lines:['Raincoats are made of cotton,','because cotton is waterproof!'],claim:'Raincoats are made of cotton, because cotton is waterproof!',options:['Plastic is waterproof; cotton soaks up water.','Cotton is waterproof.','Paper is best for raincoats.','Raincoats should soak up rain.'],answer:'Plastic is waterproof; cotton soaks up water.',
+ why:'Cotton <b>absorbs</b> water. Raincoats use <b>plastic</b> or rubber, which are <b>waterproof</b>.',taunt:'Mwahaha! Soggy socks for everyone!',hint:'What happens to your cotton T-shirt in the rain?',
+ hints:{'Cotton is waterproof.':'Drip water on cotton. Does it soak in?','Paper is best for raincoats.':'Paper gets soggy and tears.','Raincoats should soak up rain.':'Then you would get wet!'},art:emo('🧥☔',440,310,60)}),
+boss('Cycles · Animal life cycles',{lines:['ALL animals have 4 stages,','just like the butterfly!'],claim:'All animals have 4 stages, just like the butterfly!',options:['Some have 3: egg → nymph → adult.','All animals have 4 stages.','All animals have 2 stages.','Insects have no life cycle.'],answer:'Some have 3: egg → nymph → adult.',
+ why:'The butterfly has 4 stages. The <b>cockroach</b> and grasshopper have <b>3</b>: egg → nymph → adult. No pupa!',taunt:'Hehehe! Cockroach butterflies!',hint:'Think of the cockroach. Does it make a pupa?',
+ hints:{'All animals have 4 stages.':'Cockroaches skip the pupa.','All animals have 2 stages.':'A butterfly has 4. A cockroach has 3.','Insects have no life cycle.':'Every living thing has a life cycle.'},art:emo('🪳')}),
+boss('Cycles · Plant life cycles',{lines:['A seed needs SUNLIGHT','to germinate!'],claim:'A seed needs sunlight to germinate!',options:['Water, air and warmth.','Sunlight only.','Soil only.','Nothing at all.'],answer:'Water, air and warmth.',
+ why:'A seed needs <b>water, air and the right warmth</b> to germinate. It has food inside, so it doesn\'t need light yet. Green bean seeds sprout in a dark cupboard!',taunt:'Mwahaha! My seeds wear sunglasses!',hint:'Remember the green bean experiment on wet cotton wool.',
+ hints:{'Sunlight only.':'Seeds can sprout in the dark. What do they really need?','Soil only.':'Seeds sprout on wet cotton wool. Soil is not needed.','Nothing at all.':'A dry seed stays asleep.'},art:emo('🌱')}),
+boss('Systems · Plant parts',{lines:['The stem makes food','for the plant!'],claim:'The stem makes food for the plant!',options:['Leaves make food.','The stem makes food.','The roots make food.','The flowers make food.'],answer:'Leaves make food.',
+ why:'<b>Leaves</b> make food. The <b>stem</b> holds the plant up and carries water and food. <b>Roots</b> take in water.',taunt:'Hehehe! Stems are the kitchen!',hint:'Which green part faces the sun?',
+ hints:{'The stem makes food.':'The stem carries water and food. It doesn\'t make it.','The roots make food.':'Roots take in water. They are in the dark.','The flowers make food.':'Flowers make seeds.'},art:emo('🌻')}),
+boss('Systems · Digestion',{lines:['Digestion only happens','in the stomach!'],claim:'Digestion only happens in the stomach!',options:['Mouth, stomach and small intestine.','Only the stomach.','Only the mouth.','Only the large intestine.'],answer:'Mouth, stomach and small intestine.',
+ why:'Digestion <b>starts in the mouth</b>, goes on in the <b>stomach</b>, and is <b>completed in the small intestine</b>.',taunt:'Mwahaha! My tummy does everything!',hint:'What happens to food when you chew?',
+ hints:{'Only the stomach.':'Chewing in the mouth is digestion too.','Only the mouth.':'Food keeps being broken down after you swallow.','Only the large intestine.':'The large intestine takes in water. Digestion is finished before that.'},art:emo('🍎➜😋',440,310,56)}),
+boss('Interactions · Magnets, the hardest one',{lines:['Magnets attract ALL metals:','cans, coins, keys!'],claim:'Magnets attract all metals: cans, coins and keys!',options:['Only iron, steel, nickel and cobalt.','All metals.','Only aluminium cans.','Only copper.'],answer:'Only iron, steel, nickel and cobalt.',
+ why:'Magnets attract only <b>magnetic materials</b>: <b>iron, steel, nickel and cobalt</b>. Aluminium cans and copper are not attracted.',taunt:'Hehehe! My magnet will steal all your coins!',hint:'Try a magnet on a drink can. What happens?',
+ hints:{'All metals.':'Try a magnet on an aluminium drink can. Does it stick?','Only aluminium cans.':'Aluminium is NOT magnetic.','Only copper.':'Copper is NOT magnetic.'},art:emo('🧲')}),
+{part:'boss',_door:true,title:'Baddie is beaten!',who:'otter',say:CH+'You caught <b>all 12 lies</b> across the four P3 themes: Diversity, Cycles, Systems and Interactions!',
+ draw:()=>G(baddie(320,388,1.2,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(320,70,40),'a-pop',.8)+T(320,150,'P3 Science champion!','h mid acc'),
+ mount:a=>a.later(()=>a.win(),600)},
+...daddyIntro('P3 science'),
+tl('Interactions · Magnet poles',{claim:'Like poles repel. Unlike poles attract.',truth:true,art:T(440,320,'N S  ➜➜  N S','big mid','style="font-size:40px"'),
+ reasons:['N–N push apart; N–S pull together.','N–N pull together.','All poles always attract.','Poles only work on Mondays.'],
+ reason:'N–N push apart; N–S pull together.',why:'True! <b>Like poles repel</b> (N–N, S–S). <b>Unlike poles attract</b> (N–S).',hint:'Try pushing two N poles together. What do you feel?',hint2:'Which reason matches what magnets really do?'}),
+multi('Interactions · Magnetic materials',{q:'Which of these will a magnet attract?',options:['iron nail','steel paper clip','aluminium can','copper wire','plastic ruler','steel scissors','wooden pencil','glass marble'],correct:['iron nail','steel paper clip','steel scissors'],
+ why:'Iron and steel are <b>magnetic</b>. Aluminium, copper, plastic, wood and glass are not.',hint:'Only iron, steel, nickel and cobalt.'}),
+order('Cycles · Mosquito life cycle',{q:'Put a mosquito\'s life cycle in order.',items:['egg (in still water)','larva','pupa','adult'],
+ why:'Egg → larva → pupa → adult. The eggs and larvae live in <b>still water</b>, which is why we clear stagnant water to stop dengue!',hint:'It has 4 stages, like the butterfly.'}),
+tl('Cycles · Cockroach',{claim:'A cockroach turns into a pupa before it becomes an adult.',truth:false,
+ reasons:['It has 3 stages: egg, nymph, adult.','It has 4 stages, like a butterfly.','It is born as an adult.','Cockroaches have no eggs.'],
+ reason:'It has 3 stages: egg, nymph, adult.',why:'A <b>lie</b>! The cockroach has <b>3 stages</b>: egg → nymph → adult. A nymph looks like a small adult with no wings.',hint:'Does a young cockroach look like a small adult?',hint2:'Which insect DOES have a pupa?',art:emo('🪳')}),
+mc('Diversity · Plants',{q:'Which of these is a NON-flowering plant?',options:['fern','hibiscus','sunflower','rice plant','mango tree'],answer:'fern',
+ why:'A <b>fern</b> makes spores, not flowers. Hibiscus, sunflower, rice and mango all flower.',hint:'Which one makes spores under its leaves?',
+ hints:{'hibiscus':'Hibiscus has big red flowers.','sunflower':'It is even called a FLOWER.','rice plant':'Rice plants have tiny flowers that become grains.','mango tree':'Mango trees flower before the mangoes grow.'}}),
+tl('Diversity · Fungi',{claim:'Mushrooms and bread mould are both fungi.',truth:true,
+ reasons:['Both feed on other things and grow from spores.','Both are green plants.','Both are animals.','Only mushrooms are fungi.'],
+ reason:'Both feed on other things and grow from spores.',why:'True! Mushrooms and bread mould are both <b>fungi</b>: they can\'t make their own food and they reproduce by <b>spores</b>.',hint:'Can either of them make food from sunlight?',hint2:'Is mould a plant?',art:emo('🍄🍞',440,310,60)}),
+mc('Diversity · Materials',{q:'Why are car tyres made of rubber?',options:['Rubber is strong and flexible.','Rubber is transparent.','Rubber is magnetic.','Rubber soaks up water.','Rubber is light as a feather.'],answer:'Rubber is strong and flexible.',
+ why:'Tyres must be <b>strong</b> (to carry the car) and <b>flexible</b> (to bend over bumps).',hint:'What must a tyre do on a bumpy road?',
+ hints:{'Rubber is transparent.':'You can\'t see through a tyre.','Rubber is magnetic.':'Rubber is not magnetic.','Rubber soaks up water.':'Rubber is waterproof.','Rubber is light as a feather.':'Tyres are quite heavy!'}}),
+mc('Diversity · Fair test: waterproof',{q:'Mei drips 10 drops of water on each cloth. Cloth A soaks up 8 drops, B soaks up 3, C soaks up 0. Which cloth is MOST waterproof?',options:['C','A','B','They are all the same'],answer:'C',
+ why:'Cloth <b>C</b> soaked up no water at all, so it is the most <b>waterproof</b>.',hint:'Waterproof means it does NOT soak up water.',
+ hints:{'A':'A soaked up the MOST water.','B':'B still soaked up 3 drops.','They are all the same':'They soaked up different amounts.'}}),
+spot('Systems · Plant parts',{q:'One part of my plant fact is wrong. Tap it!',tokens:['Roots','take in water,','leaves','make food,','the stem','holds the plant up,','and flowers','make food too.'],wrong:[7],
+ why:'Flowers don\'t make food: they make <b>fruits and seeds</b>. Leaves make the food.',hint:'Which part grows into fruits and seeds?'}),
+order('Systems · Digestive system',{q:'Put the parts in the order food passes through them.',items:['mouth','gullet','stomach','small intestine','large intestine'],
+ why:'Mouth → gullet → stomach → small intestine → large intestine.',hint:'Food goes down a tube from the mouth to the stomach first.'}),
+tl('Systems · Absorbing food',{claim:'Digested food goes into the blood in the small intestine.',truth:true,
+ reasons:['The small intestine takes digested food into the blood.','Food goes into the blood in the mouth.','The stomach sends all food straight to the legs.','Food never enters the blood.'],
+ reason:'The small intestine takes digested food into the blood.',why:'True! Digestion is finished in the <b>small intestine</b>, and the digested food is <b>absorbed into the blood</b> there. The large intestine takes in water.',hint:'Where is digestion completed?',hint2:'What does the large intestine take in?'}),
+mc('Interactions · Fair test, the hardest one',{q:'Ali wants to find out which magnet is the strongest. Which test is FAIR?',options:['Count identical paper clips each magnet picks up.','Use bigger clips for the big magnet.','Test only one magnet.','Hold each magnet a different distance away.','Use iron clips for one, steel for the other.'],answer:'Count identical paper clips each magnet picks up.',
+ why:'Keep everything the <b>same</b> (same clips, same distance), and change only the magnet. The most clips = the strongest.',hint:'Only the MAGNET should be different.',
+ hints:{'Use bigger clips for the big magnet.':'Different clips is a second change.','Test only one magnet.':'You need to compare magnets.','Hold each magnet a different distance away.':'Distance changes the pull too. Keep it the same.','Use iron clips for one, steel for the other.':'Use the same clips for every magnet.'}}),
+daddyEnd('P3 science')];
+
+/* ---- one level, two bosses: Baddie Vampire first, then the hidden boss Baddie Daddy ---- */
+function daddySil(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z"/><ellipse cx="0" cy="-40" rx="32" ry="38"/><ellipse cx="0" cy="-104" rx="36" ry="28"/><path d="M12 -112 q52 -4 56 13 q2 16 -54 18z"/><rect x="-26" y="-182" width="48" height="40"/><rect x="-38" y="-146" width="72" height="9"/><circle cx="-16" cy="-124" r="12"/><circle cx="13" cy="-126" r="12"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#000" stroke-width="5"/></g>`}
+(function(){const k=S.findIndex(s=>s._door);if(k<0)return;const L=S[k],d0=L.draw,m0=L.mount;
+ L.draw=a=>`<g class="shadow" style="opacity:0;transition:opacity 1.5s"><g style="filter:brightness(0)" opacity=".28">${daddySil(440,400,1.75)}</g>${T(560,120,'?','big mid','style="fill:#4B2A6B"')}</g>`+(d0?d0(a):'');
+ L.mount=a=>{if(m0)m0(a);a.later(()=>{const g=a.q('.shadow');if(g)g.style.opacity=1;setWho('baddie');a.say(BD+'Waaah! I\'m telling my <b>DADDY</b>! He\'s much smarter than me… and he doesn\'t always lie!');
+   a.btn('🚪 Who is that shadow?',()=>go(S.findIndex(s=>s.part==='daddy')),'go');},2600)};})();
+if(location.hash==='#daddy'){const k=S.findIndex(s=>s.part==='daddy');if(k>0)i=k;}
+render();
+(function(){const nav=document.querySelector('.parts');if(!S.some(s=>s.part==='daddy')||nav.querySelector('[data-part="daddy"]'))return;
+ const b=document.createElement('button');b.type='button';b.dataset.part='daddy';b.textContent='🎩 '+PARTS.daddy;b.onclick=()=>go(S.findIndex(s=>s.part==='daddy'));nav.appendChild(b);
+ const vb=nav.querySelector('[data-part="boss"]');if(vb)vb.textContent='🧛 '+PARTS.boss;
+ b.setAttribute('aria-current',S[i].part==='daddy');})();
+
+</script>
+
+<script id="den-fireworks">
+/* Fireworks: a big show when a deck's final slide celebrates (deck done, Baddie Daddy beaten), a smaller one when
+   the last slide of a stage celebrates (e.g. Baddie beaten) or the last quiz star of a stage is earned. Generated by tools/den-polish.py. */
+(()=>{ if(typeof api!=='object'||typeof S==='undefined'||typeof render!=='function') return;
+  const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cols=['#FFB800','#FF6A2B','#2E9BE0','#2FA84F','#E83E6C','#8A55E0','#FF3B3B'];
+  let cv=null, parts=[], rockets=[], until=0, start=0, raf=0, shown=-1;
+  function show(big){ if(calm||document.hidden) return;
+    if(!cv){cv=document.createElement('canvas');cv.setAttribute('aria-hidden','true');
+      cv.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:40';document.body.appendChild(cv);}
+    const dpr=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);
+    const n=big?14:6, span=big?3200:1500, now=performance.now(); if(!raf) start=now;
+    for(let k=0;k<n;k++) rockets.push({t:now+k*span/n+Math.random()*180,x:innerWidth*(.1+.8*Math.random()),y:innerHeight+10,
+      ty:innerHeight*(.1+.35*Math.random()),c:cols[(Math.random()*7)|0],live:false});
+    until=Math.max(until,now+span+2400); if(!raf) raf=requestAnimationFrame(tick); }
+  function burst(r){ const m=80+(Math.random()*30|0), c2=cols[(Math.random()*7)|0], ring=Math.random()<.35, sc=Math.min(innerWidth,900)/900+.4;
+    for(let k=0;k<m;k++){const a=k/m*Math.PI*2+Math.random()*.08, v=(ring?5.2:2+Math.random()*4.4)*sc;
+      parts.push({x:r.x,y:r.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:1,c:k%3?r.c:c2,s:2.6+Math.random()*2,tw:Math.random()<.3});} }
+  function tick(now){ const g=cv.getContext('2d'); g.clearRect(0,0,innerWidth,innerHeight);
+    const fade=Math.min(1,(now-start)/400,Math.max(0,(until-now)/900)); g.fillStyle=`rgba(24,34,72,${.22*fade})`; g.fillRect(0,0,innerWidth,innerHeight);
+    for(const r of rockets){ if(now<r.t) continue; if(!r.live){r.live=true;r.vy=-(innerHeight-r.ty)/42;}
+      r.y+=r.vy; r.vy*=.985; g.fillStyle=r.c; g.beginPath(); g.arc(r.x,r.y,4,0,7); g.fill();
+      g.fillStyle='rgba(255,184,0,.6)'; g.fillRect(r.x-1.5,r.y+5,3,16);
+      if(r.y<=r.ty||r.vy>-1){burst(r);r.done=true;} }
+    rockets=rockets.filter(r=>!r.done);
+    for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vx*=.975; p.vy=p.vy*.975+.045; p.life-=.0085;
+      g.globalAlpha=Math.max(p.life,0)*(p.tw&&Math.random()<.4?.35:1); g.fillStyle=p.c; g.beginPath(); g.arc(p.x,p.y,p.s,0,7); g.fill();
+      g.strokeStyle=p.c; g.lineWidth=2; g.beginPath(); g.moveTo(p.x,p.y); g.lineTo(p.x-p.vx*4,p.y-p.vy*4); g.stroke(); }
+    g.globalAlpha=1; parts=parts.filter(p=>p.life>0);
+    if(now<until||parts.length||rockets.length) raf=requestAnimationFrame(tick); else {raf=0; cv.remove(); cv=null;} }
+  const last=()=>i===S.length-1;
+  const stageDone=k=>{ const sc=S[k]; if(!sc||!sc.quiz) return false;
+    const qs=S.map((s,j)=>j).filter(j=>S[j].part===sc.part&&S[j].quiz); return qs.length>1&&qs.every(j=>earned.has(j)); };
+  const conf0=confetti, win0=win, render0=render;
+  const partEnd=()=>!last()&&S[i+1]&&S[i+1].part!==S[i].part;
+  confetti=function(){ conf0.apply(this,arguments); if((last()||partEnd())&&shown!==i){shown=i;show(last());} };
+  win=function(){ const had=earned.has(i); win0.apply(this,arguments); if(!had&&earned.has(i)&&!last()&&stageDone(i)) show(false); };
+  render=function(){ shown=-1; return render0.apply(this,arguments); };
+  api.confetti=confetti; api.win=win;
+  addEventListener('resize',()=>{ if(cv){const d=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*d;cv.height=innerHeight*d;cv.getContext('2d').setTransform(d,0,0,d,0,0);} });
+})();
+</script>
+</body></html>

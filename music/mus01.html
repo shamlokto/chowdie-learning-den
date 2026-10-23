@@ -827,13 +827,8 @@ mq('check','Star check 4','flame',{q:'Name this note in the <b>bass clef</b>. Co
 mq('check','Star check 5','mommy',{q:'A <b>double sharp 𝄪</b> raises a note by how much?',art:()=>mroom()+noteCard('treble','Fx4'),options:['Two semitones','One semitone','Three semitones','One octave'],answer:'Two semitones',why:'Double sharp = two semitones up. F𝄪 sounds like G.',hint:'"Double" means twice as much as a sharp.'}),
 
 /* ---------- Mommy vs Baddie Daddy ---------- */
-{part:'boss',title:'Baddie Daddy wants a turn!',who:'daddy',say:DD+'Ho… ho… ho. A music class? I am <b>Baddie Daddy</b>. I know EVERYTHING about music… and sometimes I even tell the truth. Can you tell when I\'m lying?',
- draw:()=>mroom()+G(daddy(170,388,1.5,{point:true}),'a-drop',.1)+G(mommy(480,392,1.2,{still:true}),'a-pop',.5)+G(bubble(370,40,230,70,'My ears catch lies!','sm'),'a-pop',.9),
- mount:a=>a.later(()=>a.as('mommy',MM+'Don\'t worry! My big ears <b>always</b> catch Baddie Daddy\'s lies. Listen carefully, think, and decide: <b>True</b>, or a <b>lie</b>?'),3200)},
-dclaim('Daddy\'s claim 1',{claim:'In the alto clef, the middle line is middle C.',truth:true,why:'The C clef points straight at middle C, and in the alto clef it sits on the middle line.',art:noteCard('alto','C4',{x:250,y:200,w:220,sp:12,col:C4col})}),
-dclaim('Daddy\'s claim 2',{claim:'B♯ and C sound completely different. Everyone knows that!',truth:false,fix:['They sound the same: they are enharmonic.','B♯ is an octave higher than C.','B♯ is two semitones lower than C.'],answer:'They sound the same: they are enharmonic.',why:'B♯ is one semitone above B, which is C. Two names, one sound!',play:()=>playSeq([['B#3',1],['C4',1]])}),
-dclaim('Daddy\'s claim 3',{claim:'Trombones only ever read the treble clef.',truth:false,fix:['Trombones read the bass and tenor clefs.','Trombones only read the alto clef.','Trombones don\'t read any clef at all.'],answer:'Trombones read the bass and tenor clefs.',why:'My trombone reads the <b>bass clef</b>, and the <b>tenor clef</b> for high notes!',play:fanfare}),
-{part:'boss',title:'Lies caught!',who:'mommy',say:MM+'You caught Baddie Daddy! You can read <b>four clefs</b>, <b>ledger lines</b> and <b>enharmonic</b> notes. Next time: keys and scales! 🎺',
+dclaim('Daddy\'s claim',{claim:'Trombones only ever read the treble clef.',truth:false,fix:['Trombones read the bass and tenor clefs.','Trombones only read the alto clef.','Trombones don\'t read any clef at all.'],answer:'Trombones read the bass and tenor clefs.',why:'My trombone reads the <b>bass clef</b>, and the <b>tenor clef</b> for high notes!',play:fanfare}),
+{part:'boss',title:'Lies caught!',who:'mommy',say:MM+'You caught Baddie Daddy! You can read <b>four clefs</b>, <b>ledger lines</b> and <b>enharmonic</b> notes.  <br>🎺 <b>Trombone fun fact:</b> the <b>alto trombone</b> reads the <b>alto clef</b>, just like the viola! Next time: keys and scales! 🎺',
  draw:()=>mroom()+G(mommy(200,388,1.5,{trombone:true}),'a-pop',.1)+G(flame(440,388,1.1,{wave:true}),'a-pop',.3)+G(daddy(580,388,.8,{busted:true}),'a-fade',.5),mount:a=>{a.later(()=>{fanfare();a.win()},600)}},
 ];
 

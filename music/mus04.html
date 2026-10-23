@@ -829,12 +829,8 @@ mq('check','Star check 4','flame',{q:'Which of these is an <b>irregular</b> time
 mq('check','Star check 5','mommy',{q:'A whole bar of silence in <b>3/4</b> is written as a…',art:()=>mroom()+rowCard(['rw','||'],{x:200,w:240,y:150,time:'3/4',u:60}),options:['semibreve rest','dotted minim rest','minim rest','crotchet rest'],answer:'semibreve rest',why:'A whole bar rest is always a semibreve rest, even in 3/4!',hint:'It\'s a special rule for a whole bar of silence.'}),
 
 /* ---------- Mommy vs Baddie Daddy ---------- */
-{part:'boss',title:'Baddie Daddy keeps time',who:'daddy',say:DD+'Tick… tock… tick… tock. My golden watch never stops. Neither do my FACTS. Ho ho!',
- draw:()=>mroom()+G(daddy(170,388,1.5,{point:true}),'a-drop',.1)+G(mommy(480,392,1.2,{baton:true,still:true}),'a-pop',.5)},
-dclaim('Daddy\'s claim 1',{claim:'6/8 has six beats in every bar, so it\'s compound… sextuple!',truth:false,fix:['6/8 has 2 dotted-crotchet beats: compound duple.','6/8 has 3 crotchet beats: simple triple.','6/8 has 6 crotchet beats: simple sextuple.'],answer:'6/8 has 2 dotted-crotchet beats: compound duple.',why:'There are 6 <b>quavers</b>, but they make <b>2 dotted-crotchet beats</b>. 6/8 is compound duple.',play:()=>rplay([{beam:['8','8','8']},{beam:['8','8','8']},'|',{beam:['8','8','8']},'q.'],100)}),
-dclaim('Daddy\'s claim 2',{claim:'A double-dotted minim lasts three and a half crotchet beats.',truth:true,why:'2 + 1 + ½ = 3½. Correct this time!'}),
-dclaim('Daddy\'s claim 3',{claim:'In compound time, a duplet means three notes in the time of two.',truth:false,fix:['A duplet is 2 notes in the time of 3.','A duplet is 4 notes in the time of 2.','A duplet is 2 notes in the time of 4.'],answer:'A duplet is 2 notes in the time of 3.',why:'That was a <b>triplet</b>! A duplet squeezes <b>2 notes into the time of 3</b>.'}),
-{part:'boss',title:'Right on time!',who:'mommy',say:MM+'You keep time better than Baddie Daddy\'s golden watch! Next: <b>chords and cadences</b>, the harmony that makes music sing. 🎺',
+dclaim('Daddy\'s claim',{claim:'In compound time, a duplet means three notes in the time of two.',truth:false,fix:['A duplet is 2 notes in the time of 3.','A duplet is 4 notes in the time of 2.','A duplet is 2 notes in the time of 4.'],answer:'A duplet is 2 notes in the time of 3.',why:'That was a <b>triplet</b>! A duplet squeezes <b>2 notes into the time of 3</b>.'}),
+{part:'boss',title:'Right on time!',who:'mommy',say:MM+'You keep time better than Baddie Daddy\'s golden watch!  <br>🎺 <b>Trombone fun fact:</b> the trombone\'s great-great-grandparent was the <b>sackbut</b>, played over 500 years ago! Next: <b>chords and cadences</b>, the harmony that makes music sing. 🎺',
  draw:()=>mroom()+G(mommy(200,388,1.5,{trombone:true}),'a-pop',.1)+G(flame(440,388,1.1,{wave:true}),'a-pop',.3)+G(daddy(580,388,.8,{busted:true}),'a-fade',.5),mount:a=>{a.later(()=>{fanfare();a.win()},600)}},
 ];
 

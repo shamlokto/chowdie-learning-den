@@ -440,7 +440,7 @@ const S=[
   .map(([m,z,p,ic],k)=>{const x=20+(k%3)*204,y=20+Math.floor(k/3)*176;return G(box(x,y,192,164,'#fff',14)+T(x+30,y+44,m,'zh mid','style="font-size:36px;fill:'+C.accent+'"')+`<g transform="translate(${x+120} ${y+50})">${ic}</g>`+zhw(x+96,y+118,z,p,'',24),'a-pop',.1+k*.15)}).join('')},
 
 {part:'learn',title:'Where is it? 在哪里？',say:CH+'Position words tell us <b>where</b> something is. <b>上面</b> on top, <b>下面</b> under, <b>里面</b> inside, <b>旁边</b> beside, <b>前面</b> in front, <b>后面</b> behind. Say it like this: 球在盒子<b>上面</b>。The ball is on top of the box.',
- draw:()=>POS.map((p,k)=>{const x=110+(k%3)*210,y=k<3?100:280;return G(posScene(x,y,p,1)+zhw(x,y+86,p[0],p[1],p[2],24),'a-pop',.1+k*.15)}).join('')},
+ draw:()=>POS.map((p,k)=>{const x=110+(k%3)*210,y=k<3?94:262;return G(posScene(x,y,p,1)+zhw(x,y+86,p[0],p[1],p[2],24),'a-pop',.1+k*.15)}).join('')},
 
 {part:'learn',title:'Where is my pencil? 我的铅笔在哪里？',who:'wala',say:WL+'Oh no! 我的铅笔在哪里？ Where is my pencil? Chowdie found it: 你的铅笔在桌子上面。Your pencil is on the desk. Then I say 谢谢你！ and Chowdie says 不客气！ (You\'re welcome!)',
  draw:()=>dlg(600,8,0,'我的铅笔在哪里？','Wǒ de qiānbǐ zài nǎlǐ?','','r',.1,'wala')+dlg(40,86,0,'你的铅笔在桌子上面。','Nǐ de qiānbǐ zài zhuōzi shàngmiàn.','','l',.8,'otter')
@@ -469,10 +469,7 @@ const S=[
 {part:'check',title:'Quiz 4',say:CH+'Which subject is <b>音乐</b>?',draw:()=>G(`<g transform="translate(320 150) scale(2.4)">${subj[4][3]}</g>`,'a-pop',.1)+zhw(320,300,'音乐','yīnyuè','',44),
  quiz:{options:['music','maths','art'],answer:'music',why:'音乐 <i class="py">yīnyuè</i> is music. 数学 is maths; 美术 is art.',hint:'Look at the picture!'}},
 
-bossIntro('Baddie sneaks into school!','Mwahaha! I sneaked into your school. I\'ll teach you <b>my</b> kind of Chinese. Hehehe!'),
-boss('Lie #1: zhī or zhī?',{lines:['一只铅笔! 只 and 支 sound the','same, so they are the same word!'],claim:'一只铅笔! 只 and 支 sound the same, so they are the same word!',options:["一支铅笔", "一只铅笔", "一张铅笔"],answer:"一支铅笔",why:'Same sound, different characters! <b>支</b> for long thin things (一支铅笔), <b>只</b> for animals (一只猫).',taunt:'Hehehe! A pencil is basically a skinny cat!',hint:'Look at the characters, not just the sound.',art:pencilI(440,320,1.6)}),
-boss('Lie #2: positions',{lines:['上面 shàngmiàn means','UNDER! Mwahaha!'],claim:'上面 means under!',options:["上面 is on top.", "上面 is underneath.", "上面 is inside the box."],answer:"上面 is on top.",why:'<b>上</b> is up, so 上面 is on top. <b>下</b> is down, so 下面 is under.',taunt:'Hehehe! Up is down, down is up!',hint:'上 points up, 下 points down.',art:posScene(440,300,POS[0],1.6)}),
-boss('Lie #3: the hardest one',{lines:['同学 tóngxué means TEACHER!','Your teacher is your 同学!'],claim:'同学 means teacher!',options:["classmate", "teacher", "school principal"],answer:"classmate",why:'<b>同学</b> <i class="py">tóngxué</i> = classmates who learn together. <b>老师</b> = teacher. <b>校长</b> = principal.',taunt:'Mwahaha! Call your teacher "buddy"!',hint:'同 means "same": people in the same class.'}),
+boss('Baddie\'s lie: zhī or zhī?',{lines:['一只铅笔! 只 and 支 sound the','same, so they are the same word!'],claim:'一只铅笔! 只 and 支 sound the same, so they are the same word!',options:["一支铅笔", "一只铅笔", "一张铅笔"],answer:"一支铅笔",why:'Same sound, different characters! <b>支</b> for long thin things (一支铅笔), <b>只</b> for animals (一只猫).',taunt:'Hehehe! A pencil is basically a skinny cat!',hint:'Look at the characters, not just the sound.',art:pencilI(440,320,1.6)}),
 finale('Baddie leaves school! 再见！','上学真好玩！','Shàngxué zhēn hǎowán!','School is so much fun!','太棒了！We beat Baddie again! You learned school words, 支/块/把/本/张, position words and school subjects. 明天见！<i class="py">Míngtiān jiàn!</i>'),
 ];
 
