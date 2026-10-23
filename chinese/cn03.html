@@ -440,7 +440,7 @@ const S=[
   .map(([m,z,p,ic],k)=>{const x=20+(k%3)*204,y=20+Math.floor(k/3)*176;return G(box(x,y,192,164,'#fff',14)+T(x+30,y+44,m,'zh mid','style="font-size:36px;fill:'+C.accent+'"')+`<g transform="translate(${x+120} ${y+50})">${ic}</g>`+zhw(x+96,y+118,z,p,'',24),'a-pop',.1+k*.15)}).join('')},
 
 {part:'learn',title:'Where is it? 在哪里？',say:CH+'Position words tell us <b>where</b> something is. <b>上面</b> on top, <b>下面</b> under, <b>里面</b> inside, <b>旁边</b> beside, <b>前面</b> in front, <b>后面</b> behind. Say it like this: 球在盒子<b>上面</b>。The ball is on top of the box.',
- draw:()=>POS.map((p,k)=>{const x=110+(k%3)*210,y=k<3?100:280;return G(posScene(x,y,p,1)+zhw(x,y+86,p[0],p[1],p[2],24),'a-pop',.1+k*.15)}).join('')},
+ draw:()=>POS.map((p,k)=>{const x=110+(k%3)*210,y=k<3?94:262;return G(posScene(x,y,p,1)+zhw(x,y+86,p[0],p[1],p[2],24),'a-pop',.1+k*.15)}).join('')},
 
 {part:'learn',title:'Where is my pencil? 我的铅笔在哪里？',who:'wala',say:WL+'Oh no! 我的铅笔在哪里？ Where is my pencil? Chowdie found it: 你的铅笔在桌子上面。Your pencil is on the desk. Then I say 谢谢你！ and Chowdie says 不客气！ (You\'re welcome!)',
  draw:()=>dlg(600,8,0,'我的铅笔在哪里？','Wǒ de qiānbǐ zài nǎlǐ?','','r',.1,'wala')+dlg(40,86,0,'你的铅笔在桌子上面。','Nǐ de qiānbǐ zài zhuōzi shàngmiàn.','','l',.8,'otter')
