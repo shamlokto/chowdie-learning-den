@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Beat Baddie: English</title>
+<title>Beat Baddie &amp; Daddy: English</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
@@ -122,7 +122,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
   <header>
     <div>
       <p class="eyebrow">Boss level · P2 English</p>
-      <h1>Beat Baddie: English</h1>
+      <h1>Beat Baddie &amp; Daddy: English</h1>
     </div>
     <div class="starpill" id="starpill" title="Stars earned"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 11 12 1.3-9 8 2.7 12L20 29l-10.7 6.3L12 23.3l-9-8L15 14z" fill="#FFC83D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/></svg><span id="starcount">0</span></div>
   </header>
@@ -144,7 +144,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
     <button id="replay" type="button">Replay</button>
     <button id="next" type="button" class="primary">Next</button>
   </div>
-  <p class="foot">Boss level for P2 English: catch Baddie Vampire's lies. Use the arrow keys or the big buttons to move around.</p>
+  <p class="foot">Boss level for P2 English. First catch Baddie Vampire's lies, then face the hidden boss, Baddie Daddy. Use the arrow keys or the big buttons to move around.</p>
 </div>
 
 <script>
@@ -370,8 +370,8 @@ function bossStage(claimLines,art=''){ if(!art) art=`<g data-gauge="1">${gauge(4
      +T(250,54,'Baddie says:','sm','style="fill:#B3243A;font-weight:800"')+claimLines.map((l,k)=>T(250,86+k*30,l,'lab')).join(''),'a-pop',.35)
    +`<g class="stamp"></g>`+(art?G(art,'a-fade',.7):'');
 }
-function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
-  return {part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
+function boss(title,{lines,claim,options,answer,why,taunt,hint,hints={},art=''}){
+  return {_ans:answer,options,part:'boss',title,who:'baddie',say:`<b class="bd">Baddie:</b> ${claim}`,draw:()=>bossStage(lines,art),
    mount:a=>{let done=false;[...options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(done)return;
      if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);
        a.q('[data-bd]').innerHTML=baddie(122,374,1.72,{busted:true});
@@ -379,44 +379,208 @@ function boss(title,{lines,claim,options,answer,why,taunt,hint,art=''}){
        const gg=a.q('[data-gauge]'); if(gg) gg.innerHTML=gauge(440,310,true); setWho('otter'); a.win('<b>Busted!</b> '+why);
      } else {b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
        a.as('baddie','<b class="bd">Baddie:</b> '+(taunt||'Hehehe! You believe me!'));
-       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+hint),2200);}
+       a.later(()=>a.as('otter','<b>Chowdie:</b> Don\'t trust him! '+(hints[o]||hint)),2200);}
    },'lie'))}};
 }
+/* ===== Baddie Daddy: the hidden boss. Baddie Vampire's dad. He SOMETIMES lies. ===== */
+/* origin = feet centre, ~170 tall at s=1. o.busted: caught; o.point: arm raised with cane */
+function daddy(x,y,s=1,o={}){
+  const g='#4E8A47',g2='#3E7238',belly='#D2E5A4',ink=C.ink,b=o.busted,cape='#4B2A6B',gold='#E3B23C';
+  const eyes=b?`<path d="M-21 -128 l10 10 M-11 -128 l-10 10 M7 -130 l10 10 M17 -130 l-10 10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+   :`<ellipse cx="-16" cy="-123" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="-15" cy="-122" rx="1.8" ry="5" fill="${ink}"/>
+     <ellipse cx="13" cy="-125" rx="7" ry="8" fill="#FFE066" stroke="${ink}" stroke-width="2"/><ellipse cx="14" cy="-124" rx="1.8" ry="5" fill="${ink}"/>
+     <circle cx="13" cy="-125" r="11" fill="none" stroke="${gold}" stroke-width="3"/><path d="M23 -120 q14 20 4 46" stroke="${gold}" stroke-width="1.5" fill="none"/>`;
+  const brows=b?'':`<path d="M-28 -138 q10 -6 20 2 M2 -140 q10 -8 22 0" stroke="#E9EEF1" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  const hat=`<g transform="${b?'translate(100 134) rotate(-10)':''}"><rect x="-26" y="-182" width="48" height="40" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/><rect x="-26" y="-156" width="48" height="9" fill="${cape}"/><rect x="-38" y="-146" width="72" height="9" rx="4" fill="#1E1E28" stroke="${ink}" stroke-width="2.5"/></g>`;
+  const cane=o.point?`<path d="M30 -60 q24 -12 40 -34" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="72" cy="-96" rx="8" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><line x1="74" y1="-110" x2="66" y2="-40" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="75" cy="-112" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`
+   :`<ellipse cx="30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(-20 30 -50)"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#5B3A1E" stroke-width="5" stroke-linecap="round"/><circle cx="40" cy="-46" r="6" fill="${gold}" stroke="${ink}" stroke-width="2"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${o.still?'':(b?'a-wig':'a-bob')}">
+  <path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z" fill="${cape}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-74 0 h148" stroke="${gold}" stroke-width="5"/><path d="M-30 -78 q-24 34 -30 74 h120 q-6 -40 -30 -74z" fill="#7A3B8F"/>
+  <path d="M-30 -10 q-36 2 -46 -20 q24 6 44 -4z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-40" rx="32" ry="38" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="0" cy="-36" rx="20" ry="28" fill="${belly}"/><path d="M-17 -50 h34 M-19 -37 h38 M-17 -24 h34" stroke="${g2}" stroke-width="2"/>
+  <path d="M-16 -74 l16 10 l16 -10 l-6 14 h-20z" fill="#fff" stroke="${ink}" stroke-width="2"/><path d="M-8 -68 l8 8 l8 -8 l-8 -4z" fill="${b?C.bad:'#B3243A'}" stroke="${ink}" stroke-width="1.5"/>
+  ${b?`<circle cx="6" cy="-30" r="8" fill="none" stroke="${gold}" stroke-width="3"/>`:''}
+  <ellipse cx="-17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/><ellipse cx="17" cy="-2" rx="15" ry="7" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="-30" cy="-50" rx="9" ry="14" fill="${g}" stroke="${ink}" stroke-width="3" transform="rotate(20 -30 -50)"/>${cane}
+  <path d="M-44 -78 l-18 -40 l24 18 l7 -24 l13 33z M44 -78 l18 -40 l-24 18 l-7 -24 l-13 33z" fill="${cape}" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-104" rx="36" ry="28" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  <path d="M12 -112 q52 -4 56 13 q2 16 -54 18z" fill="${g}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="62" cy="-106" r="2.3" fill="${ink}"/><circle cx="53" cy="-107" r="2.3" fill="${ink}"/>
+  <path d="M10 -84 q14 10 26 0 q12 10 26 -2 q-6 12 -26 6 q-20 8 -26 -4z" fill="#F4F6F8" stroke="${ink}" stroke-width="2"/>
+  <circle cx="-16" cy="-124" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/><circle cx="13" cy="-126" r="12" fill="${g}" stroke="${ink}" stroke-width="3"/>
+  ${eyes}${brows}${hat}
+  <circle cx="-24" cy="-98" r="2" fill="${g2}"/><circle cx="-16" cy="-92" r="2" fill="${g2}"/><circle cx="-28" cy="-90" r="2" fill="${g2}"/>
+  </g></g>`;
+}
+FACES.daddy=()=>daddy(36,124,.62,{still:true});
+VOICE.daddy={en:[.8,.35],zh:[.7,.4],pref:VMALE};
+const DD='<b class="dd">Baddie Daddy:</b> ';
+PARTS.boss='Baddie Vampire';PARTS.daddy='Baddie Daddy';
+(function(){const st=document.createElement('style');st.textContent=`
+ .bubble b.dd{color:#4B2A6B} .tag.daddy{background:#4B2A6B} .dots button.daddy:not(.done):not([aria-current="true"]){background:#E4DAF0;border-color:#4B2A6B}
+ .parts button[data-part="daddy"]{border-color:#4B2A6B;color:#4B2A6B} .parts button[data-part="daddy"][aria-current="true"]{background:#4B2A6B;color:#fff}
+ .ui button.opt{font-size:18px;text-align:left;max-width:100%}
+ .ui button.tf{font-size:20px;min-width:220px}
+ .ui button.pick[aria-pressed="true"]{background:var(--sky);color:#fff}
+ .ui button.tok{font-size:20px;min-width:0;padding:6px 12px 3px}
+ .ui button.tok[aria-pressed="true"]{background:var(--bad);color:#fff;text-decoration:line-through}
+ .ui button.key{min-width:58px;font-size:24px}
+ .ui .pad{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:var(--display);font-weight:800;font-size:26px}
+ .ui .pad output{min-width:140px;padding:6px 16px 2px;border:3px solid var(--ink);border-radius:14px;background:#fff;text-align:center}
+ .ui .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}`;document.head.appendChild(st);})();
+/* stage: Daddy on the left, a wrapped speech bubble on the right, optional art below the bubble */
+function wrapLines(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduce((n,c)=>n+(CJ.test(c)?1.9:1),0);const toks=t.match(/[⺀-鿿＀-￯　-〿“”]|[^\s⺀-鿿＀-￯　-〿“”]+|\s+/g)||[];const L=[];let c='';
+  toks.forEach(x=>{if(/^\s+$/.test(x)){if(c)c+=' ';return}if(W(c+x)>max&&c.trim()&&!/^[，。！？、：；”）]$/.test(x)){L.push(c.trim());c=x}else c+=x});if(c.trim())L.push(c.trim());return L}
+function daddyStage(text,art='',head='Baddie Daddy says:'){const L=wrapLines(text,34),h=L.length*28+46;
+  return G(daddy(118,384,1.45,{point:true}),'a-drop',.05,'data-dd="1"')
+   +G(`<path d="M248 18 h364 a16 16 0 0 1 16 16 v${h-32} a16 16 0 0 1 -16 16 h-344 l-28 24 l6 -24 a16 16 0 0 1 -14 -16 v${-(h-32)} a16 16 0 0 1 16 -16z" fill="#F1EAF8" stroke="#4B2A6B" stroke-width="3"/>`
+     +T(266,44,head,'sm','style="fill:#4B2A6B;font-weight:800"')+L.map((l,k)=>T(266,74+k*28,l,'lab')).join(''),'a-pop',.3)
+   +`<g class="stamp"></g>`+(art?`<g transform="translate(0 ${Math.max(0,h-110)})">${G(art,'a-fade',.6)}</g>`:'');}
+const stamp=(a,truth)=>{a.q('.stamp').innerHTML=`<g class="a-pop" transform="rotate(-10 470 ${60})"><rect x="380" y="30" width="180" height="60" rx="10" fill="none" stroke="${truth?C.good:C.bad}" stroke-width="5"/>${T(470,74,truth?'TRUE!':'LIE!','h mid','style="fill:'+(truth?C.good:C.bad)+';font-size:38px;letter-spacing:4px"')}</g>`};
+const bust=a=>{const g=a.q('[data-dd]');if(g)g.innerHTML=daddy(118,384,1.45,{busted:true})};
+const shuf=x=>[...x].sort(()=>Math.random()-.5);
+const nope=(a,taunt,hint)=>{a.as('daddy',DD+(taunt||'Ho ho ho! Wrong, little one.'));a.later(()=>a.as('otter',CH+hint),2300)};
+const winD=(a,why)=>{bust(a);setWho('otter');a.win('<b>You beat him!</b> '+why)};
+/* ---- question types ---- */
+/* 1. Truth or lie, then WHY */
+function tl(title,{claim,truth,reasons,reason,why,hint,hint2,hints={},art='',taunt}){return {_ans:{truth,reason},options:reasons,part:'daddy',title,who:'daddy',say:DD+claim+' <i>Am I telling the truth… or a lie?</i>',draw:()=>daddyStage(claim,art),
+ mount:a=>{let step=1;const s2=()=>{step=2;a.ui.innerHTML='';a.say(CH+`Right, he was ${truth?'telling the <b>truth</b>':'<b>lying</b>'}! Now the hard part: <b>WHY?</b>`);
+   shuf(reasons).forEach(r=>a.btn(r,b=>{if(step!==2)return;if(r===reason){step=3;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,'Ho ho! Right answer, wrong reason. That doesn\'t count!',hints[r]||hint2||hint)}},'opt'))};
+  [['😇 He is telling the TRUTH',true],['😈 He is telling a LIE',false]].forEach(([l,v])=>a.btn(l,b=>{if(step!==1)return;if(v===truth){b.classList.add('ok');stamp(a,truth);a.later(s2,900)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'tf'));}}}
+/* 2. Hard multiple choice (5-6 options) */
+function mc(title,{q,options,answer,why,hint,hints={},art='',taunt}){return {_ans:answer,options,part:'daddy',title,who:'daddy',say:DD+q,draw:()=>daddyStage(q,art),
+ mount:a=>{let done=false;shuf(options).forEach(o=>a.btn(o,b=>{if(done)return;if(o===answer){done=true;b.classList.add('ok');[...a.ui.children].forEach(x=>x.disabled=true);winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hints[o]||hint)}},'opt'))}}}
+/* 3. Type the answer on a keypad */
+function num(title,{q,answer,unit='',why,hint,art='',keys=[],taunt}){return {_ans:String(answer),part:'daddy',title,who:'daddy',say:DD+q+' <i>Type your answer.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{let v='',done=false;const pad=document.createElement('div');pad.className='pad';pad.innerHTML=`<output>?</output><span>${unit}</span>`;a.ui.appendChild(pad);
+  const out=pad.querySelector('output'),upd=()=>out.textContent=v||'?';const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  const mk=(l,fn,c='key')=>{const b=document.createElement('button');b.type='button';b.className=c;b.innerHTML=l;b.onclick=()=>fn(b);row.appendChild(b);return b};
+  [...'1234567890',...keys].forEach(k=>mk(k,()=>{if(done||v.length>=7)return;v+=k;upd()}));mk('⌫',()=>{if(done)return;v=v.slice(0,-1);upd()});
+  mk('Check ✓',b=>{if(done||!v)return;if(v===String(answer)){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`${v}${unit?' '+unit:''}? Ho ho ho! Not even close.`,hint)}},'go');}}}
+/* 4. Pick ALL the correct ones */
+function multi(title,{q,options,correct,why,hint,art='',taunt}){return {_ans:correct,options,part:'daddy',title,who:'daddy',say:DD+q+' <i>Pick ALL the right ones, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  shuf(options).forEach(o=>{const b=document.createElement('button');b.type='button';b.className='pick opt';b.innerHTML=o;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(o)?sel.delete(o):sel.add(o);b.setAttribute('aria-pressed',sel.has(o))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=correct.length===sel.size&&correct.every(c=>sel.has(c));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{const wrong=[...sel].filter(x=>!correct.includes(x)).length+correct.filter(x=>!sel.has(x)).length;b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||`Ho ho! ${wrong===1?'One choice is':wrong+' choices are'} still wrong.`,hint)}},'go');}}}
+/* 5. Put in order */
+function order(title,{q,items,why,hint,art='',taunt}){return {_ans:items,part:'daddy',title,who:'daddy',say:DD+q+' <i>Tap them in the right order.</i>',draw:()=>daddyStage(q,art)+`<g class="seq"></g>`,
+ mount:a=>{let n=0;const show=()=>{a.q('.seq').innerHTML=items.slice(0,n).map((t,k)=>T(270,250+k*26,(k+1)+'. '+t.replace(/<[^>]+>/g,''),'sm','style="font-weight:800;fill:'+C.good+'"')).join('')};
+  shuf(items).forEach(t=>a.btn(t,b=>{if(b.disabled)return;if(t===items[n]){n++;b.disabled=true;b.classList.add('ok');show();if(n===items.length)winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt,hint)}},'opt'));}}}
+/* 6. Tap the mistake(s) */
+function spot(title,{q,tokens,wrong,why,hint,art='',taunt}){return {_ans:wrong,part:'daddy',title,who:'daddy',say:DD+q+' <i>Tap every wrong part, then press Check.</i>',draw:()=>daddyStage(q,art),
+ mount:a=>{const sel=new Set();let done=false;const row=document.createElement('div');row.className='row';a.ui.appendChild(row);
+  tokens.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='tok';b.innerHTML=t;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(done)return;sel.has(i)?sel.delete(i):sel.add(i);b.setAttribute('aria-pressed',sel.has(i))};row.appendChild(b)});
+  a.btn('Check ✓',b=>{if(done)return;const ok=wrong.length===sel.size&&wrong.every(i=>sel.has(i));
+   if(ok){done=true;b.classList.add('ok');winD(a,why)}else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');nope(a,taunt||(sel.size<wrong.length?'Ho ho! You missed something.':'Ho ho! Some of those were right all along.'),hint)}},'go');}}}
+/* intro, rules and finale */
+const daddyIntro=(subject)=>[{part:'daddy',title:'Who is THAT?',who:'daddy',say:DD+`Ho… ho… ho. So you beat my son, Baddie Vampire? Impressive. I am <b>Baddie Daddy</b>, his father. Unlike my silly son, I don't <i>always</i> lie. <b>Sometimes I tell the truth.</b> Good luck spotting which is which in my super-hard ${subject} challenge.`,
+  draw:()=>G(`<rect x="0" y="0" width="640" height="400" rx="16" fill="#2B1E3A" opacity=".9"/>`,'')+G(daddy(330,388,2.15),'a-drop',.2)+G(baddie(560,392,.8,{still:true})+T(560,250,'"Daddy!"','sm mid','style="fill:#fff"'),'a-pop',1)+G(otter(80,392,.8,{still:true})+T(80,262,'Gulp!','sm mid','style="fill:#fff"'),'a-pop',1.3)+G(T(330,40,'THE HIDDEN BOSS','h mid','style="fill:#E3B23C;letter-spacing:3px"'),'a-fade',.6)},
+ {part:'daddy',title:'How to beat Baddie Daddy',who:'otter',say:CH+'Careful! Daddy <b>sometimes tells the truth</b>. Think first. Then show <b>why</b>. Some questions need a number, some need <b>all</b> the right answers.',
+  draw:()=>[['😇 / 😈','Truth or lie?','then choose WHY'],['1 2 3','Type it','use the keypad'],['✓ ✓ ✗','Pick ALL','maybe more than one'],['✗','Tap the mistake','find every wrong part'],['1→2→3','Put in order','tap in sequence'],['A–E','Tricky choices','up to five options']]
+  .map(([ic,n,d],k)=>{const x=20+(k%3)*204,y=24+Math.floor(k/3)*180;return G(box(x,y,192,166,'#fff',16)+T(x+96,y+60,ic,'h mid','style="fill:#4B2A6B"')+T(x+96,y+104,n,'lab mid')+T(x+96,y+130,d,'sm mid mut'),'a-pop',.1+k*.12)}).join('')}];
+const daddyEnd=(subject)=>({part:'daddy',title:'Baddie Daddy is beaten!',who:'otter',say:CH+`You did it! You out-thought <b>Baddie Daddy</b> himself. You didn't just find answers: you explained <b>why</b>. That's how real ${subject} champions think. Count your stars: every star is a challenge you beat.`,
+ draw:()=>G(daddy(270,388,1.2,{busted:true}),'a-pop',.1)+G(baddie(420,392,.7,{busted:true}),'a-pop',.3)+G(otter(85,392,1.05,{wave:true})+wala(560,392,.95,{wave:true}),'a-pop',.5)+G(star(200,80,34)+star(440,80,34),'a-pop',.8)+T(320,96,'Super brain!','h mid acc'),
+ mount:a=>a.later(()=>a.win(`You beat Baddie Daddy! Stars: <b>${earned.size} of ${S.filter(x=>x._ans!==undefined).length}</b>.`),500)});
+/* Baddie Daddy: super-hard P2 English */
 /* Beat Baddie: P2 English boss level */
 PARTS.learn='How to play';
 document.querySelectorAll('.parts button').forEach(b=>{if(b.dataset.part==='learn')b.textContent=PARTS.learn});
+/* Combined boss level: P2 English. Group 1 = Baddie Vampire (one lie per deck, getting harder).
+   Group 2 = Baddie Daddy (hidden boss). Subgroup = the topic in each title. */
+const recipe=(x,y,steps,col='#fff')=>steps.map(([ic,w],k)=>G(box(x+k*76,y,70,62,col,12)+T(x+k*76+35,y+28,ic,'mid','style="font-size:22px"')+T(x+k*76+35,y+52,w,'sm mid','style="font-size:13px;font-weight:800"'),'a-pop',.6+k*.12)).join('');
 const S=[
-{part:'learn',title:'How to beat Baddie',say:CH+'Baddie Vampire thinks he knows English. He doesn\'t! He <b>always lies</b> about grammar, spelling and punctuation. Read his sentence, find the mistake, and tap the correction. Catch all 13 lies!',
- draw:()=>G(baddie(450,385,2,{point:false}),'a-drop',.1)+G(otter(130,385,1.4,{wave:true}),'a-pop',.4)+G(box(30,26,300,150,'#fff',18)+T(180,60,'3 steps to beat him','lab mid acc')+T(50,96,'1. Read his sentence','lab')+T(50,128,'2. Spot the mistake','lab')+T(50,160,'3. Tap the correction','lab'),'a-pop',.8)},
-boss('Lie #1: a or an?',{lines:['I ate a apple, a egg','and a orange! Hehehe!'],claim:'I ate a apple, a egg and a orange!',options:["an apple, an egg, an orange", "a apple, a egg, a orange", "the apple, a egg, an orange"],answer:"an apple, an egg, an orange",why:'Words starting with a vowel sound (a, e, i, o, u) take <b>an</b>: an apple, an egg, an orange.',taunt:'Mwahaha! "An" is too much work!',hint:'Say "a apple" out loud. Does it sound right?',art:T(440,290,'a / an ?','big mid')}),
-boss('Lie #2: plurals',{lines:['One mouse, two mouses!','One child, two childs!'],claim:'One mouse, two mouses! One child, two childs!',options:["two mice, two children", "two mouses, two childs", "two mouse, two child"],answer:"two mice, two children",why:'Some plurals are special: mouse → <b>mice</b>, child → <b>children</b>, tooth → teeth, foot → feet.',taunt:'Hehehe! Add s to everything!',hint:'These are special plurals that don\'t just add s.'}),
-boss('Lie #3: past tense',{lines:['Yesterday I goed to the park','and eated ice cream!'],claim:'Yesterday I goed to the park and eated ice cream!',options:["I went and ate.", "I goed and eated.", "I go and eat yesterday."],answer:"I went and ate.",why:'Some past tenses are irregular: go → <b>went</b>, eat → <b>ate</b>, see → saw, run → ran.',taunt:'Mwahaha! Just add -ed, always!',hint:'What is the past tense of "go"?'}),
-boss('Lie #4: verbs that agree',{lines:['He go to school every day.','She like cats. Perfect!'],claim:'He go to school every day. She like cats.',options:["He goes. She likes cats.", "He go. She like cats.", "He going. She liking cats."],answer:"He goes. She likes cats.",why:'With he, she or it, add <b>s</b> or <b>es</b>: he <b>goes</b>, she <b>likes</b>.',taunt:'Hehehe! Verbs don\'t need to agree with anyone!',hint:'He, she or it needs an -s on the verb.'}),
-boss('Lie #5: capital letters',{lines:['i live in singapore and my','birthday is on monday.'],claim:'i live in singapore and my birthday is on monday.',options:["I, Singapore and Monday", "Only the first word", "Every single word in the sentence"],answer:"I, Singapore and Monday",why:'Use capitals for <b>I</b>, the start of a sentence, names of <b>places</b> (Singapore) and <b>days</b> (Monday).',taunt:'Mwahaha! Capitals are for VIPs only!',hint:'Names of places and days are special.'}),
-boss('Lie #6: question marks',{lines:['Where is my cape.','Questions end with a full stop!'],claim:'Where is my cape. Questions end with a full stop!',options:["Where is my cape?", "Where is my cape.", "Where is my cape,"],answer:"Where is my cape?",why:'Asking sentences (who, what, where, when, why, how) end with a <b>?</b>',taunt:'Hehehe! Full stops everywhere!',hint:'Is he asking or telling?',art:T(440,300,'. or ?','big mid','style="font-size:70px"')}),
-boss('Lie #7: describing words',{lines:['"Happy" is a verb,','an action word!'],claim:'Happy is a verb, an action word!',options:["an adjective", "a verb, an action word", "a noun, a naming word"],answer:"an adjective",why:'<b>Happy</b> describes how someone feels: the happy girl. It is an <b>adjective</b>. Action words are like run, jump, eat.',taunt:'Mwahaha! I can "happy" all day long!',hint:'Can you "happy"? Or are you happy?'}),
-boss('Lie #8: pronouns',{lines:['Mei is my friend.','He is very kind.'],claim:'Mei is my friend. He is very kind.',options:["She is very kind.", "He is very kind.", "They is very kind."],answer:"She is very kind.",why:'Use <b>she</b> for a girl or woman, <b>he</b> for a boy or man, and <b>they</b> for more than one.',taunt:'Hehehe! He, she, whatever!',hint:'Is Mei a boy or a girl?'}),
-boss('Lie #9: joining words',{lines:['I was hungry, but I ate lunch.','Totally makes sense!'],claim:'I was hungry, but I ate lunch.',options:["I was hungry, so I ate lunch.", "I was hungry, but I ate lunch.", "I was hungry, or I ate lunch."],answer:"I was hungry, so I ate lunch.",why:'<b>So</b> joins a reason to what happened next. <b>But</b> shows a surprise: I was hungry, but I didn\'t eat.',taunt:'Mwahaha! But, so, and: all the same!',hint:'Eating lunch is what happened BECAUSE he was hungry.'}),
-boss('Lie #10: word meanings',{lines:['"Huge" means tiny!','Like a huge little ant!'],claim:'Huge means tiny!',options:["very big", "very small", "very fast"],answer:"very big",why:'<b>Huge</b> = very big. <b>Tiny</b> = very small. They are opposites.',taunt:'Hehehe! An elephant is tiny!',hint:'Think of a huge elephant.',art:`<circle cx="400" cy="290" r="60" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/><circle cx="520" cy="335" r="8" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/>`+T(400,375,'huge','sm mid')+T(520,375,'tiny','sm mid')}),
-boss('Lie #11: -ing words',{lines:['Look! The cat is sleep','on the mat right now.'],claim:'Look! The cat is sleep on the mat right now.',options:["The cat is sleeping.", "The cat is sleep.", "The cat are sleeping."],answer:"The cat is sleeping.",why:'For something happening <b>right now</b>, use is + <b>-ing</b>: is sleeping, is eating, is running.',taunt:'Mwahaha! -ing is a waste of letters!',hint:'It is happening right now. What ending do we add?',art:catI(440,300,1.6)}),
-boss('Lie #12: this and these',{lines:['These is my cape.','This are my fangs.'],claim:'These is my cape. This are my fangs.',options:["This is my cape. These are my fangs.", "These is my cape. This are my fangs.", "This is my cape. This are my fangs."],answer:"This is my cape. These are my fangs.",why:'<b>This is</b> for one thing (my cape). <b>These are</b> for more than one (my fangs).',taunt:'Hehehe! One, many, who\'s counting?',hint:'One cape, many fangs.'}),
-boss('Lie #13: the hardest one',{lines:['Zack forgot his umbrella and got','home soaking wet. So he went','swimming! Mwahaha!'],claim:'Zack forgot his umbrella and got home soaking wet. That means he went swimming!',options:["It was raining.", "He swam.", "He spilled his drink."],answer:"It was raining.",why:'Use the <b>clues</b>: umbrella + soaking wet = it was <b>raining</b>. Good readers look for clues in the story.',taunt:'Mwahaha! I never read the clues!',hint:'Why would forgetting an umbrella make him wet?',art:`<path d="M380 270 q60 -60 120 0z" fill="${C.berry}" stroke="${C.ink}" stroke-width="3"/><line x1="440" y1="270" x2="440" y2="320" stroke="${C.ink}" stroke-width="3"/>`+[0,1,2,3,4,5].map(k=>`<line x1="${360+k*30}" y1="${240+(k%2)*20}" x2="${354+k*30}" y2="${258+(k%2)*20}" stroke="${C.sky}" stroke-width="3" stroke-linecap="round"/>`).join('')+`<line x1="430" y1="340" x2="470" y2="300" stroke="${C.bad}" stroke-width="5"/><line x1="430" y1="300" x2="470" y2="340" stroke="${C.bad}" stroke-width="5"/>`}),
-{part:'boss',title:'Baddie is defeated!',say:CH+'You caught <b>all 13 lies</b>! Baddie\'s English is full of mistakes, but yours isn\'t. Remember: a/an, special plurals and past tenses, he goes, capital letters, question marks, and look for clues when you read!',
+{part:'learn',title:'How to beat Baddie',say:CH+'Baddie Vampire <b>always lies</b> about English. Read his sentence. Find the mistake. Tap the fix!',
+ draw:()=>G(baddie(450,385,2,{point:false}),'a-drop',.1)+G(otter(130,385,1.4,{wave:true}),'a-pop',.4)+G(box(30,26,300,150,'#fff',18)+T(180,60,'3 steps to beat him','lab mid acc')+T(50,96,'1. Read his sentence','lab')+T(50,128,'2. Spot the mistake','lab')+T(50,160,'3. Tap the fix','lab'),'a-pop',.8)},
+boss('Lie 1 · a or an',{lines:['I ate a apple','and a egg!'],claim:'I ate a apple and a egg!',options:['an apple, an egg','a apple, a egg','the apple, a egg'],answer:'an apple, an egg',
+ why:'Use <b>an</b> before a vowel <b>sound</b>: an apple, an egg, an owl.',taunt:'Hehehe! "A" is good enough!',hint:'Say it aloud. Does "apple" start with a vowel sound?',
+ hints:{'a apple, a egg':'That is Baddie\'s sentence! Apple and egg start with vowel sounds.','the apple, a egg':'"A egg" is still wrong.'},art:T(440,300,'🍎 🥚','big mid','style="font-size:64px"')}),
+boss('Lie 2 · Plurals',{lines:['One mouse, two mouses!','One child, two childs!'],claim:'One mouse, two mouses! One child, two childs!',options:['two mice, two children','two mouses, two childs','two mouse, two child'],answer:'two mice, two children',
+ why:'Some plurals are special: mouse → <b>mice</b>, child → <b>children</b>, tooth → teeth, foot → feet.',taunt:'Mwahaha! Just add s to everything!',hint:'These words don\'t just add -s.',
+ hints:{'two mouses, two childs':'That is Baddie\'s way. These are special plurals.','two mouse, two child':'Two means more than one, so the word must change.'},art:T(440,300,'🐭🐭  🧒🧒','big mid','style="font-size:56px"')}),
+boss('Lie 3 · Past tense',{lines:['Yesterday I goed to the','park and eated ice cream!'],claim:'Yesterday I goed to the park and eated ice cream!',options:['I went and ate.','I goed and eated.','I go and eat.'],answer:'I went and ate.',
+ why:'Some past tenses are special: go → <b>went</b>, eat → <b>ate</b>, see → saw, run → ran.',taunt:'Hehehe! Add -ed to everything!',hint:'What do we say instead of "goed"?',
+ hints:{'I goed and eated.':'Go and eat don\'t take -ed. They change.','I go and eat.':'It happened yesterday, so it must be past tense.'},art:T(440,300,'🍦','big mid','style="font-size:70px"')}),
+boss('Lie 4 · Verbs that agree',{lines:['He go to school.','She like cats.'],claim:'He go to school. She like cats.',options:['He goes. She likes cats.','He go. She like cats.','He going. She liking cats.'],answer:'He goes. She likes cats.',
+ why:'With <b>he, she</b> or <b>it</b>, add s or es: he <b>goes</b>, she <b>likes</b>.',taunt:'Mwahaha! S is for silly!',hint:'He and she need an s on the verb.',
+ hints:{'He go. She like cats.':'That is Baddie\'s sentence. Add s for he and she.','He going. She liking cats.':'-ing words need is: he is going.'},art:T(440,300,'🏫 🐱','big mid','style="font-size:60px"')}),
+boss('Lie 5 · Describing words',{lines:['"Happy" is an','action word!'],claim:'Happy is an action word!',options:['a describing word','an action word','a naming word'],answer:'a describing word',
+ why:'<b>Happy</b> describes how someone feels: the happy girl. It is an <b>adjective</b>. Action words are run, jump, eat.',taunt:'Hehehe! Watch me happy!',hint:'Can you "happy"? Or can you BE happy?',
+ hints:{'an action word':'You can\'t "happy" like you can run. It describes.','a naming word':'Naming words are things like girl, cat, park.'},art:T(440,300,'😊','big mid','style="font-size:80px"')}),
+boss('Lie 6 · Comparing',{lines:['An elephant is','more bigger than a cat!'],claim:'An elephant is more bigger than a cat!',options:['bigger than a cat','more bigger than a cat','biggest than a cat','more big than a cat'],answer:'bigger than a cat',
+ why:'Short words add <b>-er</b>: big → <b>bigger</b>. Never use "more" and "-er" together.',taunt:'Mwahaha! More is always better!',hint:'Big, bigger, biggest. Which one compares TWO things?',
+ hints:{'more bigger than a cat':'Don\'t use more AND -er together.','biggest than a cat':'-est is for the most of all, not for comparing two.','more big than a cat':'Short words like big take -er.'},art:T(440,300,'🐘 > 🐈','big mid','style="font-size:60px"')}),
+boss('Lie 7 · Pronouns',{lines:['Mei is my friend.','He is very kind.'],claim:'Mei is my friend. He is very kind.',options:['She is very kind.','He is very kind.','They is very kind.','It is very kind.'],answer:'She is very kind.',
+ why:'Use <b>she</b> for a girl or woman, <b>he</b> for a boy or man, <b>they</b> for more than one.',taunt:'Hehehe! He, she, whatever!',hint:'Mei is a girl. Which word do we use?',
+ hints:{'He is very kind.':'He is for a boy. Mei is a girl.','They is very kind.':'They is for more than one, and it takes "are".','It is very kind.':'It is for things and animals, not people.'},art:T(440,300,'👧','big mid','style="font-size:80px"')}),
+boss('Lie 8 · Joining words',{lines:['I wore a jacket,','so it was cold!'],claim:'I wore a jacket, so it was cold!',options:['because it was cold','so it was cold','but it was cold','or it was cold'],answer:'because it was cold',
+ why:'The cold came first. It is the <b>reason</b>, so use <b>because</b>: I wore a jacket <b>because</b> it was cold.',taunt:'Mwahaha! My jacket made it cold!',hint:'Did the jacket make it cold? Or did the cold make you wear it?',
+ hints:{'so it was cold':'That says the jacket MADE it cold!','but it was cold':'But is for a surprise. This is a reason.','or it was cold':'Or gives a choice. We need a reason.'},art:T(440,300,'🧥 🥶','big mid','style="font-size:64px"')}),
+boss('Lie 9 · Capital letters',{lines:['i live in singapore.','my birthday is on monday.'],claim:'i live in singapore. my birthday is on monday.',options:['I, My, Singapore, Monday','Only "i" and "my"','Every single word','Only Singapore'],answer:'I, My, Singapore, Monday',
+ why:'Capitals for <b>I</b>, the <b>start</b> of a sentence, <b>places</b> (Singapore) and <b>days</b> (Monday).',taunt:'Hehehe! Small letters are cuter!',hint:'Check: I, sentence starts, names of places, days.',
+ hints:{'Only "i" and "my"':'Places and days need capitals too.','Every single word':'Words like live and birthday stay small.','Only Singapore':'Monday, I and sentence starts need capitals too.'},art:T(440,300,'🇸🇬 📅','big mid','style="font-size:60px"')}),
+boss('Lie 10 · Speech marks',{lines:['Put speech marks round','EVERYTHING! Hehehe!'],claim:'Put speech marks round everything!',options:['Mum said, "I am tired."','"Mum said I am tired."','Mum said, I am "tired."','"Mum" said, I am tired.'],answer:'Mum said, "I am tired."',
+ why:'Speech marks go round the <b>words someone says</b>: Mum said, <b>"I am tired."</b>',taunt:'Mwahaha! More marks, more fun!',hint:'Which words did Mum actually say?',
+ hints:{'"Mum said I am tired."':'Mum didn\'t say "Mum said". Only her words go inside.','Mum said, I am "tired."':'Mum said all of "I am tired".','"Mum" said, I am tired.':'Mum is not a spoken word here.'},art:T(440,300,'💬','big mid','style="font-size:80px"')}),
+boss('Lie 11 · Sound-alike words',{lines:['At the beach,','I can sea the see!'],claim:'At the beach, I can sea the see!',options:['I can see the sea.','I can sea the see.','I can see the see.','I can sea the sea.'],answer:'I can see the sea.',
+ why:'<b>See</b> is what your eyes do. The <b>sea</b> is the salty water. Same sound, different words!',taunt:'Hehehe! Same sound, same word!',hint:'Which "see" has two e\'s, like your two eyes?',
+ hints:{'I can sea the see.':'That is Baddie\'s mix-up. Swap them!','I can see the see.':'The water is spelled s-e-a.','I can sea the sea.':'Your eyes see: s-e-e.'},art:T(440,300,'👀 🌊','big mid','style="font-size:64px"')}),
+boss('Lie 12 · Reading clues',{lines:['Zara\'s tummy rumbled.','She stared at the cake.','She was NOT hungry!'],claim:'Zara\'s tummy rumbled. She stared at the cake. She was not hungry!',options:['She was hungry.','She was sleepy.','She was angry.','She was full.'],answer:'She was hungry.',
+ why:'Clues: a <b>rumbling tummy</b> and <b>staring at cake</b>. She was <b>hungry</b>! Good readers use clues.',taunt:'Mwahaha! The cake is mine!',hint:'What does a rumbling tummy tell you?',
+ hints:{'She was sleepy.':'Is there a clue about yawning or bed?','She was angry.':'Is there a clue about shouting or a cross face?','She was full.':'A full tummy doesn\'t rumble for cake!'},art:T(440,320,'🎂','big mid','style="font-size:70px"')}),
+boss('Lie 13 · Writing, the hardest one',{lines:['"We went." is a great','sentence. Done! Hehehe!'],claim:'"We went." is a great sentence. Done!',options:['On Sunday, we went to the zoo.','We went. We went.','We went went went.','On Sunday.'],answer:'On Sunday, we went to the zoo.',
+ why:'A great sentence says <b>when</b> (On Sunday), <b>who</b> (we), <b>what</b> (went) and <b>where</b> (to the zoo).',taunt:'Mwahaha! Short is best!',hint:'Use the recipe: When? Who? What? Where?',
+ hints:{'We went. We went.':'Saying it twice adds no new idea. Add when and where!','We went went went.':'More "went" is not more detail.','On Sunday.':'That has no who and no what. It is not a sentence.'},art:recipe(286,250,[['🕒','When'],['🧒','Who'],['🏃','What'],['📍','Where']])}),
+{part:'boss',_door:true,title:'Baddie is beaten!',who:'otter',say:CH+'You fixed <b>all 13 lies</b>! Watch out for his tricks: wrong plurals, mixed-up joining words, and sentences with no detail.',
  draw:()=>G(baddie(320,388,1.2,{busted:true}),'a-pop',.1)+G(otter(110,388,1.3,{wave:true})+wala(530,388,1.3,{wave:true}),'a-pop',.4)+G(star(320,70,40),'a-pop',.8)+T(320,150,'English champion!','h mid acc'),
  mount:a=>a.later(()=>a.win(),600)},
-];
+...daddyIntro('English'),
+tl('Challenge 1 · Plurals',{claim:'"The sheep is eating." and "The sheep are eating." Both can be correct.',truth:true,
+ reasons:['"Sheep" is the same for one and for many.','Sheep always takes "is".','The plural is "sheeps".','Animals can never take "are".'],
+ reason:'"Sheep" is the same for one and for many.',why:'True! One sheep <b>is</b> eating. Many sheep <b>are</b> eating. Fish and deer work the same way.',hint:'Can "sheep" mean one AND many?',hint2:'Is "sheeps" a real word?'}),
+tl('Challenge 2 · Spelling -ing',{claim:'"He is runing." That is spelled correctly.',truth:false,
+ reasons:['Short vowel + one consonant: double it. Running.','Just add -ing. Runing is fine.','Take away the n: ruing.','It is fine when you run slowly.'],
+ reason:'Short vowel + one consonant: double it. Running.',why:'A <b>lie</b>! run → ru<b>nn</b>ing, swim → swi<b>mm</b>ing, sit → si<b>tt</b>ing.',hint:'Think of swimming and sitting. What happens to the last letter?',hint2:'Which rule also works for swim → swimming?',art:T(440,320,'🏃','big mid','style="font-size:60px"')}),
+spot('Challenge 3 · Three mistakes',{q:'Find every mistake in my sentence!',tokens:['Yesterday','my','brother','and','me','goes','to','the','zoo','and','seen','a','lion.'],wrong:[4,5,10],
+ why:'It should be: Yesterday my brother and <b>I went</b> to the zoo and <b>saw</b> a lion.',hint:'Check the past tense words. And should it be "me" or "I"?'}),
+mc('Challenge 4 · there, their, they\'re',{q:'Only ONE sentence is completely correct. Which one?',options:['There are three books on their desk.','Their are three books on there desk.','They\'re are three books on their desk.','There is three books on their desk.','There are three books on they\'re desk.'],answer:'There are three books on their desk.',
+ why:'<b>There</b> = a place / there are. <b>Their</b> = belongs to them. <b>They\'re</b> = they are.',hint:'Check every word, not just the first one.',
+ hints:{'Their are three books on there desk.':'Both are swapped round.','They\'re are three books on their desk.':'That says "They are are".','There is three books on their desk.':'Three books: there ARE.','There are three books on they\'re desk.':'"They are desk" makes no sense.'}}),
+tl('Challenge 5 · The comma',{claim:'"Let\'s eat, Grandma!" and "Let\'s eat Grandma!" mean the same thing.',truth:false,
+ reasons:['Without the comma, we want to EAT Grandma!','Commas never change the meaning.','Both need a question mark.','Grandma needs a small g.'],
+ reason:'Without the comma, we want to EAT Grandma!',why:'A <b>lie</b>! The comma shows we are <b>talking to</b> Grandma. Commas save lives!',hint:'Read the second one slowly. Who is being eaten?',hint2:'What does the comma change?'}),
+multi('Challenge 6 · Naming words',{q:'Which of these are NOUNS (naming words)?',options:['happiness','happy','kitten','quickly','Singapore','swim','teacher','beautiful'],correct:['happiness','kitten','Singapore','teacher'],
+ why:'Nouns name a person, place, thing or feeling: <b>teacher, Singapore, kitten, happiness</b>.',hint:'Can you put "the" or "a" in front of it? (Singapore is a place name.)'}),
+order('Challenge 7 · Story order',{q:'Put Mei\'s baking story in order.',items:['Mei cracked two eggs into a bowl.','She stirred in the flour.','She poured it into a tin.','The cake rose in the oven.','Everyone shared a slice.'],
+ why:'First the eggs, then the flour, then the tin, then the oven. Last, eat it!',hint:'What do you do first when you bake a cake?'}),
+order('Challenge 8 · Show and Tell plan',{q:'Put Daddy\'s Show and Tell plan in the best order.',items:['Say what it is.','Describe it: colour, size, feel.','Say why you love it.','Say "Thank you for listening!"'],
+ why:'A good talk: <b>what</b> it is → <b>describe</b> it → <b>why</b> it is special → say <b>thank you</b>.',hint:'What do your friends need to know first?'}),
+mc('Challenge 9 · Reading clues',{q:'Zack waved until the car was gone. His best friend was moving away. Zack\'s eyes were red. How did Zack feel?',options:['Sad: his best friend was moving away.','Sleepy: he stayed up late.','Angry: the car was too fast.','Excited: he was going too.','Happy: he waved goodbye.'],answer:'Sad: his best friend was moving away.',
+ why:'Clues: his <b>best friend</b> is <b>moving away</b>, and his eyes are <b>red</b> from crying. Zack is <b>sad</b>.',hint:'Find the clues in the story. Why are his eyes red?',
+ hints:{'Sleepy: he stayed up late.':'The story says nothing about bedtime.','Angry: the car was too fast.':'Nothing says the car was fast.','Excited: he was going too.':'The friend was moving, not Zack.','Happy: he waved goodbye.':'Waving goodbye to a best friend can be sad.'}}),
+num('Challenge 10 · Noun counter',{q:'How many NOUNS are in this sentence? "The girl gave her mother a red rose in the garden."',answer:4,unit:'nouns',
+ why:'<b>girl, mother, rose, garden</b>: 4 nouns. Red describes; gave is an action.',hint:'Find the people, things and places.'}),
+order('Challenge 11 · Sentence recipe',{q:'Build ONE sentence. Recipe: When → Who → What → Where → Feeling.',items:['After school,','Mei and her dad','flew a red kite','at the beach.','They felt happy!'],
+ why:'<b>After school</b> (when), <b>Mei and her dad</b> (who) <b>flew a red kite</b> (what) <b>at the beach</b> (where). <b>They felt happy!</b> (feeling). Use this recipe in your own writing!',hint:'Read the recipe again. What goes first: when, or who?'}),
+spot('Challenge 12 · Speech marks',{q:'Which parts of this sentence have mistakes?',tokens:['"where','are','you','going','asked','Mum.'],wrong:[0,3],
+ why:'It should be: <b>"Where</b> are you <b>going?"</b> asked Mum. Capital W, and the question mark goes inside the speech marks.',hint:'Check the first letter, and look for a missing question mark.'}),
+daddyEnd('English')];
 
-const DOORKEY='boss-eng';
-/* Secret door to Baddie Daddy, shown on the final "Baddie beaten" slide */
-const DOORS={'boss-maths':'../maths/daddy-maths.html','boss-eng':'../english/daddy-eng.html','cn08':'../chinese/daddy-cn.html','boss-sci':'../science/daddy-sci.html','boss-p2cn':'../chinese/daddy-p2cn.html','boss-hcl':'../chinese/daddy-hcl.html'};
-(function(){const L=S[S.length-1],d0=L.draw,m0=L.mount;
+/* ---- one level, two bosses: Baddie Vampire first, then the hidden boss Baddie Daddy ---- */
+function daddySil(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z"/><ellipse cx="0" cy="-40" rx="32" ry="38"/><ellipse cx="0" cy="-104" rx="36" ry="28"/><path d="M12 -112 q52 -4 56 13 q2 16 -54 18z"/><rect x="-26" y="-182" width="48" height="40"/><rect x="-38" y="-146" width="72" height="9"/><circle cx="-16" cy="-124" r="12"/><circle cx="13" cy="-126" r="12"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#000" stroke-width="5"/></g>`}
+(function(){const k=S.findIndex(s=>s._door);if(k<0)return;const L=S[k],d0=L.draw,m0=L.mount;
  L.draw=a=>`<g class="shadow" style="opacity:0;transition:opacity 1.5s"><g style="filter:brightness(0)" opacity=".28">${daddySil(440,400,1.75)}</g>${T(560,120,'?','big mid','style="fill:#4B2A6B"')}</g>`+(d0?d0(a):'');
  L.mount=a=>{if(m0)m0(a);a.later(()=>{const g=a.q('.shadow');if(g)g.style.opacity=1;setWho('baddie');a.say(BD+'Waaah! I\'m telling my <b>DADDY</b>! He\'s much smarter than me… and he doesn\'t always lie!');
-   const b=a.btn('🚪 Who is that shadow?',()=>{const u=DOORS[DOORKEY];window.open(u,u.startsWith('http')?'_blank':'_self')},'go');},2600)};})();
-function daddySil(x,y,s){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-36 -84 q-30 34 -38 84 h148 q-8 -50 -38 -84z"/><ellipse cx="0" cy="-40" rx="32" ry="38"/><ellipse cx="0" cy="-104" rx="36" ry="28"/><path d="M12 -112 q52 -4 56 13 q2 16 -54 18z"/><rect x="-26" y="-182" width="48" height="40"/><rect x="-38" y="-146" width="72" height="9"/><circle cx="-16" cy="-124" r="12"/><circle cx="13" cy="-126" r="12"/><line x1="40" y1="-44" x2="46" y2="0" stroke="#000" stroke-width="5"/></g>`}
-
-
+   a.btn('🚪 Who is that shadow?',()=>go(S.findIndex(s=>s.part==='daddy')),'go');},2600)};})();
+if(location.hash==='#daddy'){const k=S.findIndex(s=>s.part==='daddy');if(k>0)i=k;}
 render();
+(function(){const nav=document.querySelector('.parts');if(!S.some(s=>s.part==='daddy')||nav.querySelector('[data-part="daddy"]'))return;
+ const b=document.createElement('button');b.type='button';b.dataset.part='daddy';b.textContent='🎩 '+PARTS.daddy;b.onclick=()=>go(S.findIndex(s=>s.part==='daddy'));nav.appendChild(b);
+ const vb=nav.querySelector('[data-part="boss"]');if(vb)vb.textContent='🧛 '+PARTS.boss;
+ b.setAttribute('aria-current',S[i].part==='daddy');})();
+
 </script>
 
 <script id="den-fireworks">
