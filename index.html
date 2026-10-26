@@ -1143,3 +1143,9 @@ ov.addEventListener('keydown',e=>{if(e.key==='Escape'&&get())hide()});
 render();if(!get())show();
 })();
 </script>
+<script id="tab-counts">
+/* Keep the subject tab counts honest: count the deck cards (distinct links) in each panel. */
+(()=>{let all=0;document.querySelectorAll('.tab-btn[data-subject]').forEach(b=>{const k=b.dataset.subject,pill=b.querySelector('.count-pill');if(!pill||k==='all')return;
+ const n=new Set([...document.querySelectorAll(`[data-panel="${k}"] a[href]:not([href^="#"])`)].map(a=>a.getAttribute('href'))).size;all+=n;pill.textContent=n;});
+ const a=document.querySelector('.tab-btn[data-subject="all"] .count-pill');if(a)a.textContent=all;})();
+</script>
