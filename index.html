@@ -871,6 +871,37 @@
       .hero-wrapper{padding-bottom:8rem}
     }
 </style>
+<style>
+    /* Family login: no passwords, just pick who's learning */
+    .who-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(255,249,235,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow-y:auto}
+    .who-overlay[hidden]{display:none}
+    .who-box{background:var(--paper,#FFFDF6);border:3px solid var(--ink,#1F3A4A);border-radius:28px;box-shadow:0 7px 0 var(--ink,#1F3A4A),0 26px 44px -16px rgba(31,58,74,.4);padding:1.6rem 1.4rem 1.4rem;width:100%;max-width:720px;text-align:center;margin:auto}
+    .who-box h2{font-family:'Fredoka',sans-serif;font-size:2rem;color:var(--ink,#1F3A4A);margin:0 0 .2rem}
+    .who-box p{color:var(--ink-soft,#475569);font-weight:700;margin:0 0 1.2rem}
+    .who-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+    .who-btn{font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1rem .5rem .9rem;border-radius:22px;border:3px solid var(--who-c);background:linear-gradient(160deg,#fff 55%,var(--who-l) 100%);box-shadow:0 5px 0 var(--who-c);transition:transform .15s,box-shadow .15s}
+    .who-btn:hover,.who-btn:focus-visible{transform:translateY(-3px);box-shadow:0 8px 0 var(--who-c);outline:none}
+    .who-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--who-c)}
+    .who-btn.is-current{background:var(--who-l)}
+    .who-btn .who-av,.who-btn .who-av svg{width:96px;height:96px;display:block}
+    .who-btn b{font-family:'Fredoka',sans-serif;font-size:1.35rem;color:var(--ink,#1F3A4A)}
+    .who-btn small{font-weight:700;white-space:nowrap;color:var(--ink-soft,#475569);font-size:.8rem}
+    .who-daddy{--who-c:#F59E0B;--who-l:#FEF3C7}.who-mommy{--who-c:#8B5CF6;--who-l:#EDE9FE}.who-willis{--who-c:#38BDF8;--who-l:#E0F2FE}.who-megan{--who-c:#F97316;--who-l:#FFEDD5}
+    .who-cancel{margin-top:1.1rem;font:inherit;font-weight:800;background:none;border:0;color:var(--ink-soft,#475569);text-decoration:underline;cursor:pointer}
+    .who-chip{display:inline-flex;align-items:center;gap:.5rem;margin:.9rem 0 0;padding:.3rem .9rem .3rem .3rem;border-radius:999px;border:2.5px solid var(--who-c);background:var(--who-l);font-family:'Fredoka',sans-serif;font-weight:600;color:var(--ink,#1F3A4A);font-size:1.05rem}
+    .who-chip .who-av,.who-chip .who-av svg{width:40px;height:40px;display:block}
+    .who-chip button{font:inherit;font-size:.85rem;margin-left:.3rem;padding:.15rem .7rem;border-radius:999px;border:2px solid var(--ink,#1F3A4A);background:#fff;cursor:pointer;color:var(--ink,#1F3A4A)}
+    @media (max-width:640px){.who-grid{grid-template-columns:repeat(2,1fr)}.who-btn small{font-size:.72rem}.who-box h2{font-size:1.6rem}.who-btn .who-av,.who-btn .who-av svg{width:80px;height:80px}}
+    @media (prefers-reduced-motion: reduce){.who-btn{transition:none}}
+</style>
+<div class="who-overlay" id="whoOverlay" role="dialog" aria-modal="true" aria-labelledby="whoTitle" hidden>
+<div class="who-box"><h2 id="whoTitle">Who's learning today?</h2><p>Tap your picture to come in. No password needed!</p>
+<div class="who-grid">
+<button type="button" class="who-btn who-daddy" data-user="daddy" data-av="char-chowdie"><span class="who-av"></span><b>Daddy</b><small>with Chowdie</small></button>
+<button type="button" class="who-btn who-mommy" data-user="mommy" data-av="char-mommy"><span class="who-av"></span><b>Mommy</b><small>with Mommy Elephant</small></button>
+<button type="button" class="who-btn who-willis" data-user="willis" data-av="char-wala"><span class="who-av"></span><b>Willis</b><small>with Wala</small></button>
+<button type="button" class="who-btn who-megan" data-user="megan" data-av="char-flamecharge"><span class="who-av"></span><b>Megan</b><small>with Flamecharge</small></button>
+</div><button type="button" class="who-cancel" id="whoCancel" hidden>Keep going as before</button></div></div>
 <div class="hero-wrapper">
 <svg class="sky-decor c1" viewBox="0 0 120 60" fill="none" aria-hidden="true"><path d="M25 50H95C106 50 114 42 114 31C114 21 106 13 96 13C93 5 85 0 75 0C63 0 53 8 50 19C47 17 43 16 39 16C28 16 20 24 20 35C12 36 6 42 6 50H25Z" fill="white" fill-opacity="0.85"/></svg>
 <svg class="sky-decor c2" viewBox="0 0 120 60" fill="none" aria-hidden="true"><path d="M25 50H95C106 50 114 42 114 31C114 21 106 13 96 13C93 5 85 0 75 0C63 0 53 8 50 19C47 17 43 16 39 16C28 16 20 24 20 35C12 36 6 42 6 50H25Z" fill="white" fill-opacity="0.85"/></svg>
@@ -1080,5 +1111,35 @@ window.addEventListener('hashchange',fromHash);
 document.querySelectorAll('[data-jump-subject]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();pick(a.dataset.jumpSubject);history.replaceState(null,'','#'+a.dataset.jumpSubject);document.querySelector('.controls-wrapper').scrollIntoView({behavior:'smooth'})}));
 document.querySelectorAll('.sub-nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const s=document.getElementById(a.getAttribute('href').slice(1));if(s)s.scrollIntoView({behavior:'smooth'})}));
 if(!fromHash())pick(store('hubTab')||'all',false);
+})();
+</script>
+<script>
+// Family login: remembers who is learning in localStorage 'denUser'. No passwords.
+(function(){
+const ov=document.getElementById('whoOverlay'),cancel=document.getElementById('whoCancel'),btns=[...ov.querySelectorAll('.who-btn')];
+const get=()=>{try{return localStorage.getItem('denUser')}catch(e){return null}};
+const set=v=>{try{localStorage.setItem('denUser',v)}catch(e){}};
+let n=0;
+// Copy a crew avatar SVG, giving its ids fresh names so clip paths still work when the crew grid is hidden
+function avatar(cls){const src=document.querySelector('.char-card.'+cls+' .char-avatar svg');if(!src)return null;
+ const s=src.cloneNode(true),sfx='-who'+(n++);
+ s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
+  s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
+ s.setAttribute('aria-hidden','true');s.removeAttribute('role');return s}
+btns.forEach(b=>{const a=avatar(b.dataset.av);if(a)b.querySelector('.who-av').appendChild(a)});
+const hero=document.querySelector('header.hero-card');let chip=null;
+function show(){const u=get();btns.forEach(b=>b.classList.toggle('is-current',b.dataset.user===u));cancel.hidden=!u;ov.hidden=false;document.body.style.overflow='hidden';
+ (btns.find(b=>b.dataset.user===u)||btns[0]).focus()}
+function hide(){ov.hidden=true;document.body.style.overflow=''}
+function render(){const b=btns.find(x=>x.dataset.user===get());if(chip)chip.remove();chip=null;if(!b||!hero)return;
+ chip=document.createElement('div');chip.className='who-chip '+[...b.classList].find(c=>c.startsWith('who-')&&c!=='who-btn');
+ const av=document.createElement('span');av.className='who-av';const a=avatar(b.dataset.av);if(a)av.appendChild(a);
+ const name=b.querySelector('b').textContent,t=document.createElement('span');t.textContent='Hi, '+name+'!';
+ const sw=document.createElement('button');sw.type='button';sw.textContent='Switch';sw.setAttribute('aria-label','Switch who is learning');sw.addEventListener('click',show);
+ chip.append(av,t,sw);hero.appendChild(chip)}
+btns.forEach(b=>b.addEventListener('click',()=>{set(b.dataset.user);render();hide()}));
+cancel.addEventListener('click',hide);
+ov.addEventListener('keydown',e=>{if(e.key==='Escape'&&get())hide()});
+render();if(!get())show();
 })();
 </script>
