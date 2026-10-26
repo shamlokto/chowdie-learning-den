@@ -509,7 +509,7 @@ const stream=(dirty=false)=>`<path d="M0 300 q160 -40 320 0 t320 0 V360 q-160 40
 const junk=()=>[[90,320,'🥤'],[170,332,'🥫'],[260,318,'🧴'],[380,336,'🥤'],[470,322,'🥫'],[560,330,'🛍️']].map(([x,y,e])=>T(x,y,e,'mid','style="font-size:30px"')).join('');
 const flowers=(n=9,y=350)=>[...Array(n)].map((_,k)=>{const x=30+k*(580/(n-1));return `<g transform="translate(${x} ${y+(k%2)*14})"><line y1="0" y2="-26" stroke="#3E8A3E" stroke-width="3"/><circle cy="-30" r="9" fill="${['#FFC83D','#F4A3A8','#fff'][k%3]}" stroke="#1F3A4A" stroke-width="2"/><circle cy="-30" r="3.5" fill="#E0A800"/></g>`}).join('');
 const sunflower=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><line y1="0" y2="-60" stroke="#3E8A3E" stroke-width="5"/>${[...Array(12)].map((_,k)=>`<ellipse cx="0" cy="-82" rx="6" ry="14" fill="#FFC83D" stroke="#C88A00" stroke-width="1.5" transform="rotate(${k*30} 0 -66)"/>`).join('')}<circle cy="-66" r="12" fill="#7A4A2A"/></g>`;
-const den=()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/><path d="M40 300 v-150 q0 -40 40 -40 h80 q40 0 40 40 v150" fill="#7CC8F0" stroke="#1F3A4A" stroke-width="3"/><path d="M120 110 v190 M40 200 h160" stroke="#1F3A4A" stroke-width="3"/>${T(120,180,'☾','mid','style="font-size:40px;fill:#FFE7A8"')}<rect x="460" y="90" width="120" height="90" rx="8" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/>${T(520,148,"Chowdie's Den",'sm mid','style="font-weight:800"')}`;
+const den=()=>paint('den',0,'concert');
 const table=()=>`<ellipse cx="320" cy="300" rx="230" ry="46" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/>`+[['🥟',230,292],['🍜',320,286],['🥗',410,292],['🍗',270,312],['🍉',370,314]].map(([e,x,y])=>T(x,y,e,'mid','style="font-size:34px"')).join('');
 /* the Rain Tree: 0 healthy, 1 wilting, 2 Treeman (awake, cross), 3 healed and blossoming */
 function rainTree(x,y,s=1,st=0){const leaf=st===0?'#4FAE63':st===1?'#9DBA6A':st===2?'#8A8F6A':'#4FAE63',bark='#8A5A2B';
@@ -532,7 +532,7 @@ function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduc
 /* challenge card: presenter on the left, question scroll on the right */
 const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0'],science:['🔬 Science','#3E9A52']};
 function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
-  return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
+  return (CHBG[S[i]&&S[i].part]?paint(CHBG[S[i].part],.5):'')+castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
    +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
 let CHN=0;
 const praise=['Brilliant!','Super brain!','You got it!','Amazing!','Wonderful!','Spot on!'];
@@ -599,14 +599,17 @@ const CHAP=[['c1','1 · Setting Sail','#2E8BC0'],['c2','2 · Drip, Drip','#E0574
 setChapters(CHAP);
 SUBJ.writing=['✍️ Writing','#B9471A'];
 CAST.turtle=[null,'<b style="color:#2F7D3E">Grandma Turtle:</b> '];CASTDRAW.turtle=(x,y,s)=>T(x,y-20-28*s,'🐢','mid',`style="font-size:${110*s}px"`);FACES.turtle=()=>T(50,92,'🐢','mid','style="font-size:70px"');VOICE.turtle={en:[.85,.9],zh:[.8,.9],pref:VFEM};
-const sea=(c1='#BFE6F7',c2='#FFF8E8',w='#5BB8E8')=>sky(c1,c2)+`<path d="M0 290 q40 -12 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 V400 H0z" fill="${w}" stroke="#2E7DB0" stroke-width="3"/><path d="M0 330 q40 -10 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0" stroke="#fff" stroke-width="3" fill="none" opacity=".6"/>`;
+/* painted scene backgrounds (img/leak/, Gemini, worksheet style; the den is shared with the concert story); the SVG boat and cast are drawn on top */
+const paint=(n,wash=0,dir='leak')=>`<image href="../img/${dir}/${n}.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/>`+(wash?`<rect width="640" height="400" fill="#FFFDF6" opacity="${wash}"/>`:'');
+const CHBG={c1:'shore',c2:'opensea',c3:'opensea',c4:'island',c5:'storm',c6:'sunset'};
+const sea=(c1='#BFE6F7')=>paint(c1==='#5B6B7A'?'storm':c1==='#D7E4EC'?'opensea':'shore');
 const boat=(x,y,s=1,o={})=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(${o.tilt||0})"><path d="M-130 -40 h260 l-40 60 h-180z" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/><path d="M-120 -40 h240" stroke="#8A5A2B" stroke-width="4"/><line x1="0" y1="-40" x2="0" y2="-200" stroke="#8A5A2B" stroke-width="6"/><path d="M6 -195 q70 50 0 140z" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><path d="M-6 -185 q-60 40 0 120z" fill="#F4A3A8" stroke="#1F3A4A" stroke-width="3"/>${T(-60,-6,o.name||'SEA OTTER','sm mid','style="font-weight:800;fill:#fff"')}${(o.leaks||[]).map(([a,b])=>`<g transform="translate(${a} ${b})"><circle r="5" fill="#2E7DB0"/><path d="M0 6 q-4 10 0 16 q4 -6 0 -16" fill="#5BB8E8"/></g>`).join('')}${(o.patch||[]).map(([a,b])=>`<rect x="${a-9}" y="${b-7}" width="18" height="14" rx="3" fill="#E9C27A" stroke="#1F3A4A" stroke-width="2"/>`).join('')}</g>`;
 const island=(x=470,y=300)=>`<g transform="translate(${x} ${y})"><ellipse rx="170" ry="40" fill="#F2D49B" stroke="#1F3A4A" stroke-width="3"/><path d="M-20 -10 q10 -80 0 -150" stroke="#8A5A2B" stroke-width="10" fill="none"/><path d="M-10 -160 q60 -20 90 20 q-50 -10 -90 -20 q-60 -10 -100 30 q50 -20 100 -30 q30 -50 80 -40 q-50 10 -80 40 q-40 -40 -90 -30 q50 10 90 30z" fill="#4FAE63" stroke="#1F3A4A" stroke-width="2"/></g>`;
 const rain=()=>[...Array(40)].map((_,k)=>`<line x1="${(k*53)%640}" y1="${(k*37)%280}" x2="${(k*53)%640-8}" y2="${(k*37)%280+22}" stroke="#9FB0C8" stroke-width="2.5"/>`).join('');
 const S=[
 /* ---------- 1: Setting Sail ---------- */
 story('c1','A trip to Turtle Island','otter','"Who wants to sail to Turtle Island?" asked Chowdie, waving a map. "ME!" shouted Wala, Flamecharge and Flame. Grandma Turtle lived there, and she made the best seaweed cookies in the whole ocean.',
- ()=>sea()+G(boat(220,300,.9),'a-pop',.2)+island(520,300)+G(otter(110,392,.8,{wave:true}),'a-pop',.4),
+ ()=>sea()+G(boat(220,300,.9),'a-pop',.2)+G(otter(110,392,.8,{wave:true}),'a-pop',.4),
  'Who wants to sail to <b>Turtle Island</b>? Grandma Turtle makes the best seaweed cookies in the whole ocean!'),
 story('c1','Baddie\'s Bargain Repairs','eagle','But the old boat had a crack. Baddie Vampire popped up with a sign: BADDIE\'S BARGAIN REPAIRS, ONLY $2! He stuck chewing gum on the crack. "Done! Perfect!" Flame frowned. "Ben Franklin said: Look before, or you\'ll find yourself behind."',
  ()=>sea()+G(boat(260,300,.9,{patch:[[60,-14]]}),'a-pop',.2)+G(baddie(520,392,.8,{point:true}),'a-drop',.3)+G(`<rect x="430" y="170" width="190" height="60" rx="8" fill="#FFF3D6" stroke="#1F3A4A" stroke-width="2.5"/>`+T(525,196,"BADDIE'S BARGAIN",'sm mid','style="font-weight:800"')+T(525,218,'REPAIRS $2!','sm mid','style="font-weight:800;fill:#E0574F"'),'a-pop',.5),
@@ -639,7 +642,7 @@ write('c3','wala','writing','Describe the sea',{q:'Write 2 sentences describing 
  example:'The sea was blue and sparkling in the morning sun. Gentle waves splashed against our little wooden boat.'}),
 /* ---------- 4: Turtle Island ---------- */
 story('c4','Turtle Island','turtle','At last they reached Turtle Island. Grandma Turtle was waiting on the golden beach with a basket of warm seaweed cookies. "Welcome, little sailors! You fixed your leak in time. Well done!"',
- ()=>sky()+sun(560,80)+island(330,330)+G(T(470,330,'🐢','mid','style="font-size:90px"'),'a-pop',.3)+G(wala(200,330,.6,{wave:true})+otter(280,330,.6,{wave:true}),'a-pop',.5),
+ ()=>paint('island')+G(T(470,330,'🐢','mid','style="font-size:90px"'),'a-pop',.3)+G(wala(200,330,.6,{wave:true})+otter(280,330,.6,{wave:true}),'a-pop',.5),
  'Welcome, little sailors! You fixed your leak in time. Have a seaweed cookie!'),
 num('c4','turtle','maths','The beach walk',{q:'My beach is 85 m long. The forest path is 47 m long. How much LONGER is the beach than the path?',answer:38,unit:'m',
  art:T(410,320,'85 m − 47 m','big mid'),why:'85 − 47 = <b>38 m</b> longer.',hint:'Take away the shorter length from the longer one. Regroup the tens!'}),
@@ -660,7 +663,7 @@ write('c5','wala','writing','Dear Diary',{q:'Pretend you are Wala. Write a diary
  example:'Dear Diary, Today we sailed home in a big storm. The waves were huge and I felt very scared. We saw Baddie in the water, so we pulled him into our boat. I was proud of my friends because they were so brave.'}),
 /* ---------- 6: Home Again ---------- */
 story('c6','Home again','otter','At last, the Sea Otter bumped gently onto the beach by Chowdie\'s Den. Baddie helped carry the boat, and promised to use REAL patches from now on. That night, they shared Grandma Turtle\'s cookies by the fire.',
- ()=>sky('#FFC9A0','#FFF0DF')+sun(540,260,40)+grass(330,'#C9DDA0')+G(boat(240,320,.7,{patch:[[40,0],[-40,4],[0,8]]}),'a-pop',.2)+G(otter(450,392,.75,{wave:true})+wala(530,392,.7,{wave:true})+flame(600,392,.6,{still:true}),'a-pop',.4),
+ ()=>paint('sunset')+G(boat(240,320,.7,{patch:[[40,0],[-40,4],[0,8]]}),'a-pop',.2)+G(otter(450,392,.75,{wave:true})+wala(530,392,.7,{wave:true})+flame(600,392,.6,{still:true}),'a-pop',.4),
  'Home at last! Baddie promised to use <b>real</b> patches from now on.',{mount:a=>a.later(()=>a.confetti(),500)}),
 mc('c6','otter','writing','What does it mean?',{q:'"A small leak will sink a great ship." Which of these is like a small leak in real life?',options:['Skipping a bit of practice daily','Eating one healthy apple every day','Saying thank you to a good friend','Reading a short book before bed'],answer:'Skipping a bit of practice daily',
  why:'Skipping a little practice seems tiny, but it adds up into a BIG problem, just like a small leak!',hint:'Which small thing could grow into a big problem?'}),
