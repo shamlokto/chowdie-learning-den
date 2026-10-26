@@ -4,11 +4,12 @@
    - Right on the FIRST tap = a star. Any wrong tap first = no star, and the question rests for 7 days.
    - A question answered in the last 7 days earns nothing. After 7 days it can earn a review star.
    - Baddie Daddy challenges are worth 2. Finishing every question in a deck, boss round or story in one go earns a one-time bonus.
-   Who is learning comes from localStorage 'denUser'. Mommy doesn't collect stars. */
+   Who is learning comes from localStorage 'denUser'. Daddy and Mommy collect as beta testers. */
 (function(){
 // Paste the Apps Script web app URL here. Empty = stars are saved on this device only.
 const SYNC_URL='https://script.google.com/macros/s/AKfycby0Y3I4e4kAtF6zex4kcs6ZPw6D2FVPucMe-0MdgnlAbiR08vWuSJKyy9If9X6Zj_5eew/exec';
-const USERS={willis:'Willis',megan:'Megan',daddy:'Daddy'};
+const USERS={willis:'Willis',megan:'Megan',daddy:'Daddy',mommy:'Mommy'};
+const BETA={daddy:1,mommy:1};
 const WEEK=7*864e5, BONUS={deck:3,boss:5,daddy:10,story:2};
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const who=()=>ls.get('denUser');
@@ -28,15 +29,15 @@ function totals(u){const b=book(u);
 
 /* Talk to the Google Sheet. Plain-text POST keeps it a "simple" request, so Apps Script needs no CORS preflight. */
 async function call(payload){const r=await fetch(SYNC_URL,{method:'POST',body:JSON.stringify(payload),redirect:'follow'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
-let busy=false,again=false;
-async function sync(u=who()){if(!SYNC_URL||!USERS[u])return;if(busy){again=true;return}busy=true;
+let busy=false;const again=new Set();
+async function sync(u=who()){if(!SYNC_URL||!USERS[u])return;if(busy){again.add(u);return}busy=true;
  try{const b=book(u),pend=b.log.filter(e=>!e.synced);
   const res=await call({op:'sync',user:u,events:pend.map(e=>({id:e.id,type:e.type,key:e.key,ok:e.ok,value:e.value,kind:e.kind,deck:e.deck,note:e.note}))});
   if(res&&res.ok){const nb=book(u);(res.results||[]).forEach(r=>{const e=nb.log.find(x=>x.id===r.id);if(e){e.synced=true;e.stars=r.stars;e.result=r.kind}});
    nb.srv=res.state;nb.log=nb.log.filter(e=>!e.synced||Date.now()-e.ts<WEEK);save(u,nb);changed(u);
    (res.results||[]).forEach(r=>{const e=pend.find(x=>x.id===r.id);if(e&&e.guess!==r.stars&&r.kind!=='dup')toast(r.stars>0?`⭐ ${r.stars} banked for ${USERS[u]}.`:`The Star Bank says this one isn't ready yet.`)})}}
  catch(e){/* offline: try again later */}
- finally{busy=false;if(again){again=false;sync(u)}}}
+ finally{busy=false;const next=[...again][0];if(next){again.delete(next);sync(next)}}}
 
 /* Record an attempt or bonus. Returns {stars, kind} using the local view of the rules. */
 function record(u,ev){const b=book(u);let stars=0,kind,last=0;
@@ -60,7 +61,7 @@ const day=t=>new Date(t+WEEK).toLocaleDateString(undefined,{weekday:'short',day:
 
 /* Device-only rewards for the Star Bank when there is no backend yet (with a backend, the Sheet checks the PIN) */
 function reward(u,n,note){const b=book(u);b.log.push({id:uid(),ts:Date.now(),type:n<0?'redeem':'gift',stars:n,note,synced:true});save(u,b);changed(u)}
-window.DenStars={SYNC_URL,USERS,BONUS,who,totals,sync,record,reward,toast,book,onChange:f=>subs.push(f),call:SYNC_URL?call:null};
+window.DenStars={SYNC_URL,USERS,BETA,BONUS,who,totals,sync,record,reward,toast,book,onChange:f=>subs.push(f),call:SYNC_URL?call:null};
 
 /* ---- Deck hook: wraps the deck engine's win() and watches for wrong taps (the engine marks them with class "no") ---- */
 if(typeof S==='undefined'||typeof win!=='function'||typeof api==='undefined')return;
