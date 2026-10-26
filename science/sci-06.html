@@ -269,7 +269,7 @@ const mushroomI=(x,y,s=1)=>mc('mushroom',x,y,54*s);
 const sunI2=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="20" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-26" x2="0" y2="-34" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
 const dropI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -24 q18 24 18 36 a18 18 0 0 1 -36 0 q0 -12 18 -36z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
 const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="24" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M18 18 l20 20" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/></g>`;
-const kidI=(x,y,col=C.sky)=>col===C.berry?`<image href="../img/sci/mic-kidsick.webp" x="${x-20}" y="${y-46}" width="40" height="64" preserveAspectRatio="xMidYMid meet"/>`:`<image href="../img/sci/body-child.webp" x="${x-20}" y="${y-46}" width="40" height="64" preserveAspectRatio="xMidYMid meet"/>`;
+const kidI=(x,y,col=C.sky)=>`<image href="../img/sci/${col===C.berry?'mic-kidsick':'kid-boy'}.webp" x="${x-14}" y="${y-46}" width="28" height="64" preserveAspectRatio="xMidYMid meet"/>`;
 /* ===== Characters: Wala the Koala and Baddie Vampire, plus engine add-ons ===== */
 /* Wala: origin = feet centre, ~115 tall at s=1 (same convention as otter) */
 function wala(x,y,s=1,o={}){
@@ -510,7 +510,7 @@ const S=[
 
 {part:'try',title:'Germ spread simulator',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{let sick=new Set([0]),wash=false,round=0;const N=12;const pos=[...Array(N)].map((_,i)=>[90+(i%6)*92,140+Math.floor(i/6)*120]);
-  const draw=()=>{a.q('.play').innerHTML=T(320,36,`Day ${round} · ${sick.size} of ${N} sick · handwashing ${wash?'ON':'OFF'}`,'lab mid acc')+pos.map(([x,y],i)=>kidI(x,y,sick.has(i)?C.berry:C.leaf)+(sick.has(i)?virusI(x+18,y-44,.3):'')).join('')};
+  const draw=()=>{a.q('.play').innerHTML=T(320,36,`Day ${round} · ${sick.size} of ${N} sick · handwashing ${wash?'ON':'OFF'}`,'lab mid acc')+pos.map(([x,y],i)=>`<image href="../img/sci/${i%2?'kid-boy':(sick.has(i)?'mic-kidsick':'kid-girl')}.webp" x="${x-14}" y="${y-46}" width="28" height="64"${sick.has(i)?'':' opacity=".95"'}/>`+(sick.has(i)?virusI(x+18,y-44,.3):'')).join('')};
   draw();a.say('One child has a cold. Tap <b>Next day</b> to see it spread. Then try again with <b>handwashing on</b>!');
   a.btn('Next day',()=>{round++;const p=wash?.12:.5;const n=new Set(sick);sick.forEach(i=>{[i-1,i+1,i-6,i+6].forEach(j=>{if(j>=0&&j<N&&Math.abs((j%6)-(i%6))<=1&&Math.random()<p)n.add(j)})});sick=n;draw();
    if(sick.size===N)a.say(`Day ${round}: <b>everyone is sick!</b> Germs spread fast without handwashing. Tap Reset and turn handwashing on.`);else if(round>=6&&wash)a.win(`Day ${round}: only ${sick.size} of 12 sick. <b>Handwashing slowed the germs right down!</b>`);else a.say(`Day ${round}: ${sick.size} sick.`)},'go');
