@@ -504,12 +504,15 @@ const cloud=(x,y,s=1,f='#fff')=>`<g transform="translate(${x} ${y}) scale(${s})"
 const grass=(y=330,c='#9ED48A')=>`<path d="M0 ${y} q160 -24 320 0 t320 0 V400 H0z" fill="${c}"/>`;
 const sun=(x,y,r=34)=>`<g transform="translate(${x} ${y})">${[...Array(10)].map((_,k)=>`<line x1="0" y1="${-r-8}" x2="0" y2="${-r-20}" stroke="#FFC83D" stroke-width="5" stroke-linecap="round" transform="rotate(${k*36})"/>`).join('')}<circle r="${r}" fill="#FFD95A" stroke="#E0A800" stroke-width="3"/></g>`;
 const gate=(x=320)=>`<g transform="translate(${x} 0)"><path d="M-120 330 v-180 q120 -110 240 0 v180" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round"/><path d="M-120 330 v-180 q120 -110 240 0 v180" fill="none" stroke="#9AD3F0" stroke-width="6" stroke-dasharray="2 14" stroke-linecap="round"/>${cloud(-120,330,.9)}${cloud(120,330,.9)}${cloud(0,62,.8)}</g>`;
+/* painted scene backgrounds (img/eagle/, Gemini, worksheet style; meadow, storm clearing, sunset and den are shared with other stories); SVG props (gate, peak, stream, sunflowers, the Old Rain Tree) and the cast are drawn on top */
+const paint=(n,wash=0,dir='eagle')=>`<image href="../img/${dir}/${n}.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/>`+(wash?`<rect width="640" height="400" fill="#FFFDF6" opacity="${wash}"/>`:'');
+const CHBG={c1:['clouds','eagle'],c2:['peaksky','eagle'],c3:['streamwood','eagle'],c4:['meadow','talent'],c5:['afterstorm','money'],c6:['den','concert']};
 const peak=()=>`<path d="M-20 400 L200 150 L300 230 L420 110 L660 400z" fill="#C9B79C" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/><path d="M380 156 L420 110 L462 160 q-20 10 -40 0 q-20 10 -42 -4z" fill="#fff"/><ellipse cx="420" cy="140" rx="46" ry="14" fill="#B07A3E" stroke="#1F3A4A" stroke-width="3"/>`;
 const stream=(dirty=false)=>`<path d="M0 300 q160 -40 320 0 t320 0 V360 q-160 40 -320 0 t-320 0z" fill="${dirty?'#8FA39A':'#7CC8F0'}" stroke="#1F3A4A" stroke-width="3"/>`+(dirty?'':`<path d="M60 318 q20 -6 40 0 M300 330 q20 -6 40 0 M520 316 q20 -6 40 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>`);
 const junk=()=>[[90,320,'🥤'],[170,332,'🥫'],[260,318,'🧴'],[380,336,'🥤'],[470,322,'🥫'],[560,330,'🛍️']].map(([x,y,e])=>T(x,y,e,'mid','style="font-size:30px"')).join('');
 const flowers=(n=9,y=350)=>[...Array(n)].map((_,k)=>{const x=30+k*(580/(n-1));return `<g transform="translate(${x} ${y+(k%2)*14})"><line y1="0" y2="-26" stroke="#3E8A3E" stroke-width="3"/><circle cy="-30" r="9" fill="${['#FFC83D','#F4A3A8','#fff'][k%3]}" stroke="#1F3A4A" stroke-width="2"/><circle cy="-30" r="3.5" fill="#E0A800"/></g>`}).join('');
 const sunflower=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><line y1="0" y2="-60" stroke="#3E8A3E" stroke-width="5"/>${[...Array(12)].map((_,k)=>`<ellipse cx="0" cy="-82" rx="6" ry="14" fill="#FFC83D" stroke="#C88A00" stroke-width="1.5" transform="rotate(${k*30} 0 -66)"/>`).join('')}<circle cy="-66" r="12" fill="#7A4A2A"/></g>`;
-const den=()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/><path d="M40 300 v-150 q0 -40 40 -40 h80 q40 0 40 40 v150" fill="#7CC8F0" stroke="#1F3A4A" stroke-width="3"/><path d="M120 110 v190 M40 200 h160" stroke="#1F3A4A" stroke-width="3"/>${T(120,180,'☾','mid','style="font-size:40px;fill:#FFE7A8"')}<rect x="460" y="90" width="120" height="90" rx="8" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/>${T(520,148,"Chowdie's Den",'sm mid','style="font-weight:800"')}`;
+const den=()=>paint('den',0,'concert');
 const table=()=>`<ellipse cx="320" cy="300" rx="230" ry="46" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/>`+[['🥟',230,292],['🍜',320,286],['🥗',410,292],['🍗',270,312],['🍉',370,314]].map(([e,x,y])=>T(x,y,e,'mid','style="font-size:34px"')).join('');
 /* the Rain Tree: 0 healthy, 1 wilting, 2 Treeman (awake, cross), 3 healed and blossoming */
 function rainTree(x,y,s=1,st=0){const leaf=st===0?'#4FAE63':st===1?'#9DBA6A':st===2?'#8A8F6A':'#4FAE63',bark='#8A5A2B';
@@ -532,7 +535,7 @@ function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduc
 /* challenge card: presenter on the left, question scroll on the right */
 const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0'],science:['🔬 Science','#3E9A52']};
 function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
-  return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
+  return ((b=>b?paint(b[0],.5,b[1]):'')(CHBG[S[i]&&S[i].part]))+castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
    +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
 let CHN=0;
 const praise=['Brilliant!','Super brain!','You got it!','Amazing!','Wonderful!','Spot on!'];
@@ -565,17 +568,17 @@ const CHAP=[['c1','1 · Sky Gate','#5BB8E8'],['c2','2 · Phoenix Peak','#FF7A45'
 setChapters(CHAP);
 const tri=(x,y)=>[1,2,3,4,5].map((n,r)=>[...Array(n)].map((_,k)=>`<circle cx="${x+(k-(n-1)/2)*26}" cy="${y+r*24}" r="9" fill="#FFC83D" stroke="#C88A00" stroke-width="2"/>`).join('')).join('')+T(x,y+5*24+12,'1, 3, 6, 10, 15, ?','lab mid');
 const nest=(x,y,n)=>`<g transform="translate(${x} ${y})"><ellipse rx="40" ry="14" fill="#B07A3E" stroke="#1F3A4A" stroke-width="2.5"/>${[...Array(n)].map((_,k)=>`<ellipse cx="${-18+k*12}" cy="-10" rx="7" ry="9" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="2"/>`).join('')}</g>`;
-const scroll=(lines)=>G(`<rect x="150" y="166" width="340" height="${lines.length*46+70}" rx="16" fill="#FFF3D6" stroke="#8A5A2B" stroke-width="4"/>`+T(320,206,'🗺️ The Mission','h mid','style="fill:#8A5A2B"')+lines.map((l,k)=>T(176,254+k*44,l,'lab')).join(''),'a-pop',.4);
+const scroll=(lines)=>G(`<rect x="120" y="166" width="400" height="${lines.length*46+70}" rx="16" fill="#FFF3D6" stroke="#8A5A2B" stroke-width="4"/>`+T(320,206,'🗺️ The Mission','h mid','style="fill:#8A5A2B"')+lines.map((l,k)=>T(146,254+k*44,l,'lab')).join(''),'a-pop',.4);
 const S=[
 /* ---------- Chapter 1: the Sky Gate ---------- */
 story('c1','Off to Phoenix Peak!','wala','One sunny Saturday, Wala the Koala packed her favourite leaf snacks. "I\'m off to visit Flamecharge on Phoenix Peak!" "Have fun, and be back for dinner!" called Chowdie.',
- ()=>sky()+sun(560,110)+cloud(120,120,.8)+grass(320)+`<path d="M420 330 q0 -120 90 -120 q90 0 90 120z" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/><path d="M490 330 v-60 q20 -20 40 0 v60" fill="#7A4A2A" stroke="#1F3A4A" stroke-width="3"/>`+T(510,252,"Chowdie's Den",'sm mid','style="font-weight:800;fill:#fff"')+G(otter(380,394,.9,{wave:true}),'a-pop',.3)+G(wala(170,394,1,{wave:true}),'a-pop',.5),
+ ()=>paint('meadow',0,'talent')+`<path d="M420 330 q0 -120 90 -120 q90 0 90 120z" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/><path d="M490 330 v-60 q20 -20 40 0 v60" fill="#7A4A2A" stroke="#1F3A4A" stroke-width="3"/>`+T(510,252,"Chowdie's Den",'sm mid','style="font-weight:800;fill:#fff"')+G(otter(380,394,.9,{wave:true}),'a-pop',.3)+G(wala(170,394,1,{wave:true}),'a-pop',.5),
  'One sunny Saturday, Wala packed her favourite leaf snacks. "I\'m off to visit Flamecharge on Phoenix Peak!" "Have fun, and be back for dinner!" called Chowdie. Tap <b>Next</b> to turn the page.'),
 story('c1','The Sky Gate','eagle','High above the clouds stood the shimmering Sky Gate. WHOOSH! Down swooped an eagle with goggles and a bright red scarf. "HALT! Nobody visits Flamecharge without passing MY tests!"',
- ()=>sky('#9FD8F2','#E8F6FC')+cloud(80,330,1.2)+cloud(560,340,1.3)+gate(330)+G(wala(150,392,.95,{still:true}),'a-pop',.3)+G(eagle(460,370,1.25,{wave:true}),'a-drop',.5),
+ ()=>paint('clouds')+gate(330)+G(wala(150,392,.95,{still:true}),'a-pop',.3)+G(eagle(460,370,1.25,{wave:true}),'a-drop',.5),
  'HALT! I am <b>Flame the Eagle</b>, guardian of the Sky Gate and Flamecharge\'s best friend. Nobody visits her without passing MY three tests!'),
 story('c1','Meet Flame the Eagle','eagle','"I can spot a mouse from a kilometre away, and I check answers just as carefully! Three tests: one Maths, one English and one 华文. Get all three right and the gate will open."',
- ()=>sky('#9FD8F2','#E8F6FC')+gate(330)+G(eagle(320,390,1.6,{point:true}),'a-pop',.2)+G(`<g transform="translate(110 250)">${T(0,0,'🔢','mid','style="font-size:52px"')}</g><g transform="translate(110 320)">${T(0,0,'🔤','mid','style="font-size:52px"')}</g><g transform="translate(530 290)">${T(0,0,'🀄','mid','style="font-size:52px"')}</g>`,'a-pop',.7),
+ ()=>paint('clouds')+gate(330)+G(eagle(320,390,1.6,{point:true}),'a-pop',.2)+G(`<g transform="translate(110 250)">${T(0,0,'🔢','mid','style="font-size:52px"')}</g><g transform="translate(110 320)">${T(0,0,'🔤','mid','style="font-size:52px"')}</g><g transform="translate(530 290)">${T(0,0,'🀄','mid','style="font-size:52px"')}</g>`,'a-pop',.7),
  'I can spot a mouse from a kilometre away, and I check answers just as carefully! Three tests: one <b>Maths</b>, one <b>English</b> and one <b>华文</b>. Ready, little koala?'),
 num('c1','eagle','maths','Test 1: the eagle eggs',{q:'I have 3 nests. Each nest has 4 eggs. 5 eggs have already hatched. How many eggs have NOT hatched yet?',answer:7,unit:'eggs',
  art:nest(300,330,4)+nest(410,330,4)+nest(520,330,4),why:'3 nests × 4 eggs = 12 eggs. 12 − 5 = <b>7</b> eggs still waiting to hatch.',hint:'First find how many eggs there are altogether, then take away the ones that hatched.'}),
@@ -585,25 +588,25 @@ mc('c1','eagle','english','Test 2: the right sentence',{q:'Only ONE of these sen
 multi('c1','eagle','chinese','Test 3: birds of a feather',{q:'Tap ALL the characters that have the bird part 鸟 in them. Careful: some only LOOK like birds!',options:['鸡','鸭','鹅','鸣','鸽','乌','岛','马'],correct:['鸡','鸭','鹅','鸣','鸽'],
  why:'鸡 鸭 鹅 鸽 are birds, and 鸣 (to chirp) = 口 + 鸟. <b>乌</b> (crow) is missing a stroke, the eye, because a crow is so black you can\'t see it! <b>岛</b> hides a 山 underneath, and 马 is a horse.',hint:'Look closely: does it have ALL of 鸟, including the little dot inside?'}),
 story('c1','The gate opens!','eagle','"Three out of three!" Flame bowed his head, and the Sky Gate swung open with a sound like wind chimes. "You may pass… and I\'m coming with you. Flamecharge is my best friend!"',
- ()=>sky('#9FD8F2','#E8F6FC')+gate(330)+`<rect x="230" y="160" width="200" height="170" fill="#FFF8D6" opacity=".7"/>`+G(wala(270,392,.95,{wave:true}),'a-pop',.2)+G(eagle(420,390,1.15,{wave:true}),'a-pop',.4)+G(star(140,200,24)+star(540,180,24)+star(330,120,20),'a-pop',.6),
+ ()=>paint('clouds')+gate(330)+`<rect x="230" y="160" width="200" height="170" fill="#FFF8D6" opacity=".7"/>`+G(wala(270,392,.95,{wave:true}),'a-pop',.2)+G(eagle(420,390,1.15,{wave:true}),'a-pop',.4)+G(star(140,200,24)+star(540,180,24)+star(330,120,20),'a-pop',.6),
  '"Three out of three!" Flame bowed his head, and the Sky Gate swung open. "You may pass… and I\'m coming with you!" said Flame.'),
 /* ---------- Chapter 2: Phoenix Peak ---------- */
 story('c2','Phoenix Peak','flame','On top of Phoenix Peak, Flamecharge was waiting by her warm, glowing nest. "Wala! You passed Flame\'s tests? He\'s the toughest quizmaster in the whole sky!"',
- ()=>sky('#FFD9A8','#FFF3E0')+peak()+G(flame(420,128,.75,{wave:true}),'a-pop',.2)+G(wala(160,392,.95,{wave:true})+eagle(290,390,.95,{still:true}),'a-pop',.4),
+ ()=>paint('peaksky')+peak()+G(flame(420,128,.75,{wave:true}),'a-pop',.2)+G(wala(160,392,.95,{wave:true})+eagle(290,390,.95,{still:true}),'a-pop',.4),
  'Wala! You passed Flame\'s tests? He\'s the toughest quizmaster in the whole sky! Welcome to Phoenix Peak!'),
 mc('c2','flame','english','Flamecharge\'s welcome riddle',{q:'Before we have tea, my welcome riddle! Which word is spelt correctly?',options:['beautiful','beatiful','beautifull','beutiful'],answer:'beautiful',
  why:'<b>b-e-a-u-t-i-f-u-l</b>. Say it the spelling way: "be-a-u-ti-ful", with just ONE L at the end.',hint:'Sound out every part: b-e-a-u… And how many Ls does "-ful" have?'}),
 story('c2','A creaky groan','flame','Suddenly, a long, creaky GROAN rolled across the valley. Below them, the Old Rain Tree was drooping. Its leaves were falling… and two sleepy eyes were opening in its trunk!',
- ()=>sky('#E9D6B8','#FFF3E0')+grass(330,'#B9C98A')+rainTree(420,392,.78,1)+G(flame(110,392,.8,{still:true})+wala(200,392,.8,{still:true})+eagle(270,392,.75,{still:true}),'a-pop',.3),
+ ()=>paint('meadow',0,'talent')+rainTree(420,392,.78,1)+G(flame(110,392,.8,{still:true})+wala(200,392,.8,{still:true})+eagle(270,392,.75,{still:true}),'a-pop',.3),
  'GROOOAN… Look! The Old Rain Tree is drooping. Its leaves are falling… and two sleepy eyes are opening in its trunk!'),
 story('c2','The mission','flame','"Oh no!" said Flamecharge. "When a tree is sad and thirsty for too long, it turns into a grumpy TREEMAN! If that happens, the birds and squirrels lose their home. We must heal it before sunset!"',
- ()=>sky('#E9D6B8','#FFF3E0')+scroll(['💧 Crystal Water from Whisper Stream','🌻 Golden Seeds from Sun Meadow','🎵 The Song of Kind Words'])+G(flame(80,392,.85,{still:true}),'a-pop',.2)+G(eagle(570,392,.8,{still:true}),'a-pop',.3),
+ ()=>paint('meadow',.45,'talent')+scroll(['💧 Crystal Water from Whisper Stream','🌻 Golden Seeds from Sun Meadow','🎵 The Song of Kind Words'])+G(flame(80,392,.85,{still:true}),'a-pop',.2)+G(eagle(570,392,.8,{still:true}),'a-pop',.3),
  'When a tree is sad and thirsty for too long, it turns into a grumpy <b>Treeman</b>! To heal it we need three treasures: <b>Crystal Water</b>, <b>Golden Seeds</b>, and the <b>Song of Kind Words</b>.',{bag:0}),
 mc('c2','eagle','maths','Beat the sunset',{q:'It is 2:30 pm now. The sun sets at 7:00 pm. How much time do we have to save the tree?',options:['4 h 30 min','5 h 30 min','3 h 30 min','4 h'],answer:'4 h 30 min',bg:0,
  art:T(400,300,'2:30 → 7:00','big mid','style="font-size:44px"'),why:'2:30 → 6:30 is <b>4 hours</b>, and 6:30 → 7:00 is <b>30 minutes</b>: 4 h 30 min.',hint:'Count whole hours first: 3:30, 4:30, 5:30, 6:30… then the minutes left.'}),
 /* ---------- Chapter 3: Whisper Stream ---------- */
 story('c3','Whisper Stream','eagle','They flew to Whisper Stream… but the water was grey and full of rubbish! Muddy crocodile footprints led into the bushes. "BADDIE VAMPIRE!" growled Flame.',
- ()=>sky('#C9D6D2','#EEF2EE')+grass(270,'#A9C79A')+stream(true)+junk()+T(560,388,'🐾 🐾 🐾','mid','style="font-size:20px;opacity:.6"')+G(eagle(110,280,.85,{still:true})+wala(220,286,.8,{still:true})+flame(330,284,.8,{still:true}),'a-pop',.3),
+ ()=>paint('streamwood')+'<rect width="640" height="400" fill="#5E6B66" opacity=".22"/>'+stream(true)+junk()+T(560,388,'🐾 🐾 🐾','mid','style="font-size:20px;opacity:.6"')+G(eagle(110,280,.85,{still:true})+wala(220,286,.8,{still:true})+flame(330,284,.8,{still:true}),'a-pop',.3),
  'The stream is grey and full of rubbish! And look: muddy crocodile footprints. <b>BADDIE VAMPIRE!</b>',{bag:0}),
 num('c3','eagle','maths','Clean-up crew',{q:'There are 36 bottles and 24 cans in the stream. I can carry 10 pieces of rubbish on each trip. How many trips to clear ALL of it?',answer:6,unit:'trips',bg:0,
  art:T(410,320,'🥤 × 36   🥫 × 24','mid','style="font-size:30px"'),why:'36 + 24 = 60 pieces. 60 ÷ 10 = <b>6 trips</b>.',hint:'Add up ALL the rubbish first, then make groups of 10.'}),
@@ -613,11 +616,11 @@ mc('c3','wala','english','Fix Baddie\'s sign',{q:'Baddie left a messy sign by th
  options:["Don't throw rubbish in the stream.","Dont throw rubbish in the stream.","Don't throw rubish in the stream.","Don't throw rubbish in the streem."],answer:"Don't throw rubbish in the stream.",bg:0,
  why:"<b>Don't</b> needs an apostrophe (do not), <b>rubbish</b> has two Bs, and <b>stream</b> is s-t-r-e-a-m.",hint:'Check three things: the apostrophe, the double letters and the "ea" sound.'}),
 story('c3','Treasure 1: Crystal Water!','wala','The stream sparkled clean and blue again. A shining drop rose out of the water and floated into Wala\'s paws: the Crystal Water! "One treasure down, two to go!"',
- ()=>sky('#BFE6F7','#FFF8E8')+grass(270)+stream(false)+G(`<g transform="translate(320 170)"><circle r="40" fill="#BFE6F7" opacity=".6"/>${T(0,18,'💧','mid','style="font-size:56px"')}</g>`,'a-pop',.4)+G(eagle(110,280,.85,{wave:true})+wala(220,286,.8,{wave:true})+flame(520,284,.8,{wave:true}),'a-pop',.2),
+ ()=>paint('streamwood')+stream(false)+G(`<g transform="translate(320 170)"><circle r="40" fill="#BFE6F7" opacity=".6"/>${T(0,18,'💧','mid','style="font-size:56px"')}</g>`,'a-pop',.4)+G(eagle(110,280,.85,{wave:true})+wala(220,286,.8,{wave:true})+flame(520,284,.8,{wave:true}),'a-pop',.2),
  'The stream sparkles again! And look: the <b>Crystal Water</b>! One treasure down, two to go!',{bag:1}),
 /* ---------- Chapter 4: Sun Meadow ---------- */
 story('c4','Sun Meadow','flame','At Sun Meadow, golden sunflowers grew in a magic triangle. A wooden sign said: "Only clever friends may pick the Golden Seeds. Solve the meadow\'s puzzles!"',
- ()=>sky('#FFE9A8','#FFF8E8')+sun(560,90)+grass(300,'#B8DC7E')+[90,160,230,300,370,440].map((x,k)=>sunflower(x,330+(k%2)*10,.8)).join('')+G(flame(530,392,.85,{still:true})+wala(600,392,.7,{still:true}),'a-pop',.3),
+ ()=>paint('meadow',0,'talent')+[90,160,230,300,370,440].map((x,k)=>sunflower(x,330+(k%2)*10,.8)).join('')+G(flame(530,392,.85,{still:true})+wala(600,392,.7,{still:true}),'a-pop',.3),
  'Sun Meadow! The sign says: only clever friends may pick the <b>Golden Seeds</b>. Let\'s solve the meadow\'s puzzles!',{bag:1}),
 num('c4','flame','maths','The sunflower triangle',{q:'The sunflowers grow in rows: 1, 3, 6, 10, 15… How many sunflowers are in the NEXT row?',answer:21,unit:'sunflowers',bg:1,
  art:tri(410,170),why:'Each row grows by one more: +2, +3, +4, +5, so next is <b>+6</b>. 15 + 6 = <b>21</b>.',hint:'Find the jumps: 1 → 3 is +2, 3 → 6 is +3… what comes next?'}),
@@ -629,18 +632,18 @@ mc('c4','flame','english','Why did the seeds glow?',{q:'Read: "The Golden Seeds 
  options:['Because Flame did something kind.','Because the little bee was golden.','Because it suddenly started to rain.','Because Flame flew there very fast.'],answer:'Because Flame did something kind.',bg:1,
  why:'The clue is in the first sentence: the seeds glow <b>when someone is kind</b>, and Flame was kind to the bee.',hint:'Read the FIRST sentence again: when do the seeds glow?'}),
 story('c4','Treasure 2: Golden Seeds!','eagle','The sunflowers bowed, and a shower of glowing Golden Seeds fell into Flame\'s talons. "Two treasures! Now… back to the tree, FAST!"',
- ()=>sky('#FFE9A8','#FFF8E8')+sun(560,90)+grass(300,'#B8DC7E')+[90,160,230,300,370,440].map((x,k)=>sunflower(x,330+(k%2)*10,.8)).join('')+G(`<g transform="translate(320 180)">${T(0,18,'🌻','mid','style="font-size:64px"')}</g>`,'a-pop',.4)+G(eagle(530,392,.9,{wave:true}),'a-pop',.2),
+ ()=>paint('meadow',0,'talent')+[90,160,230,300,370,440].map((x,k)=>sunflower(x,330+(k%2)*10,.8)).join('')+G(`<g transform="translate(320 180)">${T(0,18,'🌻','mid','style="font-size:64px"')}</g>`,'a-pop',.4)+G(eagle(530,392,.9,{wave:true}),'a-pop',.2),
  'The <b>Golden Seeds</b>! Two treasures! Now… back to the tree, FAST!',{bag:2}),
 /* ---------- Chapter 5: the Treeman ---------- */
 story('c5','The TREEMAN!','wala','When they got back, the Old Rain Tree had pulled up its roots! It was a GRUMPY TREEMAN, stomping and groaning. And behind a rock, laughing, was… Baddie Vampire!',
- ()=>sky('#B9B3C9','#EDE6F0')+grass(330,'#9DB08A')+rainTree(320,392,.78,2)+G(baddie(560,394,.8,{point:true}),'a-drop',.5)+G(wala(80,392,.75,{still:true}),'a-pop',.3),
+ ()=>paint('afterstorm',0,'money')+rainTree(320,392,.78,2)+G(baddie(560,394,.8,{point:true}),'a-drop',.5)+G(wala(80,392,.75,{still:true}),'a-pop',.3),
  'The Old Rain Tree pulled up its roots! It\'s a grumpy <b>TREEMAN</b>! And behind that rock… Baddie Vampire!',{bag:2}),
 Object.assign(boss('Baddie\'s lie #1',{lines:['Trees don\'t need water or','sunlight. They eat RUBBISH!'],claim:'Trees don\'t need water or sunlight. They eat rubbish! That\'s why I fed it my rubbish!',options:['Trees need water and sunlight','Trees eat rubbish and plastic','Trees only need some rubbish'],answer:'Trees need water and sunlight',
  why:'Plants need <b>water</b>, <b>sunlight</b> and air to make their own food. Rubbish makes them sick!',taunt:'Mwahaha! Yummy plastic salad!',hint:'What do plants need to grow?',art:rainTree(460,392,.42,2)}),{part:'c5'}),
 Object.assign(boss('Baddie\'s lie #2',{lines:['I took 15 of your 40 seeds','and gave 5 back. You have 20!'],claim:'I took 15 of your 40 Golden Seeds and gave 5 back. So you only have 20 left! Hehehe!',options:['30 seeds','20 seeds','25 seeds'],answer:'30 seeds',
  why:'40 − 15 = 25. Then he gave back 5: 25 + 5 = <b>30 seeds</b>. Baddie can\'t count!',taunt:'Hehehe! Maths is for nerds!',hint:'Take away the 15 first, then ADD the 5 he gave back.',art:T(440,300,'🌻 40','big mid')}),{part:'c5'}),
 story('c5','The Song of Kind Words','flame','Busted twice, Baddie ran off into the bushes. "Now the last treasure," said Flamecharge. "The Song of Kind Words. We must sing to the tree in 华文 AND in English!"',
- ()=>sky('#B9B3C9','#EDE6F0')+grass(330,'#9DB08A')+rainTree(440,392,.72,2)+G(flame(90,392,.85,{wave:true})+wala(190,392,.8,{still:true})+eagle(270,392,.75,{still:true}),'a-pop',.3)+T(330,180,'🎵','mid','style="font-size:48px"'),
+ ()=>paint('afterstorm',0,'money')+rainTree(440,392,.72,2)+G(flame(90,392,.85,{wave:true})+wala(190,392,.8,{still:true})+eagle(270,392,.75,{still:true}),'a-pop',.3)+T(330,180,'🎵','mid','style="font-size:48px"'),
  'Baddie ran away! Now the last treasure: the <b>Song of Kind Words</b>. We must sing to the tree in 华文 AND in English!',{bag:2}),
 order('c5','wala','chinese','Kind words in 华文',{q:'Build Wala\'s kind words for the tree, in the right order: "Big tree, thank you for giving us a home."',items:['大树','，','谢谢你','给','我们','一个','家','。'],bg:2,
  why:'<b>大树，谢谢你给我们一个家。</b> The tree\'s branches shook gently. It was listening!',hint:'Start by calling the tree: 大树，… then 谢谢你….'}),
@@ -649,11 +652,11 @@ order('c5','eagle','english','Kind words in English',{q:'Now Flame\'s line in En
 num('c5','flame','mix','The healing',{q:'Last step! The tree has 5 big branches. Each branch needs 3 Golden Seeds and 2 drops of Crystal Water. How many seeds AND drops altogether?',answer:25,unit:'',bg:3,
  art:T(410,320,'🌿 × 5','big mid'),why:'Each branch needs 3 + 2 = 5 treasures. 5 branches × 5 = <b>25</b>. (Or 15 seeds + 10 drops = 25!)',hint:'Work out what ONE branch needs, then do it for all 5 branches.'}),
 story('c5','The tree is healed!','wala','The Treeman stopped stomping. It let out a long, happy sigh, pushed its roots back into the earth… and burst into pink flowers! "Thank you, little friends. Visit me any time."',
- ()=>sky('#FFD9C2','#FFF3E0')+grass(330)+rainTree(320,392,.78,3)+G(wala(80,392,.8,{wave:true})+flame(560,392,.8,{wave:true}),'a-pop',.3)+G(star(90,120,22)+star(560,110,22),'a-pop',.7),
+ ()=>paint('sunset',0,'money')+rainTree(320,392,.78,3)+G(wala(80,392,.8,{wave:true})+flame(560,392,.8,{wave:true}),'a-pop',.3)+G(star(90,120,22)+star(560,110,22),'a-pop',.7),
  'The tree is healed! It pushed its roots back into the earth and burst into pink flowers. "Thank you, little friends. Visit me any time."',{bag:3,mount:a=>a.later(()=>a.confetti(),600)}),
 /* ---------- Chapter 6: Dinner at Chowdie's Den ---------- */
 story('c6','Flying home','eagle','The sun was setting as the friends flew home, with Wala riding on Flame\'s back! "WHEEE!" At the den, Chowdie was waving a big wooden spoon. "Just in time for dinner!"',
- ()=>sky('#FFB38A','#FFE3C2')+sun(560,250,40)+cloud(150,140,.8,'#FFE3D6')+`<g transform="translate(330 300) rotate(-6)">${eagle(0,0,1,{wave:true})}${wala(0,-118,.42,{wave:true})}</g>`+G(flame(140,250,.6,{wave:true}),'a-pop',.3)+grass(340,'#B8C98A')+G(otter(560,394,.75,{wave:true}),'a-pop',.5),
+ ()=>paint('sunsetsky')+`<g transform="translate(330 300) rotate(-6)">${eagle(0,0,1,{wave:true})}${wala(0,-118,.42,{wave:true})}</g>`+G(flame(140,250,.6,{wave:true}),'a-pop',.3)+grass(340,'#B8C98A')+G(otter(560,394,.75,{wave:true}),'a-pop',.5),
  'The sun is setting, and Wala is riding on Flame\'s back! WHEEE! And there\'s Chowdie, waving his big wooden spoon. "Just in time for dinner!"'),
 num('c6','otter','maths','Sharing the dumplings',{q:'I made 30 dumplings! Then Baddie knocked on the door to say sorry, so now 5 friends are eating. If we share them equally, how many does each friend get?',answer:6,unit:'dumplings',
  art:T(410,320,'🥟 × 30','big mid'),why:'30 ÷ 5 = <b>6 dumplings</b> each. Even Baddie gets 6, because he said sorry!',hint:'Share 30 into 5 equal groups. 5 × ? = 30'}),
