@@ -112,7 +112,9 @@ def apply(path):
     s = s[:head_end] + "\n" + CSS + s[head_end:]
     s = s.replace("\n\n" + CSS, "\n" + CSS)
     body_end = s.rindex("</body>")
-    s = s[:body_end] + JS + s[body_end:]
+    stars = s.rfind('<script src="../stars.js"', 0, body_end)  # keep the Star Bank script last
+    at = stars if stars != -1 else body_end
+    s = s[:at] + JS + s[at:]
     path.write_text(s, encoding="utf-8")
     return "ok"
 
