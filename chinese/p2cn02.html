@@ -546,7 +546,9 @@ function tingxie(a,W,intro){let r=0,score=0,miss=[];
   show();a.as('flame',intro);}
 
 /* P2 Chinese helpers: emoji icons, dialogue scenes, vocab grids, Flamecharge's 听写 corner (needs cnlib, flamelib, txlib) */
-const em=(e,s=46,ex='')=>T(0,s*.36,e,'mid',`style="font-size:${s}px" ${ex}`);
+/* painted pictures for emoji (den-art) */
+const ART={"🧧": "cn/hongbao", "🍊": "cn/oranges", "🏮": "cn/lantern", "🎆": "cn/fireworks", "🍲": "cn/steamboat", "🥮": "cn/niangao", "🦁": "cn/liondance", "👘": "cn/newclothes", "🎂": "cn/cake", "🕯️": "cn/candle", "🎁": "cn/present", "🎈": "cn/balloon"};
+const em=(e,s=46,ex='')=>ART[e]?`<image href="../img/${ART[e]}.webp" x="${-s*.62}" y="${-s*.62}" width="${s*1.24}" height="${s*1.24}" preserveAspectRatio="xMidYMid meet"/>`:T(0,s*.36,e,'mid',`style="font-size:${s}px" ${ex}`);
 const NMS={w:['wala',WL],c:['otter',CH],f:['flame',FL]};
 const castDraw=(k,x,s=.72)=>k==='w'?wala(x,398,s,{still:true}):k==='c'?otter(x,398,s,{still:true}):flame(x,398,s*.95,{still:true});
 /* dialogue scene: up to 3 lines [who,zh,py,en]; L = left speaker, R = right speaker */
