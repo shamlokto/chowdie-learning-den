@@ -239,7 +239,9 @@ const ballI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle 
 const boxI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-26" y="-18" width="52" height="40" rx="4" fill="#D9A066" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 -18 h52 M0 -18 v40" stroke="${C.ink}" stroke-width="2" opacity=".5"/></g>`;
 const girlI=(x,y,col=C.berry)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -32 q16 -22 32 0 v10 q-4 -6 -8 -4 q-8 -14 -16 -2 q-6 -4 -8 2z" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 l6 30 h-44z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
 const boyI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#2B2B3A"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
-const treeI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="0" width="12" height="30" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2"/><circle cy="-14" r="26" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
+/* painted plants (img/sci/plant-*.webp, Gemini, checked for accuracy) */
+const pp=(n,x,y,w,h,ex='')=>`<image href="../img/sci/plant-${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" ${ex}/>`;
+const treeI=(x,y,s=1)=>pp('tree',x-30*s,y-44*s,60*s,76*s);
 const sunI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="18" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-24" x2="0" y2="-30" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>`;
 /* quiz helper: multiple-choice over a sentence with blank */
 function fillQ(before,after,opts,answer,why,hint,extra=''){return {draw:()=>prose(40,120,before+' ______ '+after,44,'h',38)+extra,quiz:{options:opts,answer,why,hint}}}
@@ -253,8 +255,8 @@ const noteH=(w,txt)=>42+nLines(txt,Math.floor((w-28)/7.2))*17; // box grows with
 const funfact=(x,y,w,txt)=>G(box(x,y,w,noteH(w,txt),C.sun,16)+T(x+14,y+26,'Fun fact!','sm','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.4);
 const tryhome=(x,y,w,txt)=>G(box(x,y,w,noteH(w,txt),'#E6F6EA',16)+T(x+14,y+26,'Try at home','sm acc','style="font-weight:800"')+wr(x+14,y+48,txt,Math.floor((w-28)/7.2),'sm',17),'a-pop',1.6);
 /* icons */
-const leafI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -30 C26 -22 26 14 0 30 C-26 14 -26 -22 0 -30z" fill="${col}" stroke="${C.ink}" stroke-width="2.5" transform="rotate(30)"/><path d="M0 -24 v50 M0 -6 l10 -8 M0 6 l-10 -8" stroke="${C.ink}" stroke-width="1.5" fill="none" transform="rotate(30)"/></g>`;
-const flowerI=(x,y,s=1,col=C.berry)=>`<g transform="translate(${x} ${y}) scale(${s})"><line x1="0" y1="10" x2="0" y2="60" stroke="${C.leaf}" stroke-width="5"/><path d="M0 40 q18 -6 22 8 q-14 6 -22 -8z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2"/>${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-16" rx="9" ry="14" fill="${col}" stroke="${C.ink}" stroke-width="2" transform="rotate(${a})"/>`).join('')}<circle r="8" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/></g>`;
+const leafI=(x,y,s=1)=>pp('leaf',x-32*s,y-32*s,64*s,64*s);
+const flowerI=(x,y,s=1)=>pp('flower',x-38*s,y-30*s,78*s,79*s);
 const seedI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="10" ry="14" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2.5" transform="rotate(-20)"/></g>`;
 const rockI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-28 14 q-6 -24 12 -30 q14 -12 30 -4 q18 10 10 30 q-26 10 -52 4z" fill="#9AA3AB" stroke="${C.ink}" stroke-width="2.5"/></g>`;
 const bugI=(x,y,s=1,col=C.bad)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse rx="18" ry="22" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-22" r="9" fill="${C.ink}"/><line x1="0" y1="-14" x2="0" y2="22" stroke="${C.ink}" stroke-width="2"/><circle cx="-8" cy="-6" r="3.5" fill="${C.ink}"/><circle cx="8" cy="2" r="3.5" fill="${C.ink}"/><circle cx="-6" cy="10" r="3" fill="${C.ink}"/><circle cx="9" cy="-12" r="3" fill="${C.ink}"/></g>`;
@@ -271,14 +273,14 @@ const dropI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d=
 const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="24" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M18 18 l20 20" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/></g>`;
 const kidI=(x,y,col=C.sky)=>`<g transform="translate(${x} ${y})"><circle cy="-30" r="14" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-14 -36 q14 -16 28 0" fill="#5B3A1E"/><path d="M-16 -14 q16 -8 32 0 v30 h-32z" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-5" cy="-31" r="1.8" fill="${C.ink}"/><circle cx="5" cy="-31" r="1.8" fill="${C.ink}"/><path d="M-4 -24 q4 3 8 0" stroke="${C.ink}" stroke-width="1.5" fill="none"/></g>`;
 /* Life Science 3: Plants */
-const plantFull=(x,y,s=1,o={})=>`<g transform="translate(${x} ${y}) scale(${s})">
-  <path d="M-40 0 h80" stroke="#8A5A2B" stroke-width="3"/>
-  <path class="pp" data-p="roots" d="M0 0 q-10 20 -30 34 M0 0 q10 22 28 36 M0 0 v40 M-6 14 q-14 8 -18 22 M6 16 q14 8 16 22" stroke="#C9A27A" stroke-width="4" fill="none" stroke-linecap="round"/>
-  <line class="pp" data-p="stem" x1="0" y1="0" x2="0" y2="-120" stroke="${C.leaf}" stroke-width="8" stroke-linecap="round"/>
-  <g class="pp" data-p="leaves">${leafI(-28,-60,.7)}${leafI(30,-85,.75)}</g>
-  <g class="pp" data-p="flower">${flowerI(0,-130,1.1)}</g>
-  </g>`;
-const pot=(x,y,fill,level)=>`<path d="M${x-30} ${y} h60 l-6 50 h-48z" fill="#C9735A" stroke="${C.ink}" stroke-width="2.5"/><rect x="${x-26}" y="${y+4}" width="52" height="40" fill="#5B3A1E" clip-path="none" opacity=".9"/>`+(level>0?`<line x1="${x}" y1="${y+4}" x2="${x}" y2="${y+4-level*22}" stroke="${C.leaf}" stroke-width="4" stroke-linecap="round"/>`+(level>1?leafI(x-8,y-level*18,.3):'')+(level>2?leafI(x+9,y-level*22,.32):''):'');
+// whole plant: painting is 600x719 px with the soil line at 478; invisible .pp shapes over each painted part keep it tappable
+const plantFull=(x,y,s=1)=>{const h=200*s,w=h*600/719,X=x-w*290/600,Y=y-h*478/719,k=w/600,P=(px,py)=>[X+px*k,Y+py*k];
+ const E=(px,py,rx,ry,rot)=>{const [cx,cy]=P(px,py);return `<ellipse cx="${cx}" cy="${cy}" rx="${rx*k}" ry="${ry*k}" transform="rotate(${rot} ${cx} ${cy})" fill="transparent"/>`};
+ const [rx,ry]=P(140,485),[sx,sy]=P(288,120),[fx,fy]=P(290,70);
+ return pp('plant',X,Y,w,h)+`<rect class="pp" data-p="roots" x="${rx}" y="${ry}" width="${330*k}" height="${205*k}" fill="transparent"/><rect class="pp" data-p="stem" x="${sx}" y="${sy}" width="${32*k}" height="${360*k}" fill="transparent"/>`+
+  `<g class="pp" data-p="leaves">${E(250,190,58,30,30)+E(365,190,58,30,-25)+E(235,290,62,26,25)+E(378,310,62,28,-30)}</g><circle class="pp" data-p="flower" cx="${fx}" cy="${fy}" r="${78*k}" fill="transparent"/>`};
+// bean pot growth stages 0-4: paintings share one 400x800 canvas with the pot bottom at 97.7%
+const pot=(x,y,fill,level)=>pp('pot'+Math.max(0,Math.min(4,level)),x-57.5,y+50-225,115,230);
 const S=[
 {part:'learn',title:'Plants are everywhere',say:'Hi! Plants are the quiet heroes of our planet. They make the <b>oxygen</b> we breathe, give us <b>food</b> like rice and fruit, and provide <b>shade</b>, <b>wood</b> and homes for animals. Singapore calls itself a <b>City in Nature</b> because we have so many! Let\'s see how plants work.',
  draw:()=>G(sunI2(80,70,1.2),'a-pop',.1)+G(`<rect x="0" y="300" width="640" height="100" fill="#C9E0B8"/>`,'')+[treeI(140,290,1.6),treeI(300,300,1.2),treeI(470,290,1.5)].map((t,k)=>G(t,'a-pop',.3+k*.2)).join('')+G(flowerI(230,310,.9)+flowerI(390,310,.9,C.grape)+flowerI(560,310,.9,C.sun),'a-pop',.9)+
@@ -291,7 +293,7 @@ const S=[
 
 {part:'learn',title:'What does a seed need?',say:'Inside every seed is a baby plant and a packed lunch. To wake up and sprout (<b>germinate</b>), a seed needs <b>water</b>, <b>warmth</b> and <b>air</b>. It does not need light yet, because it is under the soil! Once it pokes out, it needs <b>sunlight</b> too.',
  draw:()=>[['Water',dropI(0,4,1),C.sky],['Warmth',sunI2(0,0,.8),C.sun],['Air',`<path d="M-20 -6 q10 -14 20 0 q10 14 20 0 M-20 8 q10 -14 20 0 q10 14 20 0" stroke="${C.sky}" stroke-width="3" fill="none"/>`,C.leaf]].map(([t,ic,c],k)=>G(`<circle cx="${130+k*190}" cy="100" r="40" fill="${c}" opacity=".3"/><g transform="translate(${130+k*190} 100)">${ic}</g>`+T(130+k*190,165,t,'h mid acc'),'a-pop',.1+k*.3)).join('')+
-  G(`<rect x="100" y="260" width="440" height="60" fill="#5B3A1E"/>`+seedI(200,290,1.2)+G(`<path d="M200 275 q0 -20 -8 -30" stroke="${C.leaf}" stroke-width="3" fill="none"/>`+leafI(192,240,.35),'a-pop',1.2)+T(200,345,'no light needed yet!','sm mid mut')+arrow(260,290,330,290,C.accent)+T(400,250,'Then it needs','sm mid mut')+sunI2(400,290,.7)+T(400,345,'sunlight','sm mid acc'),'a-fade',.9)},
+  G(`<defs><clipPath id="gclip"><rect x="110" y="214" width="180" height="112" rx="12"/></clipPath></defs>`+pp('germ',110,198,180,134,'clip-path="url(#gclip)"')+`<rect x="110" y="214" width="180" height="112" rx="12" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`+T(200,345,'no light needed yet!','sm mid mut')+arrow(300,270,356,270,C.accent)+T(400,250,'Then it needs','sm mid mut')+sunI2(400,290,.7)+T(400,345,'sunlight','sm mid acc'),'a-fade',.9)},
 
 {part:'learn',title:'Leaves make food from sunlight',say:'Here is plant magic: <b>photosynthesis</b>. Leaves take in <b>sunlight</b>, <b>water</b> from the roots, and <b>carbon dioxide</b> from the air. They mix them to make <b>sugar</b> (food) and release <b>oxygen</b>, the gas we breathe. Plants feed themselves AND give us air. Thank a leaf today!',
  draw:()=>G(sunI2(90,70,1.3)+arrow(120,100,230,170,C.sun),'a-pop',.1)+G(`<text x="60" y="230" class="lab">carbon dioxide</text>`+arrow(196,226,240,218,C.sky),'a-fade',.5)+G(T(120,330,'water from roots','lab mid')+arrow(170,310,250,260,C.sky),'a-fade',.8)+
@@ -299,12 +301,12 @@ const S=[
   G(box(170,355,300,36,C.sun,18)+T(320,379,'photosynthesis','lab mid'),'a-pop',2)},
 
 {part:'learn',title:'From flower to fruit',say:'Flowers are not just pretty. <b>Bees</b> and butterflies visit for sweet nectar and carry yellow <b>pollen</b> from flower to flower. This is <b>pollination</b>. Then the flower grows into a <b>fruit</b> with <b>seeds</b> inside. An apple, a durian, a rambutan: all are fruits protecting seeds!',
- draw:()=>G(flowerI(120,200,1.6),'a-pop',.1)+G(bugI(200,150,.6,C.sun)+`<path d="M190 160 q-20 10 -40 0" stroke="${C.ink}" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>`+T(200,120,'bee carries pollen','sm mid'),'a-fade',.5)+G(arrow(200,230,270,230,C.accent),'a-fade',.9)+
-  G(`<circle cx="340" cy="230" r="34" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><path d="M340 196 q2 -10 8 -12" stroke="#6B4423" stroke-width="3" fill="none"/>`+T(340,290,'fruit','lab mid'),'a-pop',1.2)+G(arrow(390,230,450,230,C.accent)+`<circle cx="520" cy="230" r="34" fill="#F3E3C3" stroke="${C.ink}" stroke-width="2.5"/>`+seedI(512,228,.8)+seedI(530,232,.8)+T(520,290,'seeds inside','lab mid'),'a-pop',1.6)+
+ draw:()=>G(flowerI(120,200,1.6),'a-pop',.1)+G(pp('bee',180,128,48,43)+`<path d="M190 160 q-20 10 -40 0" stroke="${C.ink}" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>`+T(200,120,'bee carries pollen','sm mid'),'a-fade',.5)+G(arrow(200,230,270,230,C.accent),'a-fade',.9)+
+  G(`<svg x="300" y="190" width="80" height="78" viewBox="0 0 300 292">${pp('fruit',0,0,600,292)}</svg>`+T(340,290,'fruit','lab mid'),'a-pop',1.2)+G(arrow(390,230,450,230,C.accent)+`<svg x="480" y="190" width="80" height="78" viewBox="300 0 300 292">${pp('fruit',0,0,600,292)}</svg>`+T(520,290,'seeds inside','lab mid'),'a-pop',1.6)+
   G(T(320,350,'flower → pollination → fruit → seeds → new plant','lab mid acc'),'a-fade',2)},
 
 {part:'learn',title:'Seeds on the move',say:'Seeds need to travel away from the parent plant to find space. Some <b>fly</b> on the wind with fluffy parachutes or wings. Some <b>float</b> on water, like coconuts. Some are <b>eaten</b> by birds and dropped far away. Some <b>stick</b> to animal fur. And some <b>pop</b> out of exploding pods!',
- draw:()=>[['wind','dandelion',`<line x1="0" y1="10" x2="0" y2="30" stroke="${C.ink}" stroke-width="2"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="0" x2="0" y2="-18" stroke="#9AA3AB" stroke-width="1.5" transform="rotate(${a})"/>`).join('')}`],['water','coconut',`<circle r="18" fill="#8A5A2B" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 22 q13 -6 26 0 t26 0" stroke="${C.sky}" stroke-width="3" fill="none"/>`],['animals','berry eaten',birdI(0,0,.8,C.berry)],['sticking','burrs on fur',`<circle r="12" fill="#A0703F" stroke="${C.ink}" stroke-width="2"/>${[0,60,120,180,240,300].map(a=>`<path d="M0 -12 l0 -8 l4 -3" stroke="${C.ink}" stroke-width="2" fill="none" transform="rotate(${a})"/>`).join('')}`],['popping','pea pod',`<path d="M-24 0 q24 -18 48 0 q-24 18 -48 0z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/>${[-12,0,12].map(x=>`<circle cx="${x}" cy="0" r="5" fill="#9BBF3D" stroke="${C.ink}" stroke-width="1.5"/>`).join('')}`]]
+ draw:()=>[['wind','dandelion',pp('dandelion',-30,-46,60,78)],['water','coconut',pp('coconut',-44,-24,88,47)],['animals','berry eaten',pp('bird',-40,-36,80,72)],['sticking','burrs on fur',pp('burr',-40,-33,80,66)],['popping','pea pod',pp('peapod',-38,-37,76,73)]]
   .map(([n,e,ic],k)=>G(box(20+k*122,60,112,200,'#fff',14)+`<g transform="translate(${76+k*122} 130)">${ic}</g>`+T(76+k*122,205,n,'lab mid acc')+T(76+k*122,232,e,'sm mid mut'),'a-pop',.1+k*.15)).join('')+G(T(320,320,'Why travel? To find space, light and water of their own.','lab mid'),'a-fade',1.2)},
 
 {part:'try',title:'Grow a bean',say:'',draw:()=>`<g class="play"></g>`,
@@ -340,11 +342,11 @@ const S=[
  quiz:{options:['oxygen','carbon dioxide','helium'],answer:'oxygen',why:'Plants release <b>oxygen</b>, the gas we breathe. They take in carbon dioxide.',hint:'It is the gas that WE need to breathe.'}},
 
 {part:'check',title:'Quiz 4',say:'What is it called when a bee carries pollen from one flower to another?',
- draw:()=>flowerI(200,220,1.3)+bugI(320,170,.6,C.sun)+`<path d="M300 180 q-30 10 -60 0" stroke="${C.ink}" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>`+flowerI(440,220,1.3,C.grape),
+ draw:()=>flowerI(200,220,1.3)+pp('bee',300,148,48,43)+`<path d="M300 180 q-30 10 -60 0" stroke="${C.ink}" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>`+flowerI(440,220,1.3,C.grape),
  quiz:{options:['pollination','germination','photosynthesis'],answer:'pollination',why:'<b>Pollination</b> lets the flower make seeds and fruit.',hint:'It starts with the word "pollen".'}},
 
 {part:'check',title:'Quiz 5',say:'A coconut can float across the sea. How does it spread its seed?',
- draw:()=>`<circle cx="320" cy="200" r="36" fill="#8A5A2B" stroke="${C.ink}" stroke-width="3"/><path d="M0 240 q40 -16 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 V400 H0z" fill="${C.sky}"/>`,
+ draw:()=>G(pp('coconut',170,110,300,161),'a-pop',.1),
  quiz:{options:['by water','by wind','by popping'],answer:'by water',why:'Coconuts <b>float</b> and can travel far across the sea to new beaches.',hint:'What is it floating on?'}},
 
 {part:'check',title:'You did it!',say:'Fantastic! You know the <b>parts</b> of a plant, what <b>seeds need</b>, how leaves make food by <b>photosynthesis</b>, and how <b>flowers</b> become fruits and travelling seeds. Go water a plant!',
