@@ -67,7 +67,7 @@ function handle(p) {
       return { ok: true, users, recent };
     }
     if (p.op === 'reward') {
-      if (String(p.pin) !== PARENT_PIN) return { ok: false, error: 'pin' };
+      if (String(p.pin).trim() !== String(PARENT_PIN).trim()) return { ok: false, error: 'pin' };
       if (USERS.indexOf(p.user) < 0) return { ok: false, error: 'unknown user' };
       const n = Math.round(Number(p.stars));
       if (!n || Math.abs(n) > 1000) return { ok: false, error: 'amount' };

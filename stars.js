@@ -7,7 +7,7 @@
    Who is learning comes from localStorage 'denUser'. Mommy doesn't collect stars. */
 (function(){
 // Paste the Apps Script web app URL here. Empty = stars are saved on this device only.
-const SYNC_URL='';
+const SYNC_URL='https://script.google.com/macros/s/AKfycby0Y3I4e4kAtF6zex4kcs6ZPw6D2FVPucMe-0MdgnlAbiR08vWuSJKyy9If9X6Zj_5eew/exec';
 const USERS={willis:'Willis',megan:'Megan',daddy:'Daddy'};
 const WEEK=7*864e5, BONUS={deck:3,boss:5,daddy:10,story:2};
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};

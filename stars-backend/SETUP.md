@@ -9,7 +9,7 @@ Until this is done, stars are saved on each device separately. Once it is done, 
 ## 2. Add the script
 1. In the Sheet, choose **Extensions → Apps Script**.
 2. Delete what is in `Code.gs` and paste in everything from [`Code.gs`](Code.gs) in this folder.
-3. On the line `const PARENT_PIN = 'CHANGE-ME';`, change `CHANGE-ME` to a PIN only grown-ups know, for example `'5821'`. You will type it in the Star Bank to give out rewards.
+3. On the line `const PARENT_PIN = 'CHANGE-ME';`, change `CHANGE-ME` to a PIN only grown-ups know, keeping the quotes, for example `'5821'`. You will type it in the Star Bank to give out rewards.
 4. Click **Save** (the disk icon).
 
 ## 3. Publish it as a web app
