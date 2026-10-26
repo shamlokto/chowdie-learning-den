@@ -660,7 +660,7 @@ write('c5','flame','writing','Introduce the act',{q:'You are the host! Write a s
  example:'Ladies and gentlemen, welcome to the Forest Talent Show! Our next act is Flame the Eagle. He will fly loop-the-loops high in the sky. Please give him a big clap!'}),
 /* ---------- 6: Show Time! ---------- */
 story('c6','Show time!','eagle','Flame took a deep breath, spread his wings, and flew. Loop! Swoop! Loop-the-loop-the-LOOP! The crowd gasped and cheered. Wala juggled (no gloves!), Flamecharge sang like sunshine, and Chowdie made a fish disappear. Even Baddie tried his dance… and the crowd clapped for him too.',
- ()=>stage()+`<path d="M200 200 q60 -120 120 0 q60 120 120 0" stroke="#FFF3C4" stroke-width="3" stroke-dasharray="6 6" fill="none"/>`+G(eagle(440,210,.6,{wave:true}),'a-pop',.2)+G(wala(120,392,.65,{wave:true})+flame(220,392,.62,{wave:true})+otter(540,392,.65,{wave:true}),'a-pop',.4)+T(320,370,'👏 👏 👏','mid','style="font-size:30px"'),
+ ()=>stage()+`<path d="M200 270 q60 -100 120 0 q60 100 120 0" stroke="#FFF3C4" stroke-width="3" stroke-dasharray="6 6" fill="none"/>`+G(eagle(450,300,.6,{wave:true}),'a-pop',.2)+G(wala(120,392,.65,{wave:true})+flame(220,392,.62,{wave:true})+otter(540,392,.65,{wave:true}),'a-pop',.4)+T(320,370,'👏 👏 👏','mid','style="font-size:30px"'),
  'Loop! Swoop! Loop-the-loop-the-LOOP! Flame flies, and the crowd cheers! Everyone shares their talents, even Baddie.',{mount:a=>a.later(()=>a.confetti(),500)}),
 num('c6','otter','maths','The judges\' scores',{q:'The three judges gave Flame 9, 8 and 10 points. How many points did he get altogether?',answer:27,unit:'points',
  art:T(410,320,'9 + 8 + 10','big mid'),why:'9 + 8 + 10 = <b>27 points</b>. The highest score of the day!',hint:'Add 9 and 8 first, then add 10.'}),
