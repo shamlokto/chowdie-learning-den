@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Star Bank</title>
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1F3A4A;--soft:#475569;--paper:#FFFDF6;--sun:#FFC83D;--gold:#E0A800;--good:#16A34A;--bad:#DC2626}
+  *{box-sizing:border-box}
+  body{margin:0;background:#FFF9EB;background-image:radial-gradient(#F3E5C8 1.5px,transparent 1.5px);background-size:22px 22px;color:var(--ink);font-family:'Nunito',sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:16px 16px 48px}
+  a.back{display:inline-block;font-weight:800;color:var(--ink);text-decoration:none;padding:.35rem .9rem;border:2.5px solid var(--ink);border-radius:999px;background:#fff;box-shadow:0 3px 0 var(--ink)}
+  h1,h2{font-family:'Fredoka',sans-serif;margin:0}
+  header{text-align:center;margin:1.2rem 0 1rem}
+  header h1{font-size:2.6rem}
+  header p{margin:.3rem 0 0;font-weight:700;color:var(--soft)}
+  .status{display:inline-block;margin-top:.6rem;font-size:.85rem;font-weight:800;padding:.2rem .8rem;border-radius:999px;background:#E0F2FE;color:#075985}
+  .status.local{background:#FEF3C7;color:#92400E}
+  .card{background:var(--paper);border:3px solid var(--ink);border-radius:24px;box-shadow:0 6px 0 var(--ink);padding:1.2rem;margin:1.2rem 0}
+  .kids{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+  .kid{background:linear-gradient(160deg,#fff 50%,var(--l) 100%);border:3px solid var(--c);border-radius:22px;box-shadow:0 5px 0 var(--c);padding:1rem .8rem;text-align:center}
+  .kid .av svg{width:84px;height:84px;display:block;margin:0 auto}
+  .kid h2{font-size:1.4rem;margin-top:.3rem}
+  .kid .bal{font-family:'Fredoka',sans-serif;font-size:2.6rem;font-weight:700;line-height:1.1}
+  .kid .bal span{font-size:1.6rem}
+  .kid small{display:block;color:var(--soft);font-weight:700}
+  .kid .beta{display:inline-block;font-size:.7rem;font-weight:800;padding:0 .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;vertical-align:middle}
+  .willis{--c:#38BDF8;--l:#E0F2FE}.megan{--c:#F97316;--l:#FFEDD5}.daddy{--c:#F59E0B;--l:#FEF3C7}
+  h2.sec{font-size:1.5rem;margin-bottom:.6rem}
+  .who-pick{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+  .who-pick label{cursor:pointer}
+  .who-pick input{position:absolute;opacity:0}
+  .who-pick span{display:inline-block;padding:.35rem 1rem;border-radius:999px;border:2.5px solid var(--c);font-weight:800;background:#fff}
+  .who-pick input:checked+span{background:var(--c);color:#fff}
+  .who-pick input:focus-visible+span{outline:3px solid var(--ink);outline-offset:2px}
+  .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:flex-end}
+  .row label.f{display:flex;flex-direction:column;font-weight:800;font-size:.85rem;gap:.2rem;flex:1 1 160px}
+  input[type=text],input[type=number],input[type=password]{font:inherit;font-size:1rem;padding:.5rem .7rem;border:2.5px solid var(--ink);border-radius:12px;background:#fff;width:100%}
+  .chips{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0}
+  .chips button{font:inherit;font-weight:700;font-size:.85rem;padding:.2rem .7rem;border-radius:999px;border:2px dashed var(--gold);background:#FFFBEB;cursor:pointer}
+  .acts{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}
+  .acts button{font:inherit;font-family:'Fredoka',sans-serif;font-size:1.05rem;padding:.5rem 1.1rem;border-radius:14px;border:3px solid var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+  .acts button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+  .spend{background:var(--sun)}.gift{background:#DCFCE7}
+  .msg{font-weight:800;margin-top:.6rem;min-height:1.3em}
+  .msg.bad{color:var(--bad)}.msg.ok{color:var(--good)}
+  ul.hist{list-style:none;margin:0;padding:0}
+  ul.hist li{display:grid;grid-template-columns:auto 1fr auto;gap:.7rem;align-items:center;padding:.5rem 0;border-bottom:1.5px dashed #E5D9BE}
+  ul.hist .who{font-weight:800;padding:.05rem .6rem;border-radius:999px;background:var(--l);border:2px solid var(--c);font-size:.85rem}
+  ul.hist .what{font-weight:700;min-width:0;overflow-wrap:anywhere}
+  ul.hist .what small{display:block;color:var(--soft);font-weight:700}
+  ul.hist .n{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.15rem}
+  ul.hist .n.pos{color:var(--good)}ul.hist .n.neg{color:var(--bad)}
+  .rules{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem 1.2rem;margin:0;padding:0;list-style:none}
+  .rules li{font-weight:700;padding-left:1.8rem;position:relative}
+  .rules li::before{content:attr(data-i);position:absolute;left:0}
+  .empty{color:var(--soft);font-weight:700}
+  @media (max-width:640px){.kids{grid-template-columns:1fr}.kid{display:grid;grid-template-columns:auto 1fr;text-align:left;gap:0 .9rem;align-items:center}.kid .av{grid-row:span 3}.kid .av svg{width:72px;height:72px}.kid .bal{font-size:2rem}.rules{grid-template-columns:1fr}header h1{font-size:2rem}}
+</style>
+</head><body>
+<div class="wrap">
+<a class="back" href="index.html">← Back to the Den</a>
+<header><h1>⭐ Star Bank</h1><p>Stars earned by answering questions right on the first try.</p><span class="status" id="status">Loading…</span></header>
+<section class="kids" id="kids" aria-label="Star balances"></section>
+
+<section class="card" aria-labelledby="hRules"><h2 class="sec" id="hRules">How to earn stars</h2>
+<ul class="rules">
+<li data-i="⭐">Get a question right on your <b>first try</b>: +1 star.</li>
+<li data-i="🦹">Catch one of Baddie's lies: +1. Beat a Baddie Daddy challenge: <b>+2</b>.</li>
+<li data-i="🤔">Wrong first tap? No star this time. That question can earn again in <b>7 days</b>.</li>
+<li data-i="🔁">Already answered this week? Come back after 7 days for a <b>review star</b>.</li>
+<li data-i="🎉">Finish every question in a deck: +3. Beat Baddie: +5. Beat Baddie Daddy: +10. Finish a story: +2.</li>
+<li data-i="🎁">Ask a grown-up to swap your stars for a reward!</li>
+</ul></section>
+
+<section class="card" aria-labelledby="hGive"><h2 class="sec" id="hGive">Grown-ups: give a reward</h2>
+<form id="give" autocomplete="off">
+<div class="who-pick" id="givePick" role="radiogroup" aria-label="Whose stars"></div>
+<div class="row"><label class="f">Reward<input type="text" id="gNote" maxlength="80" placeholder="e.g. Ice cream" required></label>
+<label class="f" style="flex:0 1 110px">Stars<input type="number" id="gStars" min="1" max="1000" required></label>
+<label class="f" style="flex:0 1 160px" id="gCheckLabel">Parent PIN<input type="password" id="gPin" inputmode="numeric" required></label></div>
+<div class="chips" id="chips"></div>
+<div class="acts"><button type="submit" class="spend" data-sign="-1">🎁 Spend stars on this reward</button><button type="submit" class="gift" data-sign="1">➕ Give bonus stars</button></div>
+<div class="msg" id="gMsg" role="status"></div>
+</form></section>
+
+<section class="card" aria-labelledby="hHist"><h2 class="sec" id="hHist">Recent stars</h2><ul class="hist" id="hist"></ul></section>
+</div>
+<template id="avatars"><div data-u="willis"><svg viewBox="0 0 100 100" aria-hidden="true" aria-label="Wala the Koala"><defs><clipPath id="cp-wala-bank"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#E0F2FE"/><g clip-path="url(#cp-wala-bank)"><g transform="translate(50 130) scale(0.86)"><g class="">
+  <ellipse cx="0" cy="-34" rx="33" ry="36" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="#C9D0D6"/>
+  <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="-26" cy="-44" rx="9" ry="14" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3" transform="rotate(20 -26 -44)"/><ellipse cx="26" cy="-44" rx="9" ry="14" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3" transform="rotate(-20 26 -44)"/>
+  <circle cx="-36" cy="-104" r="20" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/><circle cx="36" cy="-104" r="20" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
+  <circle cx="-36" cy="-104" r="11" fill="#F4C6CC"/><circle cx="36" cy="-104" r="11" fill="#F4C6CC"/>
+  <path d="M-44 -112 q-6 -6 -2 -12 M-30 -118 q0 -8 6 -10 M44 -112 q6 -6 2 -12 M30 -118 q0 -8 -6 -10" stroke="#1F3A4A" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-84" r="33" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="0" cy="-72" rx="20" ry="12" fill="#C9D0D6"/>
+  <circle cx="-15" cy="-92" r="5" fill="#1F3A4A"/><circle cx="15" cy="-92" r="5" fill="#1F3A4A"/>
+  <circle cx="-13" cy="-94" r="1.8" fill="#fff"/><circle cx="17" cy="-94" r="1.8" fill="#fff"/>
+  <ellipse cx="-23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="23" cy="-76" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="#1F3A4A" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
+  <path d="M-6 -64 q6 5 12 0" stroke="#1F3A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="#E0574F" stroke="#1F3A4A" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="#E0574F" stroke="#1F3A4A" stroke-width="2"/></g>
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#38BDF8" stroke-width="3"/></svg></div>
+<div data-u="megan"><svg viewBox="0 0 100 100" aria-hidden="true" aria-label="Flamecharge the Phoenix"><defs><clipPath id="cp-flame-bank"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FFEDD5"/><g clip-path="url(#cp-flame-bank)"><g transform="translate(50 130) scale(0.8)"><g class="">
+  <g class=""><path d="M-14 -12 q-46 12 -64 -10 q22 4 30 -10 q-26 -6 -32 -30 q22 18 36 10 q-12 -14 -8 -34 q14 28 34 38z" fill="#E8552B" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-20 -16 q-30 6 -44 -8 q18 2 26 -10 q-14 -8 -16 -22 q14 14 30 14z" fill="#FFC83D"/></g>
+  <path d="M0 -76 q34 2 32 38 q-2 36 -32 38 q-30 -2 -32 -38 q-2 -36 32 -38z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3"/>
+  <path d="M0 -66 q20 2 20 30 q-2 26 -20 28 q-18 -2 -20 -28 q0 -28 20 -30z" fill="#FFE7A8"/>
+  <path d="M-10 -46 l5 5 l5 -5 l5 5 l5 -5 M-10 -30 l5 5 l5 -5 l5 5 l5 -5" stroke="#FFC83D" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M-14 -2 v7 M14 -2 v7" stroke="#D9A21B" stroke-width="5" stroke-linecap="round"/>
+  <path d="M-25 12 q2 -8 11 -7 q9 -1 11 7 M-14 5 v7 M3 12 q2 -8 11 -7 q9 -1 11 7 M14 5 v7" stroke="#D9A21B" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M-25 12 l-2 4 M-3 12 l2 4 M-14 12 v4 M3 12 l-2 4 M25 12 l2 4 M14 12 v4" stroke="#1F3A4A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M-24 -62 q-28 6 -34 40 l9 -5 l0 11 l8 -7 l3 10 l6 -9 q4 2 8 -4z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/><path d="M24 -62 q28 6 34 40 l-9 -5 l0 11 l-8 -7 l-3 10 l-6 -9 q-4 2 -8 -4z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
+  <g class="" style="transform-origin:0px -118px"><path d="M-22 -108 q-14 -14 -30 -14 q12 -6 22 -4 q-16 -14 -20 -30 q16 10 26 18 q-4 -18 4 -34 q6 20 16 26 q4 -14 16 -20 q-4 18 0 30 q10 -8 22 -6 q-12 8 -16 22z" fill="#E8552B" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M-12 -112 q-6 -14 -2 -26 q6 12 12 14 q2 -10 10 -16 q-2 14 2 24z" fill="#FFC83D"/></g>
+  <path d="M0 -122 q32 0 32 30 q0 16 -10 26 q-10 8 -22 8 q-12 0 -22 -8 q-10 -10 -10 -26 q0 -30 32 -30z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3"/>
+  <path d="M-30 -96 q-12 4 -16 12 q10 -2 16 0 M30 -96 q12 4 16 12 q-10 -2 -16 0" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M-22 -88 q4 16 22 22 q18 -6 22 -22 q-10 6 -22 6 q-12 0 -22 -6z" fill="#FFE7A8"/>
+  <circle cx="-12" cy="-94" r="7" fill="#FFC83D" stroke="#1F3A4A" stroke-width="2"/><circle cx="12" cy="-94" r="7" fill="#FFC83D" stroke="#1F3A4A" stroke-width="2"/>
+  <circle cx="-11" cy="-93" r="4.6" fill="#1F3A4A"/><circle cx="11" cy="-93" r="4.6" fill="#1F3A4A"/>
+  <circle cx="-9.5" cy="-95" r="1.8" fill="#fff"/><circle cx="12.5" cy="-95" r="1.8" fill="#fff"/>
+  <path d="M-24 -106 q10 -2 18 6 M24 -106 q-10 -2 -18 6" stroke="#C2410C" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="-22" cy="-80" rx="5" ry="3" fill="#F4A3A8" opacity=".85"/><ellipse cx="22" cy="-80" rx="5" ry="3" fill="#F4A3A8" opacity=".85"/>
+  <path d="M-9 -88 q9 -6 18 0 q2 10 -4 18 q-3 4 -5 9 q-2 -5 -5 -9 q-6 -8 -4 -18z" fill="#FFB020" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M-4 -70 q4 3 8 0 q-2 5 -4 9 q-2 -4 -4 -9z" fill="#B45309"/>
+  <path d="M-5 -84 h1 M4 -84 h1" stroke="#1F3A4A" stroke-width="2.4" stroke-linecap="round"/>
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#EA580C" stroke-width="3"/></svg></div>
+<div data-u="daddy"><svg viewBox="0 0 100 100" aria-hidden="true" aria-label="Chowdie"><defs><clipPath id="cp-otter-bank"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FEF3C7"/><g clip-path="url(#cp-otter-bank)"><g transform="translate(50 126) scale(0.95)"><g class="">
+  <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
+  <ellipse cx="-16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="16" cy="-2" rx="12" ry="7" fill="#82552F" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="-26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3" transform="rotate(25 -26 -48)"/><ellipse cx="26" cy="-48" rx="8" ry="12" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3" transform="rotate(-25 26 -48)"/>
+  <circle cx="-27" cy="-100" r="9" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/><circle cx="27" cy="-100" r="9" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
+  <circle cx="0" cy="-86" r="32" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
+  <ellipse cx="0" cy="-74" rx="22" ry="15" fill="#F2DDBE"/>
+  <circle cx="-13" cy="-92" r="5.5" fill="#1F3A4A"/><circle cx="13" cy="-92" r="5.5" fill="#1F3A4A"/>
+  <circle cx="-11" cy="-94" r="2" fill="#fff"/><circle cx="15" cy="-94" r="2" fill="#fff"/>
+  <ellipse cx="-22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/><ellipse cx="22" cy="-78" rx="6" ry="3.5" fill="#F4A3A8"/>
+  <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="#1F3A4A"/>
+  <path d="M-6 -71 q6 6 12 0" stroke="#1F3A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="#1F3A4A" stroke-width="1.5" stroke-linecap="round"/>
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#F59E0B" stroke-width="3"/></svg></div></template>
+<script src="stars.js"></script>
+<script>
+(function(){
+const D=window.DenStars,U=D.USERS,KEYS=Object.keys(U),$=id=>document.getElementById(id);
+const av=u=>{const t=$('avatars').content.querySelector('[data-u="'+u+'"]');return t?t.innerHTML:''};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const when=t=>new Date(t).toLocaleString(undefined,{weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});
+let data=null,pick=D.who()&&U[D.who()]?D.who():KEYS[0],check=null;
+$('status').textContent=D.call?'☁️ Synced with the family Google Sheet':'📱 Saved on this device only';
+if(!D.call)$('status').classList.add('local');
+// Without a backend there is no PIN to check, so ask a grown-up sum instead
+function newCheck(){if(D.call)return;const a=6+Math.floor(Math.random()*7),b=12+Math.floor(Math.random()*8);check=a*b;
+ $('gCheckLabel').firstChild.textContent='Grown-up check: '+a+' × '+b+' = ?';$('gPin').type='number'}
+newCheck();
+async function load(){
+ if(D.call){try{for(const u of KEYS)if(D.book(u).log.some(e=>!e.synced))await D.sync(u);const r=await D.call({op:'bank'});if(r&&r.ok)data=r}catch(e){$('status').textContent='⚠️ Could not reach the Google Sheet. Showing this device only.';$('status').classList.add('local')}}
+ if(!data||!D.call){const users={},recent=[];KEYS.forEach(u=>{users[u]=D.totals(u);D.book(u).log.forEach(e=>{if(e.stars)recent.push({ts:e.ts,user:u,type:e.type,stars:e.stars,note:e.note})})});
+  if(!data)data={users,recent:recent.sort((a,b)=>b.ts-a.ts).slice(0,300)}}
+ draw()}
+function draw(){
+ $('kids').innerHTML=KEYS.map(u=>{const t=data.users[u]||{balance:0,lifetime:0,spent:0};
+  return `<div class="kid ${u}"><div class="av">${av(u)}</div><h2>${U[u]}${u==='daddy'?' <span class="beta">beta tester</span>':''}</h2><div class="bal"><span>⭐</span> ${t.balance}</div><small>${t.lifetime} earned · ${t.spent} spent</small></div>`}).join('');
+ $('givePick').innerHTML=KEYS.map(u=>`<label class="${u}"><input type="radio" name="who" value="${u}"${u===pick?' checked':''}><span>${U[u]} · ⭐ ${(data.users[u]||{}).balance||0}</span></label>`).join('');
+ $('givePick').querySelectorAll('input').forEach(r=>r.onchange=()=>pick=r.value);
+ const seen=new Map();data.recent.filter(r=>r.type==='redeem').forEach(r=>{if(!seen.has(r.note))seen.set(r.note,-r.stars)});
+ $('chips').innerHTML=[...seen].slice(0,8).map(([n,s])=>`<button type="button" data-n="${esc(n)}" data-s="${s}">${esc(n)} · ⭐${s}</button>`).join('');
+ $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('gNote').value=b.dataset.n;$('gStars').value=b.dataset.s});
+ const T={attempt:'Question',bonus:'Bonus',redeem:'Reward',gift:'Gift from a grown-up'};
+ $('hist').innerHTML=data.recent.length?data.recent.slice(0,60).map(r=>`<li class="${esc(r.user)}"><span class="who">${esc(U[r.user]||r.user)}</span><span class="what">${esc(r.note||T[r.type]||'')}<small>${T[r.type]||''} · ${when(r.ts)}</small></span><span class="n ${r.stars>0?'pos':'neg'}">${r.stars>0?'+':''}${r.stars}</span></li>`).join('')
+  :'<li class="empty">No stars yet. Go answer some questions!</li>'}
+let sign=-1;
+$('give').querySelectorAll('button[type=submit]').forEach(b=>b.onclick=()=>sign=+b.dataset.sign);
+$('give').onsubmit=async e=>{e.preventDefault();const m=$('gMsg'),n=Math.round(+$('gStars').value),note=$('gNote').value.trim(),pin=$('gPin').value.trim();
+ const say=(t,ok)=>{m.textContent=t;m.className='msg '+(ok?'ok':'bad')};
+ if(!n||n<1)return say('Type how many stars.');
+ const bal=(data.users[pick]||{}).balance||0;if(sign<0&&n>bal)return say(U[pick]+' only has '+bal+' stars.');
+ if(D.call){const r=await D.call({op:'reward',user:pick,stars:sign*n,note,pin,id:Date.now().toString(36)}).catch(()=>null);
+  if(!r)return say('Could not reach the Google Sheet. Try again.');if(!r.ok)return say(r.error==='pin'?'That PIN is not right.':'Sorry: '+r.error)}
+ else{if(+pin!==check){newCheck();$('gPin').value='';return say('Grown-up check was not right. Try the new sum.')}D.reward(pick,sign*n,note);newCheck()}
+ say(sign<0?`🎁 ${U[pick]} spent ${n} stars on ${note}. Enjoy!`:`➕ ${U[pick]} got ${n} bonus stars for ${note}!`,true);
+ $('gPin').value='';$('gStars').value='';$('gNote').value='';data=null;load()};
+load();
+})();
+</script>
+</body></html>
