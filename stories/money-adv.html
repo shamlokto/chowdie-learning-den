@@ -616,7 +616,7 @@ const market=()=>paint('market');
 const S=[
 /* ---------- 1: A Home for Flame ---------- */
 story('c1','A Home for Flame','eagle','After a big storm, Flame the Eagle came back to find his nest blown away. "My home… it\'s gone," he said quietly. Flamecharge put a warm wing around him. "Then we\'ll build you a NEW one. A real treehouse!"',
- ()=>paint('afterstorm')+treehouse(470,392,.8,false)+[[400,360],[520,350],[450,375]].map(([a,b])=>`<path d="M${a} ${b} l30 -6" stroke="#8A5A2B" stroke-width="5" stroke-linecap="round"/>`).join('')+G(eagle(140,392,.9,{still:true})+flame(260,392,.85,{still:true}),'a-pop',.3),
+ ()=>paint('afterstorm')+[[400,360],[520,350],[450,375]].map(([a,b])=>`<path d="M${a} ${b} l30 -6" stroke="#8A5A2B" stroke-width="5" stroke-linecap="round"/>`).join('')+G(eagle(140,392,.9,{still:true})+flame(260,392,.85,{still:true}),'a-pop',.3),
  'A storm blew Flame\'s nest away! "Then we\'ll build you a NEW one," says Flamecharge. "A real treehouse!"'),
 story('c1','100 golden acorns','flame','The builder beaver said the treehouse would cost $100. "We\'ll raise the money ourselves!" said Flamecharge. "Let\'s sell LEMONADE!" Wala and Chowdie cheered, and Flame got out an old book with a leaf on the cover.',
  ()=>market()+stand()+G(flame(110,392,.85,{wave:true})+wala(540,392,.8,{wave:true}),'a-pop',.3)+G(T(320,160,'Goal: $100','h mid','style="fill:#B9471A;paint-order:stroke;stroke:#FFFDF6;stroke-width:6px"'),'a-pop',.6),
