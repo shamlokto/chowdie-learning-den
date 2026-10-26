@@ -5,8 +5,10 @@ Adds two marked blocks to each deck that uses the shared engine:
   * CSS  /* den-polish:start */ ... /* den-polish:end */  at the end of the head <style>
   * JS   <script id="den-fireworks"> ... </script>        just before </body>
 Re-running replaces the blocks, so edit them here and run:  python3 tools/den-polish.py
-Lesson content is never touched. stories/ gets only the phone-layout part (PHONE_CSS, marked
-den-phone); pages without the deck engine (spelling/wordlists.html) and the grown-ups deck are skipped.
+Lesson and story content is never touched. Storybooks share the deck engine, so they get the same
+blocks (a chapter counts as a stage for the fireworks). Pages without the engine (spelling/wordlists.html)
+and the grown-ups deck are skipped. PHONE_CSS / apply_phone() hold just the phone layout, for any future
+page that should not take the full look.
 """
 import pathlib, re, sys
 
@@ -105,6 +107,7 @@ def apply(path):
         return "no-engine"
     s = re.sub(r"/\* den-polish:start.*?/\* den-polish:end \*/\n", "", s, flags=re.S)
     s = re.sub(r'<script id="den-fireworks">.*?</script>\n', "", s, flags=re.S)
+    s = re.sub(r"/\* den-phone:start.*?/\* den-phone:end \*/\n", "", s, flags=re.S)
     head_end = s.index("</style></head>")
     s = s[:head_end] + "\n" + CSS + s[head_end:]
     s = s.replace("\n\n" + CSS, "\n" + CSS)
@@ -116,8 +119,6 @@ def apply(path):
 if __name__ == "__main__":
     for p in sorted(ROOT.glob("*/*.html")):
         rel = p.relative_to(ROOT).as_posix()
-        if rel.startswith("stories/"):
-            print(apply_phone(p), rel); continue
         if rel in SKIP:
             continue
         print(apply(p), rel)
