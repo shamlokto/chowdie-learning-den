@@ -797,7 +797,7 @@ function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduc
 /* challenge card: presenter on the left, question scroll on the right */
 const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0'],science:['🔬 Science','#3E9A52']};
 function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
-  return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
+  return (CHBG[S[i]&&S[i].part]?paint(CHBG[S[i].part],.5):'')+castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
    +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
 let CHN=0;
 const praise=['Brilliant!','Super brain!','You got it!','Amazing!','Wonderful!','Spot on!'];
@@ -925,30 +925,25 @@ const notes=(x,y,col='#6A5BA8',n=3)=>['♪','♫','♩','♬'].slice(0,n).map((c
 
 /* ---- scenery ---- */
 const floor=(c='#D9C7EE')=>`<rect y="330" width="640" height="70" fill="${c}"/>`;
-const home=()=>mroom()+floor()+`<rect x="460" y="150" width="150" height="120" rx="8" fill="#BFE6F7" stroke="${C.ink}" stroke-width="3"/><path d="M535 150 v120 M460 210 h150" stroke="${C.ink}" stroke-width="3"/>${cloud(500,190,.35)}`;
+/* painted scene backgrounds (img/trombone/, Gemini, worksheet style); the SVG cast is drawn on top */
+const paint=(n,wash=0)=>`<image href="../img/trombone/${n}.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/>`+(wash?`<rect width="640" height="400" fill="#FFFDF6" opacity="${wash}"/>`:'');
+const CHBG={t1:'home',t2:'hawker',t3:'gardens',t4:'gardens',boss:'night',t5:'night'};
+const home=()=>paint('home');
 const poster=(x,y)=>`<g transform="rotate(-2 ${x+95} ${y+60})"><rect x="${x}" y="${y}" width="190" height="122" rx="10" fill="#FFF3D6" stroke="${C.ink}" stroke-width="3"/>${lantern(x+30,y+64,'#E0574F',.6)}${lantern(x+160,y+64,'#FF8A3D',.6)}`
   +T(x+95,y+34,'MID-AUTUMN','lab mid','style="fill:#B3243A;font-weight:800;font-size:19px"')+T(x+95,y+58,'Lantern Parade','sm mid','style="font-weight:800"')+T(x+95,y+82,'Gardens by the Bay','sm mid','style="font-size:13px"')+T(x+95,y+106,'7 p.m. tonight','sm mid','style="fill:#6A5BA8;font-weight:800"')+`</g>`;
 const stall=(x,name,col)=>`<g transform="translate(${x} 0)"><rect x="-110" y="150" width="220" height="180" fill="#F7E3C0" stroke="${C.ink}" stroke-width="3"/><rect x="-110" y="150" width="220" height="38" fill="${col}" stroke="${C.ink}" stroke-width="3"/>${T(0,177,name,'lab mid','style="fill:#fff;font-weight:800"')}
   ${[...Array(11)].map((_,k)=>`<path d="M${-110+k*20} 188 h20 v12 a10 10 0 0 1 -20 0z" fill="${k%2?'#fff':col}" stroke="${C.ink}" stroke-width="1.5"/>`).join('')}<rect x="-110" y="262" width="220" height="68" fill="#C98B55" stroke="${C.ink}" stroke-width="3"/>
   ${T(-60,250,'☕','mid','style="font-size:30px"')}${T(0,252,'🍞','mid','style="font-size:30px"')}${T(60,250,'🥚','mid','style="font-size:28px"')}</g>`;
-const hawker=()=>`<rect width="640" height="400" fill="#FFF1D6"/>`+[...Array(9)].map((_,k)=>`<line x1="${k*80}" y1="130" x2="${k*80}" y2="330" stroke="#EBD6B2" stroke-width="10"/>`).join('')+stall(170,'KAYA TOAST',C.bad)+stall(470,'DRINKS','#2E8BC0')
-  +`<rect y="330" width="640" height="70" fill="#E6D3B3"/>`+[...Array(9)].map((_,k)=>`<line x1="${k*80}" y1="330" x2="${k*80-30}" y2="400" stroke="#D2BC98" stroke-width="2"/>`).join('');
-const mrt=()=>`<rect width="640" height="400" fill="#E9EEF2"/><rect y="120" width="640" height="16" fill="#C9D3DA"/>
-  <rect x="-20" y="168" width="680" height="150" rx="30" fill="#F4F6F8" stroke="${C.ink}" stroke-width="3"/><rect x="-20" y="270" width="680" height="16" fill="#005EC4"/>
-  ${[30,180,330,480].map(x=>`<rect x="${x}" y="190" width="120" height="66" rx="12" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2.5"/>`).join('')}
-  ${[0,160,320,480,640].map(x=>`<rect x="${x-6}" y="150" width="12" height="180" fill="#8A97A3"/>`).join('')}<rect y="150" width="640" height="10" fill="#8A97A3"/>
-  <rect x="190" y="138" width="260" height="38" rx="8" fill="#1F2A33"/>${T(270,164,'Bayfront','lab mid','style="fill:#fff;font-weight:800"')}${tagPill(338,143,'DT16','#005EC4',52)}${tagPill(394,143,'CE1','#FA9E0D',48)}
-  <rect y="330" width="640" height="70" fill="#B7C1C9"/><rect y="336" width="640" height="8" fill="#FFD43B"/>`;
+const hawker=()=>paint('hawker')+tagPill(165,226,'KAYA TOAST',C.bad,110)+tagPill(380,226,'DRINKS','#2E8BC0',80);
+const mrt=()=>paint('mrt')+`<rect x="190" y="138" width="260" height="38" rx="8" fill="#1F2A33" stroke="#fff" stroke-width="2"/>${T(270,164,'Bayfront','lab mid','style="fill:#fff;font-weight:800"')}${tagPill(338,143,'DT16','#005EC4',52)}${tagPill(394,143,'CE1','#FA9E0D',48)}`;
 /* a Supertree: (x,y) = base, h = height; lit = night lights */
 const supertree=(x,y,h,lit=false,w=null)=>{w=w||h*.42;const t=y-h,tr=lit?'#5B3F7A':'#6E7F6A',cn=lit?'#C86BD8':'#7FA36A';
   return `<g><path d="M${x-16} ${y} L${x-6} ${t+30} h12 L${x+16} ${y}z" fill="${tr}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>${[...Array(Math.floor(h/26))].map((_,k)=>`<path d="M${x-14+k*.6} ${y-12-k*24} l${12-k*.4} -16 l${12-k*.4} 16" stroke="${lit?'#9A7BC0':'#9DBA6A'}" stroke-width="2" fill="none"/>`).join('')}
   <path d="M${x-w} ${t} q${w} -22 ${2*w} 0 L${x+8} ${t+34} h-16z" fill="${cn}" stroke="${C.ink}" stroke-width="2.5" stroke-linejoin="round"/>${[...Array(7)].map((_,k)=>`<line x1="${x-w+k*w/3}" y1="${t-(k%6?8:2)}" x2="${x}" y2="${t+30}" stroke="${lit?'#F4C6F0':'#5E8A4E'}" stroke-width="1.5"/>`).join('')}
   ${lit?[...Array(9)].map((_,k)=>`<circle cx="${x-w*.8+k*w*.2}" cy="${t-4+Math.abs(k-4)*2}" r="2.5" fill="#FFF3C4"/>`).join(''):''}</g>`};
-const gardens=(top='#BFE6F7',bot='#FFF8E8')=>sky(top,bot)+cloud(120,150,.6)+supertree(470,330,200)+supertree(560,330,150)+supertree(380,330,130)+`<path d="M330 214 q90 -14 180 0" stroke="#8A97A3" stroke-width="5" fill="none"/>`+grass(330,'#8FCB7A')+flowers(7,356);
-const dusk=()=>gardens('#F6A97E','#FFE2C2')+`<circle cx="120" cy="300" r="36" fill="#FFB86B" opacity=".9"/>`;
-const nightG=()=>`<rect width="640" height="400" fill="#2A2850"/>`+[...Array(16)].map((_,k)=>`<circle cx="${(k*97+30)%640}" cy="${150+(k*53)%100}" r="1.8" fill="#FFF3C4"/>`).join('')
-  +`<circle cx="320" cy="190" r="40" fill="#FFF3C4"/><circle cx="320" cy="190" r="56" fill="#FFF3C4" opacity=".18"/>`+supertree(90,330,190,true)+supertree(560,330,170,true)+supertree(470,330,120,true)+`<rect y="330" width="640" height="70" fill="#3B3566"/>`
-  +[[200,170,'#E0574F'],[260,152,'#FF8A3D'],[390,160,'#E0574F'],[440,176,'#FFC83D']].map(([x,y,c])=>lantern(x,y,c,.7)).join('');
+const gardens=()=>paint('gardens');
+const dusk=()=>paint('dusk');
+const nightG=()=>paint('night');
 /* the map for Mommy's directions */
 const MAPP={station:[246,354],bridge:[360,318],lantern:[476,318],tree:[440,262]};
 const dmap=()=>`<g><rect x="206" y="176" width="414" height="214" rx="14" fill="#E3F2DA" stroke="${C.ink}" stroke-width="2.5"/><ellipse cx="360" cy="318" rx="62" ry="46" fill="#9AD3F0" stroke="${C.ink}" stroke-width="2"/>
@@ -1067,7 +1062,7 @@ story('t4','Chase to the Supertrees','mommy','Baddie grabbed the trombone and RA
 route('t4','mommy','english','Mommy\'s directions',{q:'The wind mixed up Mommy\'s directions! Follow the map to the tallest Supertree.',items:['Run out of the station.','Cross the bridge over the lake.','Turn left at the red lantern.','Look under the tallest Supertree.'],spots:['station','bridge','lantern','tree'],words:['First,','Next,','Then,','Finally,'],
  why:'Use the order words <b>First, Next, Then, Finally</b> to tell someone the way:',hint:'Follow the dotted path on the map with your finger, starting at the MRT station.'}),
 story('t4','Found it!','wala','Under the tallest Supertree, Wala found the trombone! "Got it!" she cheered. But oh no, the slide was STUCK. "For the parade\'s low notes, the slide must go much further out," said Mommy.',
- ()=>gardens()+supertree(320,330,230)+G(wala(260,392,.85,{wave:true})+tbone(296,300,.7,-50),'a-pop',.2)+G(mommy(500,392,.85,{still:true}),'a-pop',.3)+G(T(390,226,'STUCK!','h mid','style="fill:#E0574F"'),'a-pop',.7),
+ ()=>gardens()+G(wala(260,392,.85,{wave:true})+tbone(296,300,.7,-50),'a-pop',.2)+G(mommy(500,392,.85,{still:true}),'a-pop',.3)+G(T(390,226,'STUCK!','h mid','style="fill:#E0574F"'),'a-pop',.7),
  'Wala found it! But the slide is <b>stuck</b>, and the parade is soon.'),
 num('t4','mommy','maths','How far to slide?',{q:'The stuck slide is pulled out 25 cm. For a low note, Mommy needs it pulled out 60 cm. How many more centimetres must it slide?',answer:35,unit:'cm',art:ruler(232,320,360,25,60),
  why:'60 − 25 = <b>35 cm</b>. You can also count on from 25: 25 → 30 is 5, 30 → 60 is 30, and 5 + 30 = 35.',hint:'Take away: 60 − 25. Or count on from 25 to 60.'}),
