@@ -1,7 +1,7 @@
 /* Chowdie's Learning Den: Star Bank backend (Google Apps Script, bound to a Google Sheet).
    Setup steps are in SETUP.md next to this file. Change PARENT_PIN before you deploy. */
 const PARENT_PIN = 'CHANGE-ME';            // grown-ups type this in the Star Bank to give out rewards
-const USERS = ['willis', 'megan', 'daddy']; // Mommy doesn't collect stars
+const USERS = ['willis', 'megan', 'daddy', 'mommy']; // Daddy and Mommy are beta testers
 const WEEK = 7 * 864e5;
 const BONUS = { deck: 3, boss: 5, daddy: 10, story: 2 };
 const HEAD = ['Time', 'User', 'Type', 'Key', 'OK', 'Stars', 'Note', 'Deck', 'Id'];

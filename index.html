@@ -1149,7 +1149,7 @@ function render(){const b=btns.find(x=>x.dataset.user===get());if(chip)chip.remo
  const sw=document.createElement('button');sw.type='button';sw.textContent='Switch';sw.setAttribute('aria-label','Switch who is learning');sw.addEventListener('click',show);
  const bank=document.createElement('a');bank.className='who-bank';bank.href='bank.html';
  const u=b.dataset.user,D=window.DenStars,collects=D&&D.USERS[u];
- const paint=()=>{bank.innerHTML=collects?'⭐ <b>'+D.totals(u).balance+'</b>'+(u==='daddy'?' <small>beta</small>':''):'⭐ Star Bank';
+ const paint=()=>{bank.innerHTML=collects?'⭐ <b>'+D.totals(u).balance+'</b>'+(D.BETA[u]?' <small>beta</small>':''):'⭐ Star Bank';
   bank.setAttribute('aria-label',collects?name+' has '+D.totals(u).balance+' stars. Open the Star Bank':'Open the Star Bank')};
  paint();if(collects){D.onChange(x=>{if(x===u)paint()});D.sync(u)}
  chip.append(av,t,bank,sw);hero.appendChild(chip)}

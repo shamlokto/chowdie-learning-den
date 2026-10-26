@@ -26,4 +26,4 @@ Paste the URL into the chat. Claude puts it into `stars.js`, and every device st
 - **The Sheet is the record.** The `Stars` tab gets one row per star event: who, when, which question, and how many stars. Rewards show as negative rows.
 - **Changing the PIN later:** edit the PIN line, then choose **Deploy → Manage deployments → Edit (pencil) → Version: New version → Deploy**. The URL stays the same.
 - **Safety:** anyone who digs the URL out of the page source could add stars, but they can't spend them without the PIN. That's fine for family rewards.
-- **Mommy** doesn't collect stars. **Daddy** collects stars as a beta tester.
+- **Daddy** and **Mommy** collect stars as beta testers.
