@@ -244,8 +244,8 @@ function arr(x,y,rows,cols,col=C.sky,gap=30,anim=true,d0=0,r=11){let s='';for(le
 /* groups: n plates each with k items */
 function groups(x,y,n,k,item,plateW=90,gapX=100,anim=true,d0=0){let s='';for(let g=0;g<n;g++){const px=x+(g%6)*gapX,py=y+Math.floor(g/6)*110;let inner=`<ellipse cx="${px+plateW/2}" cy="${py+34}" rx="${plateW/2}" ry="30" fill="#fff" stroke="${C.ink}" stroke-width="3"/>`;
   for(let i=0;i<k;i++){const a=k===1?0:(i/k)*Math.PI*2,rr=k===1?0:Math.min(22,plateW*.3);inner+=item(px+plateW/2+rr*Math.cos(a),py+34+rr*Math.sin(a)*.6)}s+=anim?G(inner,'a-pop',d0+g*.15):inner}return s}
-const strawberryI=(x,y)=>`<g transform="translate(${x} ${y}) scale(.55)"><path d="M0 14 q-14 -8 -12 -18 q2 -6 12 -5 q10 -1 12 5 q2 10 -12 18z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/><path d="M-8 -9 l4 2 l1 -5 l3 4 l3 -4 l1 5 l4 -2 l-3 5 h-10z" fill="${C.leaf}" stroke="${C.ink}" stroke-width="1.5"/></g>`;
-const cookieI=(x,y)=>`<g><circle cx="${x}" cy="${y}" r="10" fill="#D9A066" stroke="${C.ink}" stroke-width="2"/><circle cx="${x-3}" cy="${y-3}" r="2" fill="#5B3A1E"/><circle cx="${x+4}" cy="${y+2}" r="2" fill="#5B3A1E"/><circle cx="${x-2}" cy="${y+5}" r="1.5" fill="#5B3A1E"/></g>`;
+const strawberryI=(x,y)=>`<image href="../img/obj/strawberry.webp" x="${x+(-7.7)*1}" y="${y+(-7.2)*1}" width="${15.4*1}" height="${15.4*1}" preserveAspectRatio="xMidYMid meet"/>`;
+const cookieI=(x,y)=>`<image href="../img/obj/cookie.webp" x="${x+(-10.8)*1}" y="${y+(-10.8)*1}" width="${21.6*1}" height="${21.6*1}" preserveAspectRatio="xMidYMid meet"/>`;
 const fishI=(x,y)=>`<g transform="translate(${x} ${y}) scale(.6)"><path d="M-14 0 q12 -13 24 0 q-12 13 -24 0z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/><path d="M10 0 l8 -7 v14z" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/><circle cx="-7" cy="-2" r="2" fill="${C.ink}"/></g>`;
 const starI=(x,y)=>star(x,y,10);
 const eq=(x,y,txt,cls='h')=>T(x,y,txt,cls+' mid');
