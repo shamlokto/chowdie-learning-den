@@ -492,6 +492,7 @@ const daddyEnd=(subject)=>({part:'daddy',title:'Baddie Daddy is beaten!',who:'ot
    Systems (plant parts, digestive system) · Interactions (magnets). */
 PARTS.learn='How to play';
 document.querySelectorAll('.parts button').forEach(b=>{if(b.dataset.part==='learn')b.textContent=PARTS.learn});
+const pt=(n,x,y,b)=>`<image href="../img/sci/${n}.webp" x="${x-b/2}" y="${y-b/2}" width="${b}" height="${b}" preserveAspectRatio="xMidYMid meet"/>`; // painted props from the Life Science decks
 const emo=(e,x=440,y=310,sz=72)=>T(x,y,e,'big mid',`style="font-size:${sz}px"`);
 const S=[
 {part:'learn',title:'How to beat Baddie: P3 Science',say:CH+'Baddie Vampire has read the <b>P3 Science</b> book… upside down. He <b>always lies</b>. Use what you learnt in class to catch him!',
@@ -504,13 +505,13 @@ boss('Diversity · Plants',{lines:['ALL plants have','flowers!'],claim:'All plan
  hints:{'Every plant has flowers.':'That is Baddie\'s lie. Think of ferns and mosses.','Only trees have flowers.':'Hibiscus and rice plants flower too, and they are not trees.'},art:emo('🌿')}),
 boss('Diversity · Animals',{lines:['Dolphins live in the sea,','so they breathe with gills!'],claim:'Dolphins live in the sea, so they breathe with gills!',options:['They breathe air with lungs.','They breathe with gills.','They don\'t need to breathe.'],answer:'They breathe air with lungs.',
  why:'Dolphins are <b>mammals</b>: they come up to breathe air with <b>lungs</b> and feed their young milk.',taunt:'Mwahaha! Blub blub!',hint:'Why do dolphins keep coming up to the surface?',
- hints:{'They breathe with gills.':'Fish have gills. Dolphins come up for air.','They don\'t need to breathe.':'All animals need air.'},art:emo('🐬')}),
+ hints:{'They breathe with gills.':'Fish have gills. Dolphins come up for air.','They don\'t need to breathe.':'All animals need air.'},art:pt('an-dolphin',440,285,150)}),
 boss('Diversity · Fungi',{lines:['Fungi make their own food','from sunlight, like plants!'],claim:'Fungi make their own food from sunlight, like plants!',options:['They feed on dead or rotting things.','They make food from sunlight.','They catch insects.'],answer:'They feed on dead or rotting things.',
  why:'Fungi have no green parts, so they <b>cannot make food</b>. They feed on dead or decaying matter, like bread mould does.',taunt:'Hehehe! Mushrooms love sunbathing!',hint:'Does bread mould need sunlight? It grows in a dark cupboard!',
- hints:{'They make food from sunlight.':'Fungi have no green parts to use sunlight.','They catch insects.':'Fungi can\'t move to catch anything.'},art:emo('🍄')}),
+ hints:{'They make food from sunlight.':'Fungi have no green parts to use sunlight.','They catch insects.':'Fungi can\'t move to catch anything.'},art:pt('mic-mushroom',440,285,130)}),
 boss('Diversity · Bacteria',{lines:['You can see bacteria with','a magnifying glass!'],claim:'You can see bacteria with a magnifying glass!',options:['You need a microscope.','A magnifying glass works.','You can see them with your eyes.','Bacteria are invisible forever.'],answer:'You need a microscope.',
  why:'Bacteria are far too small for a magnifying glass. Scientists use a <b>microscope</b>.',taunt:'Mwahaha! I see one! It\'s waving!',hint:'Which tool makes things look hundreds of times bigger?',
- hints:{'A magnifying glass works.':'A magnifying glass only makes things a few times bigger.','You can see them with your eyes.':'They are much too tiny.','Bacteria are invisible forever.':'A microscope can show them.'},art:emo('🔬')}),
+ hints:{'A magnifying glass works.':'A magnifying glass only makes things a few times bigger.','You can see them with your eyes.':'They are much too tiny.','Bacteria are invisible forever.':'A microscope can show them.'},art:pt('mic-scope',440,290,120)}),
 boss('Diversity · Materials',{lines:['Windows are made of glass','because glass is STRONG!'],claim:'Windows are made of glass because glass is strong!',options:['Glass is transparent.','Glass is strong.','Glass is flexible.','Glass is magnetic.'],answer:'Glass is transparent.',
  why:'We use glass for windows because it is <b>transparent</b>: it lets light through so we can see out.',taunt:'Hehehe! I\'ll play football against your window!',hint:'Why do we want to look through a window?',
  hints:{'Glass is strong.':'Glass breaks easily! That is not the reason.','Glass is flexible.':'Glass can\'t bend.','Glass is magnetic.':'Glass is not attracted to magnets.'},art:emo('🪟')}),
@@ -522,10 +523,10 @@ boss('Cycles · Animal life cycles',{lines:['ALL animals have 4 stages,','just l
  hints:{'All animals have 4 stages.':'Cockroaches skip the pupa.','All animals have 2 stages.':'A butterfly has 4. A cockroach has 3.','Insects have no life cycle.':'Every living thing has a life cycle.'},art:emo('🪳')}),
 boss('Cycles · Plant life cycles',{lines:['A seed needs SUNLIGHT','to germinate!'],claim:'A seed needs sunlight to germinate!',options:['Water, air and warmth.','Sunlight only.','Soil only.','Nothing at all.'],answer:'Water, air and warmth.',
  why:'A seed needs <b>water, air and the right warmth</b> to germinate. It has food inside, so it doesn\'t need light yet. Green bean seeds sprout in a dark cupboard!',taunt:'Mwahaha! My seeds wear sunglasses!',hint:'Remember the green bean experiment on wet cotton wool.',
- hints:{'Sunlight only.':'Seeds can sprout in the dark. What do they really need?','Soil only.':'Seeds sprout on wet cotton wool. Soil is not needed.','Nothing at all.':'A dry seed stays asleep.'},art:emo('🌱')}),
+ hints:{'Sunlight only.':'Seeds can sprout in the dark. What do they really need?','Soil only.':'Seeds sprout on wet cotton wool. Soil is not needed.','Nothing at all.':'A dry seed stays asleep.'},art:pt('plant-germ',440,285,170)}),
 boss('Systems · Plant parts',{lines:['The stem makes food','for the plant!'],claim:'The stem makes food for the plant!',options:['Leaves make food.','The stem makes food.','The roots make food.','The flowers make food.'],answer:'Leaves make food.',
  why:'<b>Leaves</b> make food. The <b>stem</b> holds the plant up and carries water and food. <b>Roots</b> take in water.',taunt:'Hehehe! Stems are the kitchen!',hint:'Which green part faces the sun?',
- hints:{'The stem makes food.':'The stem carries water and food. It doesn\'t make it.','The roots make food.':'Roots take in water. They are in the dark.','The flowers make food.':'Flowers make seeds.'},art:emo('🌻')}),
+ hints:{'The stem makes food.':'The stem carries water and food. It doesn\'t make it.','The roots make food.':'Roots take in water. They are in the dark.','The flowers make food.':'Flowers make seeds.'},art:pt('plant-plant',440,270,170)}),
 boss('Systems · Digestion',{lines:['Digestion only happens','in the stomach!'],claim:'Digestion only happens in the stomach!',options:['Mouth, stomach and small intestine.','Only the stomach.','Only the mouth.','Only the large intestine.'],answer:'Mouth, stomach and small intestine.',
  why:'Digestion <b>starts in the mouth</b>, goes on in the <b>stomach</b>, and is <b>completed in the small intestine</b>.',taunt:'Mwahaha! My tummy does everything!',hint:'What happens to food when you chew?',
  hints:{'Only the stomach.':'Chewing in the mouth is digestion too.','Only the mouth.':'Food keeps being broken down after you swallow.','Only the large intestine.':'The large intestine takes in water. Digestion is finished before that.'},art:emo('🍎➜😋',440,310,56)}),
@@ -551,7 +552,7 @@ mc('Diversity · Plants',{q:'Which of these is a NON-flowering plant?',options:[
  hints:{'hibiscus':'Hibiscus has big red flowers.','sunflower':'It is even called a FLOWER.','rice plant':'Rice plants have tiny flowers that become grains.','mango tree':'Mango trees flower before the mangoes grow.'}}),
 tl('Diversity · Fungi',{claim:'Mushrooms and bread mould are both fungi.',truth:true,
  reasons:['Both feed on other things and grow from spores.','Both are green plants.','Both are animals.','Only mushrooms are fungi.'],
- reason:'Both feed on other things and grow from spores.',why:'True! Mushrooms and bread mould are both <b>fungi</b>: they can\'t make their own food and they reproduce by <b>spores</b>.',hint:'Can either of them make food from sunlight?',hint2:'Is mould a plant?',art:emo('🍄🍞',440,310,60)}),
+ reason:'Both feed on other things and grow from spores.',why:'True! Mushrooms and bread mould are both <b>fungi</b>: they can\'t make their own food and they reproduce by <b>spores</b>.',hint:'Can either of them make food from sunlight?',hint2:'Is mould a plant?',art:pt('mic-mushroom',405,295,80)+pt('mic-bread',485,295,80)}),
 mc('Diversity · Materials',{q:'Why are car tyres made of rubber?',options:['Rubber is strong and flexible.','Rubber is transparent.','Rubber is magnetic.','Rubber soaks up water.','Rubber is light as a feather.'],answer:'Rubber is strong and flexible.',
  why:'Tyres must be <b>strong</b> (to carry the car) and <b>flexible</b> (to bend over bumps).',hint:'What must a tyre do on a bumpy road?',
  hints:{'Rubber is transparent.':'You can\'t see through a tyre.','Rubber is magnetic.':'Rubber is not magnetic.','Rubber soaks up water.':'Rubber is waterproof.','Rubber is light as a feather.':'Tyres are quite heavy!'}}),
