@@ -144,7 +144,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
     <button id="replay" type="button">Replay</button>
     <button id="next" type="button" class="primary">Next</button>
   </div>
-  <p class="foot">A storybook about respect and humility for Primary 2: proud Wala learns from Baddie, Flame the Eagle and Hoot the Owl on Quiz Day, and teaches Mommy some 华文. Ben Franklin: "Who is wise? He that learns from every one." Confucius: 三人行，必有我师焉. Use the arrow keys or the big buttons to move around.</p>
+  <p class="foot">A storybook about respect and humility for Primary 2: proud Wala learns from Baddie, Flame the Eagle and the wise Owl on Quiz Day, and teaches Mommy some 华文. Ben Franklin: "Who is wise? He that learns from every one." Confucius: 三人行，必有我师焉. Use the arrow keys or the big buttons to move around.</p>
 </div>
 
 <script>
@@ -868,13 +868,13 @@ const medal=(who,x,y,d=150,cls='a-bob')=>`<g class="${cls}"><g transform="transl
 CASTDRAW.mommy=(x,y,s,o)=>mommy(x,y,s,o);
 CASTDRAW.daddy=(x,y,s,o)=>medal('daddy',x,y-80*s,170*s,o&&o.still?'':'a-bob');
 /* ===== Wala and the Three Teachers 三人行: a Respect & humility storybook for P2 (华文, English, Maths).
-   Proud Wala learns from Baddie, Flame and Hoot the Owl, and teaches Mommy. Baddie Daddy (Professor Know-It-All) is the hidden boss. ===== */
-const CHAP=[['w1','1 · Proud Wala','#8E6BD8'],['w2','2 · Teacher Baddie?!','#B9471A'],['w3','3 · Teacher Flame','#2E8BC0'],['w4','4 · Teacher Hoot','#8A5A2B'],['w5','5 · Teacher Wala','#C2185B'],['boss','🎩 ???','#4B2A6B'],['w6','6 · Three Teachers','#E0A800']];
+   Proud Wala learns from Baddie, Flame and the wise Owl, and teaches Mommy. Baddie Daddy (Professor Know-It-All) is the hidden boss. ===== */
+const CHAP=[['w1','1 · Proud Wala','#8E6BD8'],['w2','2 · Teacher Baddie?!','#B9471A'],['w3','3 · Teacher Flame','#2E8BC0'],['w4','4 · Teacher Owl','#8A5A2B'],['w5','5 · Teacher Wala','#C2185B'],['boss','🎩 ???','#4B2A6B'],['w6','6 · Three Teachers','#E0A800']];
 setChapters(CHAP);
 CAST.mommy=[mommy,MM];CAST.daddy=[daddy,DD];CAST.eagle=[eagle,EG];
 SUBJ.writing=['✍️ Writing','#B9471A'];
 
-/* ===== Hoot the Owl: the wise owl of the old rain tree (Willis's idea). origin = feet centre, ~135 tall at s=1. o.wave: right wing up; o.book: holds a book ===== */
+/* ===== The wise Owl of the old rain tree (no name yet). origin = feet centre, ~135 tall at s=1. o.wave: right wing up; o.book: holds a book ===== */
 function owl(x,y,s=1,o={}){const ink=C.ink,br='#9C6B3F',dk='#80542E',cr='#F1DDB8',yl='#FFC83D',bk='#E8A23C';
   const wingR=o.wave?`<path d="M30 -64 q34 -18 44 -56 q2 34 -14 58 q-12 10 -30 10z" fill="${dk}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><path d="M40 -70 q14 -14 22 -36 M44 -60 q14 -10 20 -24" stroke="${br}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
    :`<path d="M32 -70 q16 26 4 58 q-12 -4 -16 -22z" fill="${dk}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`;
@@ -895,7 +895,7 @@ function owl(x,y,s=1,o={}){const ink=C.ink,br='#9C6B3F',dk='#80542E',cr='#F1DDB8
   </g></g>`}
 FACES.owl=()=>owl(50,132,.68,{still:true});
 VOICE.owl={en:[.88,.8],zh:[.8,.8],pref:VMALE};
-const OW='<b class="ow">Hoot:</b> ';
+const OW='<b class="ow">Owl:</b> ';
 (function(){const st=document.createElement('style');st.textContent='.bubble b.ow{color:#80542E}';document.head.appendChild(st)})();
 CAST.owl=[owl,OW];CASTDRAW.owl=(x,y,s,o)=>owl(x,y,s,o);NAMES.owl=OW;NAMES.eagle=EG;NAMES.baddie=BD;NAMES.daddy=DD;
 
@@ -953,8 +953,8 @@ const S=[
 story('w1','Meet the stars!','wala','Today\'s story is about a very clever little koala who thinks she has nothing left to learn… and the friends who show her that EVERYONE can be a teacher.',
  ()=>paint('field')+`<rect x="24" y="118" width="592" height="252" rx="26" fill="#FFFDF6" stroke="#1F3A4A" stroke-width="3" opacity=".94"/>`
   +G(wala(108,300,.78,{still:true}),'a-pop',.2)+G(eagle(250,300,.7,{still:true}),'a-pop',.35)+G(owl(390,300,.72,{still:true,book:true}),'a-pop',.5)+G(mommy(530,300,.66,{still:true}),'a-pop',.65)
-  +[[108,'Wala the Koala','by Willis'],[250,'Flame the Eagle','sky pilot'],[390,'Hoot the Owl','Willis\'s idea!'],[530,'Mommy','music teacher']].map(([x,n,d])=>T(x,326,n,'sm mid','style="font-weight:800;font-size:16px"')+T(x,348,d,'sm mid mut','style="font-size:13px"')).join(''),
- 'Meet <b>Wala</b>, <b>Flame the Eagle</b>, <b>Hoot the Owl</b> (a new friend, Willis\'s idea!) and <b>Mommy the Elephant</b>. Let\'s find out who teaches whom!'),
+  +[[108,'Wala the Koala','by Willis'],[250,'Flame the Eagle','sky pilot'],[390,'the wise Owl','lives in the rain tree'],[530,'Mommy','music teacher']].map(([x,n,d])=>T(x,326,n,'sm mid','style="font-weight:800;font-size:16px"')+T(x,348,d,'sm mid mut','style="font-size:13px"')).join(''),
+ 'Meet <b>Wala</b>, <b>Flame the Eagle</b>, <b>the wise Owl</b> (a new friend) and <b>Mommy the Elephant</b>. Let\'s find out who teaches whom!'),
 story('w1','听写 champion!','wala','Wala got 100 marks for 听写 AGAIN. "I\'m the cleverest koala in Forest School!" she cheered. "I don\'t need to learn from anybody. Everybody should learn from ME!"',
  ()=>paint('school')+G(tingxie(330,170),'a-drop',.3)+G(wala(200,392,1.05,{wave:true}),'a-pop',.2)+G(otter(560,392,.62,{still:true}),'a-pop',.4)+G(T(206,212,'★','mid','style="font-size:30px;fill:#FFC83D"'),'a-pop',.6),
  '100 marks! Well done, Wala… but "Everybody should learn from ME"? Hmm. Is that how a wise koala talks?'),
@@ -993,17 +993,17 @@ story('w3','Look before you leap','wala','"You were right, Flame!" said Wala. "T
  ()=>paint('trail')+G(wala(220,392,.9,{wave:true}),'a-pop',.2)+G(eagle(400,392,.85,{wave:true}),'a-pop',.3)+G(baddie(560,392,.7,{still:true}),'a-pop',.4),
  'Two teachers already: Baddie taught Wala to count on, and Flame taught her to <b>look first</b>.'),
 
-/* ---------- 4: Teacher Hoot ---------- */
-story('w4','The wise old owl','owl','In the big old rain tree sat Hoot the Owl, with books all around him. "Whoo… whoo is wise?" he hooted. "I give my clue only to those who ask nicely."',
+/* ---------- 4: Teacher Owl ---------- */
+story('w4','The wise old owl','owl','In the big old rain tree sat a wise old Owl, with books all around him. "Whoo… whoo is wise?" he hooted. "I give my clue only to those who ask nicely."',
  ()=>paint('owltree')+G(owl(214,300,.95,{book:true}),'a-drop',.2)+G(wala(420,392,.78,{still:true})+eagle(510,392,.72,{still:true})+baddie(600,392,.62,{still:true}),'a-pop',.4)+G(T(340,206,'Whoo-whoo!','lab mid','style="fill:#80542E;font-weight:800;paint-order:stroke;stroke:#fff;stroke-width:5px"'),'a-pop',.7),
- '"<b>Whoo is wise?</b>" Hoot sounds just like Ben Franklin! How should the team ask for the clue?'),
-mc('w4','owl','english','Ask Hoot nicely',{q:'Which is the most polite way to ask Hoot for the clue?',options:['Could you please give us the clue, Hoot?','Give us the clue now!','Oi, Owl! Clue!','We want the clue. Hurry up.'],answer:'Could you please give us the clue, Hoot?',
- why:'<b>Could you please…?</b> is polite and kind. Hoot ruffles his feathers happily and hands over the clue.',hint:'Look for the magic word, and a question, not an order.'}),
-story('w4','Whoo is wise?','owl','Hoot blinked his big round eyes. "I have read a thousand books," he said, "and I still learn something new every day. Even from a little mouse! The wisest ones are humble. They never say they know everything."',
+ '"<b>Whoo is wise?</b>" The Owl sounds just like Ben Franklin! How should the team ask for the clue?'),
+mc('w4','owl','english','Ask the Owl nicely',{q:'Which is the most polite way to ask the Owl for the clue?',options:['Could you please give us the clue, Owl?','Give us the clue now!','Oi, Owl! Clue!','We want the clue. Hurry up.'],answer:'Could you please give us the clue, Owl?',
+ why:'<b>Could you please…?</b> is polite and kind. The Owl ruffles his feathers happily and hands over the clue.',hint:'Look for the magic word, and a question, not an order.'}),
+story('w4','Whoo is wise?','owl','The Owl blinked his big round eyes. "I have read a thousand books," he said, "and I still learn something new every day. Even from a little mouse! The wisest ones are humble. They never say they know everything."',
  ()=>paint('owltree')+G(owl(214,300,.95,{wave:true}),'a-pop',.2)+G(wala(440,392,.9,{still:true}),'a-pop',.3)+G(`<g transform="translate(330 380)"><ellipse rx="14" ry="10" fill="#B7BEC5" stroke="${C.ink}" stroke-width="2"/><circle cx="12" cy="-6" r="7" fill="#B7BEC5" stroke="${C.ink}" stroke-width="2"/><circle cx="12" cy="-14" r="4" fill="#F4C6CC" stroke="${C.ink}" stroke-width="1.5"/><circle cx="15" cy="-6" r="1.5" fill="${C.ink}"/><path d="M-14 2 q-12 4 -16 -6" stroke="${C.ink}" stroke-width="2" fill="none"/></g>`,'a-pop',.6),
- '<b>Humble</b> means you don\'t show off, and you know you can still learn. Hoot is very wise AND very humble.'),
-mcR('w4','owl','english','Humble words','Hoot has two word puzzles for the team. Whoo can solve them?',[
- {q:'Which word means the OPPOSITE of "boastful"?',options:['humble','proud','noisy','clever'],answer:'humble',ok:'Boastful people show off. <b>Humble</b> people don\'t. They are opposites!',hint:'Think of how Hoot talks about himself.'},
+ '<b>Humble</b> means you don\'t show off, and you know you can still learn. The Owl is very wise AND very humble.'),
+mcR('w4','owl','english','Humble words','The Owl has two word puzzles for the team. Whoo can solve them?',[
+ {q:'Which word means the OPPOSITE of "boastful"?',options:['humble','proud','noisy','clever'],answer:'humble',ok:'Boastful people show off. <b>Humble</b> people don\'t. They are opposites!',hint:'Think of how the Owl talks about himself.'},
  {q:'Which sentence sounds HUMBLE?',options:['I can learn from you.','I know everything!','I am the best, so listen to me.','You are too small to teach me.'],answer:'I can learn from you.',ok:'"<b>I can learn from you.</b>" That\'s what a humble, wise koala says!',hint:'Which one shows that you can still learn from others?'}]),
 
 /* ---------- 5: Teacher Wala ---------- */
@@ -1014,7 +1014,7 @@ mcR('w5','wala','chinese','Teacher Wala\'s measure words','Help Wala teach the t
  {q:'一 ___ 大象 (an elephant, like Mommy)',options:['头','只','条','本'],answer:'头',ok:'一<b>头</b>大象. Big animals like elephants and cows use 头.',hint:'Big, heavy animals use a special word. It also means "head".',hear:'一头大象',cls:'zh'},
  {q:'一 ___ 鳄鱼 (a crocodile, like Baddie)',options:['条','头','本','只'],answer:'条',ok:'一<b>条</b>鳄鱼. Long animals like fish, snakes and crocodiles use 条.',hint:'Crocodiles are long, like fish and snakes.',hear:'一条鳄鱼',cls:'zh'},
  {q:'一 ___ 考拉 (a koala, like Wala)',options:['只','条','头','本'],answer:'只',ok:'一<b>只</b>考拉. Small animals and birds use 只. So it\'s 一只老鹰 for Flame, too!',hint:'Small animals and birds use this one.',hear:'一只考拉',cls:'zh'},
- {q:'一 ___ 书 (a book, like Hoot\'s)',options:['本','只','条','头'],answer:'本',ok:'一<b>本</b>书. Books use 本.',hint:'This measure word is used for books and notebooks.',hear:'一本书',cls:'zh'}],'zh'),
+ {q:'一 ___ 书 (a book, like the Owl\'s)',options:['本','只','条','头'],answer:'本',ok:'一<b>本</b>书. Books use 本.',hint:'This measure word is used for books and notebooks.',hear:'一本书',cls:'zh'}],'zh'),
 story('w5','Mommy\'s question','mommy','Then Mommy came along with a notebook. "Wala, your 华文 is so good. Will you be MY teacher today? How do I ask a question politely?" Wala\'s mouth fell open. "But you\'re a TEACHER!" Mommy smiled. "Teachers learn too."',
  ()=>paint('pavilion')+G(mommy(180,392,1,{still:true}),'a-pop',.2)+G(wala(430,392,.95,{wave:true}),'a-pop',.3)+G(`<g transform="translate(300 300) rotate(-8)"><rect x="-26" y="-34" width="52" height="68" rx="4" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><path d="M-16 -18 h32 M-16 -6 h32 M-16 6 h24" stroke="#BFD7EA" stroke-width="2"/></g>`,'a-pop',.5),
  'The grown-up teacher wants to learn from the little koala! In 华文, we use <b>您</b> (nín) to be extra polite to teachers and elders.'),
@@ -1032,7 +1032,7 @@ dboss('boss','Mommy vs Know-It-All',[
  {claim:'Wise people never ask questions. They already know everything!',truth:false,fix:['Wise people ask questions and learn from everyone.','Wise people only learn from grown-ups.','Wise people never talk to anyone.'],answer:'Wise people ask questions and learn from everyone.',why:'"<b>Who is wise? He that learns from every one.</b>" Even Mommy, a teacher, asked Wala to teach her!'}]),
 
 /* ---------- 6: Three Teachers ---------- */
-story('w6','The Golden Bamboo Scroll','wala','Team Three won! But Wala didn\'t shout "I\'m the cleverest!" Instead she said: "Baddie taught me to count on. Flame taught me to look first. Hoot taught me to ask nicely. And Mommy taught me that everyone can be a teacher."',
+story('w6','The Golden Bamboo Scroll','wala','Team Three won! But Wala didn\'t shout "I\'m the cleverest!" Instead she said: "Baddie taught me to count on. Flame taught me to look first. The Owl taught me to ask nicely. And Mommy taught me that everyone can be a teacher."',
  ()=>paint('stage')+G(scroll(320,236,1),'a-drop',.3)+G(baddie(140,392,.75,{})+wala(260,392,.9,{wave:true})+eagle(390,392,.8,{wave:true})+owl(520,392,.66,{wave:true}),'a-pop',.2),
  'Wala thanks all her teachers. <b>三人行，必有我师焉!</b>',{mount:a=>a.later(()=>a.confetti(),900)}),
 story('w6','The End','mommy','Mommy gave Wala a big elephant hug. "Now THAT is wise." Even Baddie Daddy took off his top hat. "Hmm… could you teach ME something, too?" Everyone laughed. THE END.',
@@ -1040,7 +1040,7 @@ story('w6','The End','mommy','Mommy gave Wala a big elephant hug. "Now THAT is w
  '<b>Who is wise? He that learns from every one.</b> THE END… but Wala has one more job for you. Tap Next!'),
 write('w6','wala','writing','My three teachers',{q:'Your turn! Write about three people who taught you something. Use "I learned … from …" three times, and say thank you to them.',
  checks:[CK.re(/(\blearn(ed|t)\b[\s\S]*){3}/i,'Uses "learned" three times'),CK.re(/(\bfrom\b[\s\S]*){3}/i,'Names three teachers with "from"'),CK.has(['thank you','thanks'],'Says thank you'),CK.sentences(4),CK.caps(),CK.stops()],
- example:'I learned to count coins quickly from Baddie. I learned to look before I leap from Flame. I learned to ask politely from Hoot the Owl. Thank you, my three teachers!'}),
+ example:'I learned to count coins quickly from Baddie. I learned to look before I leap from Flame. I learned to ask politely from the Owl. Thank you, my three teachers!'}),
 ];
 
 render();
