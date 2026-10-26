@@ -283,7 +283,7 @@ const plantFull=(x,y,s=1)=>{const h=200*s,w=h*600/719,X=x-w*290/600,Y=y-h*478/71
 const pot=(x,y,fill,level)=>pp('pot'+Math.max(0,Math.min(4,level)),x-57.5,y+50-225,115,230);
 const S=[
 {part:'learn',title:'Plants are everywhere',say:'Hi! Plants are the quiet heroes of our planet. They make the <b>oxygen</b> we breathe, give us <b>food</b> like rice and fruit, and provide <b>shade</b>, <b>wood</b> and homes for animals. Singapore calls itself a <b>City in Nature</b> because we have so many! Let\'s see how plants work.',
- draw:()=>G(sunI2(80,70,1.2),'a-pop',.1)+G(`<rect x="0" y="300" width="640" height="100" fill="#C9E0B8"/>`,'')+[treeI(140,290,1.6),treeI(300,300,1.2),treeI(470,290,1.5)].map((t,k)=>G(t,'a-pop',.3+k*.2)).join('')+G(flowerI(230,310,.9)+flowerI(390,310,.9,C.grape)+flowerI(560,310,.9,C.sun),'a-pop',.9)+
+ draw:()=>G(sunI2(80,70,1.2),'a-pop',.1)+[treeI(140,290,1.6),treeI(300,300,1.2),treeI(470,290,1.5)].map((t,k)=>G(t,'a-pop',.3+k*.2)).join('')+G(flowerI(230,310,.9)+flowerI(390,310,.9,C.grape)+flowerI(560,310,.9,C.sun),'a-pop',.9)+
   G(box(380,40,240,120,'#fff',16)+T(500,70,'Plants give us','lab mid mut')+T(500,100,'oxygen · food · shade','lab mid')+T(500,128,'wood · medicine · homes','lab mid'),'a-fade',1.2)+otter(60,398,.6)},
 
 {part:'learn',title:'Parts of a plant',say:'Each part has a job. <b>Roots</b> hold the plant in the soil and drink up water. The <b>stem</b> holds the plant up and carries water to the leaves, like straws. <b>Leaves</b> are the food factories, catching sunlight. The <b>flower</b> makes seeds so there can be new plants. Tap each part!',
