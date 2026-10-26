@@ -17,4 +17,6 @@ Maths, English, Science, P2 Chinese and P2 Higher Chinese each have a **Beat Bad
 
 **Hidden boss: Baddie Daddy**, Baddie's father, waits behind a secret door after each Beat Baddie round (and after the last P1 Chinese deck). He only *sometimes* lies, so kids must decide truth or lie **and explain why**, plus type answers, tap mistakes, pick all correct options and put things in order.
 
+**Family login and Star Bank**: the hub asks who is learning (Daddy, Mommy, Willis or Megan; no passwords). Willis, Megan and Daddy (beta) bank a star for every question answered right on the **first try**. A miss, or any question answered in the last 7 days, earns nothing, so replaying decks can't farm stars; after 7 days a question can earn a review star. Finishing a deck, beating Baddie or Baddie Daddy and finishing a story earn one-time bonuses. Grown-ups swap stars for rewards on [`bank.html`](bank.html). Stars sync through a Google Sheet ([setup](stars-backend/SETUP.md)); without one they stay on each device. The shared logic lives in `stars.js`, which every deck loads.
+
 Every deck is a single self-contained HTML file with Learn / Try it / Quiz sections, read-aloud, and no build step. The 听写 pages load stroke data for each character from the hanzi-writer-data CDN, so they need an internet connection for stroke animations.

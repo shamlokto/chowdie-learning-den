@@ -890,6 +890,9 @@
     .who-cancel{margin-top:1.1rem;font:inherit;font-weight:800;background:none;border:0;color:var(--ink-soft,#475569);text-decoration:underline;cursor:pointer}
     .who-chip{display:inline-flex;align-items:center;gap:.5rem;margin:.9rem 0 0;padding:.3rem .9rem .3rem .3rem;border-radius:999px;border:2.5px solid var(--who-c);background:var(--who-l);font-family:'Fredoka',sans-serif;font-weight:600;color:var(--ink,#1F3A4A);font-size:1.05rem}
     .who-chip .who-av,.who-chip .who-av svg{width:40px;height:40px;display:block}
+    .who-chip .who-bank{display:inline-flex;align-items:center;gap:.25rem;padding:.1rem .7rem;border-radius:999px;background:#FFF7D6;border:2px solid #E0A800;color:var(--ink,#1F3A4A);text-decoration:none;font-size:.95rem}
+    .who-chip .who-bank:hover{background:#FFE98A}.who-chip .who-bank small{font-size:.7rem;opacity:.7}
+    .who-chip{flex-wrap:wrap;justify-content:center}
     .who-chip button{font:inherit;font-size:.85rem;margin-left:.3rem;padding:.15rem .7rem;border-radius:999px;border:2px solid var(--ink,#1F3A4A);background:#fff;cursor:pointer;color:var(--ink,#1F3A4A)}
     @media (max-width:640px){.who-grid{grid-template-columns:repeat(2,1fr)}.who-btn small{font-size:.72rem}.who-box h2{font-size:1.6rem}.who-btn .who-av,.who-btn .who-av svg{width:80px;height:80px}}
     @media (prefers-reduced-motion: reduce){.who-btn{transition:none}}
@@ -1113,6 +1116,7 @@ document.querySelectorAll('.sub-nav a').forEach(a=>a.addEventListener('click',e=
 if(!fromHash())pick(store('hubTab')||'all',false);
 })();
 </script>
+<script src="stars.js"></script>
 <script>
 // Family login: remembers who is learning in localStorage 'denUser'. No passwords.
 (function(){
@@ -1136,7 +1140,12 @@ function render(){const b=btns.find(x=>x.dataset.user===get());if(chip)chip.remo
  const av=document.createElement('span');av.className='who-av';const a=avatar(b.dataset.av);if(a)av.appendChild(a);
  const name=b.querySelector('b').textContent,t=document.createElement('span');t.textContent='Hi, '+name+'!';
  const sw=document.createElement('button');sw.type='button';sw.textContent='Switch';sw.setAttribute('aria-label','Switch who is learning');sw.addEventListener('click',show);
- chip.append(av,t,sw);hero.appendChild(chip)}
+ const bank=document.createElement('a');bank.className='who-bank';bank.href='bank.html';
+ const u=b.dataset.user,D=window.DenStars,collects=D&&D.USERS[u];
+ const paint=()=>{bank.innerHTML=collects?'⭐ <b>'+D.totals(u).balance+'</b>'+(u==='daddy'?' <small>beta</small>':''):'⭐ Star Bank';
+  bank.setAttribute('aria-label',collects?name+' has '+D.totals(u).balance+' stars. Open the Star Bank':'Open the Star Bank')};
+ paint();if(collects){D.onChange(x=>{if(x===u)paint()});D.sync(u)}
+ chip.append(av,t,bank,sw);hero.appendChild(chip)}
 btns.forEach(b=>b.addEventListener('click',()=>{set(b.dataset.user);render();hide()}));
 cancel.addEventListener('click',hide);
 ov.addEventListener('keydown',e=>{if(e.key==='Escape'&&get())hide()});
