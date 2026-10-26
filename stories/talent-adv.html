@@ -509,7 +509,7 @@ const stream=(dirty=false)=>`<path d="M0 300 q160 -40 320 0 t320 0 V360 q-160 40
 const junk=()=>[[90,320,'🥤'],[170,332,'🥫'],[260,318,'🧴'],[380,336,'🥤'],[470,322,'🥫'],[560,330,'🛍️']].map(([x,y,e])=>T(x,y,e,'mid','style="font-size:30px"')).join('');
 const flowers=(n=9,y=350)=>[...Array(n)].map((_,k)=>{const x=30+k*(580/(n-1));return `<g transform="translate(${x} ${y+(k%2)*14})"><line y1="0" y2="-26" stroke="#3E8A3E" stroke-width="3"/><circle cy="-30" r="9" fill="${['#FFC83D','#F4A3A8','#fff'][k%3]}" stroke="#1F3A4A" stroke-width="2"/><circle cy="-30" r="3.5" fill="#E0A800"/></g>`}).join('');
 const sunflower=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><line y1="0" y2="-60" stroke="#3E8A3E" stroke-width="5"/>${[...Array(12)].map((_,k)=>`<ellipse cx="0" cy="-82" rx="6" ry="14" fill="#FFC83D" stroke="#C88A00" stroke-width="1.5" transform="rotate(${k*30} 0 -66)"/>`).join('')}<circle cy="-66" r="12" fill="#7A4A2A"/></g>`;
-const den=()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/><path d="M40 300 v-150 q0 -40 40 -40 h80 q40 0 40 40 v150" fill="#7CC8F0" stroke="#1F3A4A" stroke-width="3"/><path d="M120 110 v190 M40 200 h160" stroke="#1F3A4A" stroke-width="3"/>${T(120,180,'☾','mid','style="font-size:40px;fill:#FFE7A8"')}<rect x="460" y="90" width="120" height="90" rx="8" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/>${T(520,148,"Chowdie's Den",'sm mid','style="font-weight:800"')}`;
+const den=()=>paint('den',0,'concert');
 const table=()=>`<ellipse cx="320" cy="300" rx="230" ry="46" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/>`+[['🥟',230,292],['🍜',320,286],['🥗',410,292],['🍗',270,312],['🍉',370,314]].map(([e,x,y])=>T(x,y,e,'mid','style="font-size:34px"')).join('');
 /* the Rain Tree: 0 healthy, 1 wilting, 2 Treeman (awake, cross), 3 healed and blossoming */
 function rainTree(x,y,s=1,st=0){const leaf=st===0?'#4FAE63':st===1?'#9DBA6A':st===2?'#8A8F6A':'#4FAE63',bark='#8A5A2B';
@@ -532,7 +532,7 @@ function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduc
 /* challenge card: presenter on the left, question scroll on the right */
 const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0'],science:['🔬 Science','#3E9A52']};
 function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
-  return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
+  return (CHBG[S[i]&&S[i].part]?paint(CHBG[S[i].part],.5):'')+castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
    +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
 let CHN=0;
 const praise=['Brilliant!','Super brain!','You got it!','Amazing!','Wonderful!','Spot on!'];
@@ -598,7 +598,10 @@ function write(part,who,subj,title,{q,checks,example,starter='',bg=null,art=''})
 const CHAP=[['c1','1 · Sign-ups','#8E6BD8'],['c2','2 · The Cat in Gloves','#E0A800'],['c3','3 · Plough Deep','#3E9A52'],['c4','4 · One Today','#2E8BC0'],['c5','5 · Stage Fright','#E0574F'],['c6','6 · Show Time!','#B9471A']];
 setChapters(CHAP);
 SUBJ.writing=['✍️ Writing','#B9471A'];
-const stage=(lit=true)=>`<rect width="640" height="400" fill="${lit?'#3B2A4F':'#2A2238'}"/><path d="M0 0 h640 v40 q-40 30 -80 0 q-40 30 -80 0 q-40 30 -80 0 q-40 30 -80 0 q-40 30 -80 0 q-40 30 -80 0 q-40 30 -80 0 q-40 30 -80 0z" fill="#B3243A"/><path d="M0 0 v400 h70 q-40 -200 0 -400z M640 0 v400 h-70 q40 -200 0 -400z" fill="#B3243A"/><rect y="320" width="640" height="80" fill="#8A5A2B"/>`+(lit?`<path d="M200 0 L120 330 H320z" fill="#FFF3C4" opacity=".18"/><path d="M440 0 L320 330 H520z" fill="#FFF3C4" opacity=".18"/>`:'');
+/* painted scene backgrounds (img/talent/, Gemini, worksheet style; the den is shared with the concert story); the SVG cast is drawn on top */
+const paint=(n,wash=0,dir='talent')=>`<image href="../img/${dir}/${n}.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/>`+(wash?`<rect width="640" height="400" fill="#FFFDF6" opacity="${wash}"/>`:'');
+const CHBG={c1:'stage',c2:'meadow',c3:'sunrise',c4:'meadow',c5:'backstage',c6:'stage'};
+const stage=(lit=true)=>paint(lit?'stage':'backstage');
 const gloves=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M-30 0 v-40 q0 -14 14 -14 h32 q14 0 14 14 v40z" fill="#E0574F" stroke="#1F3A4A" stroke-width="3"/><path d="M14 -30 q20 -4 22 12 q-2 10 -22 8" fill="#E0574F" stroke="#1F3A4A" stroke-width="3"/></g>`;
 const clock=(x,y,h,m,r=46)=>{const ha=((h%12)+m/60)*30-90,ma=m*6-90,rad=Math.PI/180;return `<g transform="translate(${x} ${y})"><circle r="${r}" fill="#fff" stroke="#1F3A4A" stroke-width="3"/>${[...Array(12)].map((_,k)=>`<line x1="${Math.cos(k*30*rad)*(r-8)}" y1="${Math.sin(k*30*rad)*(r-8)}" x2="${Math.cos(k*30*rad)*(r-2)}" y2="${Math.sin(k*30*rad)*(r-2)}" stroke="#1F3A4A" stroke-width="2"/>`).join('')}<line x2="${Math.cos(ha*rad)*r*.5}" y2="${Math.sin(ha*rad)*r*.5}" stroke="#1F3A4A" stroke-width="5" stroke-linecap="round"/><line x2="${Math.cos(ma*rad)*r*.78}" y2="${Math.sin(ma*rad)*r*.78}" stroke="#E0574F" stroke-width="3" stroke-linecap="round"/><circle r="4" fill="#1F3A4A"/></g>`};
 const days=(hi,y=150,x0=80,sp=70)=>['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((d,k)=>`<rect x="${x0+k*sp}" y="${y}" width="${sp-10}" height="60" rx="8" fill="${k===hi?'#FFD43B':'#fff'}" stroke="#1F3A4A" stroke-width="2.5"/>`+T(x0+k*sp+(sp-10)/2,y+36,d,'lab mid')).join('');
@@ -608,7 +611,7 @@ story('c1','The Forest Talent Show','otter','A big poster went up: "FOREST TALEN
  ()=>stage()+G(`<rect x="210" y="150" width="220" height="100" rx="10" fill="#FFF3D6" stroke="#1F3A4A" stroke-width="3"/>`+T(320,190,'TALENT SHOW','h mid','style="fill:#B3243A;font-size:28px"')+T(320,226,'NEXT SUNDAY!','lab mid'),'a-pop',.2)+G(wala(140,392,.75,{wave:true})+flame(250,392,.72,{wave:true})+otter(390,392,.75,{wave:true})+eagle(510,392,.72,{still:true}),'a-pop',.4),
  'A <b>Talent Show</b> next Sunday! Everyone signs up… except Flame. "I\'m not good at anything," he mumbles.'),
 story('c1','A sun-dial in the shade','otter','Chowdie put a paw on Flame\'s shoulder. "Ben Franklin wrote: Hide not your talents, they for use were made. What\'s a sun-dial in the shade? A sun-dial tells the time only in the sun. Your talent only shines if you SHOW it. And you can fly loop-the-loops like no one else!"',
- ()=>sky()+sun(540,90)+grass(330)+`<g transform="translate(320 300)"><ellipse rx="70" ry="16" fill="#C9C3B8" stroke="#1F3A4A" stroke-width="3"/><path d="M0 -4 l40 -50 v50z" fill="#9FB0B8" stroke="#1F3A4A" stroke-width="3"/><path d="M0 0 l-80 20" stroke="#5B6B7A" stroke-width="6" opacity=".5"/></g>`+G(otter(130,392,.85,{point:true})+eagle(510,392,.8,{still:true}),'a-pop',.3),
+ ()=>paint('meadow')+`<g transform="translate(320 300)"><ellipse rx="70" ry="16" fill="#C9C3B8" stroke="#1F3A4A" stroke-width="3"/><path d="M0 -4 l40 -50 v50z" fill="#9FB0B8" stroke="#1F3A4A" stroke-width="3"/><path d="M0 0 l-80 20" stroke="#5B6B7A" stroke-width="6" opacity=".5"/></g>`+G(otter(130,392,.85,{point:true})+eagle(510,392,.8,{still:true}),'a-pop',.3),
  '"<b>Hide not your talents, they for use were made. What\'s a sun-dial in the shade?</b>" A sun-dial is useless in the shade. Your talent only shines when you show it!'),
 mc('c1','eagle','maths','When is the show?',{q:'Today is Monday. The Talent Show is in 6 days. Which day is the show?',options:['Sunday','Saturday','Monday','Friday'],answer:'Sunday',
  art:days(6,300,192,62),why:'Monday + 6 days → Tue, Wed, Thu, Fri, Sat, <b>Sun</b>. Show day is Sunday!',hint:'Count forward 6 days from Monday.'}),
@@ -626,7 +629,7 @@ write('c2','wala','writing','How to do my talent',{q:'Write how to do a talent y
  example:'First, take off your gloves and hold one ball in each paw. Next, throw one ball up high. Then, throw the second ball when the first one is at the top. Finally, catch both balls and smile at the crowd!'}),
 /* ---------- 3: Plough Deep ---------- */
 story('c3','Early birds','flame','Every morning, Flamecharge was up at sunrise practising her song. Baddie Vampire snored in his swamp until lunchtime. "Ben Franklin said: Plough deep while sluggards sleep," sang Flamecharge. "Work hard while lazy people sleep, and you\'ll have plenty!"',
- ()=>sky('#FFD9A8','#FFF3E0')+sun(120,300,44)+grass(330)+G(flame(240,392,.85,{wave:true}),'a-pop',.2)+T(300,200,'♪ ♫','h mid','style="fill:#B9471A"')+G(baddie(500,394,.7,{}),'a-pop',.3)+T(560,250,'z z z','lab','style="fill:#4B2A6B"'),
+ ()=>paint('sunrise')+G(flame(240,392,.85,{wave:true}),'a-pop',.2)+T(300,200,'♪ ♫','h mid','style="fill:#B9471A"')+G(baddie(500,394,.7,{}),'a-pop',.3)+T(560,250,'z z z','lab','style="fill:#4B2A6B"'),
  '"<b>Plough deep while sluggards sleep.</b>" A <b>sluggard</b> is a lazy person. Work hard while others are sleeping in, and you\'ll grow great things!'),
 mc('c3','flame','writing','What is a sluggard?',{q:'In Ben Franklin\'s proverb, what is a "sluggard"?',options:['a lazy person','a slimy slug','a garden tool','a fast runner'],answer:'a lazy person',
  why:'A <b>sluggard</b> is someone who is lazy and slow to work, like Baddie snoring till lunchtime!',hint:'Think about who is sleeping while others work.'}),
@@ -657,7 +660,7 @@ write('c5','flame','writing','Introduce the act',{q:'You are the host! Write a s
  example:'Ladies and gentlemen, welcome to the Forest Talent Show! Our next act is Flame the Eagle. He will fly loop-the-loops high in the sky. Please give him a big clap!'}),
 /* ---------- 6: Show Time! ---------- */
 story('c6','Show time!','eagle','Flame took a deep breath, spread his wings, and flew. Loop! Swoop! Loop-the-loop-the-LOOP! The crowd gasped and cheered. Wala juggled (no gloves!), Flamecharge sang like sunshine, and Chowdie made a fish disappear. Even Baddie tried his dance… and the crowd clapped for him too.',
- ()=>stage()+`<path d="M200 200 q60 -120 120 0 q60 120 120 0" stroke="#FFF3C4" stroke-width="3" stroke-dasharray="6 6" fill="none"/>`+G(eagle(440,210,.6,{wave:true}),'a-pop',.2)+G(wala(120,392,.65,{wave:true})+flame(220,392,.62,{wave:true})+otter(540,392,.65,{wave:true}),'a-pop',.4)+T(320,370,'👏 👏 👏','mid','style="font-size:30px"'),
+ ()=>stage()+`<path d="M200 270 q60 -100 120 0 q60 100 120 0" stroke="#FFF3C4" stroke-width="3" stroke-dasharray="6 6" fill="none"/>`+G(eagle(450,300,.6,{wave:true}),'a-pop',.2)+G(wala(120,392,.65,{wave:true})+flame(220,392,.62,{wave:true})+otter(540,392,.65,{wave:true}),'a-pop',.4)+T(320,370,'👏 👏 👏','mid','style="font-size:30px"'),
  'Loop! Swoop! Loop-the-loop-the-LOOP! Flame flies, and the crowd cheers! Everyone shares their talents, even Baddie.',{mount:a=>a.later(()=>a.confetti(),500)}),
 num('c6','otter','maths','The judges\' scores',{q:'The three judges gave Flame 9, 8 and 10 points. How many points did he get altogether?',answer:27,unit:'points',
  art:T(410,320,'9 + 8 + 10','big mid'),why:'9 + 8 + 10 = <b>27 points</b>. The highest score of the day!',hint:'Add 9 and 8 first, then add 10.'}),
@@ -668,7 +671,7 @@ story('c6','The End','otter','Back at the den, Flame wore his gold medal. "I alm
  ()=>den()+table()+G(otter(110,394,.75,{still:true})+wala(200,394,.72,{still:true})+flame(450,394,.7,{still:true})+eagle(540,394,.68,{still:true})+baddie(610,394,.5,{}),'a-pop',.2)+G(`<circle cx="540" cy="300" r="12" fill="#FFD43B" stroke="#C88A00" stroke-width="3"/>`,'a-pop',.5)+T(330,250,'THE END','h mid','style="fill:#B9471A"'),
  'Practise today, take off your gloves, and let your talents shine! <b>THE END.</b>',{mount:a=>a.later(()=>a.win(),700)}),
 ];
-function park2(){return sky()+sun(560,80)+grass(330)}
+function park2(){return paint('meadow')}
 
 
 

@@ -546,7 +546,7 @@ const stream=(dirty=false)=>`<path d="M0 300 q160 -40 320 0 t320 0 V360 q-160 40
 const junk=()=>[[90,320,'🥤'],[170,332,'🥫'],[260,318,'🧴'],[380,336,'🥤'],[470,322,'🥫'],[560,330,'🛍️']].map(([x,y,e])=>T(x,y,e,'mid','style="font-size:30px"')).join('');
 const flowers=(n=9,y=350)=>[...Array(n)].map((_,k)=>{const x=30+k*(580/(n-1));return `<g transform="translate(${x} ${y+(k%2)*14})"><line y1="0" y2="-26" stroke="#3E8A3E" stroke-width="3"/><circle cy="-30" r="9" fill="${['#FFC83D','#F4A3A8','#fff'][k%3]}" stroke="#1F3A4A" stroke-width="2"/><circle cy="-30" r="3.5" fill="#E0A800"/></g>`}).join('');
 const sunflower=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><line y1="0" y2="-60" stroke="#3E8A3E" stroke-width="5"/>${[...Array(12)].map((_,k)=>`<ellipse cx="0" cy="-82" rx="6" ry="14" fill="#FFC83D" stroke="#C88A00" stroke-width="1.5" transform="rotate(${k*30} 0 -66)"/>`).join('')}<circle cy="-66" r="12" fill="#7A4A2A"/></g>`;
-const den=()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/><path d="M40 300 v-150 q0 -40 40 -40 h80 q40 0 40 40 v150" fill="#7CC8F0" stroke="#1F3A4A" stroke-width="3"/><path d="M120 110 v190 M40 200 h160" stroke="#1F3A4A" stroke-width="3"/>${T(120,180,'☾','mid','style="font-size:40px;fill:#FFE7A8"')}<rect x="460" y="90" width="120" height="90" rx="8" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/>${T(520,148,"Chowdie's Den",'sm mid','style="font-weight:800"')}`;
+const den=()=>paint('den',0,'concert');
 const table=()=>`<ellipse cx="320" cy="300" rx="230" ry="46" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/>`+[['🥟',230,292],['🍜',320,286],['🥗',410,292],['🍗',270,312],['🍉',370,314]].map(([e,x,y])=>T(x,y,e,'mid','style="font-size:34px"')).join('');
 /* the Rain Tree: 0 healthy, 1 wilting, 2 Treeman (awake, cross), 3 healed and blossoming */
 function rainTree(x,y,s=1,st=0){const leaf=st===0?'#4FAE63':st===1?'#9DBA6A':st===2?'#8A8F6A':'#4FAE63',bark='#8A5A2B';
@@ -569,7 +569,7 @@ function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduc
 /* challenge card: presenter on the left, question scroll on the right */
 const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0'],science:['🔬 Science','#3E9A52']};
 function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
-  return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
+  return ((b=>b?(Array.isArray(b)?paint(b[0],.5,b[1]):paint(b,.5)):'')(CHBG[S[i]&&S[i].part]))+castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
    +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
 let CHN=0;
 const praise=['Brilliant!','Super brain!','You got it!','Amazing!','Wonderful!','Spot on!'];
@@ -609,14 +609,17 @@ const jar=(x,y,lab,n,col)=>`<g transform="translate(${x} ${y})"><path d="M-46 -1
 const book=(q,who)=>{const L=wrapT(q,27);const h=L.length*34+96,y0=380-h;return G(`<rect x="130" y="${y0}" width="380" height="${h}" rx="18" fill="#FFFDF6" stroke="#8A5A2B" stroke-width="4"/><rect x="142" y="${y0+12}" width="356" height="${h-24}" rx="12" fill="none" stroke="#E9D3A8" stroke-width="2" stroke-dasharray="6 5"/>`+T(320,y0+40,'📖 Wise Words','lab mid','style="fill:#8A5A2B;font-weight:800"')+L.map((l,k)=>T(320,y0+80+k*34,l,'mid','style="font-family:var(--display);font-weight:700;font-size:23px"')).join('')+T(320,y0+h-20,'— '+who,'sm mid','style="font-style:italic;fill:#8A5A2B"'),'a-pop',.2)};
 const bars=(x,y,days,vals,hi=-1,u=12)=>days.map((d,k)=>`<rect x="${x+k*62}" y="${y-vals[k]*u}" width="40" height="${vals[k]*u}" rx="4" fill="${k===hi?'#4FAE63':'#B49BEA'}" stroke="#1F3A4A" stroke-width="2"/>`+T(x+20+k*62,y+20,d,'sm mid')+T(x+20+k*62,y-vals[k]*u-8,vals[k]>=100?'$'+(vals[k]/100).toFixed(2):vals[k]+'¢','sm mid','style="font-weight:800"')).join('');
 const snowhill=()=>sky('#CFE9F7','#F4FAFD')+`<path d="M-20 140 Q300 170 660 400 H-20z" fill="#fff" stroke="#9AC3DA" stroke-width="3"/>`+[[90,170,14],[230,215,24],[380,280,38],[520,360,56]].map(([a,b,r],k)=>G(`<circle cx="${a}" cy="${b-r}" r="${r}" fill="#F7FBFF" stroke="#9AC3DA" stroke-width="3"/>`,'a-pop',.3+k*.35)).join('');
-const market=()=>sky('#FFE3C2','#FFF8EC')+grass(330,'#C9DDA0');
+/* painted scene backgrounds (img/money/, Gemini, worksheet style; the den and the rain tree are shared with the concert and proverb stories); the SVG cast, stand and treehouse are drawn on top */
+const paint=(n,wash=0,dir='money')=>`<image href="../img/${dir}/${n}.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/>`+(wash?`<rect width="640" height="400" fill="#FFFDF6" opacity="${wash}"/>`:'');
+const CHBG={c1:'market',c2:'market',c3:['den','concert'],c5:'market',c6:'market',c7:'sunset'};
+const market=()=>paint('market');
 const S=[
 /* ---------- 1: A Home for Flame ---------- */
 story('c1','A Home for Flame','eagle','After a big storm, Flame the Eagle came back to find his nest blown away. "My home… it\'s gone," he said quietly. Flamecharge put a warm wing around him. "Then we\'ll build you a NEW one. A real treehouse!"',
- ()=>sky('#B9C4D0','#E8EEF2')+grass(330,'#A9BF94')+treehouse(470,392,.8,false)+[[400,360],[520,350],[450,375]].map(([a,b])=>`<path d="M${a} ${b} l30 -6" stroke="#8A5A2B" stroke-width="5" stroke-linecap="round"/>`).join('')+G(eagle(140,392,.9,{still:true})+flame(260,392,.85,{still:true}),'a-pop',.3),
+ ()=>paint('afterstorm')+[[400,360],[520,350],[450,375]].map(([a,b])=>`<path d="M${a} ${b} l30 -6" stroke="#8A5A2B" stroke-width="5" stroke-linecap="round"/>`).join('')+G(eagle(140,392,.9,{still:true})+flame(260,392,.85,{still:true}),'a-pop',.3),
  'A storm blew Flame\'s nest away! "Then we\'ll build you a NEW one," says Flamecharge. "A real treehouse!"'),
 story('c1','100 golden acorns','flame','The builder beaver said the treehouse would cost $100. "We\'ll raise the money ourselves!" said Flamecharge. "Let\'s sell LEMONADE!" Wala and Chowdie cheered, and Flame got out an old book with a leaf on the cover.',
- ()=>market()+stand()+G(flame(110,392,.85,{wave:true})+wala(540,392,.8,{wave:true}),'a-pop',.3)+G(T(320,140,'Goal: $100','h mid','style="fill:#B9471A"'),'a-pop',.6),
+ ()=>market()+stand()+G(flame(110,392,.85,{wave:true})+wala(540,392,.8,{wave:true}),'a-pop',.3)+G(T(320,160,'Goal: $100','h mid','style="fill:#B9471A;paint-order:stroke;stroke:#FFFDF6;stroke-width:6px"'),'a-pop',.6),
  'The treehouse costs <b>$100</b>. Let\'s raise the money ourselves by selling <b>lemonade</b>!'),
 story('c1','The Wisdom Book','eagle','"This was my grandpa\'s Wisdom Book," said Flame. "It\'s full of ideas from two real people, Warren Buffett and Charlie Munger. They became famous for being patient, careful and wise with money. Their ideas will help us!"',
  ()=>`<rect width="640" height="400" fill="#FFF3D6"/>`+book('Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1.','Warren Buffett')+G(eagle(80,394,.7,{point:true}),'a-pop',.4),
@@ -642,7 +645,7 @@ num('c2','eagle','maths','Keep our money',{q:'We said NO, and kept our $20. Our 
  art:T(410,320,'$100 − $20 = ?','big mid'),why:'$100 − $20 = <b>$80 more</b>. Slow and steady, but we haven\'t lost a single one!',hint:'Take what we have away from our goal.'}),
 /* ---------- 3: Three Jars ---------- */
 story('c3','Three jars','wala','Back at the den, Chowdie set out three jars: SAVE for Flame\'s home, SPEND for new lemons and cups, and SHARE to help others. "Every week we split our profit into the three jars," said Chowdie.',
- ()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/>`+jar(170,300,'SAVE',6,'#2E8BC0')+jar(320,300,'SPEND',4,'#E0A800')+jar(470,300,'SHARE',2,'#E5577A')+G(otter(590,394,.65,{point:true}),'a-pop',.4),
+ ()=>den()+jar(170,300,'SAVE',6,'#2E8BC0')+jar(320,300,'SPEND',4,'#E0A800')+jar(470,300,'SHARE',2,'#E5577A')+G(otter(590,394,.65,{point:true}),'a-pop',.4),
  'Three jars: <b>SAVE</b> for Flame\'s home, <b>SPEND</b> for new lemons and cups, and <b>SHARE</b> to help others.'),
 num('c3','otter','maths','Filling the jars',{q:'This week our profit is $20. Half goes into SAVE. $6 goes into SPEND. The rest goes into SHARE. How many dollars go into SHARE?',answer:4,unit:'dollars',
  art:jar(300,340,'SAVE',6,'#2E8BC0')+jar(420,340,'SPEND',4,'#E0A800')+jar(540,340,'SHARE',2,'#E5577A'),why:'Half of 20 = 10 for SAVE. 10 + 6 = 16. 20 − 16 = <b>4</b> for SHARE.',hint:'First find half of 20. Then add the 6. What\'s left of 20?'}),
@@ -655,7 +658,7 @@ story('c4','The Snowball Hill','eagle','Flame flew everyone to the top of snowy 
  ()=>snowhill()+G(eagle(80,180,.6,{point:true}),'a-pop',.2),
  'Watch the snowball! It picks up more snow as it rolls, so it grows faster and faster. Warren Buffett said life is like a snowball: <b>you need wet snow and a really long hill.</b>'),
 story('c4','The Acorn Bank','flame','"Our savings can grow like a snowball too," said Flamecharge. The Old Rain Tree, which they had saved in another adventure, had become the forest\'s Golden Acorn Bank. "For every $10 you keep with me for a season, I\'ll add $1 more," it rumbled.',
- ()=>sky()+grass(330)+rainTree(400,392,.75,3)+G(T(400,120,'🏦 ACORN BANK','lab mid','style="font-weight:800;fill:#8A5A2B"'),'a-pop',.4)+G(flame(110,392,.8,{still:true})+wala(200,392,.75,{still:true}),'a-pop',.3),
+ ()=>paint('raintree',0,'write')+G(T(400,120,'🏦 ACORN BANK','lab mid','style="font-weight:800;fill:#8A5A2B"'),'a-pop',.4)+G(flame(110,392,.8,{still:true})+wala(200,392,.75,{still:true}),'a-pop',.3),
  'The Old Rain Tree is now the forest\'s <b>Golden Acorn Bank</b>. For every $10 you keep with it for a season, it adds $1 more. That extra is called <b>interest</b>.'),
 num('c4','flame','maths','One season of interest',{q:'We keep $30 in the Golden Acorn Bank for one season. For every $10, it adds $1. How many dollars will we have after one season?',answer:33,unit:'dollars',
  art:pile(400,350,12)+T(410,380,'$30 + ? ','h mid'),why:'$30 has three $10s, so the bank adds $3. $30 + $3 = <b>$33</b>.',hint:'How many groups of $10 are in $30? Add that many dollars.'}),
@@ -701,7 +704,7 @@ mc('c7','wala','english','A good reputation',{q:'Which of these builds a GOOD re
 num('c7','flame','maths','Did we make it?',{q:'There is $74 in our SAVE jar and the Golden Acorn Bank. This week we sold 13 cups at $2 each, and every dollar goes into SAVE. How many dollars do we have now?',answer:100,unit:'dollars',
  art:T(410,320,'$74 + 13 × $2 = ?','h mid'),why:'13 × $2 = $26. $74 + $26 = <b>$100</b>. WE DID IT!',hint:'First work out 13 cups × $2. Then add $74.'}),
 story('c7','Home sweet home','eagle','The beavers built the most wonderful treehouse, with a red roof, a round window and a perch for watching sunsets. Flame wiped a tear from behind his goggles. "Thank you, my friends. This is the best home in the whole sky."',
- ()=>sky('#FFD9A8','#FFF3E0')+sun(560,300,40)+grass(340)+treehouse(330,392,.85,true)+G(eagle(330,180,.45,{wave:true}),'a-pop',.5)+G(otter(90,394,.7,{wave:true})+wala(170,394,.68,{wave:true})+flame(560,394,.7,{wave:true}),'a-pop',.3),
+ ()=>paint('sunset')+treehouse(330,392,.85,true)+G(eagle(330,180,.45,{wave:true}),'a-pop',.5)+G(otter(90,394,.7,{wave:true})+wala(170,394,.68,{wave:true})+flame(560,394,.7,{wave:true}),'a-pop',.3),
  'The treehouse is finished! "Thank you, my friends. This is the best home in the whole sky."',{mount:a=>a.later(()=>a.confetti(),500)}),
 story('c7','The End','daddy','That evening, there was a knock at the door. It was Baddie Daddy and Baddie, holding a basket. "We… we\'d like to buy some lemonade. At the FAIR price." Charlie Munger said to try to be a little wiser each day. Even crocodiles can learn! THE END.',
  ()=>den()+table()+G(otter(110,394,.7,{still:true})+wala(190,394,.68,{still:true})+flame(440,394,.66,{still:true})+eagle(520,394,.64,{still:true}),'a-pop',.2)+G(daddy(600,394,.62,{})+baddie(270,394,.5,{}),'a-pop',.5)+T(330,250,'THE END','h mid','style="fill:#B9471A"'),

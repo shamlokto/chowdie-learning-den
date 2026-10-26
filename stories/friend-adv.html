@@ -509,7 +509,7 @@ const stream=(dirty=false)=>`<path d="M0 300 q160 -40 320 0 t320 0 V360 q-160 40
 const junk=()=>[[90,320,'🥤'],[170,332,'🥫'],[260,318,'🧴'],[380,336,'🥤'],[470,322,'🥫'],[560,330,'🛍️']].map(([x,y,e])=>T(x,y,e,'mid','style="font-size:30px"')).join('');
 const flowers=(n=9,y=350)=>[...Array(n)].map((_,k)=>{const x=30+k*(580/(n-1));return `<g transform="translate(${x} ${y+(k%2)*14})"><line y1="0" y2="-26" stroke="#3E8A3E" stroke-width="3"/><circle cy="-30" r="9" fill="${['#FFC83D','#F4A3A8','#fff'][k%3]}" stroke="#1F3A4A" stroke-width="2"/><circle cy="-30" r="3.5" fill="#E0A800"/></g>`}).join('');
 const sunflower=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><line y1="0" y2="-60" stroke="#3E8A3E" stroke-width="5"/>${[...Array(12)].map((_,k)=>`<ellipse cx="0" cy="-82" rx="6" ry="14" fill="#FFC83D" stroke="#C88A00" stroke-width="1.5" transform="rotate(${k*30} 0 -66)"/>`).join('')}<circle cy="-66" r="12" fill="#7A4A2A"/></g>`;
-const den=()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/><path d="M40 300 v-150 q0 -40 40 -40 h80 q40 0 40 40 v150" fill="#7CC8F0" stroke="#1F3A4A" stroke-width="3"/><path d="M120 110 v190 M40 200 h160" stroke="#1F3A4A" stroke-width="3"/>${T(120,180,'☾','mid','style="font-size:40px;fill:#FFE7A8"')}<rect x="460" y="90" width="120" height="90" rx="8" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/>${T(520,148,"Chowdie's Den",'sm mid','style="font-weight:800"')}`;
+const den=()=>paint('den',0,'concert');
 const table=()=>`<ellipse cx="320" cy="300" rx="230" ry="46" fill="#C98B55" stroke="#1F3A4A" stroke-width="3"/>`+[['🥟',230,292],['🍜',320,286],['🥗',410,292],['🍗',270,312],['🍉',370,314]].map(([e,x,y])=>T(x,y,e,'mid','style="font-size:34px"')).join('');
 /* the Rain Tree: 0 healthy, 1 wilting, 2 Treeman (awake, cross), 3 healed and blossoming */
 function rainTree(x,y,s=1,st=0){const leaf=st===0?'#4FAE63':st===1?'#9DBA6A':st===2?'#8A8F6A':'#4FAE63',bark='#8A5A2B';
@@ -532,7 +532,7 @@ function wrapT(t,max){const CJ=/[⺀-鿿＀-￯　-〿“”]/,W=s=>[...s].reduc
 /* challenge card: presenter on the left, question scroll on the right */
 const SUBJ={maths:['🔢 Maths','#FF7A45'],english:['🔤 English','#2E8BC0'],chinese:['🀄 华文','#C2185B'],mix:['🧠 Brain buster','#7A4FB0'],science:['🔬 Science','#3E9A52']};
 function chStage(who,subj,q,art='',n,bg=null){const L=wrapT(q,34),h=Math.max(L.length*30+70,120),[lab,col]=SUBJ[subj];
-  return castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
+  return (CHBG[S[i]&&S[i].part]?paint(CHBG[S[i].part],.5):'')+castAt(who,96,394,.9,{still:true})+G(`<rect x="196" y="16" width="428" height="${h}" rx="18" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="3"/><rect x="212" y="28" width="${(lab+(n?'  ·  Challenge '+n:'')).length*8.2+34}" height="28" rx="14" fill="${col}"/>`+T(228,48,lab+(n?'  ·  Challenge '+n:''),'sm','style="fill:#fff;font-weight:800"')
    +L.map((l,k)=>T(216,92+k*30,l,'lab',/[一-鿿]/.test(l)?'style="font-size:21px"':'')).join(''),'a-pop',.15)+(art?G(art,'a-fade',.5):'')+(bg!=null?bag(bg,20):'')}
 let CHN=0;
 const praise=['Brilliant!','Super brain!','You got it!','Amazing!','Wonderful!','Spot on!'];
@@ -601,7 +601,10 @@ SUBJ.writing=['✍️ Writing','#B9471A'];
 const bracelet=(x,y,cols)=>cols.map((c,k)=>`<circle cx="${x+k*26}" cy="${y}" r="11" fill="${c}" stroke="#1F3A4A" stroke-width="2"/>`).join('');
 const R='#E0574F',B='#2E8BC0';
 const vase=(x,y,broken=false)=>`<g transform="translate(${x} ${y})">${broken?`<path d="M-30 0 l10 -50 l14 10 l-6 40z" fill="#DDF1FA" stroke="#1F3A4A" stroke-width="2.5"/><path d="M0 0 l4 -60 l20 6 l6 54z" fill="#DDF1FA" stroke="#1F3A4A" stroke-width="2.5"/><path d="M-50 4 l10 -12 l12 8z" fill="#DDF1FA" stroke="#1F3A4A" stroke-width="2"/>`:`<path d="M-24 0 q-20 -40 0 -70 h48 q20 30 0 70z" fill="#DDF1FA" stroke="#1F3A4A" stroke-width="3"/><path d="M-16 -60 h32" stroke="#2E8BC0" stroke-width="3"/><path d="M-20 -30 q20 10 40 0" stroke="#2E8BC0" stroke-width="3" fill="none"/>`}</g>`;
-const park=()=>sky()+sun(560,80)+grass(320)+`<path d="M60 330 q0 -120 50 -150 q50 30 50 150z" fill="#4FAE63" stroke="#1F3A4A" stroke-width="3"/>`;
+/* painted scene backgrounds (img/friend/, Gemini, worksheet style; the den is shared with the concert story); the SVG cast is drawn on top */
+const paint=(n,wash=0,dir='friend')=>`<image href="../img/${dir}/${n}.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/>`+(wash?`<rect width="640" height="400" fill="#FFFDF6" opacity="${wash}"/>`:'');
+const CHBG={c1:'park',c2:'park',c3:'river',c4:'bedroom',c5:'park',c6:'park'};
+const park=()=>paint('park');
 const heartCrack=(x,y,s=1,crack=true)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 30 q-60 -40 -40 -70 q20 -24 40 0 q20 -24 40 0 q20 30 -40 70z" fill="#F4A3A8" stroke="#1F3A4A" stroke-width="3"/>${crack?'<path d="M0 -40 l-8 18 l10 10 l-8 16 l6 14" stroke="#1F3A4A" stroke-width="3" fill="none"/>':''}</g>`;
 const S=[
 /* ---------- 1: Best Friends ---------- */
@@ -629,7 +632,7 @@ write('c2','wala','writing','Using speech marks',{q:'Write what Wala said when s
  example:'Wala cried, "Why did you say my drawing is ugly?"'}),
 /* ---------- 3: Chowdie Listens ---------- */
 story('c3','Chowdie listens','otter','That evening, Chowdie found Wala crying by the river. Then he found Flamecharge sulking on a branch. He listened to each of them, without interrupting. "Hmm," he said. "Ben Franklin also said: Be slow in choosing a friend, slower in changing. Let\'s not give up on a good friend too fast."',
- ()=>sky('#FFD9C2','#FFF3E0')+grass(330)+G(otter(320,392,.95,{still:true}),'a-pop',.2)+G(wala(120,392,.7,{still:true})+flame(530,392,.7,{still:true}),'a-pop',.4)+T(320,190,'👂','mid','style="font-size:44px"'),
+ ()=>paint('river')+G(otter(320,392,.95,{still:true}),'a-pop',.2)+G(wala(120,392,.7,{still:true})+flame(530,392,.7,{still:true}),'a-pop',.4)+T(320,190,'👂','mid','style="font-size:44px"'),
  'Ben Franklin said: "<b>Be slow in choosing a friend, slower in changing.</b>" Don\'t give up on a good friend too quickly!'),
 order('c3','otter','writing','How to solve a quarrel',{q:'Chowdie\'s steps for solving a quarrel. Put them in order.',items:['Calm down first.','Listen to each other.','Say how you feel.','Say sorry if you were wrong.','Make up and play together.'],zh:false,joiner:' → ',
  why:'Calm down → listen → share feelings → say sorry → make up. Calming down first helps everyone think clearly!',hint:'What should you do before you can listen properly?'}),
@@ -640,7 +643,7 @@ write('c3','wala','writing','I feel… because…',{q:'Write a sentence that sta
  example:'I feel sad because I miss playing with my best friend.'}),
 /* ---------- 4: The Letter ---------- */
 story('c4','A letter for Flamecharge','wala','Wala thought hard. Maybe there was a mistake. She took out her best paper and a pencil. "I\'ll write Flamecharge a letter," she said. "Even if I\'m upset, I can still be brave and kind."',
- ()=>`<rect width="640" height="400" fill="#F5E2C8"/><rect y="300" width="640" height="100" fill="#D9B48A"/><rect x="220" y="200" width="200" height="130" rx="6" fill="#fff" stroke="#1F3A4A" stroke-width="2.5"/>`+[0,1,2,3].map(k=>`<line x1="240" y1="${230+k*24}" x2="400" y2="${230+k*24}" stroke="#C9D3D8" stroke-width="2"/>`).join('')+G(wala(110,392,.85,{still:true}),'a-pop',.2),
+ ()=>paint('bedroom')+`<rect x="220" y="200" width="200" height="130" rx="6" fill="#fff" stroke="#1F3A4A" stroke-width="2.5"/>`+[0,1,2,3].map(k=>`<line x1="240" y1="${230+k*24}" x2="400" y2="${230+k*24}" stroke="#C9D3D8" stroke-width="2"/>`).join('')+G(wala(110,392,.85,{still:true}),'a-pop',.2),
  'Wala decides to write a letter. Even when you\'re upset, you can be brave and kind.'),
 num('c4','eagle','maths','The walk to the nest',{q:'Wala walks 250 m to the river, then 375 m up the hill to Flamecharge\'s nest. How far does she walk altogether?',answer:625,unit:'m',
  art:T(410,320,'250 m + 375 m','big mid','style="font-size:44px"'),why:'250 + 375 = <b>625 m</b>.',hint:'Add the hundreds, then the tens, then the ones.'}),
