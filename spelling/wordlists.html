@@ -129,17 +129,17 @@ function makePad(n){const c=document.createElement('canvas');const box=130;c.wid
   ['pointerup','pointercancel','pointerleave'].forEach(t=>c.addEventListener(t,()=>{down=false}));
   c.clear=()=>{grid();delete c.dataset.ink};return c}
 
-const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
-function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
-  const pool=vs.filter(ok); if(!pool.length) return null;
-  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
-  const base=loc.length?loc:pool;
-  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ava|zoe|allison|susan|nicky|matilda|isha|stephanie|google uk english female|google us english|tingting|ting-ting|lili|yu-shu|shasha|meijia|mei-jia|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VODD=/albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|kathy|fred|deranged|hysterical|princess|eddy|\bflo\b|grandma|grandpa|\breed\b|rocko|sandy|shelley|eloquence/i;
+const VQ=v=>{const s=v.name+' '+v.voiceURI;return /premium/i.test(s)?3:/enhanced|neural|natural/i.test(s)?2:0};
+function pickVoice(vs,zh,pref){const ok=v=>!VODD.test(v.name+' '+v.voiceURI)&&(zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang));
+  const loc=zh?/(CN|SG|Hans)/i:/(SG|GB|AU)/i, score=v=>(pref&&pref.test(v.name)?4:0)+VQ(v)+(loc.test(v.lang)?1:0);
+  let best=null,b=-1; vs.filter(ok).forEach(v=>{const s=score(v); if(s>b){b=s;best=v}}); return best;}
 
 /* ===== speech ===== */
 let slow=false;
 function speak(t,zh){try{speechSynthesis.cancel();const vs=speechSynthesis.getVoices();const v=pickVoice(vs,zh,VFEM);
-  t.split(/(?<=[.。!！?？])\s*/).filter(s=>s.trim()).forEach(p=>{const u=new SpeechSynthesisUtterance(p);u.lang=zh?'zh-CN':'en-SG';if(v)u.voice=v;u.rate=(zh?.8:.92)*(slow?.75:1);u.pitch=1.25;speechSynthesis.speak(u)})}catch(e){}}
+  t.split(/(?<=[.。!！?？])\s*/).filter(s=>s.trim()).forEach(p=>{const u=new SpeechSynthesisUtterance(p);u.lang=zh?'zh-CN':'en-SG';if(v)u.voice=v;u.rate=(zh?.8:.92)*(slow?.75:1);u.pitch=1.05;speechSynthesis.speak(u)})}catch(e){}}
 try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}catch(e){}
 
 /* ===== data ===== */
