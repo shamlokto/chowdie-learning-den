@@ -185,7 +185,7 @@ let i=0, earned=new Set(), reading=false, timers=[];
 const $=id=>document.getElementById(id);
 const svg=$('stage'), ui=$('ui'), sayEl=$('say');
 $('face').innerHTML=otter(50,112,.86,{still:true});
-function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.0; const v=pickVoice(speechSynthesis.getVoices(),false,null); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
 function say(t){ sayEl.innerHTML=t; speak(t); }
 function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
 function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
@@ -317,19 +317,21 @@ let WHO='otter';
 function setWho(w){WHO=FACES[w]?w:'otter';$('face').innerHTML=FACES[WHO]();}
 const CJK=/([⺀-鿿　-〿＀-￯]+)/;
 /* voices: Wala = cute little-kid voice (soft female voice, pitched up, bouncy); Baddie = deep and slow; Chowdie = friendly default */
-const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ana|google uk english female|google us english|tingting|ting-ting|meijia|mei-jia|lili|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
-const VMALE=/\bmale\b|daniel|alex|fred|david|mark|guy|ryan|george|arthur|yunxi|yunyang|kangkang|google uk english male/i;
-const VOICE={wala:{en:[1.08,1.75],zh:[.86,1.6],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.1],zh:[.8,1.05],pref:null}};
-function pickVoice(vs,zh,pref){const ok=v=>zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang);
-  const pool=vs.filter(ok); if(!pool.length) return null;
-  const loc=zh?pool.filter(v=>/(CN|SG|Hans)/i.test(v.lang)):pool.filter(v=>/(SG|GB|AU)/i.test(v.lang));
-  const base=loc.length?loc:pool;
-  return (pref&&(base.find(v=>pref.test(v.name))||pool.find(v=>pref.test(v.name))))||base[0];}
+const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ava|zoe|allison|susan|nicky|matilda|isha|stephanie|google uk english female|google us english|tingting|ting-ting|lili|yu-shu|shasha|meijia|mei-jia|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
+const VODD=/albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|kathy|fred|deranged|hysterical|princess|eddy|\bflo\b|grandma|grandpa|\breed\b|rocko|sandy|shelley|eloquence/i;
+const VQ=v=>{const s=v.name+' '+v.voiceURI;return /premium/i.test(s)?3:/enhanced|neural|natural/i.test(s)?2:0};
+const VMALE=/\bmale\b|daniel|alex|david|mark|guy|ryan|george|arthur|evan|nathan|\btom\b|aaron|oliver|gordon|\blee\b|yunxi|yunyang|kangkang|google uk english male/i;
+const VOICE={wala:{en:[1.05,1.3],zh:[.86,1.25],pref:VFEM},baddie:{en:[.86,.5],zh:[.74,.55],pref:VMALE},otter:{en:[.94,1.0],zh:[.82,1.0],pref:null}};
+function pickVoice(vs,zh,pref){const ok=v=>!VODD.test(v.name+' '+v.voiceURI)&&(zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang));
+  const loc=zh?/(CN|SG|Hans)/i:/(SG|GB|AU)/i, score=v=>(pref&&pref.test(v.name)?4:0)+VQ(v)+(loc.test(v.lang)?1:0);
+  let best=null,b=-1; vs.filter(ok).forEach(v=>{const s=score(v); if(s>b){b=s;best=v}}); return best;}
 function speakNow(t,who=WHO){ try{ speechSynthesis.cancel();
   const s=t.replace(/<i class="py">.*?<\/i>/g,' ').replace(/<[^>]+>/g,' ').replace(/ℓ/g,' litres').replace(/\s+/g,' ');
   const vs=speechSynthesis.getVoices(); const P=VOICE[who]||VOICE.otter;
   const en=pickVoice(vs,false,P.pref), zh=pickVoice(vs,true,P.pref);
-  s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,'')).forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
+  const parts=s.split(CJK).filter(p=>p.replace(/[\s,.!?;:]/g,''));
+  for(let k=parts.length-2;k>0;k--) if(/^[\s\dA-Z%.:,-]+$/.test(parts[k])&&CJK.test(parts[k-1])&&CJK.test(parts[k+1])) parts.splice(k-1,3,parts[k-1]+parts[k].trim()+parts[k+1]);
+  parts.forEach(p=>{const z=CJK.test(p);const u=new SpeechSynthesisUtterance(p);
     u.lang=z?'zh-CN':'en-SG'; const v=z?zh:en; if(v) u.voice=v; const [r,pt]=z?P.zh:P.en; u.rate=r; u.pitch=pt; speechSynthesis.speak(u)});
  }catch(e){} }
 try{speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();}catch(e){}

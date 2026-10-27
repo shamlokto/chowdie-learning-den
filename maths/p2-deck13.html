@@ -185,7 +185,10 @@ let i=0, earned=new Set(), reading=false, timers=[];
 const $=id=>document.getElementById(id);
 const svg=$('stage'), ui=$('ui'), sayEl=$('say');
 $('face').innerHTML=otter(50,112,.86,{still:true});
-function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.1; const v=speechSynthesis.getVoices().find(v=>/en[-_](SG|GB|AU)/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+const VODD=/albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|kathy|fred|deranged|hysterical|princess|eddy|\bflo\b|grandma|grandpa|\breed\b|rocko|sandy|shelley|eloquence/i;
+const VQ=v=>{const s=v.name+' '+v.voiceURI;return /premium/i.test(s)?3:/enhanced|neural|natural/i.test(s)?2:0};
+function denVoice(){let best=null,b=-1; speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)&&!VODD.test(v.name+' '+v.voiceURI)).forEach(v=>{const s=VQ(v)+(/(SG|GB|AU)/i.test(v.lang)?1:0); if(s>b){b=s;best=v}}); return best;}
+function speak(t){ if(!reading) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/<[^>]+>/g,'').replace(/ℓ/g,' litres').replace(/\bkg\b/g,'kilograms').replace(/\bmin\b/g,'minutes')); u.rate=.92; u.pitch=1.0; const v=denVoice(); if(v) u.voice=v; speechSynthesis.speak(u);}catch(e){} }
 function say(t){ sayEl.innerHTML=t; speak(t); }
 function later(fn,ms=60){ timers.push(setTimeout(fn,ms)); }
 function confetti(){ const cols=[C.sun,C.accent,C.sky,C.leaf,C.berry,C.grape]; let s='';
