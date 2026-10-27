@@ -132,8 +132,9 @@ function makePad(n){const c=document.createElement('canvas');const box=130;c.wid
 const VFEM=/female|samantha|karen|tessa|moira|fiona|victoria|serena|kate|zira|aria|jenny|libby|sonia|maisie|natasha|clara|luna|ava|zoe|allison|susan|nicky|matilda|isha|stephanie|google uk english female|google us english|tingting|ting-ting|lili|yu-shu|shasha|meijia|mei-jia|xiaoxiao|xiaoyi|xiaohan|xiaomeng|huihui|yaoyao|google 普通话|google 國語/i;
 const VODD=/albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|kathy|fred|deranged|hysterical|princess|eddy|\bflo\b|grandma|grandpa|\breed\b|rocko|sandy|shelley|eloquence/i;
 const VQ=v=>{const s=v.name+' '+v.voiceURI;return /premium/i.test(s)?3:/enhanced|neural|natural/i.test(s)?2:0};
-function pickVoice(vs,zh,pref){const ok=v=>!VODD.test(v.name+' '+v.voiceURI)&&(zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang));
-  const loc=zh?/(CN|SG|Hans)/i:/(SG|GB|AU)/i, score=v=>(pref&&pref.test(v.name)?4:0)+VQ(v)+(loc.test(v.lang)?1:0);
+const VKID=/zoe/i; /* Wala's own voice (Zoe Premium on Mac/iPad); other characters avoid it so she stands out */
+function pickVoice(vs,zh,pref,kid){const ok=v=>!VODD.test(v.name+' '+v.voiceURI)&&(zh?(/^(zh|cmn)/i.test(v.lang)&&!/HK|TW|yue/i.test(v.lang)):/^en/i.test(v.lang));
+  const loc=zh?/(CN|SG|Hans)/i:/(SG|GB|AU)/i, score=v=>(pref&&pref.test(v.name)?4:0)+VQ(v)+(loc.test(v.lang)?1:0)+(VKID.test(v.name)?(kid?8:-1):0);
   let best=null,b=-1; vs.filter(ok).forEach(v=>{const s=score(v); if(s>b){b=s;best=v}}); return best;}
 
 /* ===== speech ===== */
