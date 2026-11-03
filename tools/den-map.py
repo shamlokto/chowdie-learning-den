@@ -47,8 +47,8 @@ LAYOUT = {
              "spots": [("lantern", 462, 205, 88, {"hang": 26}), ("abacus", 322, 272, 118, {}), ("kopi", 105, 200, 92, {"lab": "above", "edge": "start"}),
                        ("album", 110, 284, 105, {"edge": "start"}), ("nest", 965, 218, 130, {}), ("microscope", 1170, 195, 100, {"lab": "above", "edge": "end"}),
                        ("armchair", 255, 470, 215, {}), ("desk", 470, 610, 165, {}), ("chest", 640, 640, 150, {}),
-                       ("piano", 1085, 470, 132, {}), ("hole", 880, 690, 170, {"lab": "above"}),
-                       ("scroll", 282, 706, 100, {"lab": "above"}), ("frame", 1175, 288, 82, {"edge": "end"}), ("magnifier", 760, 700, 64, {"lab": "above"})],
+                       ("piano", 1085, 470, 132, {}), ("hole", 940, 690, 170, {"lab": "above"}),
+                       ("scroll", 282, 706, 100, {"lab": "above"}), ("frame", 1175, 288, 82, {"edge": "end"}), ("magnifier", 776, 700, 64, {"lab": "above"})],
              "box": (50, 20, 1232, 718),  # the part that must stay on screen when the painting is scaled to cover it
              "motes": (500, 120, 280, 300),  # x, y, w, h of the sunbeam the dust floats in
              "lights": [[31,2],[1254,25],[48,26],[1234,47],[84,68],[1212,69],[712,69],[924,70],[554,71],[931,80],[726,83],[1184,88],[537,87],[119,93],[308,94],[738,93],[1155,101],[947,100],[289,103],[755,104],[1091,108],[1124,108],[149,110],[324,112],[964,113],[249,118],[181,119],[1021,119],[981,121],[215,123],[1001,124],[348,126],[827,128],[370,136],[440,144],[402,145]]},
@@ -102,10 +102,10 @@ body.subject-view .den-map{display:none}
   background:linear-gradient(180deg,#A86B3C,#7E4B25);border:3px solid #4A2A12;border-radius:16px;padding:.25em .8em .2em;box-shadow:0 4px 0 #4A2A12,0 10px 18px rgba(40,20,5,.35);
   text-shadow:0 2px 0 rgba(60,30,10,.55);text-wrap:balance}
 .den-top>*{pointer-events:auto}
-.den-top .who-chip{margin:0;box-shadow:0 3px 0 rgba(31,58,74,.35);font-size:18px;flex-wrap:nowrap}
+.den-top .who-chip{margin:0;box-shadow:0 3px 0 rgba(31,58,74,.35);font-size:clamp(18px,1.55vw,21px);flex-wrap:nowrap}
 .den-top .who-chip button,.den-top .who-chip .who-bank{font-size:16px}
 .den-top .who-chip>span{white-space:nowrap}
-.den-hint{margin:0;font:600 17px/1.3 'Fredoka',sans-serif;color:#1F3A4A;background:rgba(255,253,246,.92);border:2px solid #1F3A4A;border-radius:999px;padding:.2rem .8rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.den-hint{margin:0;font:600 clamp(16px,1.5vw,20px)/1.3 'Fredoka',sans-serif;color:#1F3A4A;background:rgba(255,253,246,.92);border:2px solid #1F3A4A;border-radius:999px;padding:.2rem .8rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
 @media (max-width:900px){.den-top{grid-template-columns:auto 1fr}.den-sign{grid-column:1/-1;grid-row:1}.den-top .den-who{grid-column:1;grid-row:2}.den-top .den-hint{grid-column:2;grid-row:2}}
 @media (max-width:560px){.den-hint:has(.den-greet){background:none;border:0;padding:0}.den-greet~.den-tap{display:none}
  .den-top{grid-template-columns:1fr;gap:6px}.den-top .den-who{grid-column:1;grid-row:2}.den-top .den-hint{grid-column:1}.den-top .den-hint{grid-row:3;justify-self:start;font-size:16px}.den-sign{font-size:20px;justify-self:stretch}}
@@ -126,7 +126,7 @@ body.subject-view .den-map{display:none}
 .den-spot:active .den-art{transform:translateY(-2px) scale(1.02)}
 .den-spot:focus-visible{outline:none}
 .den-spot:focus-visible .den-label{outline:3px solid #2563EB;outline-offset:2px}
-.den-label{position:absolute;z-index:4;left:50%;top:100%;transform:translate(-50%,4px);white-space:nowrap;font:700 clamp(16px,1.45cqi,20px)/1.2 'Fredoka',sans-serif;color:#1F3A4A;
+.den-label{position:absolute;z-index:4;left:50%;top:100%;transform:translate(-50%,4px);white-space:nowrap;font:700 clamp(18px,1.62cqi,23px)/1.2 'Fredoka',sans-serif;color:#1F3A4A;
   background:#FFFDF6;border:2.5px solid #1F3A4A;border-radius:999px;padding:2px 11px 1px;box-shadow:0 2px 0 #1F3A4A;pointer-events:none;transition:transform .18s ease,background .18s}
 .den-tall .den-label{font-size:clamp(16px,4.3cqi,19px);padding:1px 8px 0;border-width:2px}
 .lab-above .den-label{top:auto;bottom:100%;transform:translate(-50%,-4px)}
@@ -184,7 +184,7 @@ body.subject-view .den-map{display:none}
 @keyframes denFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6%)}}
 .den-map[data-fest="cny"] .fx-cny,.den-map[data-fest="raya"] .fx-raya,.den-map[data-fest="deepavali"] .fx-deepavali,.den-map[data-fest="midautumn"] .fx-midautumn,
 .den-map[data-fest="national"] .fx-national,.den-map[data-fest="xmas"] .fx-xmas,.den-map[data-fest="bday"] .fx-bday{display:block}
-.den-greet{display:inline-block;font:700 17px 'Fredoka',sans-serif;color:#7A1F12;background:#FFE58A;border:2px solid #1F3A4A;border-radius:999px;padding:.05rem .8rem;box-shadow:0 2px 0 #1F3A4A}
+.den-greet{display:inline-block;font:700 clamp(16px,1.5vw,20px) 'Fredoka',sans-serif;color:#7A1F12;background:#FFE58A;border:2px solid #1F3A4A;border-radius:999px;padding:.05rem .8rem;box-shadow:0 2px 0 #1F3A4A}
 /* evening: night paintings in dark mode (or ?night=1), dimmer objects, fireflies instead of dust */
 @media (prefers-color-scheme:dark){.den-map:not(.den-day) .den-art img,.den-map:not(.den-day) .den-fx img{filter:brightness(.84) saturate(.92) drop-shadow(0 4px 3px rgba(0,0,0,.35))}
  .den-map:not(.den-day) .den-mote{background:#E9FF8A;box-shadow:0 0 6px 3px rgba(210,255,120,.6);width:.8%}.den-map:not(.den-day) .den-bulb{width:2.8%}}
@@ -267,13 +267,13 @@ FSIZES = {"cn/lantern": (173, 247), "cn/oranges": (239, 155), "cn/hongbao": (194
           "den/ketupat": (180, 386), "den/diya": (360, 95), "den/rangoli": (360, 371), "den/mooncake": (360, 240), "den/xmastree": (229, 331)}
 DECOR = {
     "wide": [("cny", "cn/lantern", 585, 196, 74, {"hang": 36}), ("cny", "cn/lantern", 705, 196, 74, {"hang": 36}),
-             ("cny", "cn/oranges", 240, 708, 160, {}), ("cny", "cn/hongbao", 640, 420, 92, {}),
+             ("cny", "cn/oranges", 130, 708, 150, {}), ("cny", "cn/hongbao", 640, 420, 92, {}),
              ("raya", "den/ketupat", 585, 232, 58, {"hang": 36}), ("raya", "den/ketupat", 705, 232, 58, {"hang": 36}), ("raya", "crescent", 545, 300, 92, {}),
-             ("deepavali", "den/diya", 640, 422, 200, {}), ("deepavali", "den/diya", 240, 708, 170, {}), ("deepavali", "den/rangoli", 1085, 714, 240, {"flat": 1}),
-             ("midautumn", "cn/lantern", 585, 196, 74, {"hang": 36}), ("midautumn", "cn/lantern", 705, 196, 74, {"hang": 36}), ("midautumn", "den/mooncake", 240, 708, 180, {}),
+             ("deepavali", "den/diya", 640, 422, 200, {}), ("deepavali", "den/diya", 125, 708, 160, {}), ("deepavali", "den/rangoli", 1085, 714, 240, {"flat": 1}),
+             ("midautumn", "cn/lantern", 585, 196, 74, {"hang": 36}), ("midautumn", "cn/lantern", 705, 196, 74, {"hang": 36}), ("midautumn", "den/mooncake", 130, 708, 170, {}),
              ("national", "sgflags", 640, 120, 720, {}),
-             ("xmas", "den/xmastree", 245, 712, 150, {}),
-             ("bday", "cn/cake", 640, 422, 110, {}), ("bday", "cn/balloon", 240, 660, 120, {"float": 1})],
+             ("xmas", "den/xmastree", 130, 712, 140, {}),
+             ("bday", "cn/cake", 640, 422, 110, {}), ("bday", "cn/balloon", 130, 660, 110, {"float": 1})],
     "tall": [("cny", "cn/lantern", 255, 630, 54, {"hang": 12}), ("cny", "cn/lantern", 475, 645, 54, {"hang": 22}), ("cny", "cn/oranges", 640, 1274, 130, {}),
              ("raya", "den/ketupat", 255, 650, 42, {"hang": 12}), ("raya", "den/ketupat", 475, 660, 42, {"hang": 22}), ("raya", "crescent", 640, 1268, 100, {}),
              ("deepavali", "den/diya", 635, 1274, 160, {}),
