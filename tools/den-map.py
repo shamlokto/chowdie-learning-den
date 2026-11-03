@@ -44,22 +44,22 @@ SIZES = {"den/abacus": (440, 422), "den/desk": (340, 302), "den/microscope": (31
 LAYOUT = {
     "wide": {"bg": "den/room", "W": 1280, "H": 720,
              "alt": "A cosy treehouse room with a round window, shelves and fairy lights",
-             "spots": [("lantern", 448, 205, 88, {"hang": 26}), ("abacus", 322, 272, 118, {}), ("kopi", 105, 200, 92, {"lab": "above"}),
-                       ("album", 110, 284, 105, {}), ("nest", 965, 218, 130, {}), ("microscope", 1170, 195, 100, {}),
+             "spots": [("lantern", 462, 205, 88, {"hang": 26}), ("abacus", 322, 272, 118, {}), ("kopi", 105, 200, 92, {"lab": "above", "edge": "start"}),
+                       ("album", 110, 284, 105, {"edge": "start"}), ("nest", 965, 218, 130, {}), ("microscope", 1170, 195, 100, {"lab": "above", "edge": "end"}),
                        ("armchair", 255, 470, 215, {}), ("desk", 470, 610, 165, {}), ("chest", 640, 640, 150, {}),
-                       ("piano", 1085, 470, 150, {}), ("hole", 880, 690, 170, {"lab": "above"}),
-                       ("scroll", 965, 282, 120, {}), ("frame", 1175, 288, 82, {}), ("magnifier", 760, 700, 64, {"lab": "above"})],
+                       ("piano", 1085, 470, 132, {}), ("hole", 880, 690, 170, {"lab": "above"}),
+                       ("scroll", 282, 706, 100, {"lab": "above"}), ("frame", 1175, 288, 82, {"edge": "end"}), ("magnifier", 760, 700, 64, {"lab": "above"})],
              "box": (50, 20, 1232, 718),  # the part that must stay on screen when the painting is scaled to cover it
              "motes": (500, 120, 280, 300),  # x, y, w, h of the sunbeam the dust floats in
              "lights": [[31,2],[1254,25],[48,26],[1234,47],[84,68],[1212,69],[712,69],[924,70],[554,71],[931,80],[726,83],[1184,88],[537,87],[119,93],[308,94],[738,93],[1155,101],[947,100],[289,103],[755,104],[1091,108],[1124,108],[149,110],[324,112],[964,113],[249,118],[181,119],[1021,119],[981,121],[215,123],[1001,124],[348,126],[827,128],[370,136],[440,144],[402,145]]},
     "tall": {"bg": "den/tree", "W": 720, "H": 1280,
              "alt": "A treehouse with three floors in a big rain tree",
              "spots": [("lantern", 270, 440, 62, {"hang": 40}), ("nest", 460, 497, 110, {}),
-                       ("abacus", 195, 755, 120, {}), ("kopi", 440, 752, 70, {"lab": "above"}), ("microscope", 535, 752, 80, {}),
+                       ("abacus", 195, 755, 120, {}), ("kopi", 405, 752, 70, {"lab": "above"}), ("microscope", 552, 752, 80, {}),
                        ("armchair", 215, 997, 160, {}), ("piano", 500, 995, 125, {}),
-                       ("desk", 120, 1215, 130, {}), ("chest", 275, 1240, 120, {"lab": "above"}),
-                       ("album", 480, 1240, 95, {"lab": "above"}), ("hole", 615, 1125, 130, {"lab": "above"}),
-                       ("scroll", 62, 830, 92, {"hang": 30, "edge": "start"}), ("frame", 660, 850, 72, {"hang": 30, "edge": "end"}), ("magnifier", 640, 400, 52, {"hang": 24})],
+                       ("desk", 115, 1200, 130, {}), ("chest", 285, 1235, 120, {"lab": "above"}),
+                       ("album", 470, 1215, 95, {}), ("hole", 625, 1168, 120, {"lab": "above", "edge": "end"}),
+                       ("scroll", 62, 830, 92, {"hang": 30, "edge": "start"}), ("frame", 665, 562, 72, {"hang": 22, "edge": "end"}), ("magnifier", 640, 400, 52, {"hang": 24})],
              "box": (8, 290, 712, 1280),
              "motes": (40, 380, 640, 300),
              "lights": [[369,272],[357,275],[379,286],[336,294],[390,298],[314,308],[404,311],[290,320],[385,321],[425,324],[344,326],[264,328],[489,328],[445,330],[469,330],[240,331],[226,332],[330,332],[318,337],[410,340],[457,343],[240,343],[252,345],[436,345],[275,348],[206,539],[238,540],[355,542],[120,542],[137,541],[588,542],[334,552],[573,551],[228,555],[494,556],[418,558],[508,560],[554,559],[472,562],[530,563],[446,563],[306,564],[279,568],[353,570],[125,784],[337,787],[151,791],[245,792],[416,792],[492,793],[224,794],[318,794],[580,795],[510,796],[296,798],[271,799],[434,800],[477,800],[457,803],[524,804],[563,803],[543,807],[178,808]]},
@@ -96,11 +96,19 @@ body.subject-view .den-map{display:none}
 .den-tall{display:none}
 @media (orientation:portrait){.den-wide{display:none}.den-tall{display:block}}
 .den-top{position:absolute;z-index:6;top:max(10px,env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));
-  display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;pointer-events:none}
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:8px;pointer-events:none}
+.den-top .den-who{justify-self:start;grid-column:1;grid-row:1}.den-top .den-hint{justify-self:end;grid-column:3;grid-row:1}
+.den-sign{grid-column:2;grid-row:1;margin:0;justify-self:center;text-align:center;font:700 clamp(20px,2.3vw,32px)/1.15 'Fredoka',sans-serif;color:#FFF6DC;
+  background:linear-gradient(180deg,#A86B3C,#7E4B25);border:3px solid #4A2A12;border-radius:16px;padding:.25em .8em .2em;box-shadow:0 4px 0 #4A2A12,0 10px 18px rgba(40,20,5,.35);
+  text-shadow:0 2px 0 rgba(60,30,10,.55);text-wrap:balance}
 .den-top>*{pointer-events:auto}
-.den-top .who-chip{margin:0;box-shadow:0 3px 0 rgba(31,58,74,.35)}
-.den-hint{margin:0;font:600 14px/1.3 'Fredoka',sans-serif;color:#1F3A4A;background:rgba(255,253,246,.92);border:2px solid #1F3A4A;border-radius:999px;padding:.2rem .8rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-@media (max-width:560px){.den-top{flex-direction:column}.den-hint{font-size:12.5px}}
+.den-top .who-chip{margin:0;box-shadow:0 3px 0 rgba(31,58,74,.35);font-size:18px;flex-wrap:nowrap}
+.den-top .who-chip button,.den-top .who-chip .who-bank{font-size:16px}
+.den-top .who-chip>span{white-space:nowrap}
+.den-hint{margin:0;font:600 17px/1.3 'Fredoka',sans-serif;color:#1F3A4A;background:rgba(255,253,246,.92);border:2px solid #1F3A4A;border-radius:999px;padding:.2rem .8rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+@media (max-width:900px){.den-top{grid-template-columns:auto 1fr}.den-sign{grid-column:1/-1;grid-row:1}.den-top .den-who{grid-column:1;grid-row:2}.den-top .den-hint{grid-column:2;grid-row:2}}
+@media (max-width:560px){.den-hint:has(.den-greet){background:none;border:0;padding:0}.den-greet~.den-tap{display:none}
+ .den-top{grid-template-columns:1fr;gap:6px}.den-top .den-who{grid-column:1;grid-row:2}.den-top .den-hint{grid-column:1}.den-top .den-hint{grid-row:3;justify-self:start;font-size:16px}.den-sign{font-size:20px;justify-self:stretch}}
 .den-back{font:700 1rem 'Fredoka',sans-serif;color:#1F3A4A;background:#FFE58A;border:2.5px solid #1F3A4A;border-radius:999px;padding:.35rem 1rem .25rem;box-shadow:0 3px 0 #1F3A4A;cursor:pointer;align-self:flex-start;margin:0 0 .6rem}
 .den-back:hover{transform:translateY(-1px)}.den-back:focus-visible{outline:3px solid #2563EB;outline-offset:2px}
 .crew-overlay{position:fixed;inset:0;z-index:900;background:rgba(31,58,74,.55);overflow-y:auto;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 24px max(12px,env(safe-area-inset-left,0px))}
@@ -111,19 +119,21 @@ body.subject-view .den-map{display:none}
 .crew-box .characters-section{margin:0}
 .crew-pics{position:absolute;left:17%;right:17%;top:14%;bottom:14%;display:grid;grid-template-columns:1fr 1fr;gap:3%;align-content:center}
 .crew-pics svg{display:block;width:100%;height:auto}
-.den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;z-index:2;-webkit-tap-highlight-color:transparent}
+.den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .den-art{position:relative;display:block;transition:transform .18s ease,filter .18s ease}
 .den-art img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 3px rgba(60,35,15,.28))}
 .den-spot:hover .den-art,.den-spot:focus-visible .den-art{transform:translateY(-6px) scale(1.07);filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #FFE58A)}
 .den-spot:active .den-art{transform:translateY(-2px) scale(1.02)}
 .den-spot:focus-visible{outline:none}
 .den-spot:focus-visible .den-label{outline:3px solid #2563EB;outline-offset:2px}
-.den-label{position:absolute;left:50%;top:100%;transform:translate(-50%,4px);white-space:nowrap;font:600 clamp(11px,1.45cqi,15px)/1.25 'Fredoka',sans-serif;color:#1F3A4A;
-  background:rgba(255,253,246,.94);border:2px solid #1F3A4A;border-radius:999px;padding:1px 9px 0;box-shadow:0 2px 0 #1F3A4A;pointer-events:none;transition:transform .18s ease,background .18s}
-.den-tall .den-label{font-size:clamp(10.5px,3.1cqi,13px);padding:0 6px;border-width:1.5px}
+.den-label{position:absolute;z-index:4;left:50%;top:100%;transform:translate(-50%,4px);white-space:nowrap;font:700 clamp(16px,1.45cqi,20px)/1.2 'Fredoka',sans-serif;color:#1F3A4A;
+  background:#FFFDF6;border:2.5px solid #1F3A4A;border-radius:999px;padding:2px 11px 1px;box-shadow:0 2px 0 #1F3A4A;pointer-events:none;transition:transform .18s ease,background .18s}
+.den-tall .den-label{font-size:clamp(16px,4.3cqi,19px);padding:1px 8px 0;border-width:2px}
 .lab-above .den-label{top:auto;bottom:100%;transform:translate(-50%,-4px)}
 .lab-start .den-label{left:0;transform:translate(0,4px)}.lab-end .den-label{left:auto;right:0;transform:translate(0,4px)}
+.lab-above.lab-start .den-label,.lab-above.lab-end .den-label{transform:translate(0,-4px)}
 .lab-start:hover .den-label,.lab-start:focus-visible .den-label,.lab-end:hover .den-label,.lab-end:focus-visible .den-label{transform:translate(0,4px) scale(1.08)}
+.lab-above.lab-start:hover .den-label,.lab-above.lab-end:hover .den-label,.lab-above.lab-start:focus-visible .den-label,.lab-above.lab-end:focus-visible .den-label{transform:translate(0,-4px) scale(1.08)}
 .den-spot:hover .den-label,.den-spot:focus-visible .den-label{background:#FFE58A;transform:translate(-50%,4px) scale(1.08)}
 .lab-above:hover .den-label,.lab-above:focus-visible .den-label{transform:translate(-50%,-4px) scale(1.08)}
 .den-art i{position:absolute;font-style:normal;pointer-events:none}
@@ -165,16 +175,16 @@ body.subject-view .den-map{display:none}
 @keyframes denLook{0%,40%,100%{transform:translateX(0)}50%,60%{transform:translateX(-9px)}70%,80%{transform:translateX(9px)}}
 
 /* festivals (dates in the script below) */
-.den-fx{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:none;pointer-events:none;z-index:1}
+.den-fx{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:none;pointer-events:none}
 .den-fx img,.den-fx svg{display:block;width:100%;height:auto;filter:drop-shadow(0 3px 3px rgba(60,35,15,.3))}
-.den-fx.flat{transform:scaleY(.42);transform-origin:50% 100%;z-index:0}
+.den-fx.flat{transform:scaleY(.42);transform-origin:50% 100%}
 .den-fx.hang{transform-origin:50% calc(-1 * var(--hang));animation:denSwing 4.2s ease-in-out infinite}
 .den-fx.hang::before{content:"";position:absolute;left:50%;bottom:100%;height:var(--hang);border-left:2px solid #6B4A2F}
 .den-fx.float{animation:denFloat 3.4s ease-in-out infinite}
 @keyframes denFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6%)}}
 .den-map[data-fest="cny"] .fx-cny,.den-map[data-fest="raya"] .fx-raya,.den-map[data-fest="deepavali"] .fx-deepavali,.den-map[data-fest="midautumn"] .fx-midautumn,
 .den-map[data-fest="national"] .fx-national,.den-map[data-fest="xmas"] .fx-xmas,.den-map[data-fest="bday"] .fx-bday{display:block}
-.den-greet{display:inline-block;font:700 1rem 'Fredoka',sans-serif;color:#7A1F12;background:#FFE58A;border:2px solid #1F3A4A;border-radius:999px;padding:.05rem .8rem;box-shadow:0 2px 0 #1F3A4A}
+.den-greet{display:inline-block;font:700 17px 'Fredoka',sans-serif;color:#7A1F12;background:#FFE58A;border:2px solid #1F3A4A;border-radius:999px;padding:.05rem .8rem;box-shadow:0 2px 0 #1F3A4A}
 /* evening: night paintings in dark mode (or ?night=1), dimmer objects, fireflies instead of dust */
 @media (prefers-color-scheme:dark){.den-map:not(.den-day) .den-art img,.den-map:not(.den-day) .den-fx img{filter:brightness(.84) saturate(.92) drop-shadow(0 4px 3px rgba(0,0,0,.35))}
  .den-map:not(.den-day) .den-mote{background:#E9FF8A;box-shadow:0 0 6px 3px rgba(210,255,120,.6);width:.8%}.den-map:not(.den-day) .den-bulb{width:2.8%}}
@@ -202,7 +212,7 @@ JS = r"""
  if(bd&&bd===String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'))pick={id:'bday',hi:`Happy birthday, ${NAMES[who]}!`};
  if(!pick)pick=FEST.find(f=>(f.days||[now.getFullYear()+'-'+f.md]).some(d=>{const t=at(d);return today>=t-f.before*day&&today<=t+f.after*day}));
  const want=q.get('fest');if(want)pick=FEST.find(f=>f.id===want)||(want==='bday'?{id:'bday',hi:'Happy birthday!'}:null);
- if(pick){map.dataset.fest=pick.id;const p=map.querySelector('.den-hint');if(p)p.innerHTML=`<span class="den-greet">${pick.hi}</span> Tap a place to explore!`}
+ if(pick){map.dataset.fest=pick.id;const p=map.querySelector('.den-hint');if(p)p.innerHTML=`<span class="den-greet">${pick.hi}</span> <span class="den-tap">Tap a place to explore!</span>`}
  const n=q.get('night');if(n==='1'||n==='0'){map.classList.add(n==='1'?'den-night':'den-day');
   map.querySelectorAll('picture source').forEach(s=>s.remove());map.querySelectorAll('img.den-bg').forEach(i=>i.src=n==='1'?i.dataset.night:i.dataset.day)}})();
 /* Baddie's hole: open the search view already filled in with "Baddie" */
@@ -211,14 +221,16 @@ JS = r"""
  if(location.hash==='#search')dispatchEvent(new HashChangeEvent('hashchange'));else location.hash='search'}))})();
 /* Cover layout: scale the painting to fill the screen, but never so far that a spot (the "box") is cut off;
    any strip left over shows a blurred copy of the painting. Portrait screens get the tall treehouse. */
-(()=>{const map=document.querySelector('.den-map');if(!map)return;const blur=map.querySelector('.den-blur');
+(()=>{const map=document.querySelector('.den-map');if(!map)return;const blur=map.querySelector('.den-blur'),bar=map.querySelector('.den-top');
  const SC={};map.querySelectorAll('.den-scene').forEach(el=>SC[el.dataset.kind]={el,W:+el.dataset.w,H:+el.dataset.h,box:el.dataset.box.split(',').map(Number)});
  function lay(){const vw=map.clientWidth,vh=map.clientHeight;if(!vw||!vh)return;const kind=vw<vh?'tall':'wide';
   Object.entries(SC).forEach(([k,s])=>s.el.style.display=k===kind?'block':'none');
   const {el,W,H,box:[x0,y0,x1,y1]}=SC[kind],bw=x1-x0,bh=y1-y0;
-  const sc=Math.min(Math.max(vw/W,vh/H),vw/bw,vh/bh),w=W*sc,h=H*sc;
-  const place=(view,size,mid)=>size>=view?Math.min(0,Math.max(view-size,view/2-mid*sc)):(view-size)/2;
-  el.style.width=w+'px';el.style.left=place(vw,w,(x0+x1)/2)+'px';el.style.top=place(vh,h,(y0+y1)/2)+'px';
+  const ti=bar?bar.offsetTop+bar.offsetHeight+6:0,av=vh-ti;
+  const sc=Math.min(Math.max(vw/W,vh/H),vw/bw,av/bh),w=W*sc,h=H*sc,cl=(v,a,b)=>Math.min(Math.max(v,a),b);
+  const left=w>=vw?cl(vw/2-(x0+x1)/2*sc,vw-w,0):(vw-w)/2;
+  let top=h>=vh?cl(ti+av/2-(y0+y1)/2*sc,vh-h,0):(vh-h)/2;top=cl(top,ti-y0*sc,vh-y1*sc);
+  el.style.width=w+'px';el.style.left=left+'px';el.style.top=top+'px';
   const img=el.querySelector('.den-bg');if(blur&&img)blur.style.backgroundImage=`url("${img.currentSrc||img.src}")`}
  lay();addEventListener('resize',lay);addEventListener('den:show',lay);map.querySelectorAll('.den-bg').forEach(i=>i.addEventListener('load',lay));
  if(window.ResizeObserver)new ResizeObserver(lay).observe(map)})();
@@ -331,10 +343,9 @@ def block():
             f"<style id=\"den-map-css\">{CSS}</style>\n"
             "<script>document.body.classList.add(/^#[^#]/.test(location.hash)?'subject-view':'den-view')</script>\n"
             '<section class="den-map" aria-labelledby="denMapTitle">\n'
-            '<h1 class="den-sr" id="denMapTitle">Chowdie&#x27;s Learning Den</h1>\n'
             '<div class="den-blur" aria-hidden="true"></div>\n'
             f"{scene('wide')}\n{scene('tall')}\n"
-            '<div class="den-top"><div class="den-who" id="denWho"></div><p class="den-hint">Tap a place to explore!</p></div>\n'
+            '<div class="den-top"><h1 class="den-sign" id="denMapTitle">Welcome to Chowdie&#x27;s Learning Den!</h1><div class="den-who" id="denWho"></div><p class="den-hint"><span class="den-tap">Tap a place to explore!</span></p></div>\n'
             "</section>\n"
             f"<script>{JS}</script>\n"
             "<!-- den-map:end -->\n")
