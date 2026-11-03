@@ -7,7 +7,9 @@ album opens the sticker book, and Baddie's hole searches for the Baddie levels. 
 kopi steam, twinkling fairy lights, music notes, Baddie's blinking eyes) are CSS, so they stay sharp, cost nothing
 to download and switch off for children who turn off motion.
 
-The block sits between <!-- den-map:start --> and <!-- den-map:end --> just before the crew section.
+The Den is the hub's cover page: it fills the screen (scaled to cover without cutting off a spot), and the subject
+panels only show after a spot is tapped (see the hub navigation script). The block sits between <!-- den-map:start -->
+and <!-- den-map:end -->; re-running replaces it in place.
 Positions are in the painting's own pixels (x = centre, y = bottom of the object). Edit LAYOUT and run:
     python3 tools/den-map.py
 """
@@ -28,13 +30,16 @@ SPOTS = {
     "kopi":       ("Grown-ups",       "#grownups",    "grownups", "cn/kopi"),
     "chest":      ("Star Bank",       "bank.html",    None,       "den/chest"),
     "album":      ("Sticker book",    "stickers.html", None,      "den/album"),
-    "hole":       ("Baddie's lair",   "#all",         None,       None),
+    "hole":       ("Baddie's lair",   "#search",      None,       None),
+    "scroll":     ("Megan's challenge", "chinese/megan-cn.html", None, "den/scroll"),
+    "frame":      ("Meet the crew",   "#crew",        None,       "den/frame"),
+    "magnifier":  ("Search",          "#search",      None,       "den/magnifier"),
 }
 
 # Image sizes of the objects (width, height) so each art box keeps its shape before the picture loads
 SIZES = {"den/abacus": (440, 422), "den/desk": (340, 302), "den/microscope": (316, 363), "den/nest": (440, 355),
          "cn/piano": (259, 275), "den/armchair": (440, 301), "cn/kopi": (224, 153), "den/chest": (278, 277),
-         "den/album": (440, 357), "cn/lantern": (173, 247)}
+         "den/album": (440, 357), "cn/lantern": (173, 247), "den/scroll": (319, 219), "den/frame": (328, 393), "den/magnifier": (200, 347)}
 
 LAYOUT = {
     "wide": {"bg": "den/room", "W": 1280, "H": 720,
@@ -42,7 +47,9 @@ LAYOUT = {
              "spots": [("lantern", 448, 205, 88, {"hang": 26}), ("abacus", 322, 272, 118, {}), ("kopi", 105, 200, 92, {"lab": "above"}),
                        ("album", 110, 284, 105, {}), ("nest", 965, 218, 130, {}), ("microscope", 1170, 195, 100, {}),
                        ("armchair", 255, 470, 215, {}), ("desk", 470, 610, 165, {}), ("chest", 640, 640, 150, {}),
-                       ("piano", 1085, 470, 170, {}), ("hole", 880, 690, 170, {"lab": "above"})],
+                       ("piano", 1085, 470, 150, {}), ("hole", 880, 690, 170, {"lab": "above"}),
+                       ("scroll", 965, 282, 120, {}), ("frame", 1175, 288, 82, {}), ("magnifier", 760, 700, 64, {"lab": "above"})],
+             "box": (50, 20, 1232, 718),  # the part that must stay on screen when the painting is scaled to cover it
              "motes": (500, 120, 280, 300),  # x, y, w, h of the sunbeam the dust floats in
              "lights": [[31,2],[1254,25],[48,26],[1234,47],[84,68],[1212,69],[712,69],[924,70],[554,71],[931,80],[726,83],[1184,88],[537,87],[119,93],[308,94],[738,93],[1155,101],[947,100],[289,103],[755,104],[1091,108],[1124,108],[149,110],[324,112],[964,113],[249,118],[181,119],[1021,119],[981,121],[215,123],[1001,124],[348,126],[827,128],[370,136],[440,144],[402,145]]},
     "tall": {"bg": "den/tree", "W": 720, "H": 1280,
@@ -51,7 +58,9 @@ LAYOUT = {
                        ("abacus", 195, 755, 120, {}), ("kopi", 440, 752, 70, {"lab": "above"}), ("microscope", 535, 752, 80, {}),
                        ("armchair", 215, 997, 160, {}), ("piano", 500, 995, 125, {}),
                        ("desk", 120, 1215, 130, {}), ("chest", 275, 1240, 120, {"lab": "above"}),
-                       ("album", 480, 1240, 95, {"lab": "above"}), ("hole", 615, 1125, 130, {"lab": "above"})],
+                       ("album", 480, 1240, 95, {"lab": "above"}), ("hole", 615, 1125, 130, {"lab": "above"}),
+                       ("scroll", 62, 830, 92, {"hang": 30, "edge": "start"}), ("frame", 660, 850, 72, {"hang": 30, "edge": "end"}), ("magnifier", 640, 400, 52, {"hang": 24})],
+             "box": (8, 290, 712, 1280),
              "motes": (40, 380, 640, 300),
              "lights": [[369,272],[357,275],[379,286],[336,294],[390,298],[314,308],[404,311],[290,320],[385,321],[425,324],[344,326],[264,328],[489,328],[445,330],[469,330],[240,331],[226,332],[330,332],[318,337],[410,340],[457,343],[240,343],[252,345],[436,345],[275,348],[206,539],[238,540],[355,542],[120,542],[137,541],[588,542],[334,552],[573,551],[228,555],[494,556],[418,558],[508,560],[554,559],[472,562],[530,563],[446,563],[306,564],[279,568],[353,570],[125,784],[337,787],[151,791],[245,792],[416,792],[492,793],[224,794],[318,794],[580,795],[510,796],[296,798],[271,799],[434,800],[477,800],[457,803],[524,804],[563,803],[543,807],[178,808]]},
 }
@@ -63,7 +72,8 @@ DECO = {
     "chest": '<i class="spark" style="left:22%;top:18%"></i><i class="spark" style="left:62%;top:8%;--d:-.8s"></i><i class="spark" style="left:44%;top:32%;--d:-1.6s"></i><i class="spark" style="left:80%;top:40%;--d:-2.3s"></i>',
     "piano": '<i class="note" style="left:30%">♪</i><i class="note" style="left:52%;--d:-1.3s">♫</i><i class="note" style="left:70%;--d:-2.6s">♪</i>',
     "microscope": '<i class="spark" style="left:44%;top:30%;--d:-1s"></i>',
-    "abacus": "", "desk": "", "armchair": "", "album": "", "lantern": "",
+    "frame": '<span class="crew-pics" aria-hidden="true"></span>',
+    "abacus": "", "desk": "", "armchair": "", "album": "", "lantern": "", "scroll": "", "magnifier": "",
 }
 
 HOLE = ('<svg viewBox="0 0 170 64" aria-hidden="true"><ellipse cx="85" cy="40" rx="83" ry="22" fill="#8a5a33"/>'
@@ -74,15 +84,33 @@ HOLE = ('<svg viewBox="0 0 170 64" aria-hidden="true"><ellipse cx="85" cy="40" r
 
 CSS = r"""
 /* The painted Den map (generated by tools/den-map.py) */
-.den-map{max-width:1040px;margin:0 auto 1.6rem;padding:0 1rem;position:relative;z-index:2}
-.den-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .8rem;margin:0 0 .6rem}
-.den-head h2{font-family:'Fredoka',sans-serif;font-size:clamp(1.4rem,3.4vw,1.9rem);color:#1F3A4A;margin:0}
-.den-head p{margin:0;font-weight:700;color:#475569}
-.den-scene{position:relative;container-type:inline-size}
+/* the Den is the cover page; the hub's own panels show only in the subject view */
+body.den-view .container{display:none}
+body.subject-view .den-map{display:none}
+.den-map{position:relative;height:100vh;height:100dvh;min-height:400px;overflow:hidden;background:#B89B70;z-index:2}
+.den-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.den-blur{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(18px) saturate(.85) brightness(.92)}
+.den-scene{position:absolute;left:0;top:0;width:100%;container-type:inline-size}
 .den-scene picture{display:block}
-.den-scene .den-bg{display:block;width:100%;height:auto;border:3px solid #1F3A4A;border-radius:24px;box-shadow:0 7px 0 #1F3A4A,0 26px 40px -18px rgba(31,58,74,.45);background:#E9DCC4}
-.den-tall{display:none;max-width:460px;margin:0 auto}
-@media (max-width:640px){.den-wide{display:none}.den-tall{display:block}}
+.den-scene .den-bg{display:block;width:100%;height:auto}
+.den-tall{display:none}
+@media (orientation:portrait){.den-wide{display:none}.den-tall{display:block}}
+.den-top{position:absolute;z-index:6;top:max(10px,env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));
+  display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;pointer-events:none}
+.den-top>*{pointer-events:auto}
+.den-top .who-chip{margin:0;box-shadow:0 3px 0 rgba(31,58,74,.35)}
+.den-hint{margin:0;font:600 14px/1.3 'Fredoka',sans-serif;color:#1F3A4A;background:rgba(255,253,246,.92);border:2px solid #1F3A4A;border-radius:999px;padding:.2rem .8rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+@media (max-width:560px){.den-top{flex-direction:column}.den-hint{font-size:12.5px}}
+.den-back{font:700 1rem 'Fredoka',sans-serif;color:#1F3A4A;background:#FFE58A;border:2.5px solid #1F3A4A;border-radius:999px;padding:.35rem 1rem .25rem;box-shadow:0 3px 0 #1F3A4A;cursor:pointer;align-self:flex-start;margin:0 0 .6rem}
+.den-back:hover{transform:translateY(-1px)}.den-back:focus-visible{outline:3px solid #2563EB;outline-offset:2px}
+.crew-overlay{position:fixed;inset:0;z-index:900;background:rgba(31,58,74,.55);overflow-y:auto;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 24px max(12px,env(safe-area-inset-left,0px))}
+.crew-overlay[hidden]{display:none}
+.crew-box{background:#FFFDF6;border:3px solid #1F3A4A;border-radius:24px;box-shadow:0 7px 0 #1F3A4A;max-width:1040px;margin:0 auto;padding:1rem}
+.crew-close{position:sticky;top:0;z-index:2;float:right;font:700 1rem 'Fredoka',sans-serif;background:#FFE58A;border:2.5px solid #1F3A4A;border-radius:999px;padding:.3rem .9rem .2rem;box-shadow:0 3px 0 #1F3A4A;cursor:pointer}
+.crew-close:focus-visible{outline:3px solid #2563EB;outline-offset:2px}
+.crew-box .characters-section{margin:0}
+.crew-pics{position:absolute;left:17%;right:17%;top:14%;bottom:14%;display:grid;grid-template-columns:1fr 1fr;gap:3%;align-content:center}
+.crew-pics svg{display:block;width:100%;height:auto}
 .den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;z-index:2;-webkit-tap-highlight-color:transparent}
 .den-art{position:relative;display:block;transition:transform .18s ease,filter .18s ease}
 .den-art img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 3px rgba(60,35,15,.28))}
@@ -94,6 +122,8 @@ CSS = r"""
   background:rgba(255,253,246,.94);border:2px solid #1F3A4A;border-radius:999px;padding:1px 9px 0;box-shadow:0 2px 0 #1F3A4A;pointer-events:none;transition:transform .18s ease,background .18s}
 .den-tall .den-label{font-size:clamp(10.5px,3.1cqi,13px);padding:0 6px;border-width:1.5px}
 .lab-above .den-label{top:auto;bottom:100%;transform:translate(-50%,-4px)}
+.lab-start .den-label{left:0;transform:translate(0,4px)}.lab-end .den-label{left:auto;right:0;transform:translate(0,4px)}
+.lab-start:hover .den-label,.lab-start:focus-visible .den-label,.lab-end:hover .den-label,.lab-end:focus-visible .den-label{transform:translate(0,4px) scale(1.08)}
 .den-spot:hover .den-label,.den-spot:focus-visible .den-label{background:#FFE58A;transform:translate(-50%,4px) scale(1.08)}
 .lab-above:hover .den-label,.lab-above:focus-visible .den-label{transform:translate(-50%,-4px) scale(1.08)}
 .den-art i{position:absolute;font-style:normal;pointer-events:none}
@@ -106,8 +136,9 @@ CSS = r"""
 .den-tall .den-mote{width:.9%}
 @keyframes denMote{0%,100%{transform:translate(0,0);opacity:0}20%,80%{opacity:.9}50%{transform:translate(1.4cqi,-3cqi)}}
 /* object movements */
-.s-lantern .den-art{transform-origin:50% calc(-1 * var(--hang));animation:denSwing 3.6s ease-in-out infinite}
-.s-lantern .den-art::before{content:"";position:absolute;left:50%;bottom:100%;height:var(--hang);border-left:2px solid #6B4A2F}
+.s-lantern .den-art,.den-spot.hang .den-art{transform-origin:50% calc(-1 * var(--hang));animation:denSwing 3.6s ease-in-out infinite}
+.s-lantern .den-art::before,.den-spot.hang .den-art::before{content:"";position:absolute;left:50%;bottom:100%;height:var(--hang);border-left:2px solid #6B4A2F}
+.den-spot.hang .den-art{animation-duration:4.4s}
 .s-lantern:hover .den-art,.s-lantern:focus-visible .den-art{animation-duration:1.1s}
 @keyframes denSwing{0%,100%{rotate:-4deg}50%{rotate:4deg}}
 .wisp{bottom:62%;width:12%;height:55%;border-radius:50%;border-left:3px solid rgba(255,255,255,.85);filter:blur(.6px);opacity:0;animation:denSteam 3.3s ease-out var(--d,0s) infinite}
@@ -171,13 +202,38 @@ JS = r"""
  if(bd&&bd===String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'))pick={id:'bday',hi:`Happy birthday, ${NAMES[who]}!`};
  if(!pick)pick=FEST.find(f=>(f.days||[now.getFullYear()+'-'+f.md]).some(d=>{const t=at(d);return today>=t-f.before*day&&today<=t+f.after*day}));
  const want=q.get('fest');if(want)pick=FEST.find(f=>f.id===want)||(want==='bday'?{id:'bday',hi:'Happy birthday!'}:null);
- if(pick){map.dataset.fest=pick.id;const p=map.querySelector('.den-head p');if(p)p.innerHTML=`<span class="den-greet">${pick.hi}</span> Tap a place to explore.`}
+ if(pick){map.dataset.fest=pick.id;const p=map.querySelector('.den-hint');if(p)p.innerHTML=`<span class="den-greet">${pick.hi}</span> Tap a place to explore!`}
  const n=q.get('night');if(n==='1'||n==='0'){map.classList.add(n==='1'?'den-night':'den-day');
   map.querySelectorAll('picture source').forEach(s=>s.remove());map.querySelectorAll('img.den-bg').forEach(i=>i.src=n==='1'?i.dataset.night:i.dataset.day)}})();
-/* Den map: the subject spots use the hub's own data-jump-subject handler; Baddie's hole searches for the Baddie levels */
+/* Baddie's hole: open the search view already filled in with "Baddie" */
 (()=>{document.querySelectorAll('.den-map [data-den-search]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();
- const all=document.querySelector('.tab-btn[data-subject="all"]'),q=document.getElementById('deckSearchInput');if(all)all.click();
- if(q){q.value=a.dataset.denSearch;q.dispatchEvent(new Event('input'))}const c=document.querySelector('.controls-wrapper');if(c)c.scrollIntoView({behavior:'smooth'})}))})();
+ const q=document.getElementById('deckSearchInput');if(q)q.value=a.dataset.denSearch;
+ if(location.hash==='#search')dispatchEvent(new HashChangeEvent('hashchange'));else location.hash='search'}))})();
+/* Cover layout: scale the painting to fill the screen, but never so far that a spot (the "box") is cut off;
+   any strip left over shows a blurred copy of the painting. Portrait screens get the tall treehouse. */
+(()=>{const map=document.querySelector('.den-map');if(!map)return;const blur=map.querySelector('.den-blur');
+ const SC={};map.querySelectorAll('.den-scene').forEach(el=>SC[el.dataset.kind]={el,W:+el.dataset.w,H:+el.dataset.h,box:el.dataset.box.split(',').map(Number)});
+ function lay(){const vw=map.clientWidth,vh=map.clientHeight;if(!vw||!vh)return;const kind=vw<vh?'tall':'wide';
+  Object.entries(SC).forEach(([k,s])=>s.el.style.display=k===kind?'block':'none');
+  const {el,W,H,box:[x0,y0,x1,y1]}=SC[kind],bw=x1-x0,bh=y1-y0;
+  const sc=Math.min(Math.max(vw/W,vh/H),vw/bw,vh/bh),w=W*sc,h=H*sc;
+  const place=(view,size,mid)=>size>=view?Math.min(0,Math.max(view-size,view/2-mid*sc)):(view-size)/2;
+  el.style.width=w+'px';el.style.left=place(vw,w,(x0+x1)/2)+'px';el.style.top=place(vh,h,(y0+y1)/2)+'px';
+  const img=el.querySelector('.den-bg');if(blur&&img)blur.style.backgroundImage=`url("${img.currentSrc||img.src}")`}
+ lay();addEventListener('resize',lay);addEventListener('den:show',lay);map.querySelectorAll('.den-bg').forEach(i=>i.addEventListener('load',lay));
+ if(window.ResizeObserver)new ResizeObserver(lay).observe(map)})();
+/* Meet the crew: the picture frame shows the crew's own drawings and opens the crew panel */
+(()=>{const ov=document.getElementById('crewOverlay');if(!ov)return;const close=document.getElementById('crewClose');let back=null,n=0;
+ const copy=svg=>{const s=svg.cloneNode(true),sfx='-den'+(n++);s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
+  s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
+  s.setAttribute('aria-hidden','true');s.removeAttribute('role');s.removeAttribute('aria-label');return s};
+ const faces=[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
+ document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>box.appendChild(copy(f))));
+ const open=e=>{e.preventDefault();back=document.activeElement;ov.hidden=false;document.body.style.overflow='hidden';close.focus()};
+ const shut=()=>{ov.hidden=true;document.body.style.overflow='';if(back)back.focus()};
+ document.querySelectorAll('[data-den-crew]').forEach(a=>a.addEventListener('click',open));
+ close.addEventListener('click',shut);ov.addEventListener('click',e=>{if(e.target===ov)shut()});
+ ov.addEventListener('keydown',e=>{if(e.key==='Escape')shut()})})();
 """
 
 
@@ -237,7 +293,8 @@ def pct(v, total):
 def scene(kind):
     L = LAYOUT[kind]
     W, H = L["W"], L["H"]
-    out = [f'<div class="den-scene den-{kind}">',
+    bx = ",".join(str(v) for v in L["box"])
+    out = [f'<div class="den-scene den-{kind}" data-kind="{kind}" data-w="{W}" data-h="{H}" data-box="{bx}">',
            f'<picture><source media="(prefers-color-scheme: dark)" srcset="img/{L["bg"]}-night.webp">'
            f'<img class="den-bg" src="img/{L["bg"]}.webp" data-day="img/{L["bg"]}.webp" data-night="img/{L["bg"]}-night.webp" width="{W}" height="{H}" alt="{html.escape(L["alt"])}" loading="lazy" decoding="async"></picture>']
     for n, (x, y) in enumerate(L["lights"]):
@@ -250,10 +307,12 @@ def scene(kind):
         out.append(f'<i class="den-mote" style="--x:{pct(x, W)};--y:{pct(y, H)};--d:{-n * 1.1:.1f}s" aria-hidden="true"></i>')
     for sid, x, y, w, opt in L["spots"]:
         label, href, subject, img = SPOTS[sid]
-        cls = f"den-spot s-{sid}" + (" lab-above" if opt.get("lab") == "above" else "")
+        cls = f"den-spot s-{sid}" + (" lab-above" if opt.get("lab") == "above" else "") + (" hang" if "hang" in opt and sid != "lantern" else "") + (f" lab-{opt['edge']}" if "edge" in opt else "")
         attrs = f' data-jump-subject="{subject}"' if subject else ""
         if sid == "hole":
             attrs += ' data-den-search="Baddie"'
+        if sid == "frame":
+            attrs += ' data-den-crew aria-haspopup="dialog"'
         style = f"--x:{pct(x, W)};--b:{pct(H - y, H)};--w:{pct(w, W)}"
         if sid == "hole":
             art = HOLE
@@ -270,16 +329,23 @@ def scene(kind):
 def block():
     return ("<!-- den-map:start (generated by tools/den-map.py) -->\n"
             f"<style id=\"den-map-css\">{CSS}</style>\n"
+            "<script>document.body.classList.add(/^#[^#]/.test(location.hash)?'subject-view':'den-view')</script>\n"
             '<section class="den-map" aria-labelledby="denMapTitle">\n'
-            '<div class="den-head"><h2 id="denMapTitle">Welcome to the Den!</h2><p>Tap a place to explore.</p></div>\n'
-            f"{scene('wide')}\n{scene('tall')}\n</section>\n"
+            '<h1 class="den-sr" id="denMapTitle">Chowdie&#x27;s Learning Den</h1>\n'
+            '<div class="den-blur" aria-hidden="true"></div>\n'
+            f"{scene('wide')}\n{scene('tall')}\n"
+            '<div class="den-top"><div class="den-who" id="denWho"></div><p class="den-hint">Tap a place to explore!</p></div>\n'
+            "</section>\n"
             f"<script>{JS}</script>\n"
             "<!-- den-map:end -->\n")
 
 if __name__ == "__main__":
     s = HUB.read_text(encoding="utf-8")
-    s = re.sub(r"<!-- den-map:start.*?<!-- den-map:end -->\n", "", s, flags=re.S)
-    anchor = '<div class="container">\n<div class="characters-section"'
-    k = s.index(anchor)
-    HUB.write_text(s[:k] + block() + s[k:], encoding="utf-8")
+    m = re.search(r"<!-- den-map:start.*?<!-- den-map:end -->\n", s, flags=re.S)
+    if m:
+        s = s[:m.start()] + block() + s[m.end():]
+    else:
+        k = s.index('<div class="container">')
+        s = s[:k] + block() + s[k:]
+    HUB.write_text(s, encoding="utf-8")
     print("den map written")
