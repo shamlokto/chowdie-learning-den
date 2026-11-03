@@ -88,7 +88,7 @@ const POOL={
  spelling:['den/nest','obj/pencil','obj/paper','cn/candle','obj/openbook'],
  music:['cn/piano','cn/violin','sci/an-bird','cn/balloon','cn/present','cn/liondance','cn/fireworks'],
  stories:['den/armchair','obj/book']};
-const SCENE={eagle:'peaksky',friend:'park',germ:'clinic',leak:'island',money:'market',talent:'stage',teachers:'owltree',trombone:'gardens',write:'raintree',concert:'hall',dash:'track'};
+const SCENE={eagle:'peaksky',friend:'park',germ:'clinic',leak:'island',money:'market',talent:'stage',teachers:'owltree',trombone:'gardens',write:'raintree',concert:'hall',dash:'track',bread:'loaf'};
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let decks=null, me=KIDS.includes(ls.get('denUser'))?ls.get('denUser'):'willis';
