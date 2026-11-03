@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sticker Book</title>
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Sticker Book: every deck, boss round and story a child finishes gives a painted sticker. Each sticker also uncovers
+     one tile of the page's mystery painting; a full page reveals the whole painting. Reads the same Star Bank bonuses as bank.html. */
+  :root{--ink:#1F3A4A;--soft:#475569;--paper:#FFFDF6;--sun:#FFC83D;--gold:#E0A800}
+  *{box-sizing:border-box}
+  body{margin:0;background:#FFF9EB;background-image:radial-gradient(#F3E5C8 1.5px,transparent 1.5px);background-size:22px 22px;color:var(--ink);font-family:'Nunito',sans-serif}
+  .wrap{max-width:960px;margin:0 auto;padding:16px 16px 48px}
+  .top{display:flex;gap:.6rem;flex-wrap:wrap}
+  a.back{display:inline-block;font-weight:800;color:var(--ink);text-decoration:none;padding:.35rem .9rem;border:2.5px solid var(--ink);border-radius:999px;background:#fff;box-shadow:0 3px 0 var(--ink)}
+  a.back:focus-visible{outline:3px solid #2563EB;outline-offset:2px}
+  h1,h2{font-family:'Fredoka',sans-serif;margin:0}
+  header{text-align:center;margin:1.2rem 0 .8rem}
+  header h1{font-size:clamp(2rem,6vw,2.6rem)}
+  header p{margin:.3rem 0 0;font-weight:700;color:var(--soft)}
+  .who-pick{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:.8rem 0 0}
+  .who-pick label{cursor:pointer}
+  .who-pick input{position:absolute;opacity:0}
+  .who-pick span{display:inline-block;padding:.35rem 1rem;border-radius:999px;border:2.5px solid var(--c);font-weight:800;background:#fff}
+  .who-pick input:checked+span{background:var(--c);color:#fff}
+  .who-pick input:focus-visible+span{outline:3px solid var(--ink);outline-offset:2px}
+  .willis{--c:#38BDF8}.megan{--c:#F97316}.daddy{--c:#F59E0B}.mommy{--c:#8B5CF6}
+  .total{display:inline-block;margin-top:.8rem;font-family:'Fredoka',sans-serif;font-size:1.25rem;font-weight:600;padding:.25rem 1rem;border-radius:999px;background:#FFF7D6;border:2.5px solid var(--gold)}
+  .note{max-width:620px;margin:1rem auto;text-align:center;font-weight:700;color:var(--soft)}
+  .page{background:var(--paper);border:3px solid var(--ink);border-radius:24px;box-shadow:0 6px 0 var(--ink);padding:1.1rem;margin:1.4rem 0;display:flex;flex-direction:column;gap:1rem}
+  .page.done{border-color:var(--gold);box-shadow:0 6px 0 var(--gold),0 0 0 4px #FFF0B3}
+  .page-head{display:flex;align-items:center;gap:.4rem 1rem;flex-wrap:wrap}
+  .page-head h2{font-size:1.55rem}
+  .count{font-family:'Fredoka',sans-serif;font-weight:600;padding:.1rem .7rem;border-radius:999px;background:var(--l);border:2px solid var(--c)}
+  .ribbon{margin-left:auto;font-family:'Fredoka',sans-serif;font-weight:700;color:#7A5200;background:#FFE58A;border:2px solid var(--gold);border-radius:999px;padding:.1rem .8rem}
+  .page:not(.done) .ribbon{display:none}
+  .page-body{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:1.1rem;align-items:start}
+  @media (max-width:760px){.page-body{grid-template-columns:1fr}}
+  .mystery{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:16px;overflow:hidden;border:3px solid var(--ink);background:#ddd}
+  .mystery img{display:block;width:100%;height:100%;object-fit:cover}
+  .tiles{position:absolute;inset:0;display:grid}
+  .tile{background:var(--c);background-image:radial-gradient(rgba(255,255,255,.28) 2px,transparent 2.5px);background-size:14px 14px;border:1px solid rgba(255,255,255,.35);
+    display:grid;place-items:center;color:rgba(255,255,255,.85);font:700 clamp(12px,2.4vw,20px) 'Fredoka',sans-serif;transition:opacity .8s ease,transform .8s ease}
+  .tile.open{opacity:0;transform:scale(.6) rotate(8deg)}
+  .mystery figcaption{position:absolute;left:8px;bottom:8px;font-weight:800;font-size:.8rem;background:rgba(255,253,246,.92);border-radius:999px;padding:.05rem .6rem}
+  .stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:.9rem .5rem;margin:0;padding:0;list-style:none}
+  .stk{display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center;min-width:0}
+  .stk .art{width:84px;height:84px;display:grid;place-items:center;rotate:var(--r)}
+  .stk img{max-width:78px;max-height:78px;filter:drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 3px 3px rgba(31,58,74,.35))}
+  .stk.scene img{width:78px;height:78px;object-fit:cover;border-radius:50%;border:3px solid #fff;filter:drop-shadow(0 3px 3px rgba(31,58,74,.35))}
+  .stk.gold img{filter:drop-shadow(2px 0 0 #FFD54A) drop-shadow(-2px 0 0 #FFD54A) drop-shadow(0 2px 0 #FFD54A) drop-shadow(0 -2px 0 #FFD54A) drop-shadow(0 0 8px rgba(224,168,0,.7))}
+  .stk.locked .art{border:2.5px dashed #CDBF9E;border-radius:50%;rotate:0deg}
+  .stk.locked img{opacity:.13;filter:grayscale(1) brightness(.2)}
+  .stk.locked.scene img{border-color:transparent}
+  .stk small{font-weight:700;font-size:.78rem;line-height:1.2;color:var(--soft);overflow-wrap:anywhere}
+  .stk:not(.locked) small{color:var(--ink)}
+  .stk.fresh .art{animation:slap .6s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes slap{0%{transform:scale(2.2) rotate(-18deg);opacity:0}100%{transform:none;opacity:1}}
+  .maths{--c:#2563EB;--l:#DBEAFE}.english{--c:#DB2777;--l:#FCE7F3}.chinese{--c:#DC2626;--l:#FEE2E2}.science{--c:#059669;--l:#D1FAE5}
+  .spelling{--c:#EA580C;--l:#FFEDD5}.music{--c:#7C3AED;--l:#EDE9FE}.stories{--c:#0D9488;--l:#CCFBF1}
+  canvas.burst{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50}
+  @media (prefers-reduced-motion:reduce){.tile,.stk.fresh .art{transition:none;animation:none}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="back" href="index.html">← Back to the Den</a><a class="back" href="bank.html">⭐ Star Bank</a></div>
+  <header>
+    <h1>Sticker Book</h1>
+    <p>Finish a deck, beat Baddie or finish a story to win its sticker. Every sticker uncovers part of a mystery painting.</p>
+    <div class="who-pick" id="whoPick" role="radiogroup" aria-label="Whose sticker book"></div>
+    <div class="total" id="total" aria-live="polite"></div>
+  </header>
+  <p class="note" id="note" hidden></p>
+  <div id="pages"></div>
+</div>
+<script src="stars.js"></script>
+<script>
+(()=>{
+const D=window.DenStars, KIDS=['willis','megan','daddy','mommy'];
+const PAGES={maths:['Maths','maths-classroom'],english:['English','english-library'],chinese:['华文 Chinese','chinese-garden'],science:['Science','sci-garden'],
+ spelling:['Spelling & 听写','spelling-nest'],music:['Music Theory','music-stage'],stories:['Stories','stories-nook']};
+const POOL={
+ maths:['den/abacus','obj/clock','obj/ruler','obj/apple','obj/strawberry','obj/cookie','obj/ball','obj/box','cn/oranges','cn/eggs','cn/cake','cn/present','cn/plate','cn/cup','cn/balloon','obj/bottle','cn/teddy','cn/spoon'],
+ english:['obj/book','obj/openbook','obj/pencil','obj/paper','obj/eraser','obj/bag','obj/kite','obj/hat','obj/umbrella','obj/school','obj/chair','den/desk','obj/desk'],
+ chinese:['cn/lantern','cn/hongbao','cn/liondance','cn/niangao','cn/teapot','cn/chopsticks','cn/kopi','cn/kayatoast','cn/satay','cn/merlion','cn/mrt','cn/bus','cn/steamboat','cn/candyfloss',
+  'cn/noodles','cn/friedrice','cn/newclothes','cn/chinatown','cn/littleindia','cn/bicycle','cn/scooter','cn/milo','cn/tea','cn/oranges','cn/teddy'],
+ science:['sci/an-butterfly','sci/plant-flower','sci/an-frog','sci/mic-scope','sci/body-heart','sci/eco-hornbill','sci/an-turtle','sci/plant-tree','sci/an-penguin','sci/eco-owl','sci/an-whale','sci/mic-mushroom'],
+ spelling:['den/nest','obj/pencil','obj/paper','cn/candle','obj/openbook'],
+ music:['cn/piano','cn/violin','sci/an-bird','cn/balloon','cn/present','cn/liondance','cn/fireworks'],
+ stories:['den/armchair','obj/book']};
+const SCENE={eagle:'peaksky',friend:'park',germ:'clinic',leak:'island',money:'market',talent:'stage',teachers:'owltree',trombone:'gardens',write:'raintree',concert:'hall',dash:'track',bread:'loaf'};
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let decks=null, me=KIDS.includes(ls.get('denUser'))?ls.get('denUser'):'willis';
+
+// Seeded shuffle, so each page uncovers its painting in the same scattered order every visit
+const shuffle=(n,seed)=>{const a=[...Array(n).keys()];let s=seed;for(let k=n-1;k>0;k--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+
+function readHub(text){const doc=new DOMParser().parseFromString(text,'text/html'),out={};
+ Object.keys(PAGES).forEach(k=>{const seen=new Set(),list=[];
+  doc.querySelectorAll(`.subject-panel[data-panel="${k}"] a.deck-card[href]`).forEach(a=>{const href=a.getAttribute('href');
+   if(seen.has(href)||!/\.html(#daddy)?$/.test(href)||href==='spelling/wordlists.html')return;seen.add(href);
+   const t=a.querySelector('.deck-title');list.push({href,path:href.split('#')[0],daddy:href.endsWith('#daddy'),title:(t?t.textContent:a.textContent).trim()})});
+  let n=0;list.forEach(d=>{const story=d.path.match(/^stories\/([a-z]+)-adv\.html$/);
+   if(d.daddy)d.art='cn/fireworks';else if(story&&SCENE[story[1]]){d.art=story[1]+'/'+SCENE[story[1]];d.scene=true}else{d.art=POOL[k][n%POOL[k].length];n++}});
+  if(list.length)out[k]=list});
+ return out}
+
+function earnedKeys(u){const b=D.book(u),keys=new Set(b.log.filter(e=>e.type==='bonus'&&e.key).map(e=>e.key));((b.srv&&b.srv.bonuses)||[]).forEach(k=>keys.add(k));return keys}
+const has=(keys,d)=>[...keys].some(k=>k.startsWith('bonus:'+d.path+':')&&(!d.daddy||k.endsWith(':daddy')));
+
+function burst(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cv=document.createElement('canvas');cv.className='burst';document.body.appendChild(cv);
+ const g=cv.getContext('2d'),dpr=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;g.scale(dpr,dpr);
+ const cols=['#FFB800','#FF6A2B','#2E9BE0','#2FA84F','#E83E6C','#8A55E0'],ps=[...Array(140)].map(()=>({x:innerWidth/2,y:innerHeight*.45,vx:(Math.random()-.5)*14,vy:-Math.random()*13-3,c:cols[Math.random()*6|0],r:Math.random()*6+3,a:Math.random()*6}));
+ let t=0;(function f(){g.clearRect(0,0,innerWidth,innerHeight);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.vx*=.99;p.a+=.2;g.save();g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle=p.c;g.fillRect(-p.r,-p.r/2,p.r*2,p.r);g.restore()});
+  if(++t<150)requestAnimationFrame(f);else cv.remove()})()}
+
+function render(){const pages=document.getElementById('pages'),note=document.getElementById('note');
+ document.querySelectorAll('#whoPick input').forEach(r=>r.checked=r.value===me);
+ if(!decks){pages.innerHTML='';return}
+ const keys=earnedKeys(me),seenKey='denStickersSeen:'+me,seen=new Set(JSON.parse(ls.get(seenKey)||'[]')),doneKey='denStickerPages:'+me,doneSeen=new Set(JSON.parse(ls.get(doneKey)||'[]'));
+ let got=0,all=0,celebrate=false;const html=[];
+ Object.entries(decks).forEach(([k,list])=>{const [name,paint]=PAGES[k],n=list.length,have=list.map(d=>has(keys,d)),c=have.filter(Boolean).length;got+=c;all+=n;
+  const cols=Math.ceil(Math.sqrt(n*16/9)),rows=Math.ceil(n/cols),cells=cols*rows,order=shuffle(cells,n*31+k.length),done=c===n;
+  const open=new Set(done?order:have.map((h,j)=>h?order[j]:-1).filter(x=>x>=0));
+  if(done&&!doneSeen.has(k)){doneSeen.add(k);celebrate=true}
+  html.push(`<section class="page ${k}${done?' done':''}" aria-labelledby="h-${k}"><div class="page-head"><h2 id="h-${k}">${esc(name)}</h2><span class="count">${c} / ${n}</span><span class="ribbon">Page complete! Painting unlocked</span></div>
+   <div class="page-body"><figure class="mystery" style="margin:0"><img src="img/${paint}.webp" alt="${done?'The '+esc(name)+' painting':'A mystery painting, partly covered'}" loading="lazy">
+   <div class="tiles" style="grid-template-columns:repeat(${cols},1fr);grid-template-rows:repeat(${rows},1fr)" aria-hidden="true">${[...Array(cells)].map((_,j)=>`<i class="tile${open.has(j)?' open':''}">?</i>`).join('')}</div>
+   <figcaption>${done?'Mystery painting unlocked!':`Mystery painting: ${c} of ${n} tiles`}</figcaption></figure>
+   <ul class="stickers">${list.map((d,j)=>{const h=have[j],fresh=h&&!seen.has(d.href);if(h)seen.add(d.href);
+     return `<li class="stk${d.scene?' scene':''}${d.daddy?' gold':''}${h?'':' locked'}${fresh?' fresh':''}" style="--r:${((j*37)%13)-6}deg${fresh?';animation-delay:'+j*60+'ms':''}">
+      <span class="art"><img src="img/${d.art}.webp" alt="" loading="lazy"></span><small>${h?'':'<span class="sr">Not yet: </span>'}${esc(d.title)}</small></li>`}).join('')}</ul></div></section>`)});
+ pages.innerHTML=html.join('');
+ const name=D.USERS[me];document.getElementById('total').textContent=`${name} has ${got} of ${all} stickers`;
+ note.hidden=got>0;note.textContent=`No stickers yet for ${name}. Finish a whole deck in one go (every Star check right) to win the first one!`;
+ ls.set(seenKey,JSON.stringify([...seen]));ls.set(doneKey,JSON.stringify([...doneSeen]));if(celebrate)setTimeout(burst,400)}
+
+const pick=document.getElementById('whoPick');
+pick.innerHTML=KIDS.map(u=>`<label class="${u}"><input type="radio" name="who" value="${u}"><span>${esc(D.USERS[u])}</span></label>`).join('');
+pick.addEventListener('change',e=>{me=e.target.value;render();D.sync(me)});
+D.onChange(u=>{if(u===me)render()});
+fetch('index.html').then(r=>r.text()).then(t=>{decks=readHub(t);render();D.sync(me)})
+ .catch(()=>{const n=document.getElementById('note');n.hidden=false;n.textContent='The sticker book could not load the list of decks. Check the internet connection and reload.'});
+render();
+})();
+</script>
+<style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}</style>
+</body></html>

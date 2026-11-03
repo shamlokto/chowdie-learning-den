@@ -57,12 +57,44 @@
   .rules li::before{content:attr(data-i);position:absolute;left:0}
   .empty{color:var(--soft);font-weight:700}
   @media (max-width:640px){.kids{grid-template-columns:1fr}.kid{display:grid;grid-template-columns:auto 1fr;text-align:left;gap:0 .9rem;align-items:center}.kid .av{grid-row:span 3}.kid .av svg{width:72px;height:72px}.kid .bal{font-size:2rem}.rules{grid-template-columns:1fr}header h1{font-size:2rem}}
+
+  /* Treasure room: the chest's star pile follows the balance; treasures unlock with lifetime stars, so spending never takes one away */
+  .troom .vault{position:relative;container-type:inline-size;margin-top:.4rem}
+  .troom .vault>img.bg{display:block;width:100%;height:auto;border-radius:18px;border:3px solid var(--ink)}
+  .tr{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);text-align:center}
+  .tr img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 4px rgba(40,20,5,.45))}
+  .tr.locked img{filter:brightness(0) opacity(.28)}
+  .tr .lk{position:absolute;left:50%;top:100%;transform:translate(-50%,3px);white-space:nowrap;font:700 clamp(10px,1.5cqi,14px) 'Fredoka',sans-serif;background:rgba(255,253,246,.92);border:2px solid var(--ink);border-radius:999px;padding:0 .5rem}
+  .tr:not(.locked) .lk{background:#FFE58A}
+  .tr.new img{animation:trPop 1s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes trPop{0%{transform:scale(0) rotate(-20deg)}100%{transform:none}}
+  .tr.up .lk{top:auto;bottom:100%;transform:translate(-50%,-3px)}
+  @container (max-width:520px){.tr.locked .lk{display:none}.tr .lk{font-size:9px;border-width:1.5px;padding:0 .35rem}}
+  .tr.chest{z-index:2}
+  .tr.chest .front{position:absolute;inset:0;clip-path:polygon(0 50%,6% 50%,40% 59%,62% 60%,97% 56%,100% 56%,100% 100%,0 100%)}
+  .tr.chest svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  .tr.chest .lk{font-size:clamp(12px,1.9cqi,17px)}
+  .bunting{position:absolute;left:14%;top:4%;width:72%;height:auto;pointer-events:none}
+  .bunting.off{display:none}
+  .glint{position:absolute;width:1.2%;aspect-ratio:1;border-radius:50%;background:#FFF3B0;box-shadow:0 0 8px 3px rgba(255,215,90,.7);animation:glint 2.6s ease-in-out var(--d) infinite}
+  @keyframes glint{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+  .pile .tw{animation:glint 2.2s ease-in-out infinite}
+  .roomnote{font-weight:800;margin:.8rem 0 .3rem}
+  .bar{height:14px;border-radius:999px;border:2.5px solid var(--ink);background:#fff;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--sun),#FF9F1C);width:var(--p)}
+  .roomlinks{margin-top:.8rem;display:flex;gap:.6rem;flex-wrap:wrap}
+  @media (prefers-reduced-motion:reduce){.glint,.pile .tw,.tr.new img{animation:none}}
 </style>
 </head><body>
 <div class="wrap">
 <a class="back" href="index.html">← Back to the Den</a>
 <header><h1>⭐ Star Bank</h1><p>Stars earned by answering questions right on the first try.</p><span class="status" id="status">Loading…</span></header>
 <section class="kids" id="kids" aria-label="Star balances"></section>
+<section class="card troom" aria-labelledby="hRoom"><h2 class="sec" id="hRoom">🗝️ Treasure room</h2>
+<div class="who-pick" id="roomPick" role="radiogroup" aria-label="Whose treasure room"></div>
+<div class="vault" id="vault"><img class="bg" src="img/den/vault.webp" width="1280" height="720" alt="A secret treasure room among the tree roots, lit by lanterns"></div>
+<p class="roomnote" id="roomNote" role="status"></p><div class="bar" aria-hidden="true"><i id="roomBar"></i></div>
+<div class="roomlinks"><a class="back" href="stickers.html">📒 Sticker book</a></div></section>
 
 <section class="card" aria-labelledby="hRules"><h2 class="sec" id="hRules">How to earn stars</h2>
 <ul class="rules">
@@ -202,7 +234,40 @@ function draw(){
  $('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('gNote').value=b.dataset.n;$('gStars').value=b.dataset.s});
  const T={attempt:'Question',bonus:'Bonus',redeem:'Reward',gift:'Gift from a grown-up'};
  $('hist').innerHTML=data.recent.length?data.recent.slice(0,60).map(r=>`<li class="${esc(r.user)}"><span class="who">${esc(U[r.user]||r.user)}</span><span class="what">${esc(r.note||T[r.type]||'')}<small>${T[r.type]||''} · ${when(r.ts)}</small></span><span class="n ${r.stars>0?'pos':'neg'}">${r.stars>0?'+':''}${r.stars}</span></li>`).join('')
-  :'<li class="empty">No stars yet. Go answer some questions!</li>'}
+  :'<li class="empty">No stars yet. Go answer some questions!</li>';
+ drawRoom()}
+
+/* ---- Treasure room ---- */
+const TREASURES=[{at:25,id:'bunting',name:'party bunting'},
+ {at:50,id:'trophy',name:'golden trophy',x:200,y:447,w:92},
+ {at:100,id:'crown',name:'royal crown',x:1090,y:434,w:150},
+ {at:200,id:'telescope',name:'star telescope',x:975,y:598,w:112},
+ {at:400,id:'egg',name:'golden phoenix egg',x:635,y:374,w:140,up:1}];
+const pct=(v,t)=>(v/t*100).toFixed(2)+'%';
+let roomKid=pick;
+function pileSVG(n){let seed=7;const r=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+ const rim=x=>x<160?186+(x-24)*.32:x<250?230:230-(x-250)*.12;const H=Math.min(150,12+n*2.1),st=[];
+ for(let k=0;k<n;k++){const x=50+r()*300,hx=Math.max(0,1-((x-205)/165)**2),y=rim(x)+6-r()*H*hx,sz=20+r()*10;st.push([x,y,sz,r()<.15])}
+ st.sort((a,b)=>a[1]-b[1]);
+ const star=(x,y,R,tw)=>{let d='';for(let j=0;j<10;j++){const a=-Math.PI/2+j*Math.PI/5,q=j%2?R*.45:R;d+=(j?'L':'M')+(x+q*Math.cos(a)).toFixed(1)+' '+(y+q*Math.sin(a)).toFixed(1)}
+  return `<path d="${d}Z" fill="#FFC83D" stroke="#B57F00" stroke-width="2" stroke-linejoin="round"${tw?' class="tw"':''}/>`};
+ return `<svg viewBox="0 0 400 373" aria-hidden="true" class="pile">${st.map(([x,y,sz,tw])=>star(x,y,sz/2,tw)).join('')}</svg>`}
+function drawRoom(){const t=data.users[roomKid]||{balance:0,lifetime:0},life=t.lifetime||0,bal=Math.max(0,t.balance||0);
+ $('roomPick').innerHTML=KEYS.map(u=>`<label class="${u}"><input type="radio" name="room" value="${u}"${u===roomKid?' checked':''}><span>${U[u]}</span></label>`).join('');
+ $('roomPick').querySelectorAll('input').forEach(r=>r.onchange=()=>{roomKid=r.value;drawRoom()});
+ const key='denTreasures:'+roomKid;let had=[];try{had=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){}
+ const W=1280,H=720,v=$('vault');v.querySelectorAll('.tr,.bunting,.glint').forEach(e=>e.remove());const parts=[];
+ const bunt=TREASURES[0];parts.push(`<svg class="bunting${life>=bunt.at?'':' off'}" viewBox="0 0 900 90" aria-hidden="true"><path d="M0 10 Q450 80 900 10" fill="none" stroke="#6B4A2F" stroke-width="3"/>${[...Array(15)].map((_,k)=>{const x=30+k*60,y=10+70*(1-((x-450)/450)**2)*.88;return `<path d="M${x-18} ${y-4} L${x+18} ${y-4} L${x} ${y+30}Z" fill="${['#E8552B','#FFC83D','#2E9BE0','#2FA84F','#E83E6C'][k%5]}" stroke="#1F3A4A" stroke-width="2"/>`}).join('')}</svg>`);
+ TREASURES.slice(1).forEach(tr=>{const on=life>=tr.at,fresh=on&&!had.includes(tr.id);
+  parts.push(`<div class="tr${on?'':' locked'}${fresh?' new':''}${tr.up?' up':''}" style="--x:${pct(tr.x,W)};--b:${pct(H-tr.y,H)};--w:${pct(tr.w,W)}"><img src="img/den/${tr.id}.webp" alt="${on?'The '+tr.name:'A locked treasure'}" loading="lazy"><span class="lk">${on?tr.name.replace(/^./,c=>c.toUpperCase()):'🔒 '+tr.at+' ⭐'}</span></div>`)});
+ const n=bal?Math.min(70,Math.ceil(Math.sqrt(bal)*5)):0;
+ parts.push(`<div class="tr chest" style="--x:50%;--b:${pct(H-612,H)};--w:${pct(240,W)}"><img src="img/den/chest-open.webp" alt="">${pileSVG(n)}<img class="front" src="img/den/chest-open.webp" alt=""><span class="lk">⭐ ${bal} in the chest</span></div>`);
+ for(let k=0;k<Math.min(24,Math.floor(life/5));k++)parts.push(`<i class="glint" aria-hidden="true" style="left:${(12+((k*37)%76)).toFixed(1)}%;top:${(18+((k*53)%44)).toFixed(1)}%;--d:${(-k*.41).toFixed(2)}s"></i>`);
+ v.insertAdjacentHTML('beforeend',parts.join(''));
+ const next=TREASURES.find(tr=>life<tr.at),prev=[...TREASURES].reverse().find(tr=>life>=tr.at);
+ $('roomNote').textContent=`${U[roomKid]} has earned ${life} stars in all. `+(next?`Next treasure: the ${next.name} at ${next.at} stars (${next.at-life} to go).`:'Every treasure is unlocked. Amazing!');
+ const lo=prev?prev.at:0,hi=next?next.at:lo||1;$('roomBar').style.setProperty('--p',(next?Math.round((life-lo)/(hi-lo)*100):100)+'%');
+ try{localStorage.setItem(key,JSON.stringify(TREASURES.filter(tr=>life>=tr.at).map(tr=>tr.id)))}catch(e){}}
 let sign=-1;
 $('give').querySelectorAll('button[type=submit]').forEach(b=>b.onclick=()=>sign=+b.dataset.sign);
 $('give').onsubmit=async e=>{e.preventDefault();const m=$('gMsg'),n=Math.round(+$('gStars').value),note=$('gNote').value.trim(),pin=$('gPin').value.trim();
