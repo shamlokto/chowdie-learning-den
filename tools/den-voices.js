@@ -83,14 +83,21 @@ function shape(src, dst, {pitch, tempo}) {
   return run('ffmpeg', ['-loglevel', 'error', '-y', '-i', src, '-af', af, '-ac', '1', '-b:a', process.env.BITRATE || '40k', dst]);
 }
 
+/* The same key the player computes in the page (FNV-1a of who|text, base 36). */
+function denKey(who, s) { let h = 2166136261; const k = who + '|' + s; for (let n = 0; n < k.length; n++) { h ^= k.charCodeAt(n); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); }
+
 /* Play the deck headlessly with read-aloud on and record every line it would say. Timers run on a fake clock, so
    each quiz can be played through all its rounds (rounds move on after a delay) without real waiting. */
 async function capture(browser, deck) {
   const ctx = await browser.newContext(), p = await ctx.newPage();
   await p.route('https://script.google.com/**', r => r.abort());
   await p.route('https://cdn.jsdelivr.net/**', r => r.abort());
+  // lines go straight to the tool, and buttons that leave the deck (links, restarts) are blocked, so nothing is lost
+  const got = [], url = 'file://' + path.join(ROOT, deck);
+  await p.exposeFunction('__denPush', l => { got.push(l); });
+  await p.route(u => u.protocol === 'file:', r => (r.request().isNavigationRequest() && r.request().frame() === p.mainFrame() && r.request().url().split('#')[0] !== url) ? r.abort() : r.continue());
   await p.addInitScript(() => {
-    window.__denCap = []; window.SpeechSynthesisUtterance = function (t) { this.text = t; };
+    window.__denCap = {push: l => window.__denPush(l)}; window.SpeechSynthesisUtterance = function (t) { this.text = t; };
     const ss = window.speechSynthesis;
     for (const [k, v] of [['getVoices', () => []], ['speak', () => {}], ['cancel', () => {}]]) Object.defineProperty(ss, k, {value: v});
     HTMLMediaElement.prototype.play = function () { return Promise.resolve(); };
@@ -98,11 +105,11 @@ async function capture(browser, deck) {
   await p.clock.install();
   // a timer that throws (e.g. hanzi-writer without its CDN) stops runFor; skip past it and keep the clock going
   const tick = async ms => { for (let i = 0; i < 30; i++) { try { await p.clock.runFor(ms); return; } catch (e) {} } };
-  await p.goto('file://' + path.join(ROOT, deck));
+  await p.goto(url);
   await tick(500);
   await p.evaluate(() => { window.DEN_AUDIO = null; const b = document.getElementById('read'); if (b && b.getAttribute('aria-pressed') !== 'true') b.click(); });
   const n = await p.evaluate(() => document.querySelectorAll('#dots button').length);
-  const count = () => p.evaluate(() => window.__denCap.length);
+  const count = async () => got.length;
   for (let k = 0; k < n; k++) {
     await p.evaluate(k => document.querySelectorAll('#dots button')[k].click(), k);
     await tick(400);
@@ -116,7 +123,7 @@ async function capture(browser, deck) {
       if (await count() === before) break;
     }
   }
-  const keyed = await p.evaluate(() => window.__denCap.map(l => ({...l, k: denKey(l.who, l.s)})));
+  const keyed = got.map(l => ({...l, k: denKey(l.who, l.s)}));  // the page may have left the deck by now
   await ctx.close();
   const uniq = new Map(); for (const l of keyed) if (l.s) uniq.set(l.k, l);
   return [...uniq.values()];
