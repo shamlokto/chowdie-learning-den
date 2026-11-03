@@ -79,7 +79,8 @@ CSS = r"""
 .den-head h2{font-family:'Fredoka',sans-serif;font-size:clamp(1.4rem,3.4vw,1.9rem);color:#1F3A4A;margin:0}
 .den-head p{margin:0;font-weight:700;color:#475569}
 .den-scene{position:relative;container-type:inline-size}
-.den-scene>.den-bg{display:block;width:100%;height:auto;border:3px solid #1F3A4A;border-radius:24px;box-shadow:0 7px 0 #1F3A4A,0 26px 40px -18px rgba(31,58,74,.45);background:#E9DCC4}
+.den-scene picture{display:block}
+.den-scene .den-bg{display:block;width:100%;height:auto;border:3px solid #1F3A4A;border-radius:24px;box-shadow:0 7px 0 #1F3A4A,0 26px 40px -18px rgba(31,58,74,.45);background:#E9DCC4}
 .den-tall{display:none;max-width:460px;margin:0 auto}
 @media (max-width:640px){.den-wide{display:none}.den-tall{display:block}}
 .den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;z-index:2;-webkit-tap-highlight-color:transparent}
@@ -131,15 +132,104 @@ CSS = r"""
 .s-hole:hover .eyes,.s-hole:focus-visible .eyes{animation:none;transform:translateY(-6px)}
 @keyframes denBlink{0%,92%,100%{transform:scaleY(0)}95%{transform:scaleY(1)}}
 @keyframes denLook{0%,40%,100%{transform:translateX(0)}50%,60%{transform:translateX(-9px)}70%,80%{transform:translateX(9px)}}
+
+/* festivals (dates in the script below) */
+.den-fx{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:none;pointer-events:none;z-index:1}
+.den-fx img,.den-fx svg{display:block;width:100%;height:auto;filter:drop-shadow(0 3px 3px rgba(60,35,15,.3))}
+.den-fx.flat{transform:scaleY(.42);transform-origin:50% 100%;z-index:0}
+.den-fx.hang{transform-origin:50% calc(-1 * var(--hang));animation:denSwing 4.2s ease-in-out infinite}
+.den-fx.hang::before{content:"";position:absolute;left:50%;bottom:100%;height:var(--hang);border-left:2px solid #6B4A2F}
+.den-fx.float{animation:denFloat 3.4s ease-in-out infinite}
+@keyframes denFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6%)}}
+.den-map[data-fest="cny"] .fx-cny,.den-map[data-fest="raya"] .fx-raya,.den-map[data-fest="deepavali"] .fx-deepavali,.den-map[data-fest="midautumn"] .fx-midautumn,
+.den-map[data-fest="national"] .fx-national,.den-map[data-fest="xmas"] .fx-xmas,.den-map[data-fest="bday"] .fx-bday{display:block}
+.den-greet{display:inline-block;font:700 1rem 'Fredoka',sans-serif;color:#7A1F12;background:#FFE58A;border:2px solid #1F3A4A;border-radius:999px;padding:.05rem .8rem;box-shadow:0 2px 0 #1F3A4A}
+/* evening: night paintings in dark mode (or ?night=1), dimmer objects, fireflies instead of dust */
+@media (prefers-color-scheme:dark){.den-map:not(.den-day) .den-art img,.den-map:not(.den-day) .den-fx img{filter:brightness(.84) saturate(.92) drop-shadow(0 4px 3px rgba(0,0,0,.35))}
+ .den-map:not(.den-day) .den-mote{background:#E9FF8A;box-shadow:0 0 6px 3px rgba(210,255,120,.6);width:.8%}.den-map:not(.den-day) .den-bulb{width:2.8%}}
+.den-map.den-night .den-art img,.den-map.den-night .den-fx img{filter:brightness(.84) saturate(.92) drop-shadow(0 4px 3px rgba(0,0,0,.35))}
+.den-map.den-night .den-mote{background:#E9FF8A;box-shadow:0 0 6px 3px rgba(210,255,120,.6);width:.8%}.den-map.den-night .den-bulb{width:2.8%}
 @media (prefers-reduced-motion:reduce){.den-map *,.den-map *::before{animation:none!important;transition:none!important}.den-bulb{opacity:.7}.den-mote,.wisp,.ember,.spark,.note{display:none}}
 """
 
 JS = r"""
+
+/* Festival Den: decorations and a greeting during each festival (Singapore dates; lunar festivals need new dates each year).
+   Birthdays: fill in 'MM-DD' for each child. Preview with ?fest=cny|raya|deepavali|midautumn|national|xmas|bday and ?night=1 */
+(()=>{const map=document.querySelector('.den-map');if(!map)return;
+ const BIRTHDAYS={willis:'',megan:'',daddy:'',mommy:''},NAMES={willis:'Willis',megan:'Megan',daddy:'Daddy',mommy:'Mommy'};
+ const FEST=[{id:'cny',hi:'Happy Chinese New Year! 新年快乐!',days:['2026-02-17','2027-02-06','2028-01-26'],before:10,after:15},
+  {id:'raya',hi:'Selamat Hari Raya!',days:['2026-03-21','2027-03-10','2028-02-27'],before:7,after:10},
+  {id:'deepavali',hi:'Happy Deepavali!',days:['2026-11-08','2027-10-28'],before:7,after:3},
+  {id:'midautumn',hi:'Happy Mid-Autumn Festival! 中秋节快乐!',days:['2026-09-25','2027-09-15','2028-10-03'],before:7,after:2},
+  {id:'national',hi:'Happy National Day, Singapore!',md:'08-09',before:8,after:5},
+  {id:'xmas',hi:'Merry Christmas!',md:'12-25',before:24,after:1}];
+ const q=new URLSearchParams(location.search),now=new Date(),day=864e5,today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+ const at=s=>{const [y,m,d]=s.split('-').map(Number);return Date.UTC(y,m-1,d)};
+ let who=null;try{who=localStorage.getItem('denUser')}catch(e){}
+ let pick=null;const bd=BIRTHDAYS[who];
+ if(bd&&bd===String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'))pick={id:'bday',hi:`Happy birthday, ${NAMES[who]}!`};
+ if(!pick)pick=FEST.find(f=>(f.days||[now.getFullYear()+'-'+f.md]).some(d=>{const t=at(d);return today>=t-f.before*day&&today<=t+f.after*day}));
+ const want=q.get('fest');if(want)pick=FEST.find(f=>f.id===want)||(want==='bday'?{id:'bday',hi:'Happy birthday!'}:null);
+ if(pick){map.dataset.fest=pick.id;const p=map.querySelector('.den-head p');if(p)p.innerHTML=`<span class="den-greet">${pick.hi}</span> Tap a place to explore.`}
+ const n=q.get('night');if(n==='1'||n==='0'){map.classList.add(n==='1'?'den-night':'den-day');
+  map.querySelectorAll('picture source').forEach(s=>s.remove());map.querySelectorAll('img.den-bg').forEach(i=>i.src=n==='1'?i.dataset.night:i.dataset.day)}})();
 /* Den map: the subject spots use the hub's own data-jump-subject handler; Baddie's hole searches for the Baddie levels */
 (()=>{document.querySelectorAll('.den-map [data-den-search]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();
  const all=document.querySelector('.tab-btn[data-subject="all"]'),q=document.getElementById('deckSearchInput');if(all)all.click();
  if(q){q.value=a.dataset.denSearch;q.dispatchEvent(new Event('input'))}const c=document.querySelector('.controls-wrapper');if(c)c.scrollIntoView({behavior:'smooth'})}))})();
 """
+
+
+# Festival decorations: (festival, image or svg id, x, y, width, options). Shown only during that festival (see FEST in JS).
+CRESCENT = ('<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M58 12a38 38 0 1 0 30 58A30 30 0 1 1 58 12z" fill="#FFD54A" stroke="#C99A06" stroke-width="3"/>'
+            '<path d="M74 30l3 9h9l-7 6 3 9-8-5-8 5 3-9-7-6h9z" fill="#FFF3B0" stroke="#C99A06" stroke-width="2"/></svg>')
+def sgflags(n):
+    out = []
+    for k in range(n):
+        x = 20 + k * (680 / max(1, n - 1))
+        y = 8 + 34 * (1 - ((x - 360) / 340) ** 2)
+        out.append(f'<g transform="translate({x:.0f} {y:.0f})"><rect x="-15" y="0" width="30" height="11" fill="#EF3340"/><rect x="-15" y="11" width="30" height="11" fill="#fff"/>'
+                   f'<rect x="-15" y="0" width="30" height="22" fill="none" stroke="#1F3A4A" stroke-width="1.5"/>'
+                   '<circle cx="-9" cy="5.5" r="3.6" fill="#fff"/><circle cx="-7.8" cy="5.5" r="3.2" fill="#EF3340"/>'
+                   '<g fill="#fff"><circle cx="-4" cy="3" r=".9"/><circle cx="-1.5" cy="4.7" r=".9"/><circle cx="-2.4" cy="7.6" r=".9"/><circle cx="-5.6" cy="7.6" r=".9"/><circle cx="-6.5" cy="4.7" r=".9"/></g></g>')
+    return ('<svg viewBox="0 0 720 60" aria-hidden="true"><path d="M5 8 Q360 76 715 8" fill="none" stroke="#6B4A2F" stroke-width="2.5"/>' + "".join(out) + "</svg>")
+SVG_DECO = {"crescent": (CRESCENT, 1.0), "sgflags": (sgflags(15), 60 / 720)}
+FSIZES = {"cn/lantern": (173, 247), "cn/oranges": (239, 155), "cn/hongbao": (194, 164), "cn/cake": (165, 161), "cn/balloon": (190, 212),
+          "den/ketupat": (180, 386), "den/diya": (360, 95), "den/rangoli": (360, 371), "den/mooncake": (360, 240), "den/xmastree": (229, 331)}
+DECOR = {
+    "wide": [("cny", "cn/lantern", 585, 196, 74, {"hang": 36}), ("cny", "cn/lantern", 705, 196, 74, {"hang": 36}),
+             ("cny", "cn/oranges", 240, 708, 160, {}), ("cny", "cn/hongbao", 640, 420, 92, {}),
+             ("raya", "den/ketupat", 585, 232, 58, {"hang": 36}), ("raya", "den/ketupat", 705, 232, 58, {"hang": 36}), ("raya", "crescent", 545, 300, 92, {}),
+             ("deepavali", "den/diya", 640, 422, 200, {}), ("deepavali", "den/diya", 240, 708, 170, {}), ("deepavali", "den/rangoli", 1085, 714, 240, {"flat": 1}),
+             ("midautumn", "cn/lantern", 585, 196, 74, {"hang": 36}), ("midautumn", "cn/lantern", 705, 196, 74, {"hang": 36}), ("midautumn", "den/mooncake", 240, 708, 180, {}),
+             ("national", "sgflags", 640, 120, 720, {}),
+             ("xmas", "den/xmastree", 245, 712, 150, {}),
+             ("bday", "cn/cake", 640, 422, 110, {}), ("bday", "cn/balloon", 240, 660, 120, {"float": 1})],
+    "tall": [("cny", "cn/lantern", 255, 630, 54, {"hang": 12}), ("cny", "cn/lantern", 475, 645, 54, {"hang": 22}), ("cny", "cn/oranges", 640, 1274, 130, {}),
+             ("raya", "den/ketupat", 255, 650, 42, {"hang": 12}), ("raya", "den/ketupat", 475, 660, 42, {"hang": 22}), ("raya", "crescent", 640, 1268, 100, {}),
+             ("deepavali", "den/diya", 635, 1274, 160, {}),
+             ("midautumn", "cn/lantern", 255, 630, 54, {"hang": 12}), ("midautumn", "cn/lantern", 475, 645, 54, {"hang": 22}), ("midautumn", "den/mooncake", 635, 1274, 140, {}),
+             ("national", "sgflags", 352, 600, 470, {}),
+             ("xmas", "den/xmastree", 645, 1276, 105, {}),
+             ("bday", "cn/cake", 640, 1274, 95, {}), ("bday", "cn/balloon", 255, 660, 66, {"float": 1})],
+}
+def decor(kind, W, H):
+    out = []
+    for fest, art, x, y, w, opt in DECOR[kind]:
+        style = f"--x:{pct(x, W)};--b:{pct(H - y, H)};--w:{pct(w, W)}"
+        cls = f"den-fx fx-{fest}" + (" flat" if opt.get("flat") else "") + (" float" if opt.get("float") else "") + (" hang" if "hang" in opt else "")
+        if art in SVG_DECO:
+            inner, ratio = SVG_DECO[art]
+            ih_px = w * ratio
+        else:
+            iw, ih = FSIZES[art]
+            ih_px = w * ih / iw
+            inner = f'<img src="img/{art}.webp" width="{iw}" height="{ih}" alt="" loading="lazy" decoding="async">'
+        if "hang" in opt:
+            style += f";--hang:{opt['hang'] / ih_px * 100:.1f}%"
+        out.append(f'<span class="{cls}" style="{style}" aria-hidden="true">{inner}</span>')
+    return "\n".join(out)
 
 def pct(v, total):
     return f"{v / total * 100:.3f}%"
@@ -148,9 +238,11 @@ def scene(kind):
     L = LAYOUT[kind]
     W, H = L["W"], L["H"]
     out = [f'<div class="den-scene den-{kind}">',
-           f'<img class="den-bg" src="img/{L["bg"]}.webp" width="{W}" height="{H}" alt="{html.escape(L["alt"])}" loading="lazy" decoding="async">']
+           f'<picture><source media="(prefers-color-scheme: dark)" srcset="img/{L["bg"]}-night.webp">'
+           f'<img class="den-bg" src="img/{L["bg"]}.webp" data-day="img/{L["bg"]}.webp" data-night="img/{L["bg"]}-night.webp" width="{W}" height="{H}" alt="{html.escape(L["alt"])}" loading="lazy" decoding="async"></picture>']
     for n, (x, y) in enumerate(L["lights"]):
         out.append(f'<i class="den-bulb" style="--x:{pct(x, W)};--y:{pct(y, H)};--d:{-(n * 0.37) % 3.2:.2f}s" aria-hidden="true"></i>')
+    out.append(decor(kind, W, H))
     mx, my, mw, mh = L["motes"]
     for n in range(8):
         x = mx + mw * ((n * 0.618) % 1)
