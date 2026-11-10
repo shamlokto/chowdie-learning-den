@@ -36,6 +36,9 @@ SPOTS = {
     "magnifier":  ("Search",          "#search",      None,       "den/magnifier"),
 }
 
+# Spots whose decks were refreshed recently: their labels carry a small "UPDATED" badge. Empty the set to remove them.
+UPDATED = {"abacus", "desk", "lantern", "microscope", "hole"}
+
 # Image sizes of the objects (width, height) so each art box keeps its shape before the picture loads
 SIZES = {"den/abacus": (440, 422), "den/desk": (340, 302), "den/microscope": (316, 363), "den/nest": (440, 355),
          "cn/piano": (259, 275), "den/armchair": (440, 301), "cn/kopi": (224, 153), "den/chest": (278, 277),
@@ -119,6 +122,7 @@ body.subject-view .den-map{display:none}
 .crew-box .characters-section{margin:0}
 .crew-pics{position:absolute;left:17%;right:17%;top:14%;bottom:14%;display:grid;grid-template-columns:1fr 1fr;gap:3%;align-content:center}
 .crew-pics svg{display:block;width:100%;height:auto}
+.crew-pics .crew-pic{display:block;width:100%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 .den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .den-art{position:relative;display:block;transition:transform .18s ease,filter .18s ease}
 .den-art img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 3px rgba(60,35,15,.28))}
@@ -130,6 +134,7 @@ body.subject-view .den-map{display:none}
   background:#FFFDF6;border:2.5px solid #1F3A4A;border-radius:999px;padding:2px 11px 1px;box-shadow:0 2px 0 #1F3A4A;pointer-events:none;transition:transform .18s ease,background .18s}
 .den-tall .den-label{font-size:clamp(16px,4.3cqi,19px);padding:1px 8px 0;border-width:2px}
 .lab-above .den-label{top:auto;bottom:100%;transform:translate(-50%,-4px)}
+.den-upd{position:absolute;bottom:calc(100% - .35em);right:-.35em;font:800 .46em/1 'Fredoka',sans-serif;letter-spacing:.06em;color:#0E6B2C;background:#BDF5CB;border:2px solid #0E6B2C;border-radius:999px;padding:.22em .45em .18em;transform:rotate(6deg);box-shadow:0 2px 0 #0E6B2C;pointer-events:none}
 .lab-start .den-label{left:0;transform:translate(0,4px)}.lab-end .den-label{left:auto;right:0;transform:translate(0,4px)}
 .lab-above.lab-start .den-label,.lab-above.lab-end .den-label{transform:translate(0,-4px)}
 .lab-start:hover .den-label,.lab-start:focus-visible .den-label,.lab-end:hover .den-label,.lab-end:focus-visible .den-label{transform:translate(0,4px) scale(1.08)}
@@ -239,8 +244,9 @@ JS = r"""
  const copy=svg=>{const s=svg.cloneNode(true),sfx='-den'+(n++);s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
   s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
   s.setAttribute('aria-hidden','true');s.removeAttribute('role');s.removeAttribute('aria-label');return s};
- const faces=[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
- document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>box.appendChild(copy(f))));
+ const pics=['chowdie','wala','flamecharge','mommy'].map(c=>ov.querySelector('.char-card.char-'+c+' .char-paint')).filter(Boolean);
+ const faces=pics.length?pics:[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
+ document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>{if(f.tagName==='IMG'){const i=f.cloneNode();i.removeAttribute('loading');i.className='crew-pic';box.appendChild(i)}else box.appendChild(copy(f))}));
  const open=e=>{e.preventDefault();back=document.activeElement;ov.hidden=false;document.body.style.overflow='hidden';close.focus()};
  const shut=()=>{ov.hidden=true;document.body.style.overflow='';if(back)back.focus()};
  document.querySelectorAll('[data-den-crew]').forEach(a=>a.addEventListener('click',open));
@@ -334,7 +340,7 @@ def scene(kind):
             if "hang" in opt:
                 style += f";--hang:{opt['hang'] / (w * ih / iw) * 100:.1f}%"
         out.append(f'<a class="{cls}" href="{href}"{attrs} style="{style}"><span class="den-art">{art}</span>'
-                   f'<span class="den-label">{html.escape(label)}</span></a>')
+                   f'<span class="den-label">{html.escape(label)}' + ('<span class="den-upd">UPDATED</span>' if sid in UPDATED else '') + '</span></a>')
     out.append("</div>")
     return "\n".join(out)
 
