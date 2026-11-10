@@ -57,7 +57,7 @@
   .stk.fresh .art{animation:slap .6s cubic-bezier(.3,1.6,.5,1) both}
   @keyframes slap{0%{transform:scale(2.2) rotate(-18deg);opacity:0}100%{transform:none;opacity:1}}
   .maths{--c:#2563EB;--l:#DBEAFE}.english{--c:#DB2777;--l:#FCE7F3}.chinese{--c:#DC2626;--l:#FEE2E2}.science{--c:#059669;--l:#D1FAE5}
-  .spelling{--c:#EA580C;--l:#FFEDD5}.music{--c:#7C3AED;--l:#EDE9FE}.stories{--c:#0D9488;--l:#CCFBF1}
+  .spelling{--c:#EA580C;--l:#FFEDD5}.music{--c:#7C3AED;--l:#EDE9FE}.stories{--c:#0D9488;--l:#CCFBF1}.bible{--c:#B45309;--l:#FDEBD3}
   canvas.burst{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50}
   @media (prefers-reduced-motion:reduce){.tile,.stk.fresh .art{transition:none;animation:none}}
 </style></head>
@@ -78,7 +78,7 @@
 (()=>{
 const D=window.DenStars, KIDS=['willis','megan','daddy','mommy'];
 const PAGES={maths:['Maths','maths-classroom'],english:['English','english-library'],chinese:['华文 Chinese','chinese-garden'],science:['Science','sci-garden'],
- spelling:['Spelling & 听写','spelling-nest'],music:['Music Theory','music-stage'],stories:['Stories','stories-nook']};
+ spelling:['Spelling & 听写','spelling-nest'],music:['Music Theory','music-stage'],stories:['Stories','stories-nook'],bible:['Bible Stories','bible-banner']};
 const POOL={
  maths:['den/abacus','obj/clock','obj/ruler','obj/apple','obj/strawberry','obj/cookie','obj/ball','obj/box','cn/oranges','cn/eggs','cn/cake','cn/present','cn/plate','cn/cup','cn/balloon','obj/bottle','cn/teddy','cn/spoon'],
  english:['obj/book','obj/openbook','obj/pencil','obj/paper','obj/eraser','obj/bag','obj/kite','obj/hat','obj/umbrella','obj/school','obj/chair','den/desk','obj/desk'],
@@ -87,8 +87,9 @@ const POOL={
  science:['sci/an-butterfly','sci/plant-flower','sci/an-frog','sci/mic-scope','sci/body-heart','sci/eco-hornbill','sci/an-turtle','sci/plant-tree','sci/an-penguin','sci/eco-owl','sci/an-whale','sci/mic-mushroom'],
  spelling:['den/nest','obj/pencil','obj/paper','cn/candle','obj/openbook'],
  music:['cn/piano','cn/violin','sci/an-bird','cn/balloon','cn/present','cn/liondance','cn/fireworks'],
- stories:['den/armchair','obj/book']};
-const SCENE={eagle:'peaksky',friend:'park',germ:'clinic',leak:'island',money:'market',talent:'stage',teachers:'owltree',trombone:'gardens',write:'raintree',concert:'hall',dash:'track',bread:'loaf'};
+ stories:['den/armchair','obj/book'],
+ bible:['den/bible-stand','den/scroll']};
+const SCENE={eagle:'peaksky',friend:'park',germ:'clinic',leak:'island',money:'market',talent:'stage',teachers:'owltree',trombone:'gardens',write:'raintree',concert:'hall',dash:'track',bread:'loaf',bike:'glide'};
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let decks=null, me=KIDS.includes(ls.get('denUser'))?ls.get('denUser'):'willis';
