@@ -38,6 +38,8 @@ SPOTS = {
 
 # Spots whose decks were refreshed recently: their labels carry a small "UPDATED" badge. Empty the set to remove them.
 UPDATED = {"abacus", "desk", "lantern", "microscope", "hole"}
+# Spots that are brand new: a "NEW!" badge (like the NEW! sticker on the hub cards) and a soft glow.
+NEW = {"willis"}
 
 # Image sizes of the objects (width, height) so each art box keeps its shape before the picture loads
 SIZES = {"den/abacus": (440, 422), "den/desk": (340, 302), "den/microscope": (316, 363), "den/nest": (440, 355),
@@ -134,6 +136,9 @@ body.subject-view .den-map{display:none}
   background:#FFFDF6;border:2.5px solid #1F3A4A;border-radius:999px;padding:2px 11px 1px;box-shadow:0 2px 0 #1F3A4A;pointer-events:none;transition:transform .18s ease,background .18s}
 .den-tall .den-label{font-size:clamp(16px,4.3cqi,19px);padding:1px 8px 0;border-width:2px}
 .lab-above .den-label{top:auto;bottom:100%;transform:translate(-50%,-4px)}
+.den-upd.den-new{color:#B3243A;background:#FFC83D;border-color:#B3243A;box-shadow:0 2px 0 #B3243A;animation:newWiggle 2.4s ease-in-out infinite}
+.den-spot.is-new .den-art img{animation:denNewGlow 2.2s ease-in-out infinite}
+@keyframes denNewGlow{0%,100%{filter:drop-shadow(0 4px 3px rgba(60,35,15,.28))}50%{filter:drop-shadow(0 0 8px #FFE58A) drop-shadow(0 0 14px #FFC83D)}}
 .den-upd{position:absolute;bottom:calc(100% - .35em);right:-.35em;font:800 .46em/1 'Fredoka',sans-serif;letter-spacing:.06em;color:#0E6B2C;background:#BDF5CB;border:2px solid #0E6B2C;border-radius:999px;padding:.22em .45em .18em;transform:rotate(6deg);box-shadow:0 2px 0 #0E6B2C;pointer-events:none}
 .lab-start .den-label{left:0;transform:translate(0,4px)}.lab-end .den-label{left:auto;right:0;transform:translate(0,4px)}
 .lab-above.lab-start .den-label,.lab-above.lab-end .den-label{transform:translate(0,-4px)}
@@ -325,7 +330,7 @@ def scene(kind):
         out.append(f'<i class="den-mote" style="--x:{pct(x, W)};--y:{pct(y, H)};--d:{-n * 1.1:.1f}s" aria-hidden="true"></i>')
     for sid, x, y, w, opt in L["spots"]:
         label, href, subject, img = SPOTS[sid]
-        cls = f"den-spot s-{sid}" + (" lab-above" if opt.get("lab") == "above" else "") + (" hang" if "hang" in opt and sid != "lantern" else "") + (f" lab-{opt['edge']}" if "edge" in opt else "")
+        cls = f"den-spot s-{sid}" + (" is-new" if sid in NEW else "") + (" lab-above" if opt.get("lab") == "above" else "") + (" hang" if "hang" in opt and sid != "lantern" else "") + (f" lab-{opt['edge']}" if "edge" in opt else "")
         attrs = f' data-jump-subject="{subject}"' if subject else ""
         if sid == "hole":
             attrs += ' data-den-search="Baddie"'
@@ -340,7 +345,7 @@ def scene(kind):
             if "hang" in opt:
                 style += f";--hang:{opt['hang'] / (w * ih / iw) * 100:.1f}%"
         out.append(f'<a class="{cls}" href="{href}"{attrs} style="{style}"><span class="den-art">{art}</span>'
-                   f'<span class="den-label">{html.escape(label)}' + ('<span class="den-upd">UPDATED</span>' if sid in UPDATED else '') + '</span></a>')
+                   f'<span class="den-label">{html.escape(label)}' + ('<span class="den-upd">UPDATED</span>' if sid in UPDATED else '') + ('<span class="den-upd den-new">NEW!</span>' if sid in NEW else '') + '</span></a>')
     out.append("</div>")
     return "\n".join(out)
 
