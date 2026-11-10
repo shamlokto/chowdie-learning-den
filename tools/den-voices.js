@@ -31,6 +31,8 @@ const CAST = {
   eagle:  {voice: 'helios', pitch: 0.97, tempo: 1.0},
   baddie: {voice: 'zagan',  pitch: 0.86, tempo: 0.92},
   daddy:  {voice: 'atlas',  pitch: 0.78, tempo: 0.88},  // Baddie Daddy keeps his big funny growl
+  abraham:{voice: 'helios', pitch: 0.9,  tempo: 0.92},  // Bible stories: Abraham, an old, gentle voice
+  sarah:  {voice: 'ara',    pitch: 0.95, tempo: 0.95},  // Bible stories: Sarah
 };
 const FALLBACK = 'otter';
 
