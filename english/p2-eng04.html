@@ -217,6 +217,9 @@ document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findInd
 document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
 
 /* ---------- deck ---------- */
+/* painted pictures (deck refresh): pic = a cut-out standing on (x, y); tile = a framed scene */
+const pic=(n,x,y,w,h=w)=>`<image href="../img/${n}.webp" x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+let tileN=0;const tile=(n,x,y,w,h)=>{const id='dtile'+(tileN++);return `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14"/></clipPath></defs><image href="../img/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="none" stroke="${C.ink}" stroke-width="3"/>`};
 /* shared English helpers: word tokens, sentences, speech bubbles */
 const CW=11.5; // approx px per char at 20px Baloo
 function measure(w,size=20){return w.length*CW*size/20+size*.9}
@@ -447,7 +450,7 @@ const S=[
 {part:'learn',title:'Words that stand in',say:'Hi! Listen: "Mei likes Mei\'s dog. Mei walks Mei\'s dog every day." Too many Meis! <b>Pronouns</b> stand in for nouns: "Mei likes <b>her</b> dog. <b>She</b> walks <b>it</b> every day." Much better!',
  draw:()=>G(box(40,50,560,80,'#FDE7E5',16)+prose(60,84,'Mei likes Mei\'s dog. Mei walks Mei\'s dog every day.',50,'lab',26),'a-fade',.1)+G(arrow(320,140,320,175,C.accent),'a-fade',.8)+
   G(box(40,190,560,80,'#E6F6EA',16)+prose(60,224,'Mei likes her dog. She walks it every day.',50,'lab',26),'a-pop',1.1)+G(tagPill(60,236,'her',C.grape,60)+tagPill(130,236,'She',C.grape,60)+tagPill(200,236,'it',C.grape,50)+T(270,256,'← pronouns','sm mut'),'a-pop',1.6)+
-  G(T(320,330,'pronoun = a word that stands in for a noun','lab mid acc'),'a-fade',2)+otter(570,395,.5)},
+  G(T(320,330,'pronoun = a word that stands in for a noun','lab mid acc'),'a-fade',2)+otter(570,395,.5)+G(pic('sci/kid-girl',70,398,58,80)+pic('sci/an-dog',140,398,84,58),'a-fade',.4)},
 
 {part:'learn',title:'I, you, he, she, it, we, they',say:'These pronouns are the <b>doers</b> in a sentence: <b>I</b> run, <b>you</b> run, <b>he</b> runs, <b>she</b> runs, <b>it</b> runs, <b>we</b> run, <b>they</b> run. Use <b>he</b> for a boy, <b>she</b> for a girl, <b>it</b> for a thing or animal, and <b>they</b> for more than one.',
  draw:()=>[['I',`<text x="0" y="8" class="h mid">me!</text>`],['you',arrow(-20,-10,20,-10)],['he',boyI(0,22)],['she',girlI(0,22)],['it',ballI(0,0,1.2)],['we',boyI(-16,22,C.leaf)+girlI(16,22,C.grape)],['they',boyI(-20,22)+girlI(0,22)+boyI(20,22,C.sun)]]
@@ -464,7 +467,7 @@ const S=[
 
 {part:'learn',title:'Myself, yourself, themselves',say:'<b>Reflexive</b> pronouns bounce back to the doer: "I hurt <b>myself</b>." "She made the cake <b>herself</b>." "The children dressed <b>themselves</b>." They end in <b>-self</b> (one) or <b>-selves</b> (more than one).',
  draw:()=>[['I','myself'],['you','yourself / yourselves'],['he','himself'],['she','herself'],['it','itself'],['we','ourselves'],['they','themselves']].map(([a,b],k)=>G(T(130,80+k*38,a,'lab end')+arrow(150,74+k*38,200,74+k*38,C.accent)+T(215,80+k*38,b,'lab'),'a-fade',.1+k*.12)).join('')+
-  G(`<path d="M470 110 q60 -40 60 20 q0 60 -60 20" fill="none" stroke="${C.accent}" stroke-width="4"/>`+arrow(470,150,455,145,C.accent)+girlI(440,190)+T(500,250,'She made it','lab mid')+T(500,276,'herself.','h mid acc'),'a-fade',1.2)},
+  G(`<path d="M470 110 q60 -40 60 20 q0 60 -60 20" fill="none" stroke="${C.accent}" stroke-width="4"/>`+arrow(470,150,455,145,C.accent)+pic('obj/claypot',522,228,66,144)+T(500,250,'She made it','lab mid')+T(500,276,'herself.','h mid acc'),'a-fade',1.2)},
 
 {part:'learn',title:'This, that, these, those',say:'<b>This</b> and <b>these</b> point to things <b>near</b> you. <b>That</b> and <b>those</b> point to things <b>far</b> away. One thing: this / that. Many: these / those. "<b>This</b> apple is mine. <b>Those</b> apples are yours."',
  draw:()=>T(170,50,'near','h mid acc')+T(470,50,'far','h mid acc')+`<line x1="320" y1="40" x2="320" y2="300" stroke="${C.line}" stroke-width="3" stroke-dasharray="6 6"/>`+
@@ -492,20 +495,20 @@ const S=[
 
 {part:'try',title:'What kind of sentence?',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const Q=[['Please close the door','Command','.'],['Where is my bag','Question','?'],['What a beautiful rainbow','Exclamation','!'],['My brother is seven years old','Statement','.'],['Do you like chicken rice','Question','?'],['Sit down quietly','Command','.'],['I can\'t believe we won','Exclamation','!']];let r=0,busy=false;
-  const show=()=>{busy=false;const [s,kind,m]=Q[r];a.q('.play').innerHTML=T(320,40,`${r+1} of 7`,'sm mid mut')+box(40,100,560,90,'#fff',16)+T(320,156,s+' ___','h mid')+otter(320,392,.7);
-   a.ui.innerHTML='';['Statement','Question','Command','Exclamation'].forEach(o=>a.btn(o,b=>{if(busy)return;if(o===kind){busy=true;b.classList.add('ok');a.q('.play').innerHTML=T(320,40,`${r+1} of 7`,'sm mid mut')+box(40,100,560,90,'#E6F6EA',16)+T(320,156,s+m,'h mid')+otter(320,392,.7);r++;if(r<Q.length){a.confetti();a.say(`A <b>${kind.toLowerCase()}</b>, so it ends with <b>${m}</b>`);a.later(show,1600)}else a.win(`A <b>${kind.toLowerCase()}</b>, so it ends with <b>${m}</b> Sentence sorter!`)}else{b.classList.add('no');a.say('Does it tell, ask, give an order, or show strong feeling?')}},'go'));
+  const show=()=>{busy=false;const [s,kind,m]=Q[r];a.q('.play').innerHTML=T(320,40,`${r+1} of 7`,'sm mid mut')+box(40,100,560,90,'#fff',16)+T(320,156,s+' ___','h mid')+otter(320,392,.7)+(/door/.test(s)?pic('obj/door',520,392,92,121):'');
+   a.ui.innerHTML='';['Statement','Question','Command','Exclamation'].forEach(o=>a.btn(o,b=>{if(busy)return;if(o===kind){busy=true;b.classList.add('ok');a.q('.play').innerHTML=T(320,40,`${r+1} of 7`,'sm mid mut')+box(40,100,560,90,'#E6F6EA',16)+T(320,156,s+m,'h mid')+otter(320,392,.7)+(/door/.test(s)?pic('obj/door',520,392,92,121):'');r++;if(r<Q.length){a.confetti();a.say(`A <b>${kind.toLowerCase()}</b>, so it ends with <b>${m}</b>`);a.later(show,1600)}else a.win(`A <b>${kind.toLowerCase()}</b>, so it ends with <b>${m}</b> Sentence sorter!`)}else{b.classList.add('no');a.say('Does it tell, ask, give an order, or show strong feeling?')}},'go'));
    a.say('What kind of sentence is this? Tap the type.')};show();}},
 
 {part:'check',title:'Star check 1',say:'Fill in: "Hana lost ___ umbrella on the bus."',
- draw:()=>prose(40,130,'Hana lost ______ umbrella on the bus.',36,'h',38)+girlI(320,300,C.grape),
+ draw:()=>prose(40,130,'Hana lost ______ umbrella on the bus.',36,'h',38)+pic('cn/bus',180,340,230,104)+girlI(360,320,C.grape)+pic('obj/umbrella',450,340,88,78),
  quiz:{options:['she','her','hers'],answer:'her',why:'Before a noun (umbrella) we use <b>her</b>. "Hers" stands alone; "she" is the doer.',hint:'The word comes right before "umbrella". Which form goes before a noun?'}},
 
 {part:'check',title:'Star check 2',say:'Fill in: "The teacher gave ___ some homework." (Zack and me)',
- draw:()=>prose(40,130,'The teacher gave ______ some homework.',36,'h',38)+boyI(280,300)+boyI(360,300,C.leaf),
+ draw:()=>prose(40,130,'The teacher gave ______ some homework.',36,'h',38)+pic('cn/teacher',190,350,80,150)+boyI(300,320)+boyI(380,320,C.leaf),
  quiz:{options:['we','us','they'],answer:'us',why:'Zack and I are <b>receiving</b> the homework, so we use <b>us</b>.',hint:'Are they doing the giving or receiving it?'}},
 
 {part:'check',title:'Star check 3',say:'Fill in: "I wanted to play outside, ___ it started to rain."',
- draw:()=>prose(40,130,'I wanted to play outside, ______ it started to rain.',40,'h',38)+`<path d="M420 230 q40 -30 80 0 q40 -30 60 10" fill="none" stroke="${C.sky}" stroke-width="4"/>`+[0,1,2].map(k=>`<line x1="${450+k*30}" y1="250" x2="${445+k*30}" y2="275" stroke="${C.sky}" stroke-width="3" stroke-linecap="round"/>`).join(''),
+ draw:()=>prose(40,130,'I wanted to play outside, ______ it started to rain.',40,'h',38)+tile('megan/rain',380,210,220,124),
  quiz:{options:['and','but','because'],answer:'but',why:'The rain is a <b>difference</b> from what I wanted, so <b>but</b>.',hint:'Did the rain help my plan, or get in the way?'}},
 
 {part:'check',title:'Star check 4',say:'Which sentence is a <b>command</b>?',
