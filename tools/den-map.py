@@ -122,6 +122,7 @@ body.subject-view .den-map{display:none}
 .crew-box .characters-section{margin:0}
 .crew-pics{position:absolute;left:17%;right:17%;top:14%;bottom:14%;display:grid;grid-template-columns:1fr 1fr;gap:3%;align-content:center}
 .crew-pics svg{display:block;width:100%;height:auto}
+.crew-pics .crew-pic{display:block;width:100%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 .den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .den-art{position:relative;display:block;transition:transform .18s ease,filter .18s ease}
 .den-art img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 3px rgba(60,35,15,.28))}
@@ -243,8 +244,9 @@ JS = r"""
  const copy=svg=>{const s=svg.cloneNode(true),sfx='-den'+(n++);s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
   s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
   s.setAttribute('aria-hidden','true');s.removeAttribute('role');s.removeAttribute('aria-label');return s};
- const faces=[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
- document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>box.appendChild(copy(f))));
+ const pics=['chowdie','wala','flamecharge','mommy'].map(c=>ov.querySelector('.char-card.char-'+c+' .char-paint')).filter(Boolean);
+ const faces=pics.length?pics:[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
+ document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>{if(f.tagName==='IMG'){const i=f.cloneNode();i.removeAttribute('loading');i.className='crew-pic';box.appendChild(i)}else box.appendChild(copy(f))}));
  const open=e=>{e.preventDefault();back=document.activeElement;ov.hidden=false;document.body.style.overflow='hidden';close.focus()};
  const shut=()=>{ov.hidden=true;document.body.style.overflow='';if(back)back.focus()};
  document.querySelectorAll('[data-den-crew]').forEach(a=>a.addEventListener('click',open));

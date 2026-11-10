@@ -871,6 +871,13 @@
       .hero-wrapper{padding-bottom:8rem}
     }
 </style>
+<style id="crew-paint-css">
+/* Painted crew portraits (img/crew/), drawn from each character's own SVG design; the SVG stays as a fallback */
+.char-avatar.painted{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#FFFDF6 0 55%,#F1E4C8 100%)}
+.char-avatar.painted>svg{display:none}
+.char-avatar .char-paint,.who-av .who-paint{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 14%;border-radius:50%}
+.who-av:has(.who-paint){border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,#FFFDF6 0 55%,#F1E4C8 100%)}
+</style>
 <style id="new-sticker-css">
 /* "NEW" sticker for the newest storybook card, a small NEW tag on the Stories tab, and a green "UPDATED" sticker for refreshed decks */
 .new-sticker{align-self:flex-start;display:inline-block;margin:0 0 .5rem;padding:.2rem .75rem .12rem;border-radius:999px;background:#FFC83D;color:#B3243A;border:2px solid #B3243A;box-shadow:0 3px 0 #B3243A;font-family:Fredoka,"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.06em;transform:rotate(-4deg);animation:newWiggle 2.4s ease-in-out infinite}
@@ -917,7 +924,7 @@
 <div class="crew-overlay" id="crewOverlay" role="dialog" aria-modal="true" aria-labelledby="crewTitle" hidden><div class="crew-box"><button type="button" class="crew-close" id="crewClose">✕ Close</button>
 <div class="characters-section">
 <div class="section-BannerTitle"><h2 id="crewTitle">🐾 Meet your learning crew!</h2></div>
-<div class="char-grid" id="charGrid"><div class="char-card char-chowdie"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Chowdie"><defs><clipPath id="cp-otter"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FEF3C7"/><g clip-path="url(#cp-otter)"><g transform="translate(50 126) scale(0.95)"><g class="">
+<div class="char-grid" id="charGrid"><div class="char-card char-chowdie"><div class="char-avatar painted"><img class="char-paint" src="img/crew/chowdie.webp" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 100 100" role="img" aria-label="Chowdie"><defs><clipPath id="cp-otter"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FEF3C7"/><g clip-path="url(#cp-otter)"><g transform="translate(50 126) scale(0.95)"><g class="">
   <path d="M-30 -10 q-40 6 -44 -24 q14 14 40 4z" fill="#82552F" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <ellipse cx="0" cy="-36" rx="34" ry="38" fill="#9A6A45" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="0" cy="-30" rx="21" ry="27" fill="#F2DDBE"/>
@@ -932,7 +939,7 @@
   <path d="M-6 -81 q6 -5 12 0 q-6 7 -12 0z" fill="#1F3A4A"/>
   <path d="M-6 -71 q6 6 12 0" stroke="#1F3A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   <path d="M-12 -78 l-18 -3 M-12 -75 l-18 2 M12 -78 l18 -3 M12 -75 l18 2" stroke="#1F3A4A" stroke-width="1.5" stroke-linecap="round"/>
-  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#F59E0B" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Chowdie</b><span class="designer-pill">Your guide</span></div><span class="char-desc">An otter and your guide in every deck. His name comes from Chris + Claudie.</span></div></div><div class="char-card char-wala"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Wala the Koala"><defs><clipPath id="cp-wala"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#E0F2FE"/><g clip-path="url(#cp-wala)"><g transform="translate(50 130) scale(0.86)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#F59E0B" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Chowdie</b><span class="designer-pill">Your guide</span></div><span class="char-desc">An otter and your guide in every deck. His name comes from Chris + Claudie.</span></div></div><div class="char-card char-wala"><div class="char-avatar painted"><img class="char-paint" src="img/crew/wala.webp" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 100 100" role="img" aria-label="Wala the Koala"><defs><clipPath id="cp-wala"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#E0F2FE"/><g clip-path="url(#cp-wala)"><g transform="translate(50 130) scale(0.86)"><g class="">
   <ellipse cx="0" cy="-34" rx="33" ry="36" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="0" cy="-28" rx="20" ry="25" fill="#C9D0D6"/>
   <ellipse cx="-16" cy="-2" rx="13" ry="7" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/><ellipse cx="16" cy="-2" rx="13" ry="7" fill="#9FA9B3" stroke="#1F3A4A" stroke-width="3"/>
@@ -948,7 +955,7 @@
   <ellipse cx="0" cy="-80" rx="10" ry="12" fill="#3B3F4A" stroke="#1F3A4A" stroke-width="2"/><ellipse cx="-3" cy="-85" rx="3" ry="2" fill="#fff" opacity=".5"/>
   <path d="M-6 -64 q6 5 12 0" stroke="#1F3A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   <g transform="translate(26 -118) rotate(20)"><path d="M0 0 l-12 -8 v16z M0 0 l12 -8 v16z" fill="#E0574F" stroke="#1F3A4A" stroke-width="2" stroke-linejoin="round"/><circle r="4" fill="#E0574F" stroke="#1F3A4A" stroke-width="2"/></g>
-  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#38BDF8" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Wala the Koala</b><span class="designer-pill">By Willis</span></div><span class="char-desc">Chowdie's best friend. She teaches Chinese and is learning English. Designed by <b>Willis</b>.</span></div></div><div class="char-card char-flamecharge"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Flamecharge the Phoenix"><defs><clipPath id="cp-flame"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FFEDD5"/><g clip-path="url(#cp-flame)"><g transform="translate(50 130) scale(0.8)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#38BDF8" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Wala the Koala</b><span class="designer-pill">By Willis</span></div><span class="char-desc">Chowdie's best friend. She teaches Chinese and is learning English. Designed by <b>Willis</b>.</span></div></div><div class="char-card char-flamecharge"><div class="char-avatar painted"><img class="char-paint" src="img/crew/flamecharge.webp" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 100 100" role="img" aria-label="Flamecharge the Phoenix"><defs><clipPath id="cp-flame"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FFEDD5"/><g clip-path="url(#cp-flame)"><g transform="translate(50 130) scale(0.8)"><g class="">
   <g class=""><path d="M-14 -12 q-46 12 -64 -10 q22 4 30 -10 q-26 -6 -32 -30 q22 18 36 10 q-12 -14 -8 -34 q14 28 34 38z" fill="#E8552B" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <path d="M-20 -16 q-30 6 -44 -8 q18 2 26 -10 q-14 -8 -16 -22 q14 14 30 14z" fill="#FFC83D"/></g>
   <path d="M0 -76 q34 2 32 38 q-2 36 -32 38 q-30 -2 -32 -38 q-2 -36 32 -38z" fill="#FF8A3D" stroke="#1F3A4A" stroke-width="3"/>
@@ -971,7 +978,7 @@
   <path d="M-9 -88 q9 -6 18 0 q2 10 -4 18 q-3 4 -5 9 q-2 -5 -5 -9 q-6 -8 -4 -18z" fill="#FFB020" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
   <path d="M-4 -70 q4 3 8 0 q-2 5 -4 9 q-2 -4 -4 -9z" fill="#B45309"/>
   <path d="M-5 -84 h1 M4 -84 h1" stroke="#1F3A4A" stroke-width="2.4" stroke-linecap="round"/>
-  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#EA580C" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Flamecharge the Phoenix</b><span class="designer-pill">By Megan</span></div><span class="char-desc">A fiery phoenix-eagle who is a spelling and 听写 champion. Her feathers burn brightest when you spell a word perfectly! Designed by <b>Megan</b>. Find her in the <a href="#spelling" data-jump-subject="spelling">Spelling Nest</a>.</span></div></div><div class="char-card char-flame"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Flame the Eagle"><defs><clipPath id="cp-eagle"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FEF9C3"/><g clip-path="url(#cp-eagle)"><g transform="translate(50 132) scale(0.78)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#EA580C" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Flamecharge the Phoenix</b><span class="designer-pill">By Megan</span></div><span class="char-desc">A fiery phoenix-eagle who is a spelling and 听写 champion. Her feathers burn brightest when you spell a word perfectly! Designed by <b>Megan</b>. Find her in the <a href="#spelling" data-jump-subject="spelling">Spelling Nest</a>.</span></div></div><div class="char-card char-flame"><div class="char-avatar painted"><img class="char-paint" src="img/crew/flame.webp" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 100 100" role="img" aria-label="Flame the Eagle"><defs><clipPath id="cp-eagle"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#FEF9C3"/><g clip-path="url(#cp-eagle)"><g transform="translate(50 132) scale(0.78)"><g class="">
   <path d="M-16 -10 l-20 22 l10 -2 l2 10 l8 -8 l6 8 l4 -10 l8 4z" fill="#FFFFFF" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <path d="M0 -78 q34 2 34 40 q-2 38 -34 40 q-32 -2 -34 -40 q0 -38 34 -40z" fill="#7A4A2A" stroke="#1F3A4A" stroke-width="3"/>
   <path d="M0 -66 q18 2 18 28 q-2 26 -18 28 q-16 -2 -18 -28 q0 -26 18 -28z" fill="#9A6440"/>
@@ -990,7 +997,7 @@
   <path d="M-21 -109 l13 4 M21 -109 l-13 4" stroke="#1F3A4A" stroke-width="4" stroke-linecap="round"/>
   <path d="M-10 -94 q10 -6 20 0 q6 12 -2 22 q-3 4 -4 9 q-4 -6 -8 -10 q-8 -8 -6 -21z" fill="#F5B700" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/>
   <path d="M-4 -74 q4 3 8 1 q-2 6 -3 10 q-3 -5 -5 -11z" fill="#C88A00"/>
-  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#EAB308" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Flame the Eagle</b><span class="designer-pill">By Willis</span></div><span class="char-desc">Flamecharge's best friend and guardian of the Sky Gate. He sets tough tests in <a href="#stories" data-jump-subject="stories">Flame the Eagle Adventure</a>. Designed by <b>Willis</b>.</span></div></div><div class="char-card char-mommy"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Mommy the Elephant"><defs><clipPath id="cp-mommy"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#EDE9FE"/><g clip-path="url(#cp-mommy)"><g transform="translate(50 132) scale(0.78)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#EAB308" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Flame the Eagle</b><span class="designer-pill">By Willis</span></div><span class="char-desc">Flamecharge's best friend and guardian of the Sky Gate. He sets tough tests in <a href="#stories" data-jump-subject="stories">Flame the Eagle Adventure</a>. Designed by <b>Willis</b>.</span></div></div><div class="char-card char-mommy"><div class="char-avatar painted"><img class="char-paint" src="img/crew/mommy.webp" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 100 100" role="img" aria-label="Mommy the Elephant"><defs><clipPath id="cp-mommy"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#EDE9FE"/><g clip-path="url(#cp-mommy)"><g transform="translate(50 132) scale(0.78)"><g class="">
   <path d="M30 -24 q16 2 18 16" stroke="#1F3A4A" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M46 -10 l4 6 l-7 -1z" fill="#1F3A4A"/>
   <ellipse cx="0" cy="-36" rx="37" ry="37" fill="#B9B3D9" stroke="#1F3A4A" stroke-width="3"/>
   <ellipse cx="0" cy="-30" rx="22" ry="24" fill="#CFCAE6"/>
@@ -1018,7 +1025,7 @@
   
   <!-- pink bow with a little gold treble-clef charm -->
   <g transform="translate(20 -124) rotate(18)"><path d="M0 0 q-16 -14 -20 0 q4 14 20 0z M0 0 q16 -14 20 0 q-4 14 -20 0z" fill="#E5577A" stroke="#1F3A4A" stroke-width="2.5" stroke-linejoin="round"/><circle r="5" fill="#FFD43B" stroke="#1F3A4A" stroke-width="2"/><path d="M0 -3 q3 0 2 3 q-2 3 -3 0 v6" stroke="#1F3A4A" stroke-width="1.2" fill="none"/></g>
-  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#8B5CF6" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Mommy the Elephant</b><span class="designer-pill">By Jelly</span></div><span class="char-desc">A music teacher who loves her trombone. She teaches Grade 5 music theory with Flamecharge, and her big ears ALWAYS catch Baddie Daddy's lies. Find her in <a href="#music" data-jump-subject="music">Music Theory</a>. Designed by <b>Jelly</b>.</span></div></div><div class="char-card char-baddie"><div class="char-avatar"><svg viewBox="0 0 100 100" role="img" aria-label="Baddie Vampire"><defs><clipPath id="cp-baddie"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#D1FAE5"/><g clip-path="url(#cp-baddie)"><g transform="translate(44 140) scale(0.84)"><g class="">
+  </g></g></g><circle cx="50" cy="50" r="45" fill="none" stroke="#8B5CF6" stroke-width="3"/></svg></div><div class="char-info"><div class="char-name-row"><b class="char-title">Mommy the Elephant</b><span class="designer-pill">By Jelly</span></div><span class="char-desc">A music teacher who loves her trombone. She teaches Grade 5 music theory with Flamecharge, and her big ears ALWAYS catch Baddie Daddy's lies. Find her in <a href="#music" data-jump-subject="music">Music Theory</a>. Designed by <b>Jelly</b>.</span></div></div><div class="char-card char-baddie"><div class="char-avatar painted"><img class="char-paint" src="img/crew/baddie.webp" alt="" loading="lazy" decoding="async"><svg viewBox="0 0 100 100" role="img" aria-label="Baddie Vampire"><defs><clipPath id="cp-baddie"><circle cx="50" cy="50" r="45"/></clipPath></defs><circle cx="50" cy="50" r="45" fill="#D1FAE5"/><g clip-path="url(#cp-baddie)"><g transform="translate(44 140) scale(0.84)"><g class="">
   <path d="M-30 -74 q-26 30 -32 74 h124 q-6 -44 -32 -74z" fill="#2B2B3A" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
   <path d="M-22 -66 q-18 30 -24 62 h92 q-6 -32 -24 -62z" fill="#B3243A"/>
   <path d="M-26 -10 q-30 0 -40 -18 q20 6 38 -4z" fill="#5DAE4E" stroke="#1F3A4A" stroke-width="3" stroke-linejoin="round"/>
@@ -1079,6 +1086,7 @@ body.subject-view .den-map{display:none}
 .crew-box .characters-section{margin:0}
 .crew-pics{position:absolute;left:17%;right:17%;top:14%;bottom:14%;display:grid;grid-template-columns:1fr 1fr;gap:3%;align-content:center}
 .crew-pics svg{display:block;width:100%;height:auto}
+.crew-pics .crew-pic{display:block;width:100%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 .den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .den-art{position:relative;display:block;transition:transform .18s ease,filter .18s ease}
 .den-art img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 3px rgba(60,35,15,.28))}
@@ -1384,8 +1392,9 @@ body.subject-view .den-map{display:none}
  const copy=svg=>{const s=svg.cloneNode(true),sfx='-den'+(n++);s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
   s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
   s.setAttribute('aria-hidden','true');s.removeAttribute('role');s.removeAttribute('aria-label');return s};
- const faces=[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
- document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>box.appendChild(copy(f))));
+ const pics=['chowdie','wala','flamecharge','mommy'].map(c=>ov.querySelector('.char-card.char-'+c+' .char-paint')).filter(Boolean);
+ const faces=pics.length?pics:[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
+ document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>{if(f.tagName==='IMG'){const i=f.cloneNode();i.removeAttribute('loading');i.className='crew-pic';box.appendChild(i)}else box.appendChild(copy(f))}));
  const open=e=>{e.preventDefault();back=document.activeElement;ov.hidden=false;document.body.style.overflow='hidden';close.focus()};
  const shut=()=>{ov.hidden=true;document.body.style.overflow='';if(back)back.focus()};
  document.querySelectorAll('[data-den-crew]').forEach(a=>a.addEventListener('click',open));
@@ -1445,7 +1454,8 @@ const get=()=>{try{return localStorage.getItem('denUser')}catch(e){return null}}
 const set=v=>{try{localStorage.setItem('denUser',v)}catch(e){}};
 let n=0;
 // Copy a crew avatar SVG, giving its ids fresh names so clip paths still work when the crew grid is hidden
-function avatar(cls){const src=document.querySelector('.char-card.'+cls+' .char-avatar svg');if(!src)return null;
+function avatar(cls){const pic=document.querySelector('.char-card.'+cls+' .char-paint');if(pic){const i=pic.cloneNode();i.className='who-paint';i.removeAttribute('loading');return i}
+ const src=document.querySelector('.char-card.'+cls+' .char-avatar svg');if(!src)return null;
  const s=src.cloneNode(true),sfx='-who'+(n++);
  s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
   s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
