@@ -258,8 +258,11 @@ const IC={
  balloon:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 12 q-4 6 2 12" stroke="${C.ink}" stroke-width="1.5" fill="none"/><ellipse cy="-4" rx="14" ry="17" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-3 12 h6 l-3 -4z" fill="${C.grape}" stroke="${C.ink}" stroke-width="2"/><ellipse cx="-5" cy="-10" rx="3" ry="5" fill="#fff" opacity=".5"/></g>`
 };
 /* painted icons (deck refresh) replace the drawn ones; the star stays drawn */
-const icon=n=>(x,y,s=1)=>`<image href="../img/${n}.webp" x="${x-20*s}" y="${y-20*s}" width="${40*s}" height="${40*s}" preserveAspectRatio="xMidYMid meet"/>`;
-Object.assign(IC,{book:icon('obj/book'),apple:icon('obj/apple'),banana:icon('obj/banana'),orange:icon('obj/orange'),pear:icon('obj/pear'),fish:icon('sci/an-fish'),balloon:icon('obj/balloon')});
+const icon=(n,tint='')=>(x,y,s=1)=>`<image href="../img/${n}.webp" x="${x-20*s}" y="${y-20*s}" width="${40*s}" height="${40*s}" preserveAspectRatio="xMidYMid meet"${tint?` style="filter:${tint}"`:''}/>`;
+Object.assign(IC,{book:icon('obj/book'),apple:icon('obj/apple'),banana:icon('obj/banana'),orange:icon('obj/orange'),pear:icon('obj/pear'),fish:icon('sci/an-fish'),balloon:icon('obj/balloon'),
+ /* the painted balloon is purple: tint it to match coloured rows; the key balloon is grey, meaning "one balloon of any colour" */
+ balloonRed:icon('obj/balloon','hue-rotate(78deg) saturate(1.35)'),balloonBlue:icon('obj/balloon','hue-rotate(-62deg) saturate(1.2)'),
+ balloonGreen:icon('obj/balloon','hue-rotate(-150deg) saturate(1.1)'),balloonAny:icon('obj/balloon','grayscale(1) brightness(1.2)')});
 /* pictograph: rows [[name, count, iconKey]], x0 left of labels */
 function pgraph(rows,{x=30,y=60,rowH=62,lw=110,gap=46,key=null,keyIcon='book',anim=true,cls='',keyX=null,boxW=null}={}){
   const bw=boxW||lw+gap*Math.max(...rows.map(r=>r[1]))+40;
@@ -303,7 +306,7 @@ const S=[
   G(box(150,320,400,64,C.sun,32)+T(350,362,'5 + 3 + 6 + 2 = 16 pictures','lab mid'),'a-pop',1.3)},
 
 {part:'try',title:'Change the key',say:'This is the same picture graph of balloons. Tap a different <b>key</b> and see how the numbers change!',
- draw:()=>T(30,34,'Balloons at the party','h')+pgraph([['red',4,'balloon'],['blue',2,'balloon'],['green',3,'balloon']],{y:60,rowH:76,key:'2',keyIcon:'balloon',keyX:500})+`<g class="nums"></g>`,
+ draw:()=>T(30,34,'Balloons at the party','h')+pgraph([['red',4,'balloonRed'],['blue',2,'balloonBlue'],['green',3,'balloonGreen']],{y:60,rowH:76,key:'2',keyIcon:'balloonAny',keyX:500})+`<g class="nums"></g>`,
  mount:a=>{const c=[4,2,3],seen=new Set();const set=v=>{seen.add(v);a.q('.keyv').textContent='= '+v;
    a.q('.nums').innerHTML=c.map((n,r)=>G(box(376,62+r*76,110,46,'#fff',23)+T(431,94+r*76,n*v,'h mid acc'),'a-pop',r*.12)).join('');
    a.qa('#ui button').forEach(b=>b.classList.toggle('ok',b.dataset.v==v));
