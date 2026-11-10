@@ -40,7 +40,7 @@ SPOTS = {
 # Spots whose decks were refreshed recently: their labels carry a small "UPDATED" badge. Empty the set to remove them.
 UPDATED = {"abacus", "desk", "lantern", "microscope", "hole"}
 # Spots that are brand new: a "NEW!" badge (like the NEW! sticker on the hub cards) and a soft glow.
-NEW = {"willis"}
+NEW = {"willis", "bible"}
 
 # Image sizes of the objects (width, height) so each art box keeps its shape before the picture loads
 SIZES = {"den/abacus": (440, 422), "den/desk": (340, 302), "den/microscope": (316, 363), "den/nest": (440, 355),
