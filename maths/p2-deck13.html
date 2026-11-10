@@ -257,6 +257,9 @@ const IC={
  star:(x,y,s=1)=>star(x,y,17*s),
  balloon:(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 12 q-4 6 2 12" stroke="${C.ink}" stroke-width="1.5" fill="none"/><ellipse cy="-4" rx="14" ry="17" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-3 12 h6 l-3 -4z" fill="${C.grape}" stroke="${C.ink}" stroke-width="2"/><ellipse cx="-5" cy="-10" rx="3" ry="5" fill="#fff" opacity=".5"/></g>`
 };
+/* painted icons (deck refresh) replace the drawn ones; the star stays drawn */
+const icon=n=>(x,y,s=1)=>`<image href="../img/${n}.webp" x="${x-20*s}" y="${y-20*s}" width="${40*s}" height="${40*s}" preserveAspectRatio="xMidYMid meet"/>`;
+Object.assign(IC,{book:icon('obj/book'),apple:icon('obj/apple'),banana:icon('obj/banana'),orange:icon('obj/orange'),pear:icon('obj/pear'),fish:icon('sci/an-fish'),balloon:icon('obj/balloon')});
 /* pictograph: rows [[name, count, iconKey]], x0 left of labels */
 function pgraph(rows,{x=30,y=60,rowH=62,lw=110,gap=46,key=null,keyIcon='book',anim=true,cls='',keyX=null,boxW=null}={}){
   const bw=boxW||lw+gap*Math.max(...rows.map(r=>r[1]))+40;
