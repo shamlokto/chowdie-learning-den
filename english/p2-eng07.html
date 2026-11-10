@@ -217,6 +217,9 @@ document.querySelectorAll('.parts button').forEach(b=>b.onclick=()=>go(S.findInd
 document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('button')&&e.key===' ') return; if(e.key==='ArrowRight') go(i+1); if(e.key==='ArrowLeft') go(i-1); });
 
 /* ---------- deck ---------- */
+/* painted pictures (deck refresh): pic = a cut-out standing on (x, y); tile = a framed scene */
+const pic=(n,x,y,w,h=w)=>`<image href="../img/${n}.webp" x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+let tileN=0;const tile=(n,x,y,w,h)=>{const id='dtile'+(tileN++);return `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14"/></clipPath></defs><image href="../img/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="none" stroke="${C.ink}" stroke-width="3"/>`};
 /* shared English helpers: word tokens, sentences, speech bubbles */
 const CW=11.5; // approx px per char at 20px Baloo
 function measure(w,size=20){return w.length*CW*size/20+size*.9}
@@ -425,7 +428,7 @@ const ebtn='lie';
 /* "Help Wala!": Wala says something with a learner's mistake; kids choose the fix */
 function helpWala(R){return {part:'try',title:'Help Wala!',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{let r=0,busy=false;const show=()=>{busy=false;const Q=R[r];
-   a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+G(wala(520,392,1.15,{still:true}),'')+G(otter(100,392,.75,{still:true}),'')+(Q.story?G(box(30,40,580,86,'#FFF4D6',14)+T(46,64,'Story:','sm acc','style="font-weight:800"')+prose(46,88,Q.story,64,'sm',20),'a-pop')+edlg(600,138,Q.say,'','r',.3,'wala'):edlg(600,60,Q.say,Q.sub||'','r',.1,'wala'))+T(240,250,'Wala is learning English.','sm mid mut')+T(240,276,'Can you help her fix it?','lab mid acc');
+   a.q('.play').innerHTML=T(320,30,`${r+1} of ${R.length}`,'sm mid mut')+G(wala(520,392,1.15,{still:true}),'')+G(otter(100,392,.75,{still:true}),'')+(Q.story?G(box(30,40,580,86,'#FFF4D6',14)+T(46,64,'Story:','sm acc','style="font-weight:800"')+prose(46,88,Q.story,64,'sm',20),'a-pop')+edlg(600,138,Q.say,'','r',.3,'wala'):edlg(600,60,Q.say,Q.sub||'','r',.1,'wala'))+T(240,250,'Wala is learning English.','sm mid mut')+T(240,276,'Can you help her fix it?','lab mid acc')+(Q.pic?tile(Q.pic,180,292,220,96):'');
    a.ui.innerHTML='';[...Q.options].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');r++;
      if(r<R.length){a.confetti();a.as('wala',WL+`Oh! "<b>${Q.answer}</b>" ${Q.why} 谢谢！`);a.later(show,2600)}else a.win(WL+`"<b>${Q.answer}</b>" ${Q.why} Thank you for teaching me! 谢谢你们！`)}
      else{shk(b);a.as('otter',CH+(Q.hint||'Hmm, look carefully at what Wala said.'))}},ebtn))};
@@ -449,14 +452,14 @@ const magnify=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circl
 
 const S=[
 {part:'learn',title:'Be a reading detective',say:'Hi! Good readers are <b>detectives</b>. They look for the <b>big idea</b>, follow the <b>order of events</b>, ask <b>5W1H</b> questions, and find <b>clues</b> to work out what the writer did not say. Here is our story for today. Let\'s read it together.',
- draw:()=>page(30,30,380,350,STORY,0,-1,14,22)+G(magnify(500,120,1.4),'a-pop',.5)+G(otter(520,392,.8),'a-fade',.3)+G(T(520,210,'read it twice!','lab mid acc'),'a-fade',1)},
+ draw:()=>page(30,30,380,350,STORY,0,-1,14,22)+G(tile('scene/ecp-bikes',420,36,200,113),'a-pop',.5)+G(otter(520,392,.8),'a-fade',.3)+G(T(520,210,'read it twice!','lab mid acc'),'a-fade',1)},
 
 {part:'learn',title:'The big idea',say:'The <b>big idea</b> is what the whole story is mostly about, in one sentence. Not a tiny detail like "they ate a coconut", but the whole picture: <b>Mei and Zack had a fun day at East Coast Park, even though Zack hurt his knee.</b> Ask: what is this MOSTLY about?',
  draw:()=>G(box(40,40,560,70,'#FDE7E5',16)+T(320,70,'tiny detail','sm mid mut')+T(320,96,'"They shared a coconut."','lab mid'),'a-fade',.1)+G(box(40,130,560,70,'#FDE7E5',16)+T(320,160,'tiny detail','sm mid mut')+T(320,186,'"Zack scraped his knee."','lab mid'),'a-fade',.4)+
   G(arrow(320,210,320,240,C.accent),'a-fade',.8)+G(box(40,250,560,110,'#E6F6EA',18)+T(320,282,'BIG IDEA','lab mid acc')+prose(320,314,'Mei and Zack had a fun day at the park, even though Zack hurt his knee.',48,'lab mid',24),'a-pop',1.1)},
 
 {part:'learn',title:'What happened first?',say:'Stories happen in <b>order</b>. Look for <b>time words</b>: first, then, next, after that, finally. They are like signposts. In our story: first they rode bikes, then Zack fell, after that they shared a coconut, and finally they watched the sunset.',
- draw:()=>[['First','rode bikes',C.sky],['Then','Zack fell',C.berry],['After that','shared a coconut',C.leaf],['Finally','watched the sunset',C.grape]].map(([t,e,c],k)=>G(`<circle cx="${90+k*155}" cy="140" r="34" fill="${c}" stroke="${C.ink}" stroke-width="3"/>`+T(90+k*155,146,k+1,'h mid','style="fill:#fff"')+T(90+k*155,205,t,'lab mid acc')+prose(90+k*155,232,e,12,'sm mid',18),'a-pop',.2+k*.3)).join('')+[0,1,2].map(k=>G(arrow(130+k*155,140,205+k*155,140,C.ink),'a-fade',.5+k*.3)).join('')+
+ draw:()=>[['First','rode bikes',C.sky],['Then','Zack fell',C.berry],['After that','shared a coconut',C.leaf],['Finally','watched the sunset',C.grape]].map(([t,e,c],k)=>G(tile(['scene/ecp-bikes','scene/ecp-knee','scene/ecp-coconut','scene/ecp-sunset'][k],25+k*155,22,130,76)+`<circle cx="${90+k*155}" cy="140" r="34" fill="${c}" stroke="${C.ink}" stroke-width="3"/>`+T(90+k*155,146,k+1,'h mid','style="fill:#fff"')+T(90+k*155,205,t,'lab mid acc')+prose(90+k*155,232,e,12,'sm mid',18),'a-pop',.2+k*.3)).join('')+[0,1,2].map(k=>G(arrow(130+k*155,140,205+k*155,140,C.ink),'a-fade',.5+k*.3)).join('')+
   G(box(80,300,480,60,C.sun,30)+T(320,338,'time words = signposts for the order','lab mid'),'a-pop',1.5)},
 
 {part:'learn',title:'Ask 5W1H',say:'Detectives ask six questions: <b>Who</b>? <b>What</b>? <b>Where</b>? <b>When</b>? <b>Why</b>? <b>How</b>? Who: Mei and Zack. Where: East Coast Park. When: last Saturday. What: a bike ride. Why did Mei put on a plaster? Because Zack scraped his knee. How did they feel? Tired but happy.',
@@ -467,7 +470,7 @@ const S=[
   G(box(100,185,440,90,C.sun,18)+T(320,218,'I can tell that...','sm mid mut')+T(320,252,'it was a hot day, and they stayed a long time.','lab mid'),'a-pop',1.2)+G(magnify(80,330,1)+T(320,340,'The writer did not say it. The clues did!','lab mid acc'),'a-fade',1.6)},
 
 {part:'learn',title:'How do they feel?',say:'Writers often show feelings through <b>actions</b>. "Mei <b>quickly</b> cleaned the cut" shows she was <b>worried</b> and <b>caring</b>. "Tired but <b>happy</b>" shows the day ended well. Look at what characters <b>do</b> and <b>say</b> to understand how they feel.',
- draw:()=>[['Mei quickly cleaned the cut.','caring, worried',girlI(0,0,C.berry)],['Zack fell and scraped his knee.','hurt, upset',boyI(0,0)],['They went home tired but happy.','content, pleased',girlI(-18,0,C.berry)+boyI(18,0)]].map(([act,feel,ic],k)=>G(box(40,40+k*110,560,96,'#fff',16)+`<g transform="translate(90 ${90+k*110})">${ic}</g>`+T(150,78+k*110,act,'lab')+T(150,110+k*110,'→ feels: '+feel,'lab acc'),'a-fade',.2+k*.3)).join('')},
+ draw:()=>[['Mei quickly cleaned the cut.','caring, worried','scene/ecp-knee'],['Zack fell and scraped his knee.','hurt, upset','scene/ecp-knee'],['They went home tired but happy.','content, pleased','scene/ecp-sunset']].map(([act,feel,ic],k)=>G(box(40,40+k*110,560,96,'#fff',16)+tile(ic,48,48+k*110,92,80)+T(150,78+k*110,act,'lab')+T(150,110+k*110,'→ feels: '+feel,'lab acc'),'a-fade',.2+k*.3)).join('')},
 
 {part:'try',title:'Put the story in order',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const ev=['They rode their bikes.','Zack scraped his knee.','Mei put on a plaster.','They shared a coconut.','They watched the sunset.'];const shuffled=[2,4,0,3,1];let next=0;const placed=[];
@@ -483,7 +486,7 @@ const S=[
 
 {part:'try',title:'Clue detective',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const Q=[['Hana put on her raincoat and grabbed an umbrella.','It was raining.',['It was sunny.','It was night time.']],['Arjun yawned and rubbed his eyes.','He was sleepy.',['He was hungry.','He was angry.']],['The ice cream dripped down Zack\'s hand.','It was a hot day.',['It was cold.','Zack dropped it.']],['Mei jumped up and down and hugged her mum.','She was very happy.',['She was bored.','She was scared.']],['Everyone wore party hats and sang loudly.','It was a birthday party.',['It was a lesson.','It was bedtime.']]];let r=0,busy=false;
-  const show=()=>{busy=false;const [c,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`Clue ${r+1} of 5`,'sm mid mut')+box(40,70,560,90,'#fff',16)+prose(320,110,c,44,'lab mid',26)+arrow(320,175,320,205,C.accent)+T(320,240,'What can you tell?','h mid acc')+magnify(560,330,1);
+  const show=()=>{busy=false;const [c,ans]=Q[r];a.q('.play').innerHTML=T(320,36,`Clue ${r+1} of 5`,'sm mid mut')+box(40,70,560,90,'#fff',16)+prose(320,110,c,44,'lab mid',26)+arrow(320,175,320,205,C.accent)+T(320,240,'What can you tell?','h mid acc')+(r===0?tile('megan/rain',40,262,200,113):'')+magnify(560,330,1);
    a.ui.innerHTML='';[ans,...Q[r][2]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===ans){busy=true;b.classList.add('ok');r++;if(r<Q.length){a.confetti();a.say(`<b>${ans}</b> The clues told you, even though the sentence did not say it.`);a.later(show,1600)}else a.win(`<b>${ans}</b> You read between the lines!`)}else{b.classList.add('no');a.say('Look at the clue words again. What do people usually do in that situation?')}},'go'));
    a.say('The sentence gives you <b>clues</b>. What can you work out?')};show();}},
 
@@ -496,15 +499,15 @@ const S=[
  quiz:{options:['They rode bikes.','Mei cleaned the cut.','They watched the sunset.'],answer:'Mei cleaned the cut.',why:'"Then Zack fell... Mei <b>quickly cleaned the cut</b>." That came next.',hint:'Find "Zack fell" in the story and read the next sentence.'}},
 
 {part:'check',title:'Star check 3',say:'<b>Where</b> did the story happen?',
- draw:()=>T(320,120,'Where?','h mid acc')+treeI(200,260,1.2)+`<path d="M0 330 q40 -16 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 V400 H0z" fill="${C.sky}"/>`+sunI(500,120,1),
+ draw:()=>T(320,70,'Where?','h mid acc')+tile('scene/ecp-bikes',150,100,340,191),
  quiz:{options:['the zoo','East Coast Park','school'],answer:'East Coast Park',why:'The first sentence tells us: "went to <b>East Coast Park</b>".',hint:'The place is named in the very first sentence.'}},
 
 {part:'check',title:'Star check 4',say:'"Mei <b>quickly</b> cleaned the cut." What does this tell us about Mei?',
- draw:()=>girlI(320,220,C.berry)+T(320,290,'Mei','lab mid mut'),
+ draw:()=>tile('scene/ecp-knee',160,40,320,180)+T(320,260,'Mei','lab mid mut'),
  quiz:{options:['She was lazy.','She was caring and quick to help.','She was angry at Zack.'],answer:'She was caring and quick to help.',why:'Her <b>action</b> (cleaning it quickly) shows she cared about her brother.',hint:'What kind of person helps quickly when someone is hurt?'}},
 
 {part:'check',title:'Star check 5',say:'"The puppy wagged its tail and licked Arjun\'s face." How does the puppy feel?',
- draw:()=>dogI(300,220,1.5)+boyI(420,240)+T(320,320,'wag wag!','lab mid acc'),
+ draw:()=>dogI(300,220,1.5)+boyI(420,240,C.leaf)+T(320,320,'wag wag!','lab mid acc'),
  quiz:{options:['happy','scared','sleepy'],answer:'happy',why:'Wagging its tail and licking are <b>clues</b> that a dog is happy. The sentence never says "happy", but you worked it out!',hint:'What does a dog do when it is pleased to see you?'}},
 
 {part:'check',title:'You did it!',say:'Case closed, detective! You can find the <b>big idea</b>, follow the <b>order</b>, answer <b>5W1H</b>, and read <b>between the lines</b> using clues.',
@@ -564,7 +567,7 @@ const EW={
   {wala:'I\'m so tired after PE.',options:["Sit down and rest.", "You should open the rest.", "You should take the tired."],answer:"Sit down and rest.",reply:'Take a rest. Good idea!'},
   {wala:'This bag is very heavy!',options:["Let me pick it up for you.", "Let me pick up it for you.", "Let me pick it for you up."],answer:"Let me pick it up for you.",reply:'Pick it up! You\'re a good friend, Chowdie!'}]],
 7:[chat('Chat: reading together',[['wala','I read a story, but I don\'t understand it all.',''],['otter','Let\'s be detectives! Ask who, what, where…',''],['wala','Who? Mei! Where? On the way home!','谁？在哪里？'],['otter','Great detective work! Now: why?','']],WL+'Reading in English is hard for me, so Chowdie taught me to ask questions: who, what, where, when, why and how. It\'s just like 看图说话 in Chinese: 谁、什么时候、在哪里、做什么!'),
- [{story:'Mei forgot her umbrella. On the way home, it rained. Her mum gave her a towel and hot soup. Mei smiled.',say:'Why was Mei wet? Because she went swimming!',options:["It rained and she had no umbrella.", "She went swimming in the pool.", "She drank too much water."],answer:"It rained and she had no umbrella.",why:'The clues are in the story: no umbrella + rain = wet!',hint:'Look for the clues in the story.'},
+ [{story:'Mei forgot her umbrella. On the way home, it rained. Her mum gave her a towel and hot soup. Mei smiled.',pic:'scene/soup',say:'Why was Mei wet? Because she went swimming!',options:["It rained and she had no umbrella.", "She went swimming in the pool.", "She drank too much water."],answer:"It rained and she had no umbrella.",why:'The clues are in the story: no umbrella + rain = wet!',hint:'Look for the clues in the story.'},
   {story:'Mei forgot her umbrella. On the way home, it rained. Her mum gave her a towel and hot soup. Mei smiled.',say:'Who gave Mei a towel? Her teacher!',options:['Her mum gave her a towel.','Her teacher gave her a towel.','Mei gave her mum a towel.'],answer:'Her mum gave her a towel.',why:'The story says "her mum", so the answer is her mum.',hint:'Read the sentence again: who gave the towel?'},
   {story:'Mei forgot her umbrella. On the way home, it rained. Her mum gave her a towel and hot soup. Mei smiled.',say:'How did Mei feel? Angry!',options:["She felt warm and happy.", "She felt angry and cold.", "She felt hungry and sad."],answer:"She felt warm and happy.",why:'She smiled and had hot soup, so she felt warm and happy.',hint:'What does smiling tell you?'}],
  [{wala:'What is the story about?',options:["Mei getting caught in the rain.", "A towel that Mei bought.", "Mum cooking soup for dinner."],answer:"Mei getting caught in the rain.",reply:'The big idea: Mei and the rain! Thank you!'},
