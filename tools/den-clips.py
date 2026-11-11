@@ -48,8 +48,7 @@ def apply(rel, mapping):
     p = ROOT / rel
     s = p.read_text(encoding="utf-8")
     s = re.sub(r'<script id="den-clips">.*?</script>\n', "", s, flags=re.S)
-    # sit after den-polish's blocks and before the buddy (tools/den-polish.py), with stars.js last;
-    # the buddy tag carries a src attribute, so match its opening only
+    # sit after den-polish's blocks and before the buddy (tools/den-polish.py), with stars.js last
     k = s.find('<script id="den-buddy"')
     if k == -1:
         k = s.rfind('<script src="../stars.js"')
