@@ -444,6 +444,9 @@ const firstCheck=()=>S.findIndex(s=>s.part==='check');
 function addWala(open,help,talk){insertAt(1,open);insertAt(firstCheck(),helpWala(help),talkWala(talk));}
 /* English 5: Punctuation and sentences */
 const mark=(x,y,m,col=C.accent,r=30)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${col}" stroke="${C.ink}" stroke-width="3"/>`+T(x,y+r*.45,m,'mid',`style="font-size:${r*1.4}px;font-weight:800;fill:#fff"`);
+/* painted pictures (deck refresh): pic = a cut-out standing on (x, y); tile = a framed scene */
+const pic=(n,x,y,w,h=w)=>`<image href="../img/${n}.webp" x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+let tileN=0;const tile=(n,x,y,w,h)=>{const id='dtile'+(tileN++);return `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14"/></clipPath></defs><image href="../img/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="none" stroke="${C.ink}" stroke-width="3"/>`};
 const S=[
 {part:'learn',title:'Little marks, big jobs',say:'Hi! <b>Punctuation marks</b> are tiny but powerful. They tell the reader where to stop, when to ask, and when to shout. Without them, writing is a jumble: "lets eat grandma" vs "Let\'s eat, Grandma!" Commas save lives!',
  draw:()=>[['.','full stop',C.sky],['?','question mark',C.grape],['!','exclamation mark',C.berry],[',','comma',C.leaf],['’','apostrophe',C.accent],['“ ”','speech marks',C.sun]].map(([m,n,c],k)=>{const x=70+k*100;return G(mark(x,90,m,c,32)+prose(x,150,n,10,'sm mid',18),'a-pop',.1+k*.15)}).join('')+
@@ -469,7 +472,7 @@ const S=[
   G(box(40,280,560,90,C.sun,16)+T(180,316,'it\'s = it is','h mid')+T(180,350,'"It\'s raining."','sm mid')+T(460,316,'its = belongs to it','h mid')+T(460,350,'"The cat licked its paw."','sm mid')+`<line x1="320" y1="290" x2="320" y2="360" stroke="${C.ink}" stroke-width="2" opacity=".3"/>`,'a-pop',1.4)},
 
 {part:'learn',title:'Speech marks',say:'When someone <b>speaks</b>, we put their exact words inside <b>speech marks</b>: "I am hungry," said Zack. The comma goes <b>inside</b> the speech marks, before "said". If the speech is a question or shout, use ? or ! instead: "Are you hungry?" asked Mei.',
- draw:()=>G(boyI(110,200)+speech(150,70,220,70,'I am hungry,',20,20),'a-pop',.2)+G(T(260,200,'said Zack.','h'),'a-fade',.8)+
+ draw:()=>G(pic('eng/zack-hungry',95,244,72,182)+speech(150,70,220,70,'I am hungry,',20,20),'a-pop',.2)+G(T(260,200,'said Zack.','h'),'a-fade',.8)+
   G(box(40,250,560,120,'#fff',16)+T(320,284,'“I am hungry,” said Zack.','h mid')+T(320,316,'“Are you hungry?” asked Mei.','lab mid')+T(320,348,'comma or ? or ! goes INSIDE the speech marks','sm mid acc'),'a-pop',1.2)},
 
 {part:'try',title:'Fix the sentence',say:'',draw:()=>`<g class="play"></g>`,

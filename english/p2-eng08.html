@@ -446,6 +446,9 @@ function addWala(open,help,talk){insertAt(1,open);insertAt(firstCheck(),helpWala
 const paper=(x,y,w,h)=>box(x,y,w,h,'#FFFDF6',12)+[...Array(Math.floor((h-30)/28))].map((_,k)=>`<line x1="${x+14}" y1="${y+34+k*28}" x2="${x+w-14}" y2="${y+34+k*28}" stroke="#C9D3CE" stroke-width="1"/>`).join('');
 const pencil=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s}) rotate(-35)"><rect x="-8" y="-50" width="16" height="80" fill="${C.sun}" stroke="${C.ink}" stroke-width="2.5"/><path d="M-8 30 L0 48 L8 30z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-3 41 L0 48 L3 41z" fill="${C.ink}"/><rect x="-8" y="-58" width="16" height="10" fill="${C.berry}" stroke="${C.ink}" stroke-width="2.5"/></g>`;
 
+/* painted pictures (deck refresh): pic = a cut-out standing on (x, y); tile = a framed scene */
+const pic=(n,x,y,w,h=w)=>`<image href="../img/${n}.webp" x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+let tileN=0;const tile=(n,x,y,w,h)=>{const id='dtile'+(tileN++);return `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14"/></clipPath></defs><image href="../img/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="none" stroke="${C.ink}" stroke-width="3"/>`};
 const S=[
 {part:'learn',title:'Welcome to the workshop',say:'Hi, writer! Good writing has a <b>plan</b>. Today we learn to write a <b>recount</b> (something that happened), use <b>sequencing words</b>, describe with the <b>five senses</b>, write <b>instructions</b> and an <b>invitation</b>, and then <b>check</b> our work like a pro.',
  draw:()=>paper(40,40,360,330)+G(pencil(300,170,1.3),'a-pop',.5)+[['Plan it','What happened? Who? Where?'],['Write it','First, next, then, finally'],['Describe it','See, hear, smell, taste, touch'],['Check it','Capitals, full stops, tense']].map(([t,s],k)=>G(T(430,80+k*76,t,'h acc')+prose(430,106+k*76,s,22,'sm',16),'a-fade',.3+k*.25)).join('')},
@@ -459,7 +462,7 @@ const S=[
 
 {part:'learn',title:'Show it with the five senses',say:'"The zoo was nice" is boring. <b>Show</b> the reader instead! What did you <b>see</b>? The lion\'s golden mane. <b>Hear</b>? A loud roar. <b>Smell</b>? Fresh popcorn. <b>Taste</b>? Sweet, cold ice cream. <b>Touch</b>? The goat\'s rough fur. Now the reader is <b>there</b> with you.',
  draw:()=>G(box(40,40,560,60,'#FDE7E5',14)+T(320,78,'The zoo was nice.','h mid'),'a-fade',.1)+G(arrow(320,110,320,140,C.accent),'a-fade',.5)+
-  G(box(40,150,560,200,'#E6F6EA',16)+prose(60,186,'The lion shook its golden mane and let out a roar so loud I jumped. The air smelled of fresh popcorn. My ice cream was sweet and icy cold, and the goat\'s fur felt rough under my fingers.',52,'lab',27,'style="font-size:17px"'),'a-pop',.8)+
+  G(box(40,150,560,200,'#E6F6EA',16)+prose(60,186,'The lion shook its golden mane and let out a roar so loud I jumped. The air smelled of fresh popcorn. My ice cream was sweet and icy cold, and the goat\'s fur felt rough under my fingers.',52,'lab',27,'style="font-size:17px"')+tile('scene/zoo',430,252,162,91),'a-pop',.8)+
   G([['see',C.sky,100],['hear',C.berry,210],['smell',C.leaf,320],['taste',C.sun,430],['touch',C.grape,540]].map(([s,c,x])=>tagPill(x-30,355,s,c,60)).join(''),'a-fade',1.4)},
 
 {part:'learn',title:'Build a better sentence',say:'Start small and grow it! "The dog ran." Add an <b>adjective</b>: "The <b>brown</b> dog ran." Add an <b>adverb</b>: "The brown dog ran <b>quickly</b>." Add <b>where</b>: "...<b>across the wet field</b>." Add <b>why</b>: "...<b>to catch the ball</b>." One sentence, five levels!',
