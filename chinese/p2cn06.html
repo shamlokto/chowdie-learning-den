@@ -608,6 +608,8 @@ const patCard=(x,y,w,h,z,p,e,d=0,fill='#fff',sz=26)=>G(`<g class="tap" data-zh="
 /* P2 Chinese 6: 夜市真热闹 · 新加坡真好玩 — night market, 真 + describing word, 有…也有…, places in Singapore, 去 + place + do */
 const NM6=[['🏮','夜市','yèshì','night market'],['🍢','小吃','xiǎochī','snacks'],['🍭','棉花糖','miánhuātáng','candy floss'],['🧸','玩具','wánjù','toys'],['🎈','气球','qìqiú','balloon'],['🎯','游戏','yóuxì','game']];
 const PL=[['🦁','鱼尾狮','Yúwěishī','Merlion'],['🏖️','圣淘沙','Shèngtáoshā','Sentosa'],['🌳','植物园','zhíwùyuán','Botanic Gardens'],['🏮','牛车水','Niúchēshuǐ','Chinatown'],['🛕','小印度','Xiǎo Yìndù','Little India'],['🌸','滨海湾花园','Bīnhǎiwān Huāyuán','Gardens by the Bay'],['🦒','动物园','dòngwùyuán','zoo'],['✈️','樟宜机场','Zhāngyí Jīchǎng','Changi Airport']];
+/* scene tile: the painted still, clipped and framed */
+const vtile=(src,x,y,w,h,id)=>`<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/></clipPath></defs><image href="${src}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`;
 const S=[
 talk('夜市真热闹！','w','c',[['w','晚上我们去夜市吧！','Wǎnshang wǒmen qù yèshì ba!','Let\'s go to the night market tonight!'],['c','哇！夜市真热闹！','Wā! Yèshì zhēn rènao!','Wow! The night market is so lively!'],['w','有好吃的，也有好玩的。','Yǒu hǎochī de, yě yǒu hǎowán de.','There\'s yummy food and fun things too.']],
  '夜市真热闹！<i class="py">Yèshì zhēn rènao!</i> <b>热闹</b> <i class="py">rènao</i> means lively and busy, full of people and noise. At the 夜市 there are lights, food and games!'),
@@ -620,7 +622,7 @@ vocab('At the night market 夜市','c','What\'s at the night market? <b>夜市</
   +[['🏮','夜市里有好吃的，也有好玩的。','Yèshì lǐ yǒu hǎochī de, yě yǒu hǎowán de.'],['🏖️','圣淘沙有沙滩，也有水族馆。','Shèngtáoshā yǒu shātān, yě yǒu shuǐzúguǎn.'],['🌳','公园里有大树，也有小鸟。','Gōngyuán lǐ yǒu dà shù, yě yǒu xiǎo niǎo.']].map(([e,z,p],k)=>{const y=126+k*86;
   return G(`<g class="tap" data-zh="${z}">`+box(20,y,600,78,'#fff',14)+`<g transform="translate(64 ${y+39})">${em(e,44,'',z)}</g>`+T(350,y+36,z,'zh mid','style="font-size:24px"')+T(350,y+62,p,'py mid')+`</g>`,'a-pop',.3+k*.25)}).join('')},
 talk('新加坡真好玩！','c','w',[['c','这个周末你想去哪里？','Zhège zhōumò nǐ xiǎng qù nǎlǐ?','Where do you want to go this weekend?'],['w','我想去圣淘沙游泳。','Wǒ xiǎng qù Shèngtáoshā yóuyǒng.','I want to go swimming at Sentosa.'],['c','新加坡真好玩！','Xīnjiāpō zhēn hǎowán!','Singapore is so fun!']],
- '这个周末你想去哪里？<i class="py">nǎlǐ</i> means where. Wala wants to go to <b>圣淘沙</b> Sentosa to swim. 新加坡真好玩！'),
+ '这个周末你想去哪里？<i class="py">nǎlǐ</i> means where. Wala wants to go to <b>圣淘沙</b> Sentosa to swim. 新加坡真好玩！',G(vtile('../img/cn/gardens.webp',246,230,256,144,'vgbtb'),'a-pop',2.4)),
 vocab('Places in Singapore 新加坡','w','Let\'s tour Singapore! <b>鱼尾狮</b> the Merlion, <b>圣淘沙</b> Sentosa, <b>植物园</b> Botanic Gardens, <b>牛车水</b> Chinatown, <b>小印度</b> Little India, <b>滨海湾花园</b> Gardens by the Bay, <b>动物园</b> the zoo, <b>樟宜机场</b> Changi Airport!',PL),
 {part:'learn',title:'去 + place + do',who:'otter',say:CH+'Say where you go AND what you do there: <b>去</b> + place + action. 我们去<b>圣淘沙</b><b>游泳</b>。我们去<b>植物园</b><b>看花</b>。我们去<b>牛车水</b><b>买年货</b> (New Year goods). 我们去<b>樟宜机场</b><b>看飞机</b>!',
  draw:()=>[['🏖️','去圣淘沙','游泳'],['🌳','去植物园','看花'],['🏮','去牛车水','买年货'],['✈️','去樟宜机场','看飞机']].map(([e,a,b],k)=>{const y=14+k*94;

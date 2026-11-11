@@ -257,6 +257,7 @@ function brace(x1,x2,y,lab,up=true,d=0,cls='h mid acc'){const m=(x1+x2)/2,s=up?-
 const rowLab=(x,y,lab)=>T(x,y+32,lab,'lab end');
 const answerPill=(txt,d=1.8,y=332)=>G(box(140,y,360,58,C.sun,29)+T(320,y+40,txt,'h mid'),'a-pop',d);
 
+const po=(n,x,y,w,h,ex='')=>`<image href="../img/obj/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" ${ex}/>`;
 const S=[
 {part:'learn',title:'Be a maths detective',say:'Word problems are like little mysteries. A good detective follows <b>4 steps</b>: <b>Read</b> the story, <b>Draw</b> a model, <b>Solve</b> it, then <b>Check</b> the answer.',
  draw:()=>[['Read','find the clues',`<circle cx="0" cy="-6" r="22" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M15 10 l18 18" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/>`],
@@ -269,7 +270,7 @@ const S=[
 {part:'learn',title:'Part + part = whole',say:'Mei has <b>245</b> stickers. Arjun has <b>138</b>. How many stickers do they have <b>altogether</b>? Draw two parts side by side. The whole is the <b>?</b>. Add the parts: <b>245 + 138 = 383</b>.',
  draw:()=>prob('Mei has 245 stickers. Arjun has 138 stickers. How many stickers do they have altogether?')+
   seg(90,200,280,C.berry,'245',.4)+seg(370,200,158,C.sky,'138',.8)+brace(90,528,190,'?',true,1.2)+
-  G(T(230,282,'Mei','lab mid mut')+T(449,282,'Arjun','lab mid mut'),'a-fade',.9)+answerPill('245 + 138 = 383',1.8)},
+  G(T(230,282,'Mei','lab mid mut')+T(449,282,'Arjun','lab mid mut'),'a-fade',.9)+answerPill('245 + 138 = 383',1.8)+G(po('stickersheet',30,298,96,96),'a-pop',.3)},
 
 {part:'learn',title:'Whole − part = part',say:'A hall has <b>500</b> seats. <b>326</b> seats are filled. How many are <b>empty</b>? This time we know the whole and one part. Take away: <b>500 − 326 = 174</b>.',
  draw:()=>prob('A hall has 500 seats. 326 seats are filled. How many seats are empty?')+
@@ -278,7 +279,7 @@ const S=[
 {part:'learn',title:'Comparing: more than',say:'Hana has <b>52</b> marbles. Zack has <b>17 more</b> than Hana. How many does Zack have? Draw <b>two bars</b>, one for each child. Zack\'s bar is longer by 17. <b>52 + 17 = 69</b>.',
  draw:()=>prob('Hana has 52 marbles. Zack has 17 more marbles than Hana. How many marbles does Zack have?')+
   rowLab(80,140,'Hana')+seg(90,140,300,C.berry,'52',.4)+rowLab(80,206,'Zack')+seg(90,206,300,C.sky,'52',.8)+ghost(390,206,98,'17',1.1)+
-  brace(90,488,262,'?',false,1.5)+answerPill('52 + 17 = 69',2.1,334)},
+  brace(90,488,262,'?',false,1.5)+answerPill('52 + 17 = 69',2.1,334)+G(po('marbles',32,292,96,104),'a-pop',.3)},
 
 {part:'learn',title:'Comparing: fewer than',say:'Zack has <b>85</b> stamps. Mei has <b>30 fewer</b> than Zack. How many stamps does Mei have? Mei\'s bar is <b>shorter</b>. <b>85 − 30 = 55</b>.',
  draw:()=>prob('Zack has 85 stamps. Mei has 30 fewer stamps than Zack. How many stamps does Mei have?')+
@@ -292,7 +293,7 @@ const S=[
 {part:'learn',title:'Sharing equally',say:'<b>24</b> stickers are shared <b>equally</b> among <b>3</b> friends. How many does each friend get? Cut the whole into <b>3 equal parts</b>. <b>24 ÷ 3 = 8</b>.',
  draw:()=>prob('24 stickers are shared equally among 3 friends. How many stickers does each friend get?')+
   seg(110,200,420,C.grape,'',.3)+G([1,2].map(k=>`<line x1="${110+k*140}" y1="200" x2="${110+k*140}" y2="248" stroke="${C.ink}" stroke-width="3"/>`).join('')+[0,1,2].map(k=>T(180+k*140,232,'?','h mid','style="fill:#fff"')).join(''),'a-fade',1)+
-  brace(110,530,190,'24',true,.6)+answerPill('24 ÷ 3 = 8',1.9)},
+  brace(110,530,190,'24',true,.6)+answerPill('24 ÷ 3 = 8',1.9)+G(po('stickersheet',30,298,96,96),'a-pop',.3)},
 
 {part:'learn',title:'Fraction stories',say:'A pizza is cut into <b>8 equal slices</b>. Mei eats <b>2/8</b> of it. Arjun eats <b>3/8</b>. What fraction did they eat <b>altogether</b>? <b>2/8 + 3/8 = 5/8</b>.',
  draw:()=>prob('A pizza is cut into 8 equal slices. Mei eats 2/8 of it. Arjun eats 3/8 of it. What fraction of the pizza did they eat altogether?')+
@@ -308,7 +309,7 @@ const S=[
   ['Zack had 300 marbles. He gave away 120 marbles. How many marbles does he have left?','−','He gave some away, so we subtract: 300 − 120 = 180.'],
   ['18 kueh are shared equally among 3 plates. How many kueh are on each plate?','÷','Shared equally means divide: 18 ÷ 3 = 6.'],
   ['A shop sold 156 kaya buns in the morning and 208 in the afternoon. How many buns did it sell in all?','+','In all means add the parts: 156 + 208 = 364.']];
-  let r=0,busy=false;const show=()=>{busy=false;a.q('.play').innerHTML=prob(R[r][0])+T(320,170,`Mystery ${r+1} of 4`,'lab mid mut')+otter(320,395,1);a.say('Which do we use: <b>+</b>, <b>−</b>, <b>×</b> or <b>÷</b>? Look for the clue words!')};
+  let r=0,busy=false;const show=()=>{busy=false;a.q('.play').innerHTML=prob(R[r][0])+T(320,170,`Mystery ${r+1} of 4`,'lab mid mut')+otter(320,395,1)+([G(po('currypuff',440,220,160,88),'a-pop',.2),G(po('marbles',462,196,116,126),'a-pop',.2)][r]||'');a.say('Which do we use: <b>+</b>, <b>−</b>, <b>×</b> or <b>÷</b>? Look for the clue words!')};
   show();['+','−','×','÷'].forEach(op=>a.btn(op,b=>{if(busy)return;if(op===R[r][1]){busy=true;r++;if(r<R.length){a.confetti();a.say('<b>Yes!</b> '+R[r-1][2]);a.later(show,2600)}else a.win('<b>Case closed!</b> '+R[r-1][2])}
    else a.say(`Hmm, not <b>${op}</b>. Read the story again. Is something being joined, taken away, grouped or shared?`)},'go'));}},
 
@@ -316,13 +317,13 @@ const S=[
  mount:a=>{const R=[['Mei has 40 beads. Hana has 25 beads. How many more beads does Mei have than Hana?','compare',()=>rowLab(80,150,'Mei')+seg(90,150,400,C.berry,'40')+rowLab(80,220,'Hana')+seg(90,220,250,C.sky,'25')+brace(340,490,280,'?',false,.3),'Two people are being compared, so we draw <b>two bars</b>. 40 − 25 = <b>15</b> more.'],
   ['There are 3 vases. Each vase has 10 flowers. How many flowers are there?','groups',()=>[0,1,2].map(k=>seg(140+k*120,200,120,[C.leaf,C.sun,C.leaf][k],'10')).join('')+brace(140,500,190,'?',true,.3),'Equal groups! <b>3 × 10 = 30</b> flowers.'],
   ['There are 120 red balloons and 95 blue balloons. How many balloons are there altogether?','part',()=>seg(100,200,250,C.bad,'120')+seg(350,200,198,C.sky,'95')+brace(100,548,190,'?',true,.3),'Two parts make a whole. <b>120 + 95 = 215</b> balloons.']];
-  let r=0,busy=false;const show=()=>{busy=false;a.q('.play').innerHTML=prob(R[r][0])+otter(560,395,.6);a.say('Which <b>model</b> would you draw for this story?')};
+  let r=0,busy=false;const show=()=>{busy=false;a.q('.play').innerHTML=prob(R[r][0])+otter(560,395,.6)+(r===0?G(po('beads',60,190,180,130),'a-pop',.2):'');a.say('Which <b>model</b> would you draw for this story?')};
   show();[['part','part + part'],['compare','two bars'],['groups','equal groups']].forEach(([k,l])=>a.btn(l,()=>{if(busy)return;
    if(k===R[r][1]){busy=true;a.q('.play').innerHTML=prob(R[r][0])+R[r][2]();r++;if(r<R.length){a.say('<b>Good thinking!</b> '+R[r-1][3]);a.later(show,3600)}else a.win('<b>Super detective!</b> '+R[r-1][3])}
    else a.say('Not that one. Ask: are we joining parts, comparing two things, or making equal groups?')},'go'));}},
 
 {part:'check',title:'Star check 1',say:'Read the story and look at the model. What is the answer?',
- draw:()=>prob('Hana has 234 beads. She buys 125 more beads. How many beads does she have now?')+seg(90,200,280,C.berry,'234',.3)+seg(370,200,150,C.sky,'125',.6)+brace(90,520,190,'?',true,.9),
+ draw:()=>prob('Hana has 234 beads. She buys 125 more beads. How many beads does she have now?')+seg(90,200,280,C.berry,'234',.3)+seg(370,200,150,C.sky,'125',.6)+brace(90,520,190,'?',true,.9)+G(po('beads',240,272,160,116),'a-pop',1.1),
  quiz:{options:['109','349','359'],answer:'359',why:'Part + part = whole. <b>234 + 125 = 359</b> beads.',hint:'She has more beads now, so the answer must be bigger than 234.'}},
 
 {part:'check',title:'Star check 2',say:'How many adults were at the concert?',

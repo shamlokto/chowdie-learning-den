@@ -276,6 +276,7 @@ const oCirc=icon('circle',C.sky),oTri=icon('triangle',C.accent),oSq=icon('square
 const oBigR=icon('square',C.bad,0,48),oSmallB=icon('square',C.sky,0,26),oSmallR=icon('square',C.bad,0,26),oBigB=icon('square',C.sky,0,48);
 const oUp=icon('triangle',C.grape,0),oRight=icon('triangle',C.grape,90),oDown=icon('triangle',C.grape,180),oLeft=icon('triangle',C.grape,270);
 
+const po=(n,x,y,w,h,ex='')=>`<image href="../img/obj/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" ${ex}/>`;
 const S=[
 {part:'learn',title:'Flat shapes we know',say:'In Primary 1 we met these <b>flat shapes</b>. Let\'s say their names: square, rectangle, triangle, circle, half circle and quarter circle.',
  draw:()=>[['square',C.leaf,'square'],['rect',C.sky,'rectangle'],['triangle',C.accent,'triangle'],['circle',C.sun,'circle'],['half',C.berry,'half circle'],['quarter',C.grape,'quarter circle']]
@@ -305,7 +306,8 @@ const S=[
  draw:()=>G(cube(28,196,78,C.bad)+T(70,305,'cube','lab mid'),'a-drop',.1)+G(cuboid(150,166,100,108,56,C.sky)+T(205,305,'cuboid','lab mid'),'a-drop',.35)+
   G(cylinder(368,140,42,130,C.sun)+T(368,305,'cylinder','lab mid'),'a-drop',.6)+G(cone(482,268,46,150,C.leaf)+T(482,305,'cone','lab mid'),'a-drop',.85)+
   G(sphere(586,228,40,C.grape)+T(586,305,'sphere','lab mid'),'a-drop',1.1)+
-  G(T(320,365,'dice · tissue box · tin can · party hat · ball','sm mid mut'),'a-fade',1.6)},
+  G(T(320,365,'dice · tissue box · tin can · party hat · ball','sm mid mut'),'a-fade',1.6)+
+  G(po('dice',38,58,62,68)+'<image href="../img/obj/tissuebox.webp" x="150" y="44" width="120" height="74" preserveAspectRatio="none"/>'+po('soupcan',334,30,68,76)+po('partyhat',454,12,56,78)+po('ball',560,46,52,52),'a-pop',1.8)},
 
 {part:'learn',title:'Flat faces and curved faces',say:'Touch a shape all over. Some parts are <b>flat</b>, some are <b>curved</b>. A <b>cube</b> and a <b>cuboid</b> have only flat faces. A <b>sphere</b> is curved all over. A <b>cylinder</b> and a <b>cone</b> have both!',
  draw:()=>{const card=(x,shape,name,flatN,curved,d)=>G(box(x,40,112,320,'#fff',18)+shape+T(x+56,250,name,'lab mid')+
@@ -337,11 +339,11 @@ const S=[
 {part:'try',title:'Shape hunt at home',say:'These things are around the house. Tap each one to find out which <b>3D shape</b> it is!',
  draw:()=>{const it=[
   [`<g>${sphere(90,140,48,C.sky)}<path d="M42 140 q48 -26 96 0 M90 92 v96" stroke="#fff" stroke-width="4" fill="none"/></g>`,90,'sphere','a ball'],
-  [`<g>${cylinder(240,90,40,100,C.bad)}<rect x="200" y="120" width="80" height="40" fill="#fff" stroke="${C.ink}" stroke-width="2"/>${T(240,147,'SOUP','sm mid')}</g>`,240,'cylinder','a tin can'],
-  [`<g>${cube(355,110,70,'#FFFFFF')}${[[372,127],[408,163],[390,145]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="${C.ink}"/>`).join('')}</g>`,400,'cube','a dice'],
+  [`<g>${po('soupcan',180,72,120,132)}</g>`,240,'cylinder','a tin can'],
+  [`<g>${po('dice',350,76,100,110)}</g>`,400,'cube','a dice'],
   [`<g>${cuboid(490,70,80,110,40,C.sun)}${T(530,130,'CEREAL','sm mid')}</g>`,545,'cuboid','a cereal box'],
   [`<g transform="translate(28 14)"><path d="M118 236 L160 350 L202 236z" fill="#E3B66B" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round"/><path d="M130 262 l50 -26 M140 290 l54 -40 M150 318 l46 -40 M136 248 l40 70 M162 240 l22 40" stroke="#B88A3E" stroke-width="2"/>${sphere(160,214,42,C.berry)}</g>`,188,'cone','an ice cream cone'],
-  [`<g>${cone(330,340,44,130,C.grape)}<circle cx="330" cy="210" r="12" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/>${[[316,290],[346,310],[330,260]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="${C.sun}"/>`).join('')}</g>`,330,'cone','a party hat'],
+  [`<g>${po('partyhat',272,194,116,162)}</g>`,330,'cone','a party hat'],
   [`<g>${sphere(490,290,48,'#FF9F43')}<path d="M452 272 q38 20 76 0" stroke="#D97A1E" stroke-width="3" fill="none"/></g>`,490,'sphere','an orange']];
   return it.map(([g,x,n,o],k)=>`<g class="tap hunt" data-n="${n}" data-o="${o}" data-x="${x}" data-y="${k<4?232:384}">${G(g,'a-pop',.1+k*.12)}</g>`).join('')+`<g class="labels"></g>`},
  mount:a=>{const found=new Set();a.qa('.hunt').forEach(g=>g.onclick=()=>{const{n,o,x,y}=g.dataset;
@@ -361,7 +363,7 @@ const S=[
  quiz:{options:[oDown,oRight,oLeft],answer:oRight,why:'Up, right, down, left, up... then it points <b>right</b> again.',hint:'After it points up, which way did it point the first time?'}},
 
 {part:'check',title:'Star check 4',say:'Which 3D shape is a <b>tin can</b>?',
- draw:()=>cylinder(320,100,70,190,C.bad)+`<rect x="250" y="160" width="140" height="70" fill="#fff" stroke="${C.ink}" stroke-width="2"/>`+T(320,205,'BEANS','lab mid'),
+ draw:()=>po('soupcan',206,70,228,248),
  quiz:{options:['cone','cylinder','sphere','cuboid'],answer:'cylinder',why:'A tin can has two flat circle faces and one curved face. It is a <b>cylinder</b>.',hint:'It has a flat circle at the top and the bottom.'}},
 
 {part:'check',title:'Star check 5',say:'Which shape can <b>roll</b> AND <b>stack</b>?',
