@@ -80,7 +80,13 @@ function attempt(k,ok){const u=ready();if(!u||done.has(k))return null;done.add(k
 new MutationObserver(ms=>{for(const m of ms){const b=m.target;if(b.tagName==='BUTTON'&&b.classList.contains('no')&&isQ(S[i])&&b.closest('#ui')){missed.add(i);attempt(i,false)}}})
  .observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
 const win0=win;
-win=function(){const k=i,first=!done.has(k);const r=win0.apply(this,arguments);const u=ready();if(!u)return r;
+// den:answer (every right answer; first = no wrong tap before it) and den:finish (a deck, boss round or story done)
+// let other scripts, like the cheering buddy, react even when nobody is logged in
+const won=new Set(),finished=new Set(),fire=(t,d)=>dispatchEvent(new CustomEvent(t,{detail:d}));
+win=function(){const k=i,first=!done.has(k),firstWin=!won.has(k);won.add(k);const r=win0.apply(this,arguments);
+ if(isQ(S[k])){if(firstWin)fire('den:answer',{first:!missed.has(k),slide:k,part:S[k].part});
+  const g=group(S[k]);if(!finished.has(g)&&S.every((s,n)=>!isQ(s)||group(s)!==g||earned.has(n))){finished.add(g);fire('den:finish',{group:g})}}
+ const u=ready();if(!u)return r;
  if(isQ(S[k])){if(first){const res=attempt(k,true);
    if(res.stars)toast(`⭐ +${res.stars} ${res.kind==='review'?'review star! You still remember it':'banked for '+USERS[u]}! <span style="opacity:.75">(${totals(u).balance} in the bank)</span>`);
    else toast(`You already did this one this week. It can earn a star again from ${day(res.when)}.`)}

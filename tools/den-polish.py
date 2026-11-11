@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Inject (or refresh) the shared picture-book polish into every lesson deck.
 
-Adds two marked blocks to each deck that uses the shared engine:
+Adds these marked blocks to each deck that uses the shared engine:
   * CSS  /* den-polish:start */ ... /* den-polish:end */  at the end of the head <style>
-  * JS   <script id="den-fireworks"> ... </script>        just before </body>
+  * JS   <script id="den-fireworks"> ... </script>        just before </body> (and den-cutscenes in boss decks)
+  * the cheering buddy, <script id="den-buddy" src="../buddy.js" defer>, after those (stars.js stays last)
 Re-running replaces the blocks, so edit them here and run:  python3 tools/den-polish.py
+To refresh only some decks (e.g. while another team is editing the rest):  python3 tools/den-polish.py maths/p2-deck05.html ...
 Lesson and story content is never touched. Storybooks share the deck engine, so they get the same
 blocks (a chapter counts as a stage for the fireworks). Pages without the engine (spelling/wordlists.html)
 and the grown-ups deck are skipped. PHONE_CSS / apply_phone() hold just the phone layout, for any future
@@ -90,6 +92,8 @@ JS = r"""<script id="den-fireworks">
 })();
 </script>
 """
+
+BUDDY = '<script id="den-buddy" src="../buddy.js" defer></script>\n'
 
 CS_JS = r"""<script id="den-cutscenes">
 /* Boss decks only: Baddie rises out of his lair before the first lie, runs off in a puff of smoke when he is beaten, and
@@ -183,18 +187,22 @@ def apply(path):
     s = re.sub(r'<script id="den-fireworks">.*?</script>\n', "", s, flags=re.S)
     s = re.sub(r'<script id="den-cutscenes">.*?</script>\n', "", s, flags=re.S)
     s = re.sub(r"/\* den-phone:start.*?/\* den-phone:end \*/\n", "", s, flags=re.S)
+    s = s.replace(BUDDY, "")
     head_end = s.index("</style></head>")
     s = s[:head_end] + "\n" + CSS + s[head_end:]
     s = s.replace("\n\n" + CSS, "\n" + CSS)
     body_end = s.rindex("</body>")
     stars = s.rfind('<script src="../stars.js"', 0, body_end)  # keep the Star Bank script last
     at = stars if stars != -1 else body_end
-    s = s[:at] + JS + (CS_JS if "/boss-" in "/" + rel else "") + s[at:]
+    s = s[:at] + JS + (CS_JS if "/boss-" in "/" + rel else "") + BUDDY + s[at:]
     path.write_text(s, encoding="utf-8")
     return "ok"
 
 if __name__ == "__main__":
+    only = {pathlib.Path(a).as_posix() for a in sys.argv[1:]}
     for p in sorted(ROOT.glob("*/*.html")):
+        if only and p.relative_to(ROOT).as_posix() not in only:
+            continue
         rel = p.relative_to(ROOT).as_posix()
         if rel in SKIP:
             continue
