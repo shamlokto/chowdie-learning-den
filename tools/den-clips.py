@@ -25,6 +25,8 @@ CLIPS = {
     "science/sci-06.html":      {"../img/sci/v-handwash.webp": "../img/sci/v-handwash"},
     "chinese/p2cn02.html":      {"../img/cn/v-liondance.webp": "../img/cn/v-liondance"},
     "music/mus06.html":         {"../img/music/v-instruments.webp": "../img/music/v-instruments"},
+    "science/sci-05.html":      {"../img/sci/v-heart.webp": "../img/sci/v-heart", "../img/sci/v-lungs.webp": "../img/sci/v-lungs"},
+    "science/sci-07.html":      {"../img/eco-mangrove.webp": "../img/v-mangrove"},
 }
 
 JS = r"""<script id="den-clips">
@@ -46,7 +48,8 @@ def apply(rel, mapping):
     p = ROOT / rel
     s = p.read_text(encoding="utf-8")
     s = re.sub(r'<script id="den-clips">.*?</script>\n', "", s, flags=re.S)
-    # sit after den-polish's blocks and before the buddy (tools/den-polish.py), with stars.js last
+    # sit after den-polish's blocks and before the buddy (tools/den-polish.py), with stars.js last;
+    # the buddy tag carries a src attribute, so match its opening only
     k = s.find('<script id="den-buddy"')
     if k == -1:
         k = s.rfind('<script src="../stars.js"')

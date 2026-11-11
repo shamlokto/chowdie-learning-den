@@ -489,7 +489,7 @@ const S=[
 
 {part:'try',title:'Join the sentences',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const Q=[['I was tired','I went to bed early.','so',['but','or']],['Hana likes durian','Zack does not.','but',['and','because']],['We stayed indoors','it was raining.','because',['so','or']],['Would you like rice','noodles?','or',['and','so']],['Mei fed the cat','Arjun washed the dishes.','and',['because','or']]];let r=0,busy=false;
-  const show=()=>{busy=false;const [p,q,ans]=Q[r];a.q('.play').innerHTML=T(320,40,`${r+1} of 5`,'sm mid mut')+box(40,90,560,60,'#fff',14)+T(320,128,p,'lab mid')+box(230,170,180,60,'#FFF4D6',14)+T(320,208,'?','h mid acc')+box(40,250,560,60,'#fff',14)+T(320,288,q,'lab mid');
+  const show=()=>{busy=false;const [p,q,ans]=Q[r];a.q('.play').innerHTML=T(320,40,`${r+1} of 5`,'sm mid mut')+box(40,90,560,60,'#fff',14)+T(320,128,p,'lab mid')+box(230,170,180,60,'#FFF4D6',14)+T(320,208,'?','h mid acc')+box(40,250,560,60,'#fff',14)+T(320,288,q,'lab mid')+(/went to bed/.test(q)?pic('eng/zack-sleep',515,247,106,93):'');
    a.ui.innerHTML='';[ans,...Q[r][3]].sort(()=>Math.random()-.5).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===ans){busy=true;b.classList.add('ok');r++;const why={so:'The second part is a result.',but:'The two parts are different.',because:'The second part gives the reason.',or:'It is a choice.',and:'It adds another idea.'}[ans];if(r<Q.length){a.confetti();a.say(`<b>${p} ${ans} ${q}</b> ${why}`);a.later(show,1800)}else a.win(`<b>${p} ${ans} ${q}</b> ${why} Joining champion!`)}else{b.classList.add('no');a.say('Read both parts. Is the second part a reason, a result, a difference, a choice, or just another idea?')}},'go'));
    a.say('Which <b>joining word</b> connects these two ideas best?')};show();}},
 

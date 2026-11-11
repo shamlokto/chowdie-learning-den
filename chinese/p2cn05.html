@@ -608,9 +608,11 @@ const patCard=(x,y,w,h,z,p,e,d=0,fill='#fff',sz=26)=>G(`<g class="tap" data-zh="
 /* P2 Chinese 5: 你想养什么宠物 · 我和小乐和好了 · 感谢我周围的人 — pets, caring, feelings, saying sorry, thanking helpers, 您 */
 const PE=[['🐶','小狗','xiǎo gǒu','puppy'],['🐱','小猫','xiǎo māo','kitten'],['🐰','兔子','tùzi','rabbit'],['🐟','金鱼','jīnyú','goldfish'],['🐢','乌龟','wūguī','tortoise'],['🐹','仓鼠','cāngshǔ','hamster'],['🦜','鹦鹉','yīngwǔ','parrot'],['🐦','小鸟','xiǎo niǎo','little bird']];
 const HE=[['🧑‍⚕️','医生','yīshēng','doctor'],['👩‍⚕️','护士','hùshi','nurse'],['🧹','清洁工人','qīngjié gōngrén','cleaner'],['💂','保安','bǎo\'ān','security guard'],['🚌','司机','sījī','driver'],['👩‍🍳','食堂阿姨','shítáng āyí','canteen auntie']];
+/* scene tile: the painted still, clipped and framed */
+const vtile=(src,x,y,w,h,id)=>`<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/></clipPath></defs><image href="${src}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`;
 const S=[
 talk('你想养什么宠物？','w','c',[['w','你想养什么宠物？','Nǐ xiǎng yǎng shénme chǒngwù?','What pet would you like?'],['c','我想养一只小狗。','Wǒ xiǎng yǎng yì zhī xiǎo gǒu.','I\'d like a puppy.'],['w','我想养一条金鱼。','Wǒ xiǎng yǎng yì tiáo jīnyú.','I\'d like a goldfish.']],
- '你想养什么宠物？<i class="py">chǒngwù</i> means pet, and <b>养</b> <i class="py">yǎng</i> means to keep or raise. Chowdie wants <b>一只</b>小狗; Wala wants <b>一条</b>金鱼. Remember: fish use 条!'),
+ '你想养什么宠物？<i class="py">chǒngwù</i> means pet, and <b>养</b> <i class="py">yǎng</i> means to keep or raise. Chowdie wants <b>一只</b>小狗; Wala wants <b>一条</b>金鱼. Remember: fish use 条!',G(vtile('../img/cn/pets.webp',290,236,214,120,'vpets'),'a-pop',2.4)),
 vocab('Pets 宠物','c','Which pet do you like? <b>小狗</b> puppy, <b>小猫</b> kitten, <b>兔子</b> rabbit, <b>金鱼</b> goldfish, <b>乌龟</b> tortoise, <b>仓鼠</b> hamster, <b>鹦鹉</b> parrot, <b>小鸟</b> little bird.',PE),
 {part:'learn',title:'照顾宠物 Caring for a pet',who:'wala',say:WL+'Keeping a pet means taking care of it every day: <b>照顾</b> <i class="py">zhàogù</i>. <b>喂</b>它吃东西 feed it. <b>给</b>它洗澡 give it a bath. <b>带</b>它去散步 take it for a walk. <b>陪</b>它玩 play with it. 养宠物要有<b>爱心</b>和<b>耐心</b>: you need love and patience!',
  draw:()=>[['🥣','喂它吃东西','wèi tā chī dōngxi'],['🛁','给它洗澡','gěi tā xǐzǎo'],['🦮','带它去散步','dài tā qù sànbù'],['🎾','陪它玩','péi tā wán']].map(([e,z,p],k)=>{const x=20+(k%2)*304,y=14+Math.floor(k/2)*146;
