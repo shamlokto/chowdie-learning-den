@@ -969,7 +969,13 @@ const chStage0=chStage;chStage=(...a)=>paint(CHBG[S[i]&&S[i].part]||CHBG.def,.55
 const vcard=(t,ref,y=300)=>{const L=wrapT('“'+t+'”',52);const h=L.length*24+40;return G(`<rect x="60" y="${y}" width="520" height="${h}" rx="16" fill="#FFFDF6" stroke="${C.ink}" stroke-width="2.5" opacity=".95"/>`+L.map((l,k)=>T(320,y+28+k*24,l,'mid','style="font-size:18px;font-style:italic"')).join('')+T(564,y+h-10,ref,'sm end mut','style="font-size:13px"'),'a-pop',.5)};
 /* the crew reflect at the end */
 const crew=()=>G(wala(110,392,.8,{still:true})+flame(250,392,.66,{wave:true})+owl(390,392,.72,{wave:true})+otter(530,392,.74,{wave:true}),'a-pop',.2);
-const theEnd=()=>T(320,330,'THE END','h mid','style="fill:#6A5BA8;paint-order:stroke;stroke:#fff;stroke-width:6px;font-size:36px"');
+/* reverent Bible decks: a gentle glow instead of confetti, calm praise words, a quiet "The End", and no fireworks */
+(function(){const st=document.createElement('style');st.textContent='@keyframes bglow{0%{opacity:0;transform:scale(.7)}35%{opacity:.9}100%{opacity:0;transform:scale(1.2)}} .bglow{transform-box:fill-box;transform-origin:center;animation:bglow 1.6s ease-out forwards} body>canvas[aria-hidden="true"]{display:none!important}';document.head.appendChild(st)})();
+confetti=function(){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.innerHTML='<defs><radialGradient id="bgl"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".95"/><stop offset=".6" stop-color="#FFF4D0" stop-opacity=".45"/><stop offset="1" stop-color="#FFF4D0" stop-opacity="0"/></radialGradient></defs><circle class="bglow" cx="320" cy="160" r="170" fill="url(#bgl)"/>';svg.appendChild(g);later(()=>g.remove(),1700)};
+api.confetti=confetti;
+praise.splice(0,praise.length,'Well done.','That\'s right.','Yes, well done.','Well remembered.','Good listening.');
+const theEnd=()=>G(`<rect x="230" y="300" width="180" height="56" rx="16" fill="#FFFDF6" stroke="#6A5BA8" stroke-width="2.5" opacity=".95"/>`+T(320,337,'The End','h mid','style="fill:#6A5BA8;font-size:28px"'),'a-fade',.4);
+const quietEnd=a=>a.later(()=>a.win(),700);
 
 /* ===== Bible Stories: David and Saul: The Lord Looks at the Heart (1 Samuel 15–24). Chowdie narrates; the crew reflect at the end.
    A faithful retelling in simple words; quoted verses are short and exact (NIV). Focus: David's trusting heart compared with
@@ -985,14 +991,14 @@ const CHBG={d1:'saul',d2:'shepherd',d3:'goliath',d4:'jealous',d5:'cave',d6:'hear
 
 const S=[
 /* ---------- 1: King Saul ---------- */
-story('d1','Two hearts','otter',`This is a true story from the Bible, about two kings: Saul and David. One king had a proud heart. The other had a heart that trusted and loved God.`,
+story('d1','Two hearts','otter',`This story comes from God's Word, the Bible: 1 Samuel, chapters 15 to 24. It is about two kings, Saul and David. One king had a proud heart. The other had a heart that trusted and loved God.`,
  ()=>paint('shepherd',.1)+vcard('the LORD looks at the heart','1 Samuel 16:7',306),
- `Hello! I'm Chowdie. Today's story comes from the book of <b>1 Samuel</b> in the Bible. `+V('the LORD looks at the heart','1 Samuel 16:7')),
+ `Hello, I'm Chowdie. This story comes from God's Word, the book of <b>1 Samuel</b>, chapters 15 to 24. `+V('the LORD looks at the heart','1 Samuel 16:7')),
 story('d1','King Saul','otter',`Israel's first king was Saul. He was tall and handsome. But when God told him what to do, Saul did not obey God, and he was not sorry in his heart. He thought his own way was better.`,
  ()=>paint('saul'),`Saul looked like a great king on the outside. But his heart did not want to <b>obey</b> God.`),
 story('d1','"To obey is better"','samuel',`The prophet Samuel told Saul that God wants us to obey Him more than anything else we could give Him. Because Saul would not obey, God would choose a new king.`,
  ()=>paint('saul',.1),`To obey is better than sacrifice.`+R('1 Samuel 15:22')),
-mc('d1','otter','bible','Why was God sad?',{q:'Why was God sad about King Saul?',options:['Saul did not obey God','Saul was too short','Saul could not sing','Saul had no sheep'],answer:'Saul did not obey God',
+mc('d1','otter','bible','Why was God sad?',{q:'Why was God sad about King Saul?',options:['Saul did not obey God','Saul lost a battle','Saul was too old to rule','Saul had no army'],answer:'Saul did not obey God',
  why:'Saul <b>did not obey</b> God, and he was not sorry. '+V('To obey is better than sacrifice.','1 Samuel 15:22'),hint:'What did Samuel say is better than sacrifice?'}),
 
 /* ---------- 2: The Shepherd ---------- */
@@ -1023,7 +1029,7 @@ story('d3','Five smooth stones','otter',`David did not wear the king's heavy arm
 story('d3','"The battle is the LORD\'s"','david',`Goliath laughed at David. But David called out that he came in the name of the LORD Almighty, and that the battle belonged to God.`,
  ()=>paint('sling'),`I come against you in the name of the LORD Almighty… for the battle is the LORD’s.`+R('1 Samuel 17:45, 47')),
 story('d3','One stone','otter',`David ran towards Goliath, put a stone in his sling and slung it. The stone struck Goliath on the forehead, and the giant fell face down on the ground! God had given Israel the victory.`,
- ()=>paint('fallen'),`One small stone and a big trust in God! The battle really was the LORD's.`),
+ ()=>paint('fallen'),`One small stone, and a great trust in God. The battle was the LORD's.`),
 num('d3','otter','maths','Stones in the bag',{q:'David chose 5 smooth stones. He used only 1. How many stones were left in his bag?',answer:4,unit:'stones',
  why:'5 − 1 = <b>4</b>. David only needed one stone, because God was with him!',hint:'Take away 1 from 5.'}),
 
@@ -1054,7 +1060,7 @@ mcR('d6','otter','bible','Saul or David?','Whose heart is this: Saul\'s or David
  {q:'Trusted God when facing the giant.',options:['Saul','David'],answer:'David',ok:'That was <b>David</b>: "The battle is the LORD\'s!"',hint:'Who had five smooth stones?'},
  {q:'Became jealous when someone else was praised.',options:['Saul','David'],answer:'Saul',ok:'That was <b>Saul</b>. Jealousy made his heart hard.',hint:'Who was angry when the people sang?'},
  {q:'Spared his enemy in the cave.',options:['Saul','David'],answer:'David',ok:'That was <b>David</b>. He showed mercy.',hint:'Who cut off a corner of a robe?'}]),
-story('d6','What we learn from David','wala',`"God looks at our hearts, not at how big or strong we are," said Wala. "David trusted God when he faced the giant," said Flamecharge. "And he was kind even to someone who was unkind to him," hooted Immortal Dash. "Ruth would be proud of her great-grandson!" said Chowdie.`,
+story('d6','What we learn from David','wala',`"God looks at our hearts, not at how big or strong we are," said Wala. "David trusted God when he faced the giant," said Flamecharge. "And he was kind even to someone who was unkind to him," said Immortal Dash. "Ruth would be proud of her great-grandson!" said Chowdie.`,
  ()=>paint('heart',.5)+crew(),
  `David shows us a heart that <b>trusts</b> God, <b>obeys</b> Him, shows <b>mercy</b>, and says sorry when it goes wrong.`),
 mcR('d6','wala','chinese','Wala\'s 华文 words','Wala has two 华文 words from David\'s story. What do they mean?',[
@@ -1065,9 +1071,9 @@ story('d6','Memory verse','otter',`Let's learn this verse by heart: "People look
  `Say it with me! `+V('People look at the outward appearance, but the LORD looks at the heart.','1 Samuel 16:7')),
 mc('d6','otter','bible','Fill in the memory verse',{q:'"People look at the outward appearance, but the LORD looks at the ______." (1 Samuel 16:7)',options:['heart','clothes','crown','height'],answer:'heart',
  why:'"People look at the outward appearance, but the LORD looks at the <b>heart</b>."',hint:'God sees what is inside us.'}),
-story('d6','The End','otter',`God chose David because of his heart. God looks at our hearts too, and He loves a heart that trusts Him. THE END.`,
- ()=>paint('heart',.15)+theEnd(),
- `The LORD looks at the heart. <b>THE END.</b>`,{mount:a=>a.later(()=>{a.confetti();a.win()},700)}),
+story('d6','The End','otter',`David the shepherd later wrote a song to God, Psalm 23. Thank You, God, for looking at our hearts and leading us like a shepherd.`,
+ ()=>paint('heart',.15)+vcard('He leads me beside quiet waters, he refreshes my soul.','Psalm 23:2–3',150)+theEnd(),
+ `David wrote, `+V('He leads me beside quiet waters, he refreshes my soul.','Psalm 23:2–3')+` Thank You, God, for looking at our hearts. The End.`,{mount:quietEnd}),
 ];
 
 

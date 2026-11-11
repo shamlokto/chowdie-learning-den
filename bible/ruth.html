@@ -969,7 +969,13 @@ const chStage0=chStage;chStage=(...a)=>paint(CHBG[S[i]&&S[i].part]||CHBG.def,.55
 const vcard=(t,ref,y=300)=>{const L=wrapT('“'+t+'”',52);const h=L.length*24+40;return G(`<rect x="60" y="${y}" width="520" height="${h}" rx="16" fill="#FFFDF6" stroke="${C.ink}" stroke-width="2.5" opacity=".95"/>`+L.map((l,k)=>T(320,y+28+k*24,l,'mid','style="font-size:18px;font-style:italic"')).join('')+T(564,y+h-10,ref,'sm end mut','style="font-size:13px"'),'a-pop',.5)};
 /* the crew reflect at the end */
 const crew=()=>G(wala(110,392,.8,{still:true})+flame(250,392,.66,{wave:true})+owl(390,392,.72,{wave:true})+otter(530,392,.74,{wave:true}),'a-pop',.2);
-const theEnd=()=>T(320,330,'THE END','h mid','style="fill:#6A5BA8;paint-order:stroke;stroke:#fff;stroke-width:6px;font-size:36px"');
+/* reverent Bible decks: a gentle glow instead of confetti, calm praise words, a quiet "The End", and no fireworks */
+(function(){const st=document.createElement('style');st.textContent='@keyframes bglow{0%{opacity:0;transform:scale(.7)}35%{opacity:.9}100%{opacity:0;transform:scale(1.2)}} .bglow{transform-box:fill-box;transform-origin:center;animation:bglow 1.6s ease-out forwards} body>canvas[aria-hidden="true"]{display:none!important}';document.head.appendChild(st)})();
+confetti=function(){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.innerHTML='<defs><radialGradient id="bgl"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".95"/><stop offset=".6" stop-color="#FFF4D0" stop-opacity=".45"/><stop offset="1" stop-color="#FFF4D0" stop-opacity="0"/></radialGradient></defs><circle class="bglow" cx="320" cy="160" r="170" fill="url(#bgl)"/>';svg.appendChild(g);later(()=>g.remove(),1700)};
+api.confetti=confetti;
+praise.splice(0,praise.length,'Well done.','That\'s right.','Yes, well done.','Well remembered.','Good listening.');
+const theEnd=()=>G(`<rect x="230" y="300" width="180" height="56" rx="16" fill="#FFFDF6" stroke="#6A5BA8" stroke-width="2.5" opacity=".95"/>`+T(320,337,'The End','h mid','style="fill:#6A5BA8;font-size:28px"'),'a-fade',.4);
+const quietEnd=a=>a.later(()=>a.win(),700);
 
 /* ===== Bible Stories: Ruth: "Where You Go, I Will Go" (the book of Ruth). Chowdie narrates; the crew reflect at the end.
    A faithful retelling in simple words; quoted verses are short and exact (NIV). Focus: Ruth's loyalty, hard work and steady
@@ -989,16 +995,16 @@ const tree=()=>{const box=(x,y,t,c)=>`<rect x="${x-74}" y="${y-22}" width="148" 
 
 const S=[
 /* ---------- 1: Hard Times ---------- */
-story('r1','A story of loyalty','otter',`This is a true story from the Bible, about Ruth. She left her home to live in a new land, and she stayed loyal, hard-working and kind, even when life was hard.`,
+story('r1','A story of loyalty','otter',`This story comes from God's Word, the Bible: the book of Ruth, chapters 1 to 4. Ruth left her home to live in a new land, and she stayed loyal, hard-working and kind, even when life was hard.`,
  ()=>paint('journey',.1)+vcard('Where you go I will go','Ruth 1:16',306),
- `Hello! I'm Chowdie. Today's story comes from the book of <b>Ruth</b> in the Bible. `+V('Where you go I will go','Ruth 1:16')),
+ `Hello, I'm Chowdie. This story comes from God's Word, the book of <b>Ruth</b>. `+V('Where you go I will go','Ruth 1:16')),
 story('r1','No food in Bethlehem','otter',`Long ago, there was a famine in Israel. No rain fell, and no food would grow. A man named Elimelek, his wife Naomi and their two sons left the town of Bethlehem and went to live in the land of Moab.`,
  ()=>paint('famine'),`A <b>famine</b> is a time when there is not enough food. Naomi's family had to move to a new country.`),
 story('r1','A new family','otter',`In Moab, Naomi's two sons married two young women from Moab, called Ruth and Orpah. Naomi loved them like her own daughters.`,
  ()=>paint('moab'),`Naomi's family grew bigger. Ruth and Orpah became her <b>daughters-in-law</b>.`),
 story('r1','Sad times','otter',`Then sad things happened. Naomi's husband died, and some years later both of her sons died too. Naomi, Ruth and Orpah were left on their own, and they were very sad.`,
  ()=>paint('sad'),`Sometimes very sad things happen. Naomi, Ruth and Orpah stayed close and comforted each other.`),
-mc('r1','otter','bible','Why did they move?',{q:'Why did Naomi\'s family move from Bethlehem to Moab?',options:['There was a famine, with no food','They wanted a holiday','They were looking for treasure','The king sent them away'],answer:'There was a famine, with no food',
+mc('r1','otter','bible','Why did they move?',{q:'Why did Naomi\'s family move from Bethlehem to Moab?',options:['There was a famine, with no food','They wanted to visit family','They were looking for gold','A king sent them away'],answer:'There was a famine, with no food',
  why:'There was a <b>famine</b> in Israel. No food would grow, so the family moved to Moab.',hint:'Look at the dry, cracked fields.'}),
 
 /* ---------- 2: Where You Go ---------- */
@@ -1026,7 +1032,7 @@ story('r3','Barley for Naomi','otter',`Boaz even told his workers to leave extra
  ()=>paint('home'),`Ruth's hard work fed them both, and God was taking care of them through Boaz's kindness.`),
 mc('r3','otter','bible','What is gleaning?',{q:'Ruth went gleaning in the fields. What is gleaning?',options:['Picking up the grain left behind in the fields','Planting new seeds','Selling grain at the market','Baking bread'],answer:'Picking up the grain left behind in the fields',
  why:'<b>Gleaning</b> means picking up the grain the harvest workers left behind. God\'s law let poor people and strangers glean, so they would have food.',hint:'Look at Ruth bending down in the field.'}),
-mc('r3','otter','bible','Why was Boaz kind?',{q:'Why was Boaz so kind to Ruth?',options:['He had heard how kind and loyal she was to Naomi','She paid him lots of money','She was his sister','She was a famous queen'],answer:'He had heard how kind and loyal she was to Naomi',
+mc('r3','otter','bible','Why was Boaz kind?',{q:'Why was Boaz so kind to Ruth?',options:['He had heard how kind and loyal she was to Naomi','She paid him lots of money','She was his sister','She came from a rich family'],answer:'He had heard how kind and loyal she was to Naomi',
  why:'Boaz said, '+V('I’ve been told all about what you have done for your mother-in-law','Ruth 2:11')+' Ruth\'s kindness had been noticed!',hint:'What had Ruth done for Naomi?'}),
 
 /* ---------- 4: Boaz ---------- */
@@ -1049,7 +1055,7 @@ mc('r5','otter','bible','Ruth\'s great-grandson',{q:'Ruth\'s great-grandson beca
  why:'Ruth → Obed → Jesse → <b>King David</b>. Ruth was King David\'s great-grandmother!',hint:'Look at the family tree.'}),
 
 /* ---------- 6: Remember ---------- */
-story('r6','What we learn from Ruth','wala',`"Ruth stayed loyal to Naomi, even when it was hard," said Wala. "She worked hard in a new land," said Flamecharge. "And Boaz was kind to a stranger," hooted Immortal Dash. "God took care of them all along," said Chowdie.`,
+story('r6','What we learn from Ruth','wala',`"Ruth stayed loyal to Naomi, even when it was hard," said Wala. "She worked hard in a new land," said Flamecharge. "And Boaz was kind to a stranger," said Immortal Dash. "God took care of them all along," said Chowdie.`,
  ()=>paint('obed',.5)+crew(),
  `Ruth shows us <b>loyalty</b>, <b>hard work</b> and <b>faith</b> in God, even in a new land where everything is different.`),
 mcR('r6','otter','bible','Good qualities','Match each moment in the story to the good quality it shows.',[
@@ -1065,9 +1071,9 @@ story('r6','Memory verse','otter',`Let's learn this verse by heart: "Your people
  `Say it with me! `+V('Your people will be my people and your God my God.','Ruth 1:16')),
 mc('r6','otter','bible','Fill in the memory verse',{q:'"Your people will be my people and your ______ my God." (Ruth 1:16)',options:['God','house','field','town'],answer:'God',
  why:'"Your people will be my people and your <b>God</b> my God." Ruth chose to trust Naomi\'s God.',hint:'Who did Ruth choose to trust?'}),
-story('r6','The End','otter',`Ruth stayed loyal, worked hard and trusted God in a new land, and God blessed her. Next, meet her great-grandson, David! THE END.`,
+story('r6','The End','otter',`Ruth stayed loyal, worked hard and trusted God in a new land, and God blessed her. Thank You, God, for taking care of us wherever we go.`,
  ()=>paint('obed',.15)+theEnd(),
- `God takes care of us, wherever we go. <b>THE END.</b>`,{mount:a=>a.later(()=>{a.confetti();a.win()},700)}),
+ `Thank You, God, for taking care of us wherever we go. The End.`,{mount:quietEnd}),
 ];
 
 

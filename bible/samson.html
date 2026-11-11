@@ -969,7 +969,13 @@ const chStage0=chStage;chStage=(...a)=>paint(CHBG[S[i]&&S[i].part]||CHBG.def,.55
 const vcard=(t,ref,y=300)=>{const L=wrapT('“'+t+'”',52);const h=L.length*24+40;return G(`<rect x="60" y="${y}" width="520" height="${h}" rx="16" fill="#FFFDF6" stroke="${C.ink}" stroke-width="2.5" opacity=".95"/>`+L.map((l,k)=>T(320,y+28+k*24,l,'mid','style="font-size:18px;font-style:italic"')).join('')+T(564,y+h-10,ref,'sm end mut','style="font-size:13px"'),'a-pop',.5)};
 /* the crew reflect at the end */
 const crew=()=>G(wala(110,392,.8,{still:true})+flame(250,392,.66,{wave:true})+owl(390,392,.72,{wave:true})+otter(530,392,.74,{wave:true}),'a-pop',.2);
-const theEnd=()=>T(320,330,'THE END','h mid','style="fill:#6A5BA8;paint-order:stroke;stroke:#fff;stroke-width:6px;font-size:36px"');
+/* reverent Bible decks: a gentle glow instead of confetti, calm praise words, a quiet "The End", and no fireworks */
+(function(){const st=document.createElement('style');st.textContent='@keyframes bglow{0%{opacity:0;transform:scale(.7)}35%{opacity:.9}100%{opacity:0;transform:scale(1.2)}} .bglow{transform-box:fill-box;transform-origin:center;animation:bglow 1.6s ease-out forwards} body>canvas[aria-hidden="true"]{display:none!important}';document.head.appendChild(st)})();
+confetti=function(){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.innerHTML='<defs><radialGradient id="bgl"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".95"/><stop offset=".6" stop-color="#FFF4D0" stop-opacity=".45"/><stop offset="1" stop-color="#FFF4D0" stop-opacity="0"/></radialGradient></defs><circle class="bglow" cx="320" cy="160" r="170" fill="url(#bgl)"/>';svg.appendChild(g);later(()=>g.remove(),1700)};
+api.confetti=confetti;
+praise.splice(0,praise.length,'Well done.','That\'s right.','Yes, well done.','Well remembered.','Good listening.');
+const theEnd=()=>G(`<rect x="230" y="300" width="180" height="56" rx="16" fill="#FFFDF6" stroke="#6A5BA8" stroke-width="2.5" opacity=".95"/>`+T(320,337,'The End','h mid','style="fill:#6A5BA8;font-size:28px"'),'a-fade',.4);
+const quietEnd=a=>a.later(()=>a.win(),700);
 
 /* ===== Bible Stories: Samson: Strong Arms, a Second Chance (Judges 13–16). Chowdie narrates; the crew reflect at the end.
    A faithful retelling in simple words; quoted verses are short and exact (NIV). Focus: Samson's careless choices, and God
@@ -984,30 +990,30 @@ const CHBG={s1:'angel',s2:'gates',s3:'delilah',s4:'mill',s5:'pray',s6:'grow',def
 
 const S=[
 /* ---------- 1: A Special Promise ---------- */
-story('s1','A second chance','otter',`This is a true story from the Bible, about Samson. God made him very, very strong. Samson made many wrong choices, but when he turned back to God and prayed, God heard him.`,
+story('s1','A second chance','otter',`This story comes from God's Word, the Bible: the book of Judges, chapters 13 to 16. It is about Samson. God made him very strong. Samson made many wrong choices, but when he turned back to God and prayed, God heard him.`,
  ()=>paint('boy',.1)+vcard('whose weakness was turned to strength','Hebrews 11:34',306),
- `Hello! I'm Chowdie. Today's story comes from the book of <b>Judges</b> in the Bible. It's about <b>Samson</b>, a man who got a second chance. `+V('whose weakness was turned to strength','Hebrews 11:34')),
+ `Hello, I'm Chowdie. This story comes from God's Word, the book of <b>Judges</b>, chapters 13 to 16. It is about <b>Samson</b>, who was given a second chance. `+V('whose weakness was turned to strength','Hebrews 11:34')),
 story('s1','The angel\'s promise','otter',`Long ago, the Philistines ruled over God's people, Israel. A woman who had no children was in a field when the angel of the LORD came to her. He told her she would have a son.`,
  ()=>paint('angel'),`The angel said her son would help to set Israel free. `+V('He will take the lead in delivering Israel from the hands of the Philistines.','Judges 13:5')),
 story('s1','Set apart for God','otter',`The baby was named Samson. He was to be a Nazirite, set apart for God. One rule was very special: his hair must never be cut. His long hair showed that he belonged to God.`,
  ()=>paint('boy'),`Samson was <b>set apart</b> for God. `+V('He grew and the LORD blessed him','Judges 13:24')),
-mc('s1','otter','bible','The special rule',{q:'Samson was a Nazirite, set apart for God. What was his special rule?',options:['His hair must never be cut','He must never eat bread','He must never sing','He must always live in a tent'],answer:'His hair must never be cut',
+mc('s1','otter','bible','The special rule',{q:'Samson was a Nazirite, set apart for God. What was his special rule?',options:['His hair must never be cut','He must never leave his village','He must never eat bread','He must always wear white'],answer:'His hair must never be cut',
  why:'Samson\'s hair must <b>never be cut</b>. His long hair was a sign that he belonged to God.',hint:'Look at Samson\'s long braids.'}),
 
 /* ---------- 2: God's Gift ---------- */
 story('s2','A gift of strength','otter',`When Samson was a young man, a young lion came roaring towards him. The Spirit of the LORD gave Samson great strength, and he was safe! His strength was a gift from God.`,
  ()=>paint('lion'),`Samson's strength came from God. `+V('The Spirit of the LORD came powerfully upon him','Judges 14:6')),
 story('s2','Carrying the gates','otter',`Another time, Samson's enemies locked him inside the city of Gaza. In the middle of the night, he pulled up the huge city gates, posts and all, and carried them to the top of a hill!`,
- ()=>paint('gates'),`What strength! `+V('He lifted them to his shoulders and carried them to the top of the hill','Judges 16:3')),
-mc('s2','otter','bible','Where did his strength come from?',{q:'Where did Samson\'s great strength come from?',options:['God gave it to him','He ate lots of food','He lifted heavy rocks every day','His hair was magic'],answer:'God gave it to him',
+ ()=>paint('gates'),`Samson's strength was a gift from God. `+V('He lifted them to his shoulders and carried them to the top of the hill','Judges 16:3')),
+mc('s2','otter','bible','Where did his strength come from?',{q:'Where did Samson\'s great strength come from?',options:['God gave it to him','He trained very hard','He ate special food','His hair was magic'],answer:'God gave it to him',
  why:'Samson\'s strength was a <b>gift from God</b>. His long hair was a sign that he belonged to God, but the strength itself came from God.',hint:'Who came powerfully upon Samson when the lion roared?'}),
-story('s2','Careless choices','otter',`But Samson did not always follow God's ways. He did whatever he wanted. He trusted in his own strength instead of trusting God, and he made one careless choice after another.`,
+story('s2','Careless choices','otter',`But Samson did not always follow God's ways. He trusted in his own strength instead of trusting God, and he made careless choices.`,
  ()=>paint('proud'),`Samson forgot that his strength came from God. Thinking we don't need God is called <b>pride</b>.`),
 
 /* ---------- 3: The Secret ---------- */
-story('s3','Delilah\'s question','otter',`Samson loved a woman named Delilah. The Philistine rulers offered her lots of silver to find out the secret of his strength. So Delilah asked him again and again.`,
+story('s3','Delilah\'s question','otter',`There was a woman named Delilah. The Philistine rulers offered her silver to find out the secret of Samson's strength. So she asked him about his secret.`,
  ()=>paint('delilah'),`Delilah asked, `+V('Tell me the secret of your great strength','Judges 16:6')),
-story('s3','Again and again','otter',`Three times Samson told her something that wasn't true, and three times he broke free. But Delilah kept on asking, day after day, until Samson was tired of it. At last he told her everything.`,
+story('s3','Again and again','otter',`Three times, Samson did not tell her the truth. But Delilah kept asking, and at last Samson told her his secret.`,
  ()=>paint('delilah',.1),`Samson should have walked away. Instead, he told her his secret. `+V('No razor has ever been used on my head','Judges 16:17')),
 multi('s3','otter','bible','Wise or careless?',{q:'Which were CARELESS choices that Samson made? Tap ALL of them.',options:['Trusting his own strength instead of God','Not following God\'s ways','Telling Delilah his secret','Praying to God for help','Remembering that his strength came from God'],correct:['Trusting his own strength instead of God','Not following God\'s ways','Telling Delilah his secret'],zh:false,
  why:'Samson trusted himself, did not follow God\'s ways, and gave away his secret. Praying and remembering God are <b>wise</b> choices, and Samson made them later!',hint:'Which ones show Samson forgetting God?'}),
@@ -1022,7 +1028,7 @@ story('s4','Grinding grain','otter',`In prison, Samson had to grind grain, pushi
 story('s4','His hair began to grow','otter',`But something was happening. Day by day, Samson's hair began to grow again. God had not forgotten Samson.`,
  ()=>film('grow','Samson in prison as his hair grows again, in a ray of light'),
  `Look! `+V('But the hair on his head began to grow again after it had been shaved.','Judges 16:22'),{mount:mountFilm}),
-mc('s4','otter','bible','What happened in prison?',{q:'While Samson was in prison, what began to happen?',options:['His hair began to grow again','He became a king','He built a boat','He found a bag of silver'],answer:'His hair began to grow again',
+mc('s4','otter','bible','What happened in prison?',{q:'While Samson was in prison, what began to happen?',options:['His hair began to grow again','He was set free','He became a guard','He forgot all about God'],answer:'His hair began to grow again',
  why:'Samson\'s <b>hair began to grow again</b>. It was a sign that God had not forgotten him.',hint:'Look at the picture of Samson in the ray of light.'}),
 
 /* ---------- 5: Remember Me ---------- */
@@ -1034,7 +1040,7 @@ story('s5','"Remember me"','samson',`Then Samson prayed to the LORD. It was a hu
 story('s5','God heard him','otter',`God heard Samson's prayer and gave him strength one last time. Samson pushed with all his might. The great pillars cracked, and the whole temple came crashing down. Samson's life on earth ended that day, but God had heard his prayer.`,
  ()=>film('temple','Great stone pillars crack and dust drifts down'),
  `God <b>heard</b> Samson, and God <b>remembered</b> him. Samson's life on earth ended that day, but God had heard his prayer.`,{mount:mountFilm}),
-mc('s5','otter','bible','Samson\'s prayer',{q:'What did Samson ask God when he prayed?',options:['"Remember me, and strengthen me just once more."','"Make me rich."','"Give me a new house."','"Let me go home."'],answer:'"Remember me, and strengthen me just once more."',
+mc('s5','otter','bible','Samson\'s prayer',{q:'What did Samson ask God when he prayed?',options:['"Remember me, and strengthen me just once more."','"Please make me a king."','"Please let me go home."','"Please give me silver."'],answer:'"Remember me, and strengthen me just once more."',
  why:'Samson prayed, "Sovereign LORD, <b>remember me</b>. Please, God, <b>strengthen me just once more</b>." And God heard him.',hint:'Samson knew his strength could only come from God.'}),
 order('s5','otter','bible','Samson\'s story in order',{q:'Put Samson\'s story in order.',items:['The angel\'s promise','Delilah asks his secret','His hair grows in prison','Samson prays'],joiner:' → ',zh:false,
  why:'First the <b>angel\'s promise</b>, then <b>Delilah</b> found out his secret, then his <b>hair grew</b> again in prison, and at last Samson <b>prayed</b>, and God heard him.',hint:'What happened before Samson was even born?'}),
@@ -1043,7 +1049,7 @@ order('s5','otter','bible','Samson\'s story in order',{q:'Put Samson\'s story in
 story('s6','People of faith','otter',`Many years later, the book of Hebrews remembered Samson as one of the people of faith. He had been weak because of his wrong choices, but when he turned back to God, God made him strong.`,
  ()=>paint('grow',.25)+vcard('whose weakness was turned to strength','Hebrews 11:34',250),
  `Samson is on God's list of people of faith! `+V('whose weakness was turned to strength','Hebrews 11:34')),
-story('s6','What we learn from Samson','wala',`"We all make wrong choices sometimes," said Wala. "But we can say sorry to God and pray, like Samson did," said Flamecharge. "God hears us when we pray," hooted Immortal Dash. "And He is merciful," said Chowdie.`,
+story('s6','What we learn from Samson','wala',`"We all make wrong choices sometimes," said Wala. "But we can say sorry to God and pray, like Samson did," said Flamecharge. "God hears us when we pray," said Immortal Dash. "And He is merciful," said Chowdie.`,
  ()=>paint('boy',.5)+crew(),
  `Our strength and our gifts come from God. When we make wrong choices, we can turn back to God and pray, and He hears us.`),
 mcR('s6','otter','bible','Samson and us','Match each moment in Samson\'s story to the right word.',[
@@ -1056,11 +1062,11 @@ mcR('s6','wala','chinese','Wala\'s 华文 words','Wala has two 华文 words from
 story('s6','Memory verse','otter',`Let's learn this verse by heart: "If we confess our sins, he is faithful and just and will forgive us our sins." (1 John 1:9)`,
  ()=>paint('grow',.2)+vcard('If we confess our sins, he is faithful and just and will forgive us our sins','1 John 1:9',150)+G(otter(560,392,.66,{wave:true}),'a-pop',.4),
  `Say it with me! To confess means to tell God we are sorry. `+V('If we confess our sins, he is faithful and just and will forgive us our sins','1 John 1:9')),
-mc('s6','otter','bible','Fill in the memory verse',{q:'"If we ______ our sins, he is faithful and just and will forgive us our sins." (1 John 1:9)',options:['confess','hide','forget','count'],answer:'confess',
+mc('s6','otter','bible','Fill in the memory verse',{q:'"If we ______ our sins, he is faithful and just and will forgive us our sins." (1 John 1:9)',options:['confess','hide','forget','ignore'],answer:'confess',
  why:'"If we <b>confess</b> our sins, he is faithful and just and will forgive us our sins." To confess means to tell God we are sorry.',hint:'It means telling God we are sorry.'}),
-story('s6','The End','otter',`Samson made many wrong choices, but when he turned back to God and prayed, God heard him. God hears us too, whenever we pray. THE END.`,
+story('s6','The End','otter',`Samson made many wrong choices, but when he turned back to God and prayed, God heard him. Thank You, God, for hearing us when we pray.`,
  ()=>paint('grow',.15)+theEnd(),
- `God hears us when we pray, just as He heard Samson. <b>THE END.</b>`,{mount:a=>a.later(()=>{a.confetti();a.win()},700)}),
+ `Thank You, God, for hearing us when we pray. The End.`,{mount:quietEnd}),
 ];
 
 
