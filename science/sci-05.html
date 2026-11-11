@@ -230,6 +230,7 @@ function mountQuiz(sc){ const qz=sc.quiz; let done=false;
     if(o===qz.answer){done=true;b.classList.add('ok');[...ui.children].forEach(x=>x.disabled=true);win('<b>Yes!</b> '+qz.why); if(qz.after) qz.after(api);}
     else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('<b>Not quite.</b> '+qz.hint);} })); }
 function render(){
+  if(typeof HB!=='undefined')HB.stop();
   timers.forEach(clearTimeout); timers=[]; try{VTOK++;speechSynthesis.cancel()}catch(e){}
   const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
   svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
@@ -293,6 +294,18 @@ const birdI=(x,y,s=1,col=C.sky)=>`<g transform="translate(${x} ${y}) scale(${s})
 const frogI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cy="6" rx="24" ry="16" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-12" cy="-10" r="8" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="12" cy="-10" r="8" fill="${C.leaf}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-12" cy="-10" r="3" fill="${C.ink}"/><circle cx="12" cy="-10" r="3" fill="${C.ink}"/><path d="M-8 8 q8 6 16 0" stroke="${C.ink}" stroke-width="2" fill="none"/><path d="M-24 14 l-10 10 M24 14 l10 10" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/></g>`;
 const butterflyI=(x,y,s=1,col=C.accent)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0 q-30 -30 -30 -6 q0 20 30 6z M0 0 q30 -30 30 -6 q0 20 -30 6z M0 0 q-24 24 -22 8 q4 -10 22 -8z M0 0 q24 24 22 8 q-4 -10 -22 -8z" fill="${col}" stroke="${C.ink}" stroke-width="2"/><ellipse rx="4" ry="16" fill="${C.ink}"/><path d="M-3 -14 l-5 -8 M3 -14 l5 -8" stroke="${C.ink}" stroke-width="2"/></g>`;
 const heartI=(x,y,s=1)=>pic('heart',x-20.7*s,y-30*s,41.4*s,58*s);
+/* heartbeat sound: a soft "lub-dub" made with Web Audio, timed to the beating-heart pictures */
+const HB=(()=>{let ac=null,tm=null;
+ const thump=(t,f,v)=>{const o=ac.createOscillator(),lp=ac.createBiquadFilter(),g=ac.createGain();o.type='triangle';
+  o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*.55,t+.13);lp.type='lowpass';lp.frequency.value=520;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.014);g.gain.exponentialRampToValueAtTime(.0001,t+.17);
+  o.connect(lp);lp.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.2)};
+ const stop=()=>{clearInterval(tm);tm=null};
+ const start=(bpm,beats=Infinity,done)=>{try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state!=='running')ac.resume()}catch(e){return false}
+  stop();const p=60/bpm,gap=Math.min(.3,p*.36);let n=0,next=ac.currentTime+.06;
+  const run=()=>{while(next<ac.currentTime+.35&&n<beats){thump(next,92,.75);thump(next+gap,118,.5);next+=p;n++}
+   if(n>=beats&&ac.currentTime>next-p+.4){stop();if(done)done()}};run();tm=setInterval(run,90);return true};
+ return {start,stop,get on(){return !!tm}}})();
 const germI=(x,y,s=1,col=C.leaf)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="20" fill="${col}" stroke="${C.ink}" stroke-width="2.5"/>${[0,60,120,180,240,300].map(a=>`<line x1="0" y1="-20" x2="0" y2="-28" stroke="${C.ink}" stroke-width="3" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}<circle cx="-6" cy="-4" r="3" fill="${C.ink}"/><circle cx="6" cy="-4" r="3" fill="${C.ink}"/><path d="M-6 6 q6 5 12 0" stroke="${C.ink}" stroke-width="2" fill="none"/></g>`;
 const virusI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><circle r="16" fill="${C.grape}" stroke="${C.ink}" stroke-width="2.5"/>${[0,45,90,135,180,225,270,315].map(a=>`<g transform="rotate(${a})"><line x1="0" y1="-16" x2="0" y2="-24" stroke="${C.ink}" stroke-width="2.5"/><circle cy="-26" r="3.5" fill="${C.grape}" stroke="${C.ink}" stroke-width="2"/></g>`).join('')}</g>`;
 const mushroomI=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-8" y="0" width="16" height="22" rx="4" fill="#F2E6D0" stroke="${C.ink}" stroke-width="2.5"/><path d="M-26 4 q0 -30 26 -30 q26 0 26 30z" fill="${C.bad}" stroke="${C.ink}" stroke-width="2.5"/><circle cx="-10" cy="-10" r="4" fill="#fff"/><circle cx="8" cy="-14" r="3" fill="#fff"/></g>`;
@@ -333,7 +346,10 @@ const S=[
 
 {part:'learn',title:'Heart and blood',say:'Your <b>heart</b> is a muscle the size of your fist. It pumps <b>blood</b> round your body through tubes called <b>blood vessels</b>. Blood carries <b>oxygen</b> and <b>food</b> to every cell and takes away waste. Feel your <b>pulse</b> on your wrist: each beat is your heart pumping!',
  draw:()=>G(`<style>@media (prefers-reduced-motion:no-preference){.hbeat{animation:hbeat .86s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 60%}}@keyframes hbeat{12%{transform:scale(1.06)}24%{transform:scale(1)}}</style>`+pic('heart',118,12,203,285,'class="hbeat"'),'a-pop',.1)+[['Pumps blood','about 70 times a minute'],['Red tubes','carry oxygen out'],['Blue tubes','bring blood back']].map(([a,b],k)=>G(T(470,100+k*70,a,'lab')+T(470,122+k*70,b,'sm mut'),'a-fade',.6+k*.3)).join('')+tryhome(30,304,340,'Feel your wrist pulse. Count beats for 15 seconds, then × 4.')+G(vtile('../img/sci/v-heart.webp',452,300,168,94,'vheart'),'a-fade',1.4),
- mount:a=>{let t=0;const beat=()=>{const h=a.q('g[transform*="320 200"]');};const g=a.svg.querySelector('g');}},
+ mount:a=>{const h=a.q('.hbeat'),sync=()=>{if(h){h.style.animation='none';void h.getBoundingClientRect();h.style.animation=''}};let b;
+  const set=()=>{b.innerHTML=HB.on?'&#9208; Stop the heartbeat':'&#9829; Hear the heartbeat'};
+  const play=()=>{if(HB.start(70,40,set)){sync()}set()};
+  b=a.btn('',()=>{if(HB.on)HB.stop();else play();set()},'go');play();}},
 
 {part:'learn',title:'Lungs: breathing in and out',say:'Breathe in. Your <b>lungs</b> fill up with air like two balloons. The <b>oxygen</b> in the air passes into your blood. Breathe out, and you push out a waste gas called <b>carbon dioxide</b>. You breathe about <b>20,000 times a day</b> without even thinking about it!',
  draw:()=>chest()+G(vtile('../img/sci/v-lungs.webp',466,120,160,90,'vlungs'),'a-fade',1.1)+G(`<g class="ain">${arrow(292,26,292,96,C.sky)}${T(280,52,'air in','lab end acc')}${T(280,74,'brings oxygen','sm end mut')}</g>`,'a-fade',.5)+G(`<g class="aout">${arrow(348,96,348,26,C.grape)}${T(360,52,'air out','lab')}${T(360,74,'takes away carbon dioxide','sm mut')}</g>`,'a-fade',.8),
@@ -348,29 +364,36 @@ const S=[
   .map(([s,o,ic],k)=>G(`<line x1="320" y1="128" x2="${90+k*115}" y2="210" stroke="${C.sun}" stroke-width="3"/><circle cx="${90+k*115}" cy="240" r="30" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><g transform="translate(${90+k*115} 240)">${ic}</g>`+T(90+k*115,295,s,'lab mid acc')+T(90+k*115,315,o,'sm mid mut'),'a-pop',.4+k*.15)).join('')+T(320,370,'nerves carry messages to and from the brain','sm mid mut')},
 
 {part:'learn',title:'Keeping healthy',say:'Your body needs care! <b>Eat</b> a rainbow of fruit and vegetables. <b>Drink</b> water. <b>Move</b> for at least an hour a day. <b>Sleep</b> 9 to 11 hours so your brain and body can repair. <b>Wash</b> your hands to keep germs away. And <b>brush</b> your teeth twice a day!',
- draw:()=>[['Eat well','fruit, veg, rice, protein',`<circle r="14" fill="${C.bad}" stroke="${C.ink}" stroke-width="2"/><path d="M0 -14 q2 -8 6 -10" stroke="#6B4423" stroke-width="3" fill="none"/>`],['Drink water','6 to 8 cups',dropI(0,4,.9)],['Move','1 hour a day',`<circle cy="-14" r="7" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2"/><path d="M0 -6 v16 l-8 14 M0 10 l8 14 M-10 0 l10 -2 l10 6" stroke="${C.ink}" stroke-width="3" fill="none" stroke-linecap="round"/>`],['Sleep','9 to 11 hours',`<path d="M-14 -10 a14 14 0 1 0 14 20 a10 10 0 0 1 -14 -20z" fill="${C.sun}" stroke="${C.ink}" stroke-width="2"/>`],['Wash hands','20 seconds with soap',`<path d="M-10 12 v-14 q0 -4 4 -4 q4 0 4 4 v-8 q0 -4 4 -4 q4 0 4 4 v8 q0 -4 4 -4 q4 0 4 4 v16 q0 8 -8 10 h-10 q-6 -2 -6 -12z" fill="#F2D2B0" stroke="${C.ink}" stroke-width="2"/><circle cx="12" cy="-14" r="4" fill="#fff" stroke="${C.sky}" stroke-width="1.5"/>`],['Brush teeth','twice a day',`<rect x="-16" y="-4" width="26" height="8" rx="3" fill="${C.sky}" stroke="${C.ink}" stroke-width="2"/><rect x="8" y="-8" width="10" height="12" fill="#fff" stroke="${C.ink}" stroke-width="2"/>`]]
-  .map(([n,d,ic],k)=>{const x=24+(k%3)*200,y=40+Math.floor(k/3)*165;return G(box(x,y,190,150,'#fff',16)+`<g transform="translate(${x+95} ${y+55})">${ic}</g>`+T(x+95,y+105,n,'lab mid acc')+T(x+95,y+130,d,'sm mid mut'),'a-pop',.1+k*.15)}).join('')},
+ draw:()=>{const im=(f,w,h,dx=0,dy=0)=>`<image href="../img/${f}.webp" x="${-w/2+dx}" y="${-h/2+dy}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+  return [['Eat well','fruit, veg, rice, protein',im('obj/rice',52,52,-34,4)+im('obj/broccoli',50,50,10,-4)+im('obj/apple',40,46,44,6)],['Drink water','6 to 8 cups',im('obj/bottle',36,82)],['Move','1 hour a day',im('eng/zack-run',52,86)],
+   ['Sleep','9 to 11 hours',im('eng/zack-sleep',104,86)],['Wash hands','20 seconds with soap',`<defs><clipPath id="hw"><rect x="-62" y="-38" width="124" height="74" rx="9"/></clipPath></defs><image href="../img/sci/v-handwash.webp" x="-62" y="-38" width="124" height="74" preserveAspectRatio="xMidYMid slice" clip-path="url(#hw)"/>`],['Brush teeth','twice a day',im('obj/toothbrush',120,52)]]
+  .map(([n,d,ic],k)=>{const x=24+(k%3)*200,y=40+Math.floor(k/3)*165;return G(box(x,y,190,150,'#fff',16)+`<g transform="translate(${x+95} ${y+52})">${ic}</g>`+T(x+95,y+113,n,'lab mid acc')+T(x+95,y+135,d,'sm mid mut'),'a-pop',.1+k*.15)}).join('')}},
 
 {part:'try',title:'Where does it go?',say:'',draw:()=>`<g class="play"></g>`,
- mount:a=>{const O=[['brain','head','in the skull'],['heart','chest','behind the ribs, a little left'],['lungs','chest','on both sides of the heart'],['stomach','tummy','under the ribs'],['intestines','tummy','coiled below the stomach']];let r=0,busy=false;const icons={brain:brain(0,0,.9),heart:heartI(0,0,.9),lungs:lungs(0,0,.8),stomach:stomach(0,0,.9),intestines:pic('intestines',-26,-30,52,59)};
-  const show=()=>{busy=false;const [n]=O[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 5`,'sm mid mut')+body(160,260,1.1)+`<g transform="translate(420 160)">${icons[n]}</g>`+T(420,220,n,'h mid acc')+T(420,250,'Where does it belong?','lab mid mut');
+ mount:a=>{const O=[['brain','head','in the skull'],['heart','chest','behind the ribs, a little left'],['lungs','chest','on both sides of the heart'],['stomach','tummy','under the ribs'],['intestines','tummy','coiled below the stomach']];let r=0,busy=false;const icons={brain:brain(0,10,1.9),heart:heartI(0,4,1.75),lungs:lungs(0,-6,1.45),stomach:stomach(0,8,1.9),intestines:pic('intestines',-49,-52,98,111)};
+  const show=()=>{busy=false;const [n]=O[r];a.q('.play').innerHTML=T(320,36,`${r+1} of 5`,'sm mid mut')+body(160,260,1.1)+`<g transform="translate(430 140)">${icons[n]}</g>`+T(430,262,n,'h mid acc')+T(430,292,'Where does it belong?','lab mid mut');
    a.ui.innerHTML='';['head','chest','tummy'].forEach(o=>a.btn(o,b=>{if(busy)return;if(o===O[r][1]){busy=true;b.classList.add('ok');r++;if(r<O.length){a.confetti();a.say(`The <b>${n}</b> is in the ${o}: ${O[r-1][2]}.`);a.later(show,1500)}else a.win(`The <b>${n}</b> is in the ${o}: ${O[r-1][2]}. You know your body map!`)}else{b.classList.add('no');a.say(`Not the ${o}. Put your hand where you feel your ${n}!`)}},'go'));
    a.say(`Where in the body is the <b>${n}</b>?`)};show();}},
 
 {part:'try',title:'Heartbeat lab',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>{const acts=[['sleeping',60],['sitting',80],['walking',100],['running',150]];let k=1;
-  const draw=()=>{const [act,bpm]=acts[k];a.q('.play').innerHTML=T(320,36,`Activity: ${act}`,'h mid acc')+G(heartI(150,140,1.6),'a-wig')+`<style>.a-wig{animation-duration:${60/bpm}s}</style>`+box(300,66,280,124,'#fff',16)+T(440,98,'heart rate','sm mid mut')+T(440,146,`${bpm} beats`,'big mid')+T(440,174,'per minute','sm mid mut')+`<line x1="60" y1="330" x2="580" y2="330" stroke="${C.ink}" stroke-width="2"/><rect x="60" y="${330-bpm*.7}" width="${(k+1)*130}" height="${bpm*.7}" fill="${C.bad}" opacity=".2"/>`+acts.map(([n,b],i)=>`<rect x="${70+i*130}" y="${330-b*.7}" width="100" height="${b*.7}" rx="6" fill="${i===k?C.bad:'#E8A1A1'}" stroke="${C.ink}" stroke-width="2"/>`+T(120+i*130,350,n,'sm mid')+T(120+i*130,324-b*.7,b,'sm mid','style="font-weight:800"')).join('')};
-  draw();a.say('Your heart beats faster when your muscles need more oxygen. Tap an activity to see how the heart rate changes.');
-  acts.forEach(([n],i)=>a.btn(n,()=>{k=i;draw();a.say(`<b>${n}</b>: about ${acts[i][1]} beats per minute. ${i===3?'Running muscles need lots of oxygen, so the heart pumps fast!':i===0?'Resting muscles need little oxygen, so the heart slows down.':''}`);if(i===3)a.win('<b>Lab complete!</b> More activity = faster heartbeat. Try it on your own wrist!')},'go'));}},
+  const draw=()=>{const [act,bpm]=acts[k];a.q('.play').innerHTML=T(320,36,`Activity: ${act}`,'h mid acc')+`<style>@media (prefers-reduced-motion:no-preference){.labhb{animation:hbeat ${60/bpm}s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 60%}}@keyframes hbeat{12%{transform:scale(1.07)}24%{transform:scale(1)}}</style>`+pic('heart',100,68,96,142,'class="labhb"')+box(300,66,280,124,'#fff',16)+T(440,98,'heart rate','sm mid mut')+T(440,146,`${bpm} beats`,'big mid')+T(440,174,'per minute','sm mid mut')+`<line x1="60" y1="330" x2="580" y2="330" stroke="${C.ink}" stroke-width="2"/><rect x="60" y="${330-bpm*.7}" width="${(k+1)*130}" height="${bpm*.7}" fill="${C.bad}" opacity=".2"/>`+acts.map(([n,b],i)=>`<rect x="${70+i*130}" y="${330-b*.7}" width="100" height="${b*.7}" rx="6" fill="${i===k?C.bad:'#E8A1A1'}" stroke="${C.ink}" stroke-width="2"/>`+T(120+i*130,350,n,'sm mid')+T(120+i*130,324-b*.7,b,'sm mid','style="font-weight:800"')).join('')};
+  draw();a.say('Your heart beats faster when your muscles need more oxygen. Tap an activity to see and hear how the heart rate changes.');
+  acts.forEach(([n],i)=>a.btn(n,()=>{k=i;draw();HB.start(acts[i][1],Math.round(acts[i][1]/10));a.say(`<b>${n}</b>: about ${acts[i][1]} beats per minute. ${i===3?'Running muscles need lots of oxygen, so the heart pumps fast!':i===0?'Resting muscles need little oxygen, so the heart slows down.':''}`);if(i===3)a.win('<b>Lab complete!</b> More activity = faster heartbeat. Try it on your own wrist!')},'go'));}},
 
 {part:'try',title:'Healthy plate',say:'',draw:()=>`<g class="play"></g>`,
- mount:a=>{const foods=[['rice','grain',C.sun],['broccoli','veg',C.leaf],['chicken','protein',C.accent],['apple','fruit',C.bad],['sweets','junk',C.grape],['fish','protein',C.sky],['carrot','veg',C.accent],['soda','junk',C.grape]];const plate=new Set();
-  const draw=()=>{a.q('.play').innerHTML=T(320,36,'Build a healthy plate: grain + veg + protein + fruit','lab mid acc')+`<circle cx="320" cy="200" r="110" fill="#fff" stroke="${C.ink}" stroke-width="4"/><circle cx="320" cy="200" r="95" fill="none" stroke="${C.line}" stroke-width="2"/>`+[...plate].map((f,i)=>{const a2=i/Math.max(plate.size,1)*Math.PI*2,x=320+55*Math.cos(a2),y=200+55*Math.sin(a2);const col=foods.find(z=>z[0]===f)[2];return `<circle cx="${x}" cy="${y}" r="24" fill="${col}" stroke="${C.ink}" stroke-width="2"/>`+T(x,y+5,f,'sm mid','style="fill:#fff;font-size:11px;font-weight:800"')}).join('')+T(320,350,`on the plate: ${plate.size}`,'sm mid mut')};
+ mount:a=>{const foods=[['rice','grain'],['broccoli','veg'],['chicken','protein'],['apple','fruit'],['sweets','junk'],['fish','protein'],['carrot','veg'],['soda','junk']];const plate=[];
+  const img=(f,x,y,w)=>`<image href="../img/obj/${f}.webp" x="${x-w/2}" y="${y-w/2}" width="${w}" height="${w}" preserveAspectRatio="xMidYMid meet"/>`;
+  const draw=()=>{const groups=new Set(plate.map(x=>foods.find(z=>z[0]===x)[1]));
+   a.q('.play').innerHTML=T(320,36,'Build a healthy plate','h mid acc')+
+   `<ellipse cx="320" cy="214" rx="150" ry="122" fill="#fff" stroke="${C.ink}" stroke-width="4"/><ellipse cx="320" cy="214" rx="122" ry="98" fill="#FAFCF8" stroke="${C.line}" stroke-width="3"/>`+
+   plate.map((f,i)=>{const n=plate.length,ang=n===1?0:i/n*Math.PI*2-Math.PI/2,r=n===1?0:66;return G(img(f,320+r*1.15*Math.cos(ang),214+r*.85*Math.sin(ang),n>4?70:84),'a-pop',0)}).join('')+
+   ['grain','veg','protein','fruit'].map((g,k)=>{const x=40+k*150,ok=groups.has(g);return `<rect x="${x}" y="350" width="130" height="34" rx="17" fill="${ok?C.good:'#fff'}" stroke="${C.ink}" stroke-width="2.5"/>`+T(x+65,373,(ok?'\u2713 ':'')+g,'lab mid',`style="font-size:17px;fill:${ok?'#fff':C.ink}"`)}).join('')};
   draw();a.say('Tap foods to put them on the plate. Aim for a <b>balanced</b> plate: a grain, a vegetable, a protein and a fruit. Avoid the junk!');
-  foods.forEach(([f,g])=>a.btn(f,b=>{if(g==='junk'){b.classList.add('no');a.say(`${f}? That is a sometimes treat, not a healthy plate food. Too much sugar!`);return}if(plate.has(f))return;plate.add(f);b.classList.add('ok');draw();const groups=new Set([...plate].map(x=>foods.find(z=>z[0]===x)[1]));if(groups.size>=4)a.win('<b>A balanced plate!</b> Grain, veg, protein and fruit: your body has everything it needs.');else a.say(`<b>${f}</b> added. You have ${groups.size} of 4 food groups.`)},'go'));}},
+  foods.forEach(([f,g])=>a.btn(`<img src="../img/obj/${f}.webp" alt="" style="height:26px;vertical-align:-7px;margin-right:6px">${f}`,b=>{if(g==='junk'){b.classList.add('no');a.say(`${f}? That is a sometimes treat, not a healthy plate food. Too much sugar!`);return}if(plate.includes(f))return;plate.push(f);b.classList.add('ok');draw();const groups=new Set(plate.map(x=>foods.find(z=>z[0]===x)[1]));if(groups.size>=4)a.win('<b>A balanced plate!</b> Grain, veg, protein and fruit: your body has everything it needs.');else a.say(`<b>${f}</b> added. You have ${groups.size} of 4 food groups.`)},'go'));}},
 
 {part:'check',title:'Quiz 1',say:'Which bones protect your heart and lungs?',
- draw:()=>`<g transform="translate(320 200)">${[0,1,2,3].map(k=>`<path d="M-7 ${-60+k*22} q-50 10 -50 40 M7 ${-60+k*22} q50 10 50 40" stroke="${C.ink}" stroke-width="4" fill="none"/>`).join('')}${[0,1,2,3,4,5].map(k=>`<rect x="-7" y="${-70+k*18}" width="14" height="12" rx="3" fill="#fff" stroke="${C.ink}" stroke-width="2"/>`).join('')}</g>`+heartI(300,210,.8),
+ draw:()=>G(lungs(320,196,1.9)+heartI(333,236,1.25),'a-pop',.1)+T(320,372,'What keeps them safe?','lab mid mut'),
  quiz:{options:['the skull','the ribs','the backbone'],answer:'the ribs',why:'The <b>ribs</b> form a cage around your heart and lungs.',hint:'Feel the bones on the sides of your chest.'}},
 
 {part:'check',title:'Quiz 2',say:'Muscles can only...',
@@ -378,19 +401,19 @@ const S=[
  quiz:{options:['push','pull','both push and pull'],answer:'pull',why:'Muscles can only <b>pull</b>. That is why they work in pairs: one pulls the bone one way, the other pulls it back.',hint:'Think about why you need two muscles for one elbow.'}},
 
 {part:'check',title:'Quiz 3',say:'What does your blood carry to every cell in your body?',
- draw:()=>heartI(320,200,1.8)+`<path d="M320 120 q-120 40 -120 120 q0 60 120 80 q120 -20 120 -80 q0 -80 -120 -120z" fill="none" stroke="${C.bad}" stroke-width="6"/>`,
+ draw:()=>G(vtile('../img/sci/v-heart.webp',130,60,380,214,'vheartq'),'a-pop',.1)+T(320,320,'Blood travels all round your body','lab mid mut'),
  quiz:{options:['oxygen and food','air and water','bones and muscles'],answer:'oxygen and food',why:'Blood delivers <b>oxygen and food</b> to your cells and carries waste away.',hint:'Cells need these two things to make energy.'}},
 
 {part:'check',title:'Quiz 4',say:'Where is food churned into mush?',
- draw:()=>stomach(320,200,2.2),
+ draw:()=>G(stomach(320,186,3),'a-pop',.1)+T(320,350,'Squeeze, squish, churn!','lab mid mut'),
  quiz:{options:['the mouth','the stomach','the lungs'],answer:'the stomach',why:'The <b>stomach</b> squeezes and mixes food with juices until it is mush.',hint:'It is a stretchy bag under your ribs.'}},
 
 {part:'check',title:'Quiz 5',say:'How many hours of sleep does a child aged 6 to 12 need each night?',
- draw:()=>`<path d="M300 160 a40 40 0 1 0 40 56 a30 30 0 0 1 -40 -56z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/>`+star(400,150,14)+star(430,200,10,C.sky)+T(320,300,'z z z','h mid acc'),
+ draw:()=>G(`<image href="../img/eng/zack-sleep.webp" x="170" y="110" width="300" height="262" preserveAspectRatio="xMidYMid meet"/>`,'a-pop',.1)+`<path d="M480 50 a40 40 0 1 0 40 56 a30 30 0 0 1 -40 -56z" fill="${C.sun}" stroke="${C.ink}" stroke-width="3"/>`+star(570,60,14)+star(590,130,10,C.sky)+star(130,80,12)+G(T(400,120,'z z z','h mid acc'),'a-bob',.3),
  quiz:{options:['4 to 5 hours','9 to 11 hours','15 hours'],answer:'9 to 11 hours',why:'Children need <b>9 to 11 hours</b> so the brain can store memories and the body can repair and grow.',hint:'More than most grown-ups need!'}},
 
 {part:'check',title:'You did it!',say:'Fantastic! You know about your <b>bones</b>, <b>muscles</b>, <b>heart</b>, <b>lungs</b>, <b>digestion</b>, <b>brain</b> and how to <b>stay healthy</b>. Next: the tiny creatures you cannot see!',
- draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+heartI(120,230,1)+brain(520,230,1),'a-pop',.3)+T(320,60,'Body superstar!','h mid acc'),
+ draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+heartI(130,240,1.6)+brain(510,240,1.6),'a-pop',.3)+T(320,60,'Body superstar!','h mid acc'),
  mount:a=>a.later(()=>a.confetti(),400)}
 ];
 
@@ -463,7 +486,7 @@ render();
 </script>
 <script id="den-clips">
 /* Short painted clips over their stills (generated by tools/den-clips.py): muted, inline, looping; the poster is the fallback; reduced motion keeps the still */
-(()=>{const CLIPS={"../img/sci/v-heart.webp": "../img/sci/v-heart", "../img/sci/v-lungs.webp": "../img/sci/v-lungs"},svg=document.getElementById('stage');if(!svg||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+(()=>{const CLIPS={"../img/sci/v-heart.webp": "../img/sci/v-heart", "../img/sci/v-lungs.webp": "../img/sci/v-lungs", "../img/sci/v-handwash.webp": "../img/sci/v-handwash"},svg=document.getElementById('stage');if(!svg||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  const NS='http://www.w3.org/2000/svg',XH='http://www.w3.org/1999/xhtml';
  function up(){svg.querySelectorAll('image').forEach(im=>{const c=CLIPS[im.getAttribute('href')];if(!c||im.dataset.clip)return;im.dataset.clip='1';
   const fo=document.createElementNS(NS,'foreignObject');['x','y','width','height','clip-path','opacity','style','transform'].forEach(a=>{const v=im.getAttribute(a);if(v!==null)fo.setAttribute(a,v)});
