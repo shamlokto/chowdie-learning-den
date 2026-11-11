@@ -126,6 +126,16 @@ body.subject-view .den-map{display:none}
 .crew-pics{position:absolute;left:17%;right:17%;top:14%;bottom:14%;display:grid;grid-template-columns:1fr 1fr;gap:3%;align-content:center}
 .crew-pics svg{display:block;width:100%;height:auto}
 .crew-pics .crew-pic{display:block;width:100%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+/* Crew says hello: tap a friend in the crew panel and they hop, wave and say hi */
+.crew-box .char-avatar{cursor:pointer;position:relative;overflow:visible}
+.crew-box .char-avatar:focus-visible{outline:3px solid #2563EB;outline-offset:3px}
+.crew-box .char-avatar.hello>*{animation:crewHop .9s cubic-bezier(.3,1.5,.5,1)}
+@keyframes crewHop{0%,100%{transform:none}30%{transform:translateY(-14px) rotate(-6deg)}55%{transform:translateY(0) rotate(5deg)}75%{transform:translateY(-6px) rotate(-3deg)}}
+.crew-hi{position:absolute;left:62%;top:-2px;white-space:nowrap;z-index:3;font:700 15px/1.2 'Fredoka',sans-serif;color:#1F3A4A;
+  background:#FFFDF6;border:2.5px solid #1F3A4A;border-radius:14px;padding:4px 10px 3px;box-shadow:0 3px 0 #1F3A4A;pointer-events:none;animation:crewHi 1.8s ease both}
+.crew-hi::after{content:"";position:absolute;left:10px;top:100%;border:7px solid transparent;border-top-color:#1F3A4A;border-left-color:#1F3A4A}
+@keyframes crewHi{0%{opacity:0;transform:translateY(8px) scale(.6)}15%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){.crew-box .char-avatar.hello>*{animation:none}.crew-hi{animation:none}}
 .den-spot{position:absolute;left:calc(var(--x) - var(--w)/2);bottom:var(--b);width:var(--w);display:block;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .den-art{position:relative;display:block;transition:transform .18s ease,filter .18s ease}
 .den-art img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 3px rgba(60,35,15,.28))}
@@ -258,7 +268,14 @@ JS = r"""
  const shut=()=>{ov.hidden=true;document.body.style.overflow='';if(back)back.focus()};
  document.querySelectorAll('[data-den-crew]').forEach(a=>a.addEventListener('click',open));
  close.addEventListener('click',shut);ov.addEventListener('click',e=>{if(e.target===ov)shut()});
- ov.addEventListener('keydown',e=>{if(e.key==='Escape')shut()})})();
+ ov.addEventListener('keydown',e=>{if(e.key==='Escape')shut()});
+ /* Crew says hello: tap (or Enter) on a friend's picture */
+ const HI={'char-chowdie':'Hi! Let\'s learn!','char-wala':'你好! Hello!','char-flamecharge':'Spell it right!','char-flame':'Ready for a test?','char-mommy':'Hello, dear!','char-baddie':'Heh heh... boo!'};
+ ov.querySelectorAll('.char-card .char-avatar').forEach(av=>{const card=av.closest('.char-card'),k=[...card.classList].find(c=>HI[c]);
+  av.setAttribute('role','button');av.tabIndex=0;av.setAttribute('aria-label','Say hello to '+(card.querySelector('.char-title')||{}).textContent);
+  const hi=()=>{av.classList.remove('hello');void av.offsetWidth;av.classList.add('hello');const old=av.querySelector('.crew-hi');if(old)old.remove();
+   const b=document.createElement('span');b.className='crew-hi';b.textContent=HI[k]||'Hi!';av.appendChild(b);setTimeout(()=>{b.remove();av.classList.remove('hello')},1900)};
+  av.addEventListener('click',hi);av.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();hi()}})})})();
 """
 
 
