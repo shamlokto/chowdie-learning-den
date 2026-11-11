@@ -25,7 +25,7 @@ CLIPS = {
     "science/sci-06.html":      {"../img/sci/v-handwash.webp": "../img/sci/v-handwash"},
     "chinese/p2cn02.html":      {"../img/cn/v-liondance.webp": "../img/cn/v-liondance"},
     "music/mus06.html":         {"../img/music/v-instruments.webp": "../img/music/v-instruments"},
-    "science/sci-05.html":      {"../img/sci/v-heart.webp": "../img/sci/v-heart", "../img/sci/v-lungs.webp": "../img/sci/v-lungs"},
+    "science/sci-05.html":      {"../img/sci/v-heart.webp": "../img/sci/v-heart", "../img/sci/v-lungs.webp": "../img/sci/v-lungs", "../img/sci/v-handwash.webp": "../img/sci/v-handwash"},
     "science/sci-07.html":      {"../img/eco-mangrove.webp": "../img/v-mangrove"},
 }
 
