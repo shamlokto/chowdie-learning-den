@@ -4,7 +4,8 @@
 Each deck gets a small <script id="den-clips"> with its own map of  still image -> clip  (img/<dir>/v-<name>.mp4 plus
 img/<dir>/v-<name>-poster.webp). Whenever the deck draws one of those stills as an SVG <image>, the clip is laid over it
 at the same place, size, crop and clip-path: muted, inline, looping, with the poster underneath as the fallback.
-With reduced motion the still stays. The block sits just before stars.js (which stays last). Run:
+With reduced motion the still stays. The block sits before the den-buddy tag (or stars.js), so the order stays
+den-polish blocks, den-clips, den-buddy, stars.js (last). Run:
     python3 tools/den-clips.py
 """
 import pathlib, re, json
@@ -45,7 +46,10 @@ def apply(rel, mapping):
     p = ROOT / rel
     s = p.read_text(encoding="utf-8")
     s = re.sub(r'<script id="den-clips">.*?</script>\n', "", s, flags=re.S)
-    k = s.rfind('<script src="../stars.js"')
+    # sit after den-polish's blocks and before the buddy (tools/den-polish.py), with stars.js last
+    k = s.find('<script id="den-buddy"')
+    if k == -1:
+        k = s.rfind('<script src="../stars.js"')
     assert k != -1, rel
     s = s[:k] + JS.replace("__MAP__", json.dumps(mapping)) + s[k:]
     p.write_text(s, encoding="utf-8")

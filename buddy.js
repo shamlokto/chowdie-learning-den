@@ -5,6 +5,7 @@
    tools/den-polish.py, before stars.js. The kids like the original SVG crew, so the drawings below are the
    decks' own otter / wala / flame / mommy, kept private to this script. */
 (()=>{ if(typeof S==='undefined'||!document.getElementById('stage')) return;
+if(/\/bible\/[^/]*$/.test(location.pathname)) return; // Bible stories stay quiet: no cheering buddy
 const C={ink:'#1F3A4A',paper:'#FFFDF6',accent:'#FF7A45',sun:'#FFC83D',sky:'#5BB8E8',leaf:'#4FAE63',berry:'#E5577A',grape:'#8E6BD8',muted:'#58707D',line:'#B7D8CF',good:'#3EA45A',bad:'#E0574F'};
 /* ---- crew drawings (copied from the decks; origin = feet centre, about 110-130 tall at s=1) ---- */
 function otter(x,y,s=1,o={}){ // origin = feet centre; about 110 tall at s=1
