@@ -311,6 +311,8 @@ const plantFull=(x,y,s=1)=>{const h=200*s,w=h*600/719,X=x-w*290/600,Y=y-h*478/71
   `<g class="pp" data-p="leaves">${E(250,190,58,30,30)+E(365,190,58,30,-25)+E(235,290,62,26,25)+E(378,310,62,28,-30)}</g><circle class="pp" data-p="flower" cx="${fx}" cy="${fy}" r="${78*k}" fill="transparent"/>`};
 // bean pot growth stages 0-4: paintings share one 400x800 canvas with the pot bottom at 97.7%
 const pot=(x,y,fill,level)=>pp('pot'+Math.max(0,Math.min(4,level)),x-57.5,y+50-225,115,230);
+/* short looping clip tile: the still, clipped and framed; tools/den-clips.py lays the video over it */
+const vtile=(src,x,y,w,h,id)=>`<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/></clipPath></defs><image href="${src}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`;
 const S=[
 {part:'learn',title:'Plants are everywhere',say:'Hi! Plants are the quiet heroes of our planet. They make the <b>oxygen</b> we breathe, give us <b>food</b> like rice and fruit, and provide <b>shade</b>, <b>wood</b> and homes for animals. Singapore calls itself a <b>City in Nature</b> because we have so many! Let\'s see how plants work.',
  draw:()=>G(sunI2(80,70,1.2),'a-pop',.1)+[treeI(140,290,1.6),treeI(300,300,1.2),treeI(470,290,1.5)].map((t,k)=>G(t,'a-pop',.3+k*.2)).join('')+G(flowerI(230,310,.9)+flowerI(390,310,.9,C.grape)+flowerI(560,310,.9,C.sun),'a-pop',.9)+
@@ -323,11 +325,11 @@ const S=[
 
 {part:'learn',title:'What does a seed need?',say:'Inside every seed is a baby plant and a packed lunch. To wake up and sprout (<b>germinate</b>), a seed needs <b>water</b>, <b>warmth</b> and <b>air</b>. It does not need light yet, because it is under the soil! Once it pokes out, it needs <b>sunlight</b> too.',
  draw:()=>[['Water',dropI(0,4,1),C.sky],['Warmth',sunI2(0,0,.8),C.sun],['Air',`<path d="M-20 -6 q10 -14 20 0 q10 14 20 0 M-20 8 q10 -14 20 0 q10 14 20 0" stroke="${C.sky}" stroke-width="3" fill="none"/>`,C.leaf]].map(([t,ic,c],k)=>G(`<circle cx="${130+k*190}" cy="100" r="40" fill="${c}" opacity=".3"/><g transform="translate(${130+k*190} 100)">${ic}</g>`+T(130+k*190,165,t,'h mid acc'),'a-pop',.1+k*.3)).join('')+
-  G(`<defs><clipPath id="gclip"><rect x="110" y="214" width="180" height="112" rx="12"/></clipPath></defs>`+pp('germ',110,198,180,134,'clip-path="url(#gclip)"')+`<rect x="110" y="214" width="180" height="112" rx="12" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`+T(200,345,'no light needed yet!','sm mid mut')+arrow(300,270,356,270,C.accent)+T(400,250,'Then it needs','sm mid mut')+sunI2(400,290,.7)+T(400,345,'sunlight','sm mid acc'),'a-fade',.9)},
+  G(`<defs><clipPath id="gclip"><rect x="110" y="214" width="180" height="112" rx="12"/></clipPath></defs>`+pp('germ',110,198,180,134,'clip-path="url(#gclip)"')+`<rect x="110" y="214" width="180" height="112" rx="12" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`+T(200,345,'no light needed yet!','sm mid mut')+arrow(300,270,356,270,C.accent)+T(400,250,'Then it needs','sm mid mut')+sunI2(400,290,.7)+T(400,345,'sunlight','sm mid acc'),'a-fade',.9)+G(vtile('../img/sci/v-sprout.webp',462,206,164,92,'vsprout')+T(544,322,'a seed sprouting','sm mid acc'),'a-fade',1.3)},
 
 {part:'learn',title:'Leaves make food from sunlight',say:'Here is plant magic: <b>photosynthesis</b>. Leaves take in <b>sunlight</b>, <b>water</b> from the roots, and <b>carbon dioxide</b> from the air. They mix them to make <b>sugar</b> (food) and release <b>oxygen</b>, the gas we breathe. Plants feed themselves AND give us air. Thank a leaf today!',
  draw:()=>G(sunI2(90,70,1.3)+arrow(120,100,230,170,C.sun),'a-pop',.1)+G(`<text x="60" y="230" class="lab">carbon dioxide</text>`+arrow(196,226,240,218,C.sky),'a-fade',.5)+G(T(120,330,'water from roots','lab mid')+arrow(170,310,250,260,C.sky),'a-fade',.8)+
-  G(leafI(320,210,2.2),'a-pop',.3)+G(arrow(400,190,480,150,C.accent)+T(540,140,'sugar (food)','lab mid acc'),'a-fade',1.3)+G(arrow(400,230,480,280,C.leaf)+T(540,300,'oxygen','lab mid acc')+T(540,322,'for us to breathe!','sm mid mut'),'a-fade',1.6)+
+  G(leafI(320,210,2.2),'a-pop',.3)+G(vtile('../img/sci/v-leaf-sun.webp',456,20,164,92,'vleaf'),'a-fade',.6)+G(arrow(400,190,480,150,C.accent)+T(540,140,'sugar (food)','lab mid acc'),'a-fade',1.3)+G(arrow(400,230,480,280,C.leaf)+T(540,300,'oxygen','lab mid acc')+T(540,322,'for us to breathe!','sm mid mut'),'a-fade',1.6)+
   G(box(170,355,300,36,C.sun,18)+T(320,379,'photosynthesis','lab mid'),'a-pop',2)},
 
 {part:'learn',title:'From flower to fruit',say:'Flowers are not just pretty. <b>Bees</b> and butterflies visit for sweet nectar and carry yellow <b>pollen</b> from flower to flower. This is <b>pollination</b>. Then the flower grows into a <b>fruit</b> with <b>seeds</b> inside. An apple, a durian, a rambutan: all are fruits protecting seeds!',
@@ -336,7 +338,7 @@ const S=[
   G(T(320,350,'flower → pollination → fruit → seeds → new plant','lab mid acc'),'a-fade',2)},
 
 {part:'learn',title:'Seeds on the move',say:'Seeds need to travel away from the parent plant to find space. Some <b>fly</b> on the wind with fluffy parachutes or wings. Some <b>float</b> on water, like coconuts. Some are <b>eaten</b> by birds and dropped far away. Some <b>stick</b> to animal fur. And some <b>pop</b> out of exploding pods!',
- draw:()=>[['wind','dandelion',pp('dandelion',-30,-46,60,78)],['water','coconut',pp('coconut',-44,-24,88,47)],['animals','berry eaten',pp('bird',-40,-36,80,72)],['sticking','burrs on fur',pp('burr',-40,-33,80,66)],['popping','pea pod',pp('peapod',-38,-37,76,73)]]
+ draw:()=>[['wind','dandelion',vtile('../img/sci/v-dandelion.webp',-50,-38,100,56,'vdand')],['water','coconut',pp('coconut',-44,-24,88,47)],['animals','berry eaten',pp('bird',-40,-36,80,72)],['sticking','burrs on fur',pp('burr',-40,-33,80,66)],['popping','pea pod',pp('peapod',-38,-37,76,73)]]
   .map(([n,e,ic],k)=>G(box(20+k*122,60,112,200,'#fff',14)+`<g transform="translate(${76+k*122} 130)">${ic}</g>`+T(76+k*122,205,n,'lab mid acc')+T(76+k*122,232,e,'sm mid mut'),'a-pop',.1+k*.15)).join('')+G(T(320,320,'Why travel? To find space, light and water of their own.','lab mid'),'a-fade',1.2)},
 
 {part:'try',title:'Grow a bean',say:'',draw:()=>`<g class="play"></g>`,
@@ -429,6 +431,19 @@ render();
   api.confetti=confetti; api.win=win;
   addEventListener('resize',()=>{ if(cv){const d=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*d;cv.height=innerHeight*d;cv.getContext('2d').setTransform(d,0,0,d,0,0);} });
 })();
+</script>
+<script id="den-clips">
+/* Short painted clips over their stills (generated by tools/den-clips.py): muted, inline, looping; the poster is the fallback; reduced motion keeps the still */
+(()=>{const CLIPS={"../img/sci/v-sprout.webp": "../img/sci/v-sprout", "../img/sci/v-leaf-sun.webp": "../img/sci/v-leaf-sun", "../img/sci/v-dandelion.webp": "../img/sci/v-dandelion"},svg=document.getElementById('stage');if(!svg||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const NS='http://www.w3.org/2000/svg',XH='http://www.w3.org/1999/xhtml';
+ function up(){svg.querySelectorAll('image').forEach(im=>{const c=CLIPS[im.getAttribute('href')];if(!c||im.dataset.clip)return;im.dataset.clip='1';
+  const fo=document.createElementNS(NS,'foreignObject');['x','y','width','height','clip-path','opacity','style','transform'].forEach(a=>{const v=im.getAttribute(a);if(v!==null)fo.setAttribute(a,v)});
+  if(!fo.getAttribute('x'))fo.setAttribute('x','0');if(!fo.getAttribute('y'))fo.setAttribute('y','0');fo.setAttribute('aria-hidden','true');
+  const v=document.createElementNS(XH,'video');v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';
+  ['muted','playsinline','loop','autoplay'].forEach(a=>v.setAttribute(a,''));v.poster=c+'-poster.webp';v.src=c+'.mp4';
+  const fit=(im.getAttribute('preserveAspectRatio')||'').includes('slice')?'cover':'contain';
+  v.setAttribute('style',`width:100%;height:100%;object-fit:${fit};display:block`);fo.appendChild(v);im.after(fo);const p=v.play();if(p&&p.catch)p.catch(()=>{})})}
+ new MutationObserver(up).observe(svg,{childList:true,subtree:true});up();})();
 </script>
 <script src="../stars.js" defer></script>
 </body></html>
