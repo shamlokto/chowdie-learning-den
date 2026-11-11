@@ -33,6 +33,13 @@ const CAST = {
   daddy:  {voice: 'atlas',  pitch: 0.78, tempo: 0.88},  // Baddie Daddy keeps his big funny growl
   abraham:{voice: 'helios', pitch: 0.9,  tempo: 0.92},  // Bible stories: Abraham, an old, gentle voice
   sarah:  {voice: 'ara',    pitch: 0.95, tempo: 0.95},  // Bible stories: Sarah
+
+  samson: {voice: 'atlas',  pitch: 0.95, tempo: 0.95},  // Bible stories: Samson
+  ruth:   {voice: 'eve',    pitch: 1.0,  tempo: 0.98},  // Bible stories: Ruth
+  boaz:   {voice: 'orion',  pitch: 0.86, tempo: 0.94},  // Bible stories: Boaz
+  samuel: {voice: 'helios', pitch: 0.84, tempo: 0.9},   // Bible stories: the prophet Samuel
+  david:  {voice: 'leo',    pitch: 1.12, tempo: 1.04},  // Bible stories: young David
+  saul:   {voice: 'zagan',  pitch: 0.94, tempo: 0.95},  // Bible stories: King Saul
 };
 const FALLBACK = 'otter';
 
