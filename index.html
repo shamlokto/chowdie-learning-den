@@ -872,9 +872,13 @@
     }
 </style>
 <style id="crew-paint-css">
-/* Painted crew portraits (img/crew/), drawn from each character's own SVG design; the SVG stays as a fallback */
+/* Painted crew portraits (img/crew/), drawn from each character's own SVG design. The kids prefer the original drawings,
+   so when Willis or Megan is learning (body.crew-drawn) the crew panel and the Den's crew frame show the SVGs instead. */
 .char-avatar.painted{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#FFFDF6 0 55%,#F1E4C8 100%)}
-.char-avatar.painted>svg{display:none}
+body:not(.crew-drawn) .char-avatar.painted>svg{display:none}
+body.crew-drawn .char-avatar .char-paint{display:none}
+body.crew-drawn .char-avatar.painted{background:none}
+body.crew-drawn .crew-pics .crew-pic,body:not(.crew-drawn) .crew-pics svg{display:none}
 .char-avatar .char-paint,.who-av .who-paint{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 14%;border-radius:50%}
 .who-av:has(.who-paint){border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,#FFFDF6 0 55%,#F1E4C8 100%)}
 </style>
@@ -1406,9 +1410,10 @@ body.subject-view .den-map{display:none}
  const copy=svg=>{const s=svg.cloneNode(true),sfx='-den'+(n++);s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
   s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
   s.setAttribute('aria-hidden','true');s.removeAttribute('role');s.removeAttribute('aria-label');return s};
- const pics=['chowdie','wala','flamecharge','mommy'].map(c=>ov.querySelector('.char-card.char-'+c+' .char-paint')).filter(Boolean);
- const faces=pics.length?pics:[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
- document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>{if(f.tagName==='IMG'){const i=f.cloneNode();i.removeAttribute('loading');i.className='crew-pic';box.appendChild(i)}else box.appendChild(copy(f))}));
+ /* both the paintings and the drawings go in; CSS shows the drawings when Willis or Megan is learning (body.crew-drawn) */
+ const four=['chowdie','wala','flamecharge','mommy'].map(c=>ov.querySelector('.char-card.char-'+c));
+ document.querySelectorAll('.crew-pics').forEach(box=>four.forEach(card=>{if(!card)return;const p=card.querySelector('.char-paint'),v=card.querySelector('.char-avatar svg');
+  if(p){const i=p.cloneNode();i.removeAttribute('loading');i.className='crew-pic';box.appendChild(i)}if(v)box.appendChild(copy(v))}));
  const open=e=>{e.preventDefault();back=document.activeElement;ov.hidden=false;document.body.style.overflow='hidden';close.focus()};
  const shut=()=>{ov.hidden=true;document.body.style.overflow='';if(back)back.focus()};
  document.querySelectorAll('[data-den-crew]').forEach(a=>a.addEventListener('click',open));
@@ -1468,20 +1473,22 @@ const get=()=>{try{return localStorage.getItem('denUser')}catch(e){return null}}
 const set=v=>{try{localStorage.setItem('denUser',v)}catch(e){}};
 let n=0;
 // Copy a crew avatar SVG, giving its ids fresh names so clip paths still work when the crew grid is hidden
-function avatar(cls){const pic=document.querySelector('.char-card.'+cls+' .char-paint');if(pic){const i=pic.cloneNode();i.className='who-paint';i.removeAttribute('loading');return i}
+// Willis and Megan prefer the drawn crew; Daddy and Mommy get the paintings
+const DRAWN=['willis','megan'],drawnMode=()=>document.body.classList.toggle('crew-drawn',DRAWN.includes(get()));
+function avatar(cls,drawn){const pic=!drawn&&document.querySelector('.char-card.'+cls+' .char-paint');if(pic){const i=pic.cloneNode();i.className='who-paint';i.removeAttribute('loading');return i}
  const src=document.querySelector('.char-card.'+cls+' .char-avatar svg');if(!src)return null;
  const s=src.cloneNode(true),sfx='-who'+(n++);
  s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
   s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
  s.setAttribute('aria-hidden','true');s.removeAttribute('role');return s}
-btns.forEach(b=>{const a=avatar(b.dataset.av);if(a)b.querySelector('.who-av').appendChild(a)});
+btns.forEach(b=>{const a=avatar(b.dataset.av,DRAWN.includes(b.dataset.user));if(a)b.querySelector('.who-av').appendChild(a)});
 const hero=document.getElementById('denWho')||document.querySelector('header.hero-card');let chip=null;
 function show(){const u=get();btns.forEach(b=>b.classList.toggle('is-current',b.dataset.user===u));cancel.hidden=!u;ov.hidden=false;document.body.style.overflow='hidden';
  (btns.find(b=>b.dataset.user===u)||btns[0]).focus()}
 function hide(){ov.hidden=true;document.body.style.overflow=''}
-function render(){const b=btns.find(x=>x.dataset.user===get());if(chip)chip.remove();chip=null;if(!b||!hero)return;
+function render(){drawnMode();const b=btns.find(x=>x.dataset.user===get());if(chip)chip.remove();chip=null;if(!b||!hero)return;
  chip=document.createElement('div');chip.className='who-chip '+[...b.classList].find(c=>c.startsWith('who-')&&c!=='who-btn');
- const av=document.createElement('span');av.className='who-av';const a=avatar(b.dataset.av);if(a)av.appendChild(a);
+ const av=document.createElement('span');av.className='who-av';const a=avatar(b.dataset.av,DRAWN.includes(b.dataset.user));if(a)av.appendChild(a);
  const name=b.querySelector('b').textContent,t=document.createElement('span');t.textContent='Hi, '+name+'!';
  const sw=document.createElement('button');sw.type='button';sw.textContent='Switch';sw.setAttribute('aria-label','Switch who is learning');sw.addEventListener('click',show);
  const bank=document.createElement('a');bank.className='who-bank';bank.href='bank.html';

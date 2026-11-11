@@ -250,9 +250,10 @@ JS = r"""
  const copy=svg=>{const s=svg.cloneNode(true),sfx='-den'+(n++);s.querySelectorAll('[id]').forEach(el=>{const old=el.id;el.id=old+sfx;
   s.querySelectorAll('*').forEach(x=>[...x.attributes].forEach(a=>{if(a.value.includes('#'+old+')'))a.value=a.value.split('#'+old+')').join('#'+old+sfx+')')}))});
   s.setAttribute('aria-hidden','true');s.removeAttribute('role');s.removeAttribute('aria-label');return s};
- const pics=['chowdie','wala','flamecharge','mommy'].map(c=>ov.querySelector('.char-card.char-'+c+' .char-paint')).filter(Boolean);
- const faces=pics.length?pics:[...ov.querySelectorAll('.char-card .char-avatar svg')].slice(0,4);
- document.querySelectorAll('.crew-pics').forEach(box=>faces.forEach(f=>{if(f.tagName==='IMG'){const i=f.cloneNode();i.removeAttribute('loading');i.className='crew-pic';box.appendChild(i)}else box.appendChild(copy(f))}));
+ /* both the paintings and the drawings go in; CSS shows the drawings when Willis or Megan is learning (body.crew-drawn) */
+ const four=['chowdie','wala','flamecharge','mommy'].map(c=>ov.querySelector('.char-card.char-'+c));
+ document.querySelectorAll('.crew-pics').forEach(box=>four.forEach(card=>{if(!card)return;const p=card.querySelector('.char-paint'),v=card.querySelector('.char-avatar svg');
+  if(p){const i=p.cloneNode();i.removeAttribute('loading');i.className='crew-pic';box.appendChild(i)}if(v)box.appendChild(copy(v))}));
  const open=e=>{e.preventDefault();back=document.activeElement;ov.hidden=false;document.body.style.overflow='hidden';close.focus()};
  const shut=()=>{ov.hidden=true;document.body.style.overflow='';if(back)back.focus()};
  document.querySelectorAll('[data-den-crew]').forEach(a=>a.addEventListener('click',open));
