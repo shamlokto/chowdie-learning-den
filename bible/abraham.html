@@ -969,18 +969,25 @@ const CHBG={a1:'journey',a2:'stars',a3:'meal',a4:'isaac',a5:'ram',a6:'promise'};
 const chStage0=chStage;chStage=(...a)=>paint(CHBG[S[i]&&S[i].part]||'stars',.55)+chStage0(...a);
 /* a verse card on the picture */
 const vcard=(t,ref,y=300)=>{const L=wrapT('“'+t+'”',52);const h=L.length*24+40;return G(`<rect x="60" y="${y}" width="520" height="${h}" rx="16" fill="#FFFDF6" stroke="${C.ink}" stroke-width="2.5" opacity=".95"/>`+L.map((l,k)=>T(320,y+28+k*24,l,'mid','style="font-size:18px;font-style:italic"')).join('')+T(564,y+h-10,ref,'sm end mut','style="font-size:13px"'),'a-pop',.5)};
+/* reverent Bible decks: a gentle glow instead of confetti, calm praise words, a quiet "The End", and no fireworks */
+(function(){const st=document.createElement('style');st.textContent='@keyframes bglow{0%{opacity:0;transform:scale(.7)}35%{opacity:.9}100%{opacity:0;transform:scale(1.2)}} .bglow{transform-box:fill-box;transform-origin:center;animation:bglow 1.6s ease-out forwards} body>canvas[aria-hidden="true"]{display:none!important}';document.head.appendChild(st)})();
+confetti=function(){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.innerHTML='<defs><radialGradient id="bgl"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".95"/><stop offset=".6" stop-color="#FFF4D0" stop-opacity=".45"/><stop offset="1" stop-color="#FFF4D0" stop-opacity="0"/></radialGradient></defs><circle class="bglow" cx="320" cy="160" r="170" fill="url(#bgl)"/>';svg.appendChild(g);later(()=>g.remove(),1700)};
+api.confetti=confetti;
+praise.splice(0,praise.length,'Well done.','That\'s right.','Yes, well done.','Well remembered.','Good listening.');
+const theEnd=()=>G(`<rect x="230" y="300" width="180" height="56" rx="16" fill="#FFFDF6" stroke="#6A5BA8" stroke-width="2.5" opacity=".95"/>`+T(320,337,'The End','h mid','style="fill:#6A5BA8;font-size:28px"'),'a-fade',.4);
+const quietEnd=a=>a.later(()=>a.win(),700);
 
 /* story page: picture + caption (the storybook text), narrated by Chowdie unless someone speaks */
 const S=[
 /* ---------- 1: The Call ---------- */
-story('a1','A friend of God','otter','This is a true story from the Bible, about a man called Abram. He trusted God so much that the Bible says he was called God\'s friend.',
+story('a1','A friend of God','otter','This story comes from God\'s Word, the Bible: the book of Genesis, chapters 12 to 22. It is about a man called Abram, who trusted God so much that he was called God\'s friend.',
  ()=>paint('haran',.1)+vcard('he was called God’s friend','James 2:23',306),
- 'Hello! I\'m Chowdie. Today\'s story comes from the Bible, from the book of <b>Genesis</b>. It\'s about <b>Abram</b>, who trusted God. '+V('he was called God’s friend','James 2:23')),
+ 'Hello, I\'m Chowdie. This story comes from God\'s Word, the book of <b>Genesis</b>, chapters 12 to 22. It is about <b>Abram</b>, who trusted God. '+V('he was called God’s friend','James 2:23')),
 story('a1','"Go to the land I will show you"','otter','Abram lived in the town of Harran. One day, God spoke to him: "Go from your country, your people and your father\'s household to the land I will show you."',
  ()=>paint('haran'),'God asked Abram to leave his home, and He promised to bless him. '+V('Go from your country, your people and your father’s household to the land I will show you.','Genesis 12:1')),
 story('a1','So Abram went','otter','Abram did not know where he was going, but he trusted God. "So Abram went, as the LORD had told him." He was seventy-five years old! His wife Sarai and his nephew Lot came too, with their animals and tents.',
  ()=>paint('journey'),'Abram <b>obeyed</b>. '+V('So Abram went, as the LORD had told him; and Lot went with him.','Genesis 12:4')),
-mc('a1','otter','bible','What did God ask?',{q:'What did God ask Abram to do?',options:['Leave his home and go to the land God would show him','Build a tall tower','Stay at home forever','Sail across the sea'],answer:'Leave his home and go to the land God would show him',
+mc('a1','otter','bible','What did God ask?',{q:'What did God ask Abram to do?',options:['Leave his home and go to the land God would show him','Build a city in Harran','Stay in Harran with his family','Travel to the land of Egypt'],answer:'Leave his home and go to the land God would show him',
  why:'God asked Abram to leave his home and go to a new land. Abram didn\'t know where it was, but he <b>trusted God and went</b>.',hint:'Think about the caravan of camels and tents.'}),
 story('a1','An altar of thanks','otter','At last they came to the land of Canaan. God said, "To your offspring I will give this land." Abram built an altar of stones there, to worship God and thank Him.',
  ()=>paint('altar'),'In the new land, Abram <b>worshipped</b> God. He built an altar to thank Him.'),
@@ -995,7 +1002,7 @@ story('a2','Count the stars','otter','Abram and Sarai had no children, and they 
 story('a2','Abram believed','otter','Abram could not count all those stars. And he did not know how God would do it. But he believed God\'s promise. "Abram believed the LORD, and he credited it to him as righteousness."',
  ()=>paint('stars',.15)+vcard('Abram believed the LORD, and he credited it to him as righteousness.','Genesis 15:6',290),
  'Abram <b>trusted</b> God, even when he couldn\'t see how. '+V('Abram believed the LORD, and he credited it to him as righteousness.','Genesis 15:6')),
-mc('a2','otter','bible','The promise of the stars',{q:'Why did God tell Abram to count the stars?',options:['God promised him a family too big to count.','God wanted him to learn maths.','Abram was lost in the dark.','The stars were falling down.'],answer:'God promised him a family too big to count.',
+mc('a2','otter','bible','The promise of the stars',{q:'Why did God tell Abram to count the stars?',options:['God promised him a family too big to count.','So that Abram could find his way at night.','So that Abram would learn their names.','So that Abram would know when to rest.'],answer:'God promised him a family too big to count.',
  why:'God promised that Abram\'s family would be like the stars: <b>too many to count</b>. And Abram believed Him.',hint:'Read what God said after "count the stars".'}),
 story('a2','A new name','otter','Years later, God gave Abram a new name: Abraham, which means "father of many". "Your name will be Abraham, for I have made you a father of many nations." God gave Sarai a new name too: Sarah.',
  ()=>paint('waiting'),'Abram became <b>Abraham</b>, and Sarai became <b>Sarah</b>. '+V('your name will be Abraham, for I have made you a father of many nations.','Genesis 17:5')),
@@ -1016,7 +1023,7 @@ story('a4','The waiting','otter','Abraham and Sarah waited, and waited. It had b
  ()=>paint('waiting'),'Sometimes we have to wait a long time for God\'s promises. Abraham and Sarah were <b>patient</b>.'),
 story('a4','Isaac is born!','sarah','Just as God had said, Sarah had a baby boy! Abraham was one hundred years old. They named him Isaac, which means "he laughs". Sarah said, "God has brought me laughter, and everyone who hears about this will laugh with me."',
  ()=>paint('isaac'),'God has brought me laughter, and everyone who hears about this will laugh with me! '+'<span class="ref">(Genesis 21:6)</span>',{mount:a=>a.later(()=>a.confetti(),900)}),
-mc('a4','otter','bible','What does Isaac mean?',{q:'Abraham and Sarah named their baby Isaac. What does the name Isaac mean?',options:['He laughs','He is strong','He is tall','He is sleepy'],answer:'He laughs',
+mc('a4','otter','bible','What does Isaac mean?',{q:'Abraham and Sarah named their baby Isaac. What does the name Isaac mean?',options:['He laughs','He is strong','He is brave','He is kind'],answer:'He laughs',
  why:'<b>Isaac</b> means "he laughs". Sarah laughed when she first heard God\'s promise, and now she laughed with joy!',hint:'What did Sarah say God had brought her?'}),
 mcR('a4','otter','bible','Abraham\'s good qualities','Match each moment in Abraham\'s life to the good quality it shows.',[
  {q:'Abraham left his home when God called, even though he didn\'t know where he was going.',options:['faith and obedience','generosity','hospitality','patience'],answer:'faith and obedience',ok:'He trusted God and obeyed: <b>faith and obedience</b>. '+V('By faith Abraham… obeyed and went, even though he did not know where he was going.','Hebrews 11:8'),hint:'He trusted God and did what God asked.'},
@@ -1031,7 +1038,7 @@ story('a5','"God will provide"','otter','Abraham and Isaac walked up the mountai
  ()=>paint('mountain'),'Isaac asked, "Father, where is the lamb?" Abraham answered, '+V('God himself will provide the lamb… my son.','Genesis 22:8')),
 story('a5','The LORD Will Provide','otter','At the top, an angel of the LORD called out, "Abraham! Abraham! Do not lay a hand on the boy." Isaac was safe! Then Abraham saw a ram caught by its horns in a bush. God had provided! Abraham offered the ram instead, and he called that place "The LORD Will Provide".',
  ()=>paint('ram'),'God never wanted Isaac to be hurt. He provided a ram. '+V('So Abraham called that place The LORD Will Provide.','Genesis 22:14')),
-mc('a5','otter','bible','What did God provide?',{q:'On the mountain, what did God provide?',options:['A ram caught by its horns in a bush','A boat','A tall tower','A bag of gold'],answer:'A ram caught by its horns in a bush',
+mc('a5','otter','bible','What did God provide?',{q:'On the mountain, what did God provide?',options:['A ram caught by its horns in a bush','A well of water','A new tent','A bag of gold'],answer:'A ram caught by its horns in a bush',
  why:'God provided a <b>ram</b>, caught by its horns in a bush. Abraham called the place <b>"The LORD Will Provide"</b>.',hint:'Look at the picture of the mountaintop.'}),
 story('a5','A blessing for everyone','otter','God blessed Abraham, because he had trusted and obeyed. God promised that his family would be as many as the stars in the sky and the sand on the seashore, and that through his family, all nations on earth would be blessed.',
  ()=>paint('promise'),'God\'s promise was for everyone! '+V('through your offspring all nations on earth will be blessed, because you have obeyed me.','Genesis 22:18')),
@@ -1039,7 +1046,7 @@ order('a5','otter','bible','Abraham\'s story in order',{q:'Put Abraham\'s story 
  why:'Abram <b>left Harran</b>, then let <b>Lot choose</b> the land, then God told him to <b>count the stars</b>, and at last <b>Isaac was born</b>.',hint:'What happened first in the story? What happened last?'}),
 
 /* ---------- 6: Remember ---------- */
-story('a6','What we learn from Abraham','wala','"Abraham trusted God even when he couldn\'t see the way," said Wala. "He was generous to Lot," said Flamecharge. "And he waited so patiently for Isaac," hooted Immortal Dash. "And God kept every promise," said Chowdie.',
+story('a6','What we learn from Abraham','wala','"Abraham trusted God even when he couldn\'t see the way," said Wala. "He was generous to Lot," said Flamecharge. "And he waited so patiently for Isaac," said Immortal Dash. "And God kept every promise," said Chowdie.',
  ()=>paint('promise',.5)+G(wala(110,392,.8,{still:true})+flame(250,392,.66,{wave:true})+owl(390,392,.72,{wave:true})+otter(530,392,.74,{wave:true}),'a-pop',.2),
  'Abraham shows us <b>faith</b>, <b>obedience</b>, <b>generosity</b>, <b>hospitality</b> and <b>patience</b>. And God always keeps His promises.'),
 mcR('a6','wala','chinese','Wala\'s 华文 words','Wala has two 华文 words from Abraham\'s story. What do they mean?',[
@@ -1048,11 +1055,11 @@ mcR('a6','wala','chinese','Wala\'s 华文 words','Wala has two 华文 words from
 story('a6','Memory verse','otter','Let\'s learn this verse by heart: "Abram believed the LORD, and he credited it to him as righteousness." (Genesis 15:6)',
  ()=>paint('stars',.2)+vcard('Abram believed the LORD, and he credited it to him as righteousness.','Genesis 15:6',150)+G(otter(560,392,.66,{wave:true}),'a-pop',.4),
  'Say it with me! '+V('Abram believed the LORD, and he credited it to him as righteousness.','Genesis 15:6')),
-mc('a6','otter','bible','Fill in the memory verse',{q:'"Abram ______ the LORD, and he credited it to him as righteousness." (Genesis 15:6)',options:['believed','forgot','left','laughed at'],answer:'believed',
+mc('a6','otter','bible','Fill in the memory verse',{q:'"Abram ______ the LORD, and he credited it to him as righteousness." (Genesis 15:6)',options:['believed','forgot','doubted','questioned'],answer:'believed',
  why:'"Abram <b>believed</b> the LORD, and he credited it to him as righteousness." Abraham trusted God\'s promise.',hint:'What did Abraham do when God showed him the stars?'}),
-story('a6','The End','otter','Abraham was a friend of God who trusted Him. We can trust God too: He is good, and He keeps His promises. THE END.',
- ()=>paint('promise',.15)+T(320,330,'THE END','h mid','style="fill:#6A5BA8;paint-order:stroke;stroke:#fff;stroke-width:6px;font-size:36px"'),
- 'We can trust God, just like Abraham did. <b>THE END.</b>',{mount:a=>a.later(()=>{a.confetti();a.win()},700)}),
+story('a6','The End','otter','Abraham was a friend of God who trusted Him. We can trust God too: He is good, and He keeps His promises. Thank You, God, for keeping Your promises.',
+ ()=>paint('promise',.15)+theEnd(),
+ 'Thank You, God, for keeping Your promises. The End.',{mount:quietEnd}),
 ];
 
 render();
