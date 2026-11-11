@@ -885,7 +885,7 @@ body.crew-drawn .crew-pics .crew-pic,body:not(.crew-drawn) .crew-pics svg{displa
 <style id="bible-css">
 /* Bible Stories: grouped simply by Testament (not by MOE value) */
 [data-panel="bible"]{--c:#4E7A6C;--wash:62,98,88;--art:url(img/bible-banner.webp)}
-[data-panel="bible"] .panel-header-banner{background-position:center 55%!important}
+[data-panel="bible"] .panel-header-banner{background-position:center 80%!important}
 .deck-card.coming-soon{cursor:default;opacity:.8;border-style:dashed!important}
 .deck-card.coming-soon:hover{transform:none;box-shadow:none}
 .deck-card.coming-soon::after{display:none}
@@ -911,7 +911,7 @@ body.crew-drawn .crew-pics .crew-pic,body:not(.crew-drawn) .crew-pics svg{displa
 .door-v{z-index:0;object-fit:cover;object-position:center var(--door-y,68%);opacity:0;transition:opacity .8s}
 .door-v.on,.door-v.on+.door-wash,.door-kb>.door-wash{opacity:1}
 .door-wash{z-index:1;opacity:0;transition:opacity .8s;background:linear-gradient(90deg,rgba(var(--wash),.88),rgba(var(--wash),.2) 55%,rgba(var(--wash),0) 80%)}
-[data-panel="spelling"]{--door-y:30%}[data-panel="science"]{--door-y:45%}[data-panel="bible"]{--door-y:55%}
+[data-panel="spelling"]{--door-y:30%}[data-panel="science"]{--door-y:45%}[data-panel="bible"]{--door-y:80%}
 .door-kb::before{content:"";position:absolute;inset:0;z-index:0;background:var(--art) center var(--door-y,68%)/cover no-repeat;transform-origin:30% 60%;animation:doorKB 22s ease-in-out infinite alternate}
 @keyframes doorKB{from{transform:scale(1) translate(0,0)}to{transform:scale(1.09) translate(-1.5%,-1%)}}
 @media (prefers-reduced-motion: reduce){.door-v{display:none}.door-kb::before{animation:none}}
@@ -1508,8 +1508,8 @@ fromHash();
 </script>
 <script id="magic-doors">
 /* Magic doors: clip per subject banner (img/v-<art>.mp4 + -poster.webp); fetched only when its panel is on screen, paused when hidden */
-(()=>{const DOORS={maths:'maths-classroom',chinese:'chinese-garden',science:'sci-garden',music:'music-stage',stories:'stories-nook',bible:'bible-banner'},
- KB=['english','spelling'],still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+(()=>{const DOORS={maths:'maths-classroom',chinese:'chinese-garden',science:'sci-garden',music:'music-stage',stories:'stories-nook',bible:'bible-banner',english:'english-library',spelling:'spelling-nest'},
+ KB=[],still=matchMedia('(prefers-reduced-motion: reduce)').matches;
  document.querySelectorAll('.subject-panel[data-panel]').forEach(panel=>{const k=panel.dataset.panel,b=panel.querySelector(':scope>.panel-header-banner');if(!b)return;
   if(KB.includes(k)){b.classList.add('door-kb');b.insertAdjacentHTML('afterbegin','<div class="door-wash" aria-hidden="true"></div>');return}
   const n=DOORS[k];if(!n||still||!('IntersectionObserver' in window))return;

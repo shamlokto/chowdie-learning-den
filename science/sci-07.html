@@ -310,6 +310,8 @@ const owlI=(x,y,s=1)=>ec('eco-owl',x,y+2*s,58*s);
 const crabI=(x,y,s=1)=>ec('eco-crab',x,y,58*s);
 const mangroveI=(x,y,s=1)=>ec('eco-mangrove',x,y-16*s,100*s);
 const chain=(items,y,gap=130)=>items.map(([ic,n],k)=>G(`<g transform="translate(${80+k*gap} ${y})">${ic}</g>`+T(80+k*gap,y+55,n,'lab mid'),'a-pop',.1+k*.3)).join('')+items.slice(1).map((_,k)=>G(arrow(80+k*gap+40,y,80+(k+1)*gap-40,y,C.accent),'a-fade',.4+k*.3)).join('');
+/* short looping clip tile: the still, clipped and framed; tools/den-clips.py lays the video over it */
+const vtile=(src,x,y,w,h,id)=>`<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/></clipPath></defs><image href="${src}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`;
 const S=[
 {part:'learn',title:'Everything is connected',say:'Hi! No living thing lives alone. Plants, animals, microbes, water, soil and sunlight all work together in an <b>ecosystem</b>. A pond is an ecosystem. So is a rainforest, a mangrove swamp, and even the drain outside your house! Let\'s explore how it all fits together.',
  draw:()=>G(sunI2(80,70,1.2),'a-pop',.1)+G(`<rect x="0" y="300" width="640" height="100" fill="#C9E0B8"/><ellipse cx="420" cy="330" rx="150" ry="40" fill="#BFE3F5" stroke="${C.ink}" stroke-width="2"/>`,'')+G(treeI(150,290,1.5),'a-pop',.3)+G(grassI(260,300,1.2)+grassI(560,300,1),'a-pop',.5)+G(birdI(170,150,.9),'a-pop',.7)+G(frogI(390,310,.9)+fishI2(450,340,.7),'a-pop',.9)+G(butterflyI(300,230,.9)+bugI(560,280,.5,'#2B2B3A'),'a-pop',1.1)+G(dropI(520,120,.9)+T(520,170,'rain','sm mid mut'),'a-pop',1.3)+otter(600,398,.5)},
@@ -331,7 +333,7 @@ const S=[
   return E.map(([a,b],k)=>G(arrow(N[a][0]+(N[b][0]-N[a][0])*.25,N[a][1]+(N[b][1]-N[a][1])*.25,N[a][0]+(N[b][0]-N[a][0])*.72,N[a][1]+(N[b][1]-N[a][1])*.72,C.accent),'a-fade',.6+k*.12)).join('')+Object.entries(N).map(([n,[x,y]],k)=>G(`<circle cx="${x}" cy="${y}" r="30" fill="#fff" stroke="${C.ink}" stroke-width="2.5"/><g transform="translate(${x} ${y})">${ic[n]}</g>`+({owl:T(x+38,y+5,n,'sm'),frog:T(x-38,y+5,n,'sm end'),hopper:T(x-38,y+5,'grasshopper','sm end'),mouse:T(x+38,y+5,n,'sm'),snake:T(x+38,y+5,n,'sm')}[n]||T(x,y+46,n,'sm mid')),'a-pop',.1+k*.1)).join('')+G(box(470,220,150,120,C.sun,16)+wr(545,255,'The mouse is eaten by the snake AND the owl!',18,'sm mid',18),'a-pop',1.6)}},
 
 {part:'learn',title:'Singapore\'s mangroves',say:'Mangroves are special trees that grow in <b>salty mud</b> where the river meets the sea. Their tangled roots stick up to <b>breathe</b> and hold the soil so the coast does not wash away. Baby fish, <b>crabs</b> and <b>mudskippers</b> hide among the roots. You can see them at Sungei Buloh and Pasir Ris!',
- draw:()=>G(`<defs><linearGradient id="mud" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A7A5A" stop-opacity="0"/><stop offset=".35" stop-color="#8A7A5A" stop-opacity=".45"/><stop offset="1" stop-color="#7FA6B5" stop-opacity=".5"/></linearGradient></defs><rect x="0" y="240" width="640" height="160" fill="url(#mud)"/>`,'')+[120,260,400,540].map((x,k)=>G(mangroveI(x,250,1.1+(k%2)*.2),'a-pop',.1+k*.2)).join('')+G(crabI(200,330,.8)+crabI(470,340,.7),'a-pop',.9)+G(ec('eco-mudskipper',330,318,70)+T(330,365,'mudskipper','sm mid'),'a-pop',1.1)+
+ draw:()=>G(`<defs><linearGradient id="mud" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A7A5A" stop-opacity="0"/><stop offset=".35" stop-color="#8A7A5A" stop-opacity=".45"/><stop offset="1" stop-color="#7FA6B5" stop-opacity=".5"/></linearGradient></defs><rect x="0" y="240" width="640" height="160" fill="url(#mud)"/>`,'')+[120,260,400,540].map((x,k)=>G(mangroveI(x,250,1.1+(k%2)*.2),'a-pop',.1+k*.2)).join('')+G(crabI(200,330,.8)+crabI(470,340,.7),'a-pop',.9)+G(ec('eco-mudskipper',330,318,70)+vtile('../img/eco-mangrove.webp',504,298,128,72,'vmang')+T(330,365,'mudskipper','sm mid'),'a-pop',1.1)+
   G(box(40,40,260,120,'#fff',16)+T(60,70,'Mangrove roots','lab acc')+T(60,96,'• breathe above the mud','sm')+T(60,118,'• hold the shore together','sm')+T(60,140,'• hide baby fish and crabs','sm'),'a-fade',.8)+G(T(470,80,'Sungei Buloh','lab mid')+T(470,104,'Pasir Ris','lab mid')+T(470,128,'Chek Jawa','lab mid'),'a-fade',1.2)},
 
 {part:'learn',title:'Caring for nature',say:'Ecosystems are strong but not unbreakable. <b>Litter</b> in drains ends up in the sea where turtles eat plastic bags. Cutting <b>trees</b> takes away homes. But you can help: pick up litter, <b>reduce, reuse, recycle</b>, plant something, save water, and <b>never feed wild animals</b>, not even cute otters like me!',
@@ -426,6 +428,19 @@ render();
   api.confetti=confetti; api.win=win;
   addEventListener('resize',()=>{ if(cv){const d=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*d;cv.height=innerHeight*d;cv.getContext('2d').setTransform(d,0,0,d,0,0);} });
 })();
+</script>
+<script id="den-clips">
+/* Short painted clips over their stills (generated by tools/den-clips.py): muted, inline, looping; the poster is the fallback; reduced motion keeps the still */
+(()=>{const CLIPS={"../img/eco-mangrove.webp": "../img/v-mangrove"},svg=document.getElementById('stage');if(!svg||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const NS='http://www.w3.org/2000/svg',XH='http://www.w3.org/1999/xhtml';
+ function up(){svg.querySelectorAll('image').forEach(im=>{const c=CLIPS[im.getAttribute('href')];if(!c||im.dataset.clip)return;im.dataset.clip='1';
+  const fo=document.createElementNS(NS,'foreignObject');['x','y','width','height','clip-path','opacity','style','transform'].forEach(a=>{const v=im.getAttribute(a);if(v!==null)fo.setAttribute(a,v)});
+  if(!fo.getAttribute('x'))fo.setAttribute('x','0');if(!fo.getAttribute('y'))fo.setAttribute('y','0');fo.setAttribute('aria-hidden','true');
+  const v=document.createElementNS(XH,'video');v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';
+  ['muted','playsinline','loop','autoplay'].forEach(a=>v.setAttribute(a,''));v.poster=c+'-poster.webp';v.src=c+'.mp4';
+  const fit=(im.getAttribute('preserveAspectRatio')||'').includes('slice')?'cover':'contain';
+  v.setAttribute('style',`width:100%;height:100%;object-fit:${fit};display:block`);fo.appendChild(v);im.after(fo);const p=v.play();if(p&&p.catch)p.catch(()=>{})})}
+ new MutationObserver(up).observe(svg,{childList:true,subtree:true});up();})();
 </script>
 <script src="../stars.js" defer></script>
 </body></html>
