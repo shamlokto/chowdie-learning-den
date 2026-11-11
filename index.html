@@ -891,6 +891,19 @@ body.crew-drawn .crew-pics .crew-pic,body:not(.crew-drawn) .crew-pics svg{displa
 .deck-card.coming-soon::after{display:none}
 .soon-pill{align-self:flex-start;display:inline-block;margin:0 0 .5rem;padding:.15rem .7rem .1rem;border-radius:999px;background:#F3E8D2;color:#7A4A12;border:2px dashed #B45309;font-family:Fredoka,"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.04em}
 </style>
+<style id="magic-doors-css">
+/* Magic doors: each subject banner moves a little (looping painted clip, or a slow Ken Burns drift until its clip lands) */
+.panel-header-banner{position:relative;isolation:isolate}
+.panel-header-banner h2{position:relative;z-index:2}
+.door-v,.door-wash{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.door-v{z-index:0;object-fit:cover;object-position:center var(--door-y,68%);opacity:0;transition:opacity .8s}
+.door-v.on,.door-v.on+.door-wash,.door-kb>.door-wash{opacity:1}
+.door-wash{z-index:1;opacity:0;transition:opacity .8s;background:linear-gradient(90deg,rgba(var(--wash),.88),rgba(var(--wash),.2) 55%,rgba(var(--wash),0) 80%)}
+[data-panel="spelling"]{--door-y:30%}[data-panel="science"]{--door-y:45%}[data-panel="bible"]{--door-y:55%}
+.door-kb::before{content:"";position:absolute;inset:0;z-index:0;background:var(--art) center var(--door-y,68%)/cover no-repeat;transform-origin:30% 60%;animation:doorKB 22s ease-in-out infinite alternate}
+@keyframes doorKB{from{transform:scale(1) translate(0,0)}to{transform:scale(1.09) translate(-1.5%,-1%)}}
+@media (prefers-reduced-motion: reduce){.door-v{display:none}.door-kb::before{animation:none}}
+</style>
 <style id="new-sticker-css">
 /* "NEW" sticker for the newest storybook card, a small NEW tag on the Stories tab, and a green "UPDATED" sticker for refreshed decks */
 .new-sticker{align-self:flex-start;display:inline-block;margin:0 0 .5rem;padding:.2rem .75rem .12rem;border-radius:999px;background:#FFC83D;color:#B3243A;border:2px solid #B3243A;box-shadow:0 3px 0 #B3243A;font-family:Fredoka,"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.06em;transform:rotate(-4deg);animation:newWiggle 2.4s ease-in-out infinite}
@@ -1480,6 +1493,18 @@ document.getElementById('denBack').addEventListener('click',()=>{if(location.has
 document.querySelectorAll('.sub-nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const s=document.getElementById(a.getAttribute('href').slice(1));if(s)s.scrollIntoView({behavior:'smooth'})}));
 fromHash();
 })();
+</script>
+<script id="magic-doors">
+/* Magic doors: clip per subject banner (img/v-<art>.mp4 + -poster.webp); fetched only when its panel is on screen, paused when hidden */
+(()=>{const DOORS={maths:'maths-classroom',chinese:'chinese-garden',science:'sci-garden',music:'music-stage',stories:'stories-nook',bible:'bible-banner'},
+ KB=['english','spelling'],still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ document.querySelectorAll('.subject-panel[data-panel]').forEach(panel=>{const k=panel.dataset.panel,b=panel.querySelector(':scope>.panel-header-banner');if(!b)return;
+  if(KB.includes(k)){b.classList.add('door-kb');b.insertAdjacentHTML('afterbegin','<div class="door-wash" aria-hidden="true"></div>');return}
+  const n=DOORS[k];if(!n||still||!('IntersectionObserver' in window))return;
+  let v=null;new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){if(!v){v=document.createElement('video');v.className='door-v';v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';
+     ['muted','playsinline','loop','aria-hidden'].forEach(a=>v.setAttribute(a,a==='aria-hidden'?'true':''));v.poster='img/v-'+n+'-poster.webp';v.src='img/v-'+n+'.mp4';
+     v.addEventListener('playing',()=>v.classList.add('on'),{once:true});b.prepend(v);b.insertAdjacentHTML('afterbegin','<div class="door-wash" aria-hidden="true"></div>');b.prepend(v)}
+    const p=v.play();if(p&&p.catch)p.catch(()=>{})}else if(v)v.pause()})).observe(b)})})();
 </script>
 <script src="stars.js"></script>
 <script>
