@@ -89,6 +89,8 @@ const POOL={
  music:['cn/piano','cn/violin','sci/an-bird','cn/balloon','cn/present','cn/liondance','cn/fireworks'],
  stories:['den/armchair','obj/book'],
  bible:['den/bible-stand','den/scroll']};
+/* Bible stories each have their own sticker picture; until one is painted, the scroll stands in (see the img onerror below) */
+const BIBLE={'bible/abraham.html':'den/bible-stand','bible/samson.html':'bible/sticker-samson','bible/ruth.html':'bible/sticker-ruth','bible/david.html':'bible/sticker-david'};
 const SCENE={eagle:'peaksky',friend:'park',germ:'clinic',leak:'island',money:'market',talent:'stage',teachers:'owltree',trombone:'gardens',write:'raintree',concert:'hall',dash:'track',bread:'loaf',bike:'glide'};
 const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -103,7 +105,7 @@ function readHub(text){const doc=new DOMParser().parseFromString(text,'text/html
    if(seen.has(href)||!/\.html(#daddy)?$/.test(href)||href==='spelling/wordlists.html')return;seen.add(href);
    const t=a.querySelector('.deck-title');list.push({href,path:href.split('#')[0],daddy:href.endsWith('#daddy'),title:(t?t.textContent:a.textContent).trim()})});
   let n=0;list.forEach(d=>{const story=d.path.match(/^stories\/([a-z]+)-adv\.html$/);
-   if(d.daddy)d.art='cn/fireworks';else if(story&&SCENE[story[1]]){d.art=story[1]+'/'+SCENE[story[1]];d.scene=true}else{d.art=POOL[k][n%POOL[k].length];n++}});
+   if(d.daddy)d.art='cn/fireworks';else if(BIBLE[d.path])d.art=BIBLE[d.path];else if(story&&SCENE[story[1]]){d.art=story[1]+'/'+SCENE[story[1]];d.scene=true}else{d.art=POOL[k][n%POOL[k].length];n++}});
   if(list.length)out[k]=list});
  return out}
 
@@ -131,7 +133,7 @@ function render(){const pages=document.getElementById('pages'),note=document.get
    <figcaption>${done?'Mystery painting unlocked!':`Mystery painting: ${c} of ${n} tiles`}</figcaption></figure>
    <ul class="stickers">${list.map((d,j)=>{const h=have[j],fresh=h&&!seen.has(d.href);if(h)seen.add(d.href);
      return `<li class="stk${d.scene?' scene':''}${d.daddy?' gold':''}${h?'':' locked'}${fresh?' fresh':''}" style="--r:${((j*37)%13)-6}deg${fresh?';animation-delay:'+j*60+'ms':''}">
-      <span class="art"><img src="img/${d.art}.webp" alt="" loading="lazy"></span><small>${h?'':'<span class="sr">Not yet: </span>'}${esc(d.title)}</small></li>`}).join('')}</ul></div></section>`)});
+      <span class="art"><img src="img/${d.art}.webp" alt="" loading="lazy" onerror="this.onerror=null;this.src='img/den/scroll.webp'"></span><small>${h?'':'<span class="sr">Not yet: </span>'}${esc(d.title)}</small></li>`}).join('')}</ul></div></section>`)});
  pages.innerHTML=html.join('');
  const name=D.USERS[me];document.getElementById('total').textContent=`${name} has ${got} of ${all} stickers`;
  note.hidden=got>0;note.textContent=`No stickers yet for ${name}. Finish a whole deck in one go (every Star check right) to win the first one!`;
