@@ -18,6 +18,12 @@ CLIPS = {
     "stories/trombone-adv.html": {"../img/trombone/night.webp": "../img/trombone/v-night"},
     "stories/talent-adv.html":  {"../img/talent/stage.webp": "../img/talent/v-stage"},
     "chinese/p2cn06.html":      {"../img/megan/nightmarket.webp": "../img/megan/v-nightmarket"},
+    "science/sci-03.html":      {"../img/sci/v-sprout.webp": "../img/sci/v-sprout", "../img/sci/v-leaf-sun.webp": "../img/sci/v-leaf-sun",
+                                 "../img/sci/v-dandelion.webp": "../img/sci/v-dandelion"},
+    "science/sci-04.html":      {"../img/sci/v-butterfly.webp": "../img/sci/v-butterfly"},
+    "science/sci-06.html":      {"../img/sci/v-handwash.webp": "../img/sci/v-handwash"},
+    "chinese/p2cn02.html":      {"../img/cn/v-liondance.webp": "../img/cn/v-liondance"},
+    "music/mus06.html":         {"../img/music/v-instruments.webp": "../img/music/v-instruments"},
 }
 
 JS = r"""<script id="den-clips">
