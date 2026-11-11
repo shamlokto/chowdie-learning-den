@@ -1072,7 +1072,7 @@ story('d6','Memory verse','otter',`Let's learn this verse by heart: "People look
 mc('d6','otter','bible','Fill in the memory verse',{q:'"People look at the outward appearance, but the LORD looks at the ______." (1 Samuel 16:7)',options:['heart','clothes','crown','height'],answer:'heart',
  why:'"People look at the outward appearance, but the LORD looks at the <b>heart</b>."',hint:'God sees what is inside us.'}),
 story('d6','The End','otter',`David the shepherd later wrote a song to God, Psalm 23. Thank You, God, for looking at our hearts and leading us like a shepherd.`,
- ()=>paint('heart',.15)+vcard('He leads me beside quiet waters, he refreshes my soul.','Psalm 23:2–3',150)+theEnd(),
+ ()=>`<image href="../img/bible-banner.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/><rect width="640" height="400" fill="#FFFDF6" opacity=".1"/>`+vcard('He leads me beside quiet waters, he refreshes my soul.','Psalm 23:2–3',150)+theEnd(),
  `David wrote, `+V('He leads me beside quiet waters, he refreshes my soul.','Psalm 23:2–3')+` Thank You, God, for looking at our hearts. The End.`,{mount:quietEnd}),
 ];
 
