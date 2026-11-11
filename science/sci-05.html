@@ -316,6 +316,8 @@ function chest(){return `<path class="dia" d="M176 356 Q320 268 464 356 L464 372
  pic('lungs',193,60,254,280,'class="lobe" style="transition:transform .9s ease;transform-box:fill-box;transform-origin:50% 0"')+T(470,352,'diaphragm','sm mut');}
 const stomach=(x,y,s=1)=>pic('stomach',x-31*s,y-33*s,52*s,58*s);
 const brain=(x,y,s=1)=>pic('brain',x-33*s,y-35*s,66*s,57.5*s);
+/* short looping clip tile: the still, clipped and framed; tools/den-clips.py lays the video over it */
+const vtile=(src,x,y,w,h,id)=>`<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/></clipPath></defs><image href="${src}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`;
 const S=[
 {part:'learn',title:'Your amazing body',say:'Hi! Your body is the most amazing machine you will ever own. It has <b>206 bones</b>, more than <b>600 muscles</b>, a heart that beats about <b>100,000 times a day</b>, and a brain that controls it all. Let\'s look inside!',
  draw:()=>G(pic('child',100,22,120,316),'a-pop',.1)+[['206 bones','hold you up'],['600+ muscles','move you'],['100,000 heartbeats','every day'],['1 brain','in charge of it all']].map(([a,b],k)=>G(box(300,26+k*76,310,64,'#fff',14)+T(320,54+k*76,a,'h acc')+T(320,78+k*76,b,'sm mut'),'a-fade',.4+k*.2)).join('')+otter(560,395,.5)},
@@ -330,11 +332,11 @@ const S=[
   a.btn('Bend / straighten',()=>{bent=!bent;to(bent);a.say(bent?'<b>Bent!</b> The <b>biceps</b> on top tightened: it got shorter and fatter and pulled the forearm up. The triceps underneath relaxed and stretched.':'<b>Straight!</b> Now the <b>triceps</b> underneath tightened and pulled the forearm back down. The biceps relaxed. They work as a pair.')},'go');}},
 
 {part:'learn',title:'Heart and blood',say:'Your <b>heart</b> is a muscle the size of your fist. It pumps <b>blood</b> round your body through tubes called <b>blood vessels</b>. Blood carries <b>oxygen</b> and <b>food</b> to every cell and takes away waste. Feel your <b>pulse</b> on your wrist: each beat is your heart pumping!',
- draw:()=>G(`<style>@media (prefers-reduced-motion:no-preference){.hbeat{animation:hbeat .86s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 60%}}@keyframes hbeat{12%{transform:scale(1.06)}24%{transform:scale(1)}}</style>`+pic('heart',118,12,203,285,'class="hbeat"'),'a-pop',.1)+[['Pumps blood','about 70 times a minute'],['Red tubes','carry oxygen out'],['Blue tubes','bring blood back']].map(([a,b],k)=>G(T(470,100+k*70,a,'lab')+T(470,122+k*70,b,'sm mut'),'a-fade',.6+k*.3)).join('')+tryhome(30,304,340,'Feel your wrist pulse. Count beats for 15 seconds, then × 4.'),
+ draw:()=>G(`<style>@media (prefers-reduced-motion:no-preference){.hbeat{animation:hbeat .86s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 60%}}@keyframes hbeat{12%{transform:scale(1.06)}24%{transform:scale(1)}}</style>`+pic('heart',118,12,203,285,'class="hbeat"'),'a-pop',.1)+[['Pumps blood','about 70 times a minute'],['Red tubes','carry oxygen out'],['Blue tubes','bring blood back']].map(([a,b],k)=>G(T(470,100+k*70,a,'lab')+T(470,122+k*70,b,'sm mut'),'a-fade',.6+k*.3)).join('')+tryhome(30,304,340,'Feel your wrist pulse. Count beats for 15 seconds, then × 4.')+G(vtile('../img/sci/v-heart.webp',452,300,168,94,'vheart'),'a-fade',1.4),
  mount:a=>{let t=0;const beat=()=>{const h=a.q('g[transform*="320 200"]');};const g=a.svg.querySelector('g');}},
 
 {part:'learn',title:'Lungs: breathing in and out',say:'Breathe in. Your <b>lungs</b> fill up with air like two balloons. The <b>oxygen</b> in the air passes into your blood. Breathe out, and you push out a waste gas called <b>carbon dioxide</b>. You breathe about <b>20,000 times a day</b> without even thinking about it!',
- draw:()=>chest()+G(`<g class="ain">${arrow(292,26,292,96,C.sky)}${T(280,52,'air in','lab end acc')}${T(280,74,'brings oxygen','sm end mut')}</g>`,'a-fade',.5)+G(`<g class="aout">${arrow(348,96,348,26,C.grape)}${T(360,52,'air out','lab')}${T(360,74,'takes away carbon dioxide','sm mut')}</g>`,'a-fade',.8),
+ draw:()=>chest()+G(vtile('../img/sci/v-lungs.webp',466,120,160,90,'vlungs'),'a-fade',1.1)+G(`<g class="ain">${arrow(292,26,292,96,C.sky)}${T(280,52,'air in','lab end acc')}${T(280,74,'brings oxygen','sm end mut')}</g>`,'a-fade',.5)+G(`<g class="aout">${arrow(348,96,348,26,C.grape)}${T(360,52,'air out','lab')}${T(360,74,'takes away carbon dioxide','sm mut')}</g>`,'a-fade',.8),
  mount:a=>{let inh=false;const set=v=>{a.qa('.lobe').forEach(l=>l.style.transform=v?'scale(1.07,1.1)':'');a.q('.dia').style.transform=v?'translateY(8px) scaleY(.42)':'';a.q('.ain').style.opacity=v?1:.25;a.q('.aout').style.opacity=v?.25:1};
   a.btn('Breathe in / out',()=>{inh=!inh;set(inh);a.say(inh?'<b>In</b>: the <b>diaphragm</b> under your lungs pulls down and flattens. The lungs get bigger and air rushes in through the windpipe. Oxygen passes into the blood.':'<b>Out</b>: the diaphragm relaxes back up into a dome. The lungs get smaller and push the air, with its carbon dioxide, back out.')},'go');}},
 
@@ -437,6 +439,19 @@ render();
   api.confetti=confetti; api.win=win;
   addEventListener('resize',()=>{ if(cv){const d=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*d;cv.height=innerHeight*d;cv.getContext('2d').setTransform(d,0,0,d,0,0);} });
 })();
+</script>
+<script id="den-clips">
+/* Short painted clips over their stills (generated by tools/den-clips.py): muted, inline, looping; the poster is the fallback; reduced motion keeps the still */
+(()=>{const CLIPS={"../img/sci/v-heart.webp": "../img/sci/v-heart", "../img/sci/v-lungs.webp": "../img/sci/v-lungs"},svg=document.getElementById('stage');if(!svg||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const NS='http://www.w3.org/2000/svg',XH='http://www.w3.org/1999/xhtml';
+ function up(){svg.querySelectorAll('image').forEach(im=>{const c=CLIPS[im.getAttribute('href')];if(!c||im.dataset.clip)return;im.dataset.clip='1';
+  const fo=document.createElementNS(NS,'foreignObject');['x','y','width','height','clip-path','opacity','style','transform'].forEach(a=>{const v=im.getAttribute(a);if(v!==null)fo.setAttribute(a,v)});
+  if(!fo.getAttribute('x'))fo.setAttribute('x','0');if(!fo.getAttribute('y'))fo.setAttribute('y','0');fo.setAttribute('aria-hidden','true');
+  const v=document.createElementNS(XH,'video');v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';
+  ['muted','playsinline','loop','autoplay'].forEach(a=>v.setAttribute(a,''));v.poster=c+'-poster.webp';v.src=c+'.mp4';
+  const fit=(im.getAttribute('preserveAspectRatio')||'').includes('slice')?'cover':'contain';
+  v.setAttribute('style',`width:100%;height:100%;object-fit:${fit};display:block`);fo.appendChild(v);im.after(fo);const p=v.play();if(p&&p.catch)p.catch(()=>{})})}
+ new MutationObserver(up).observe(svg,{childList:true,subtree:true});up();})();
 </script>
 <script src="../stars.js" defer></script>
 </body></html>
