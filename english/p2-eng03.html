@@ -444,6 +444,9 @@ const firstCheck=()=>S.findIndex(s=>s.part==='check');
 function addWala(open,help,talk){insertAt(1,open);insertAt(firstCheck(),helpWala(help),talkWala(talk));}
 /* English 3: Adjectives, adverbs and prepositions */
 const sizedCat=(x,y,s)=>catI(x,y,s);
+/* painted pictures (deck refresh): pic = a cut-out standing on (x, y); tile = a framed scene */
+const pic=(n,x,y,w,h=w)=>`<image href="../img/${n}.webp" x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+let tileN=0;const tile=(n,x,y,w,h)=>{const id='dtile'+(tileN++);return `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14"/></clipPath></defs><image href="../img/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="none" stroke="${C.ink}" stroke-width="3"/>`};
 const S=[
 {part:'learn',title:'Describing words',say:'Hi! An <b>adjective</b> describes a noun. It tells us <b>what kind</b>, <b>what colour</b>, <b>what size</b> or <b>how many</b>. Not just "a cat", but "a <b>fluffy orange</b> cat". Adjectives make our writing come alive!',
  draw:()=>G(catI(140,180,2),'a-pop',.1)+[['fluffy','what kind',C.grape],['orange','what colour',C.accent],['big','what size',C.sky],['two','how many',C.leaf]].map(([a,w,c],k)=>G(tagPill(330,60+k*70,a,c,120)+T(470,80+k*70,w,'lab mut'),'a-pop',.5+k*.25)).join('')+
@@ -500,7 +503,7 @@ const S=[
  quiz:{options:['hungry','ate','quickly'],answer:'hungry',why:'<b>Hungry</b> describes the boy (a noun). "Quickly" describes how he ate, so it is an adverb.',hint:'Which word describes the boy?'}},
 
 {part:'check',title:'Star check 2',say:'Fill in: "An elephant is ___ than a horse."',
- draw:()=>prose(40,130,'An elephant is ______ than a horse.',36,'h',38)+otter(320,392,.8),
+ draw:()=>prose(40,130,'An elephant is ______ than a horse.',36,'h',38)+G(pic('obj/elephant',160,380,220,168),'a-pop',.2)+otter(320,392,.8),
  quiz:{options:['big','bigger','biggest'],answer:'bigger',why:'Two animals and the word "than": use <b>bigger</b>. Double the g!',hint:'How many things are being compared?'}},
 
 {part:'check',title:'Star check 3',say:'Fill in: "Of all my friends, Arjun draws the ___."',
