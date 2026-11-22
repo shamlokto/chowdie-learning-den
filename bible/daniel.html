@@ -114,7 +114,15 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
  .talk{grid-template-columns:44px 1fr;gap:8px} .talk svg{width:44px;height:44px}
 }
 /* den-polish:end */
-</style></head><body>
+</style><style id="den-captions-css">
+.capstrip{background:#FFF8EC;border:2.5px solid #1F3A4A;border-radius:14px;padding:8px 14px;display:flex;flex-direction:column;gap:6px}
+.capstrip[hidden]{display:none}
+.capstrip p{margin:0;font-style:italic;font-size:17px;line-height:1.45;color:#1F3A4A}
+.capstrip p.vc{font-size:18px;text-align:center;background:#FFFDF6;border-radius:10px;padding:4px 8px}
+.capstrip p.vc cite{display:block;font-style:normal;font-size:13px;color:#58707D;text-align:right}
+@media (max-width:480px){.capstrip p{font-size:16px}.capstrip p.vc{font-size:16px}}
+</style>
+</head><body>
 <script src="../audio/daniel.js"></script>
 <a href="../index.html" style="position:fixed;top:10px;right:12px;z-index:50;font:700 13px/1 system-ui,sans-serif;color:#1F3A4A;background:#fff;border:2px solid #1F3A4A;border-radius:999px;padding:7px 12px;text-decoration:none;box-shadow:0 2px 0 #1F3A4A">&#8592; Hub</a>
 
@@ -134,6 +142,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
   </nav>
   <section class="stage" aria-live="polite">
     <div class="scene-head"><span class="tag" id="tag"></span><h2 id="title"></h2></div>
+    <div id="capstrip" class="capstrip" hidden></div>
     <svg id="stage" viewBox="0 0 640 400" role="img"></svg>
     <div class="ui" id="ui"></div>
     <div class="talk"><svg viewBox="0 0 100 100" aria-hidden="true" id="face"></svg><div class="bubble" id="say"></div></div>
@@ -203,7 +212,7 @@ function mountQuiz(sc){ const qz=sc.quiz; let done=false;
 function render(){
   timers.forEach(clearTimeout); timers=[]; try{VTOK++;speechSynthesis.cancel();denStop()}catch(e){}
   const sc=S[i]; $('tag').textContent=PARTS[sc.part]; $('tag').className='tag '+sc.part; $('title').textContent=sc.title;
-  svg.innerHTML=sc.draw?sc.draw(api):''; ui.innerHTML=''; say(sc.say);
+  CAPQ.length=0;svg.innerHTML=sc.draw?sc.draw(api):'';capFlush(); ui.innerHTML=''; say(sc.say);
   if(sc.quiz) mountQuiz(sc); if(sc.mount) sc.mount(api);
   document.querySelectorAll('.parts button').forEach(b=>b.setAttribute('aria-current', b.dataset.part===sc.part));
   $('prev').disabled=i===0; $('next').disabled=i===S.length-1; drawDots();
@@ -850,9 +859,13 @@ function order(part,who,subj,title,{q,items,why,hint,art='',zh=true,joiner='',bg
    shuf2(items.map((w,k)=>[w,k])).forEach(([w,k])=>a.btn(w,b=>{if(done||b.disabled)return;if(w===items[got.length]){got.push(w);b.disabled=true;b.classList.add('ok');upd();if(got.length===items.length){done=true;winCh(a,who,why)}}else missCh(a,who,hint,b)},zh?'zh':'opt'));
    a.btn('↺',()=>{if(done)return;got=[];[...a.ui.children].forEach(x=>{if(x.textContent!=='↺'){x.disabled=false;x.classList.remove('ok')}});upd()})}}}
 
+/* den-captions */
+/* captions live in #capstrip above the picture (tools/den-captions.py) so the painting stays clear */
+const CAPQ=[],capEsc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'),capAdd=h=>{CAPQ.push(h);return ''};
+function capFlush(){const el=document.getElementById('capstrip');if(!el)return;el.innerHTML=CAPQ.filter(h=>h.startsWith('<p class="cap"')).concat(CAPQ.filter(h=>!h.startsWith('<p class="cap"'))).join('');el.hidden=!CAPQ.length;CAPQ.length=0}
 /* story page: scene + a parchment caption at the top (the storybook text) */
 function story(part,title,who,cap,scene,say,extra={}){const hb=extra.bag!=null,L=wrapT(cap,hb?44:58);if(hb)extra.capw=446;return Object.assign({part,title,who,say:CAST[who][1]+say,
-  draw:()=>scene()+G(`<rect x="16" y="12" width="${extra.capw||608}" height="${L.length*24+20}" rx="12" fill="#FFF8EC" stroke="#1F3A4A" stroke-width="2.5" opacity=".96"/>`+L.map((l,k)=>T(30,38+k*24,l,'sm','style="font-size:16px;font-style:italic"')).join(''),'a-fade',.1)+(hb?bag(extra.bag):'')},extra)}
+  draw:()=>scene()+capAdd('<p class="cap">'+capEsc(cap)+'</p>')+(hb?bag(extra.bag):'')},extra)}
 
 /* ===== Writing challenges: the child writes, a live checklist ticks off as they go ===== */
 const wcount=t=>(t.trim().match(/[A-Za-z']+/g)||[]).length;
@@ -966,7 +979,7 @@ const mountFilm=a=>{const v=a.q('video');if(!v)return;v.muted=true;v.setAttribut
   if(RMOT)a.btn('▶ Play the picture',()=>{v.paused?v.play().catch(()=>{}):v.pause()},'play');else{const p=v.play();if(p&&p.catch)p.catch(()=>{})}};
 const chStage0=chStage;chStage=(...a)=>paint(CHBG[S[i]&&S[i].part]||CHBG.def,.55)+chStage0(...a);
 /* a verse card on the picture */
-const vcard=(t,ref,y=300)=>{const L=wrapT('“'+t+'”',52);const h=L.length*24+40;return G(`<rect x="60" y="${y}" width="520" height="${h}" rx="16" fill="#FFFDF6" stroke="${C.ink}" stroke-width="2.5" opacity=".95"/>`+L.map((l,k)=>T(320,y+28+k*24,l,'mid','style="font-size:18px;font-style:italic"')).join('')+T(564,y+h-10,ref,'sm end mut','style="font-size:13px"'),'a-pop',.5)};
+const vcard=(t,ref)=>capAdd('<p class="vc">“'+capEsc(t)+'”<cite>'+capEsc(ref)+'</cite></p>');
 /* the crew reflect at the end */
 const crew=()=>G(wala(110,392,.8,{still:true})+flame(250,392,.66,{wave:true})+owl(390,392,.72,{wave:true})+otter(530,392,.74,{wave:true}),'a-pop',.2);
 /* reverent Bible decks: a gentle glow instead of confetti, calm praise words, a quiet "The End", and no fireworks */
