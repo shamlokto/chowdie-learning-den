@@ -43,6 +43,9 @@ const CAST = {
   samuel: {voice: 'helios', pitch: 0.84, tempo: 0.9},   // Bible stories: the prophet Samuel
   david:  {voice: 'leo',    pitch: 1.12, tempo: 1.04},  // Bible stories: young David
   saul:   {voice: 'zagan',  pitch: 0.94, tempo: 0.95},  // Bible stories: King Saul
+  noah:   {voice: 'helios', pitch: 0.88, tempo: 0.92},  // Bible stories: Noah
+  nehemiah:{voice: 'orion', pitch: 0.92, tempo: 0.95},  // Bible stories: Nehemiah
+  shepherd:{voice: 'leo',   pitch: 0.94, tempo: 0.96},  // Bible stories: the shepherd in Jesus' story
 };
 const FALLBACK = 'otter';
 
