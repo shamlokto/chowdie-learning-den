@@ -965,28 +965,99 @@ const hearZh=(t)=>()=>speakNow(t,'wala');
    Spoken, colloquial Hong Kong Cantonese, every phrase in Traditional characters + Jyutping (with tone numbers) + English.
    English narration is spoken as usual; Cantonese (inside <i class="py">) is never read by the English voice and plays only
    through yue(), which uses the device's Cantonese voice (zh-HK / yue, e.g. Apple's Sinji). ===== */
+/* Every Cantonese line the deck speaks, one literal each, so tools/yue-voices.py finds them all (its literal scanner can lose track inside ${} templates) */
+const YUE_PHRASES=[
+  '一  二  三',
+  '乖孫，食咗飯未呀？',
+  '你今年幾多歲呀？',
+  '你今日返學乖唔乖呀？',
+  '你好',
+  '你身體好唔好呀？',
+  '保重',
+  '八  九',
+  '公公',
+  '公公婆婆',
+  '六  七',
+  '利是',
+  '十',
+  '叉燒包',
+  '唔該',
+  '喂，婆婆！係我呀！',
+  '喂，婆婆！我係Megan呀！',
+  '喂，婆婆！我係Willis呀！',
+  '喂，嫲嫲！係我呀！',
+  '喂，嫲嫲！我係Megan呀！',
+  '喂，嫲嫲！我係Willis呀！',
+  '喂？',
+  '四  五',
+  '多謝',
+  '好好食！',
+  '婆婆',
+  '婆婆保重，拜拜！',
+  '婆婆好掛住你呀！',
+  '婆婆，早晨！',
+  '媽咪',
+  '嫲嫲',
+  '嫲嫲保重，拜拜！',
+  '嫲嫲好掛住你呀！',
+  '嫲嫲，早晨！',
+  '家姐',
+  '對唔住',
+  '廣東話',
+  '恭喜發財！',
+  '我',
+  '我今年七歲。',
+  '我今年九歲。',
+  '我今年五歲。',
+  '我今年八歲。',
+  '我今年六歲。',
+  '我今年四歲。',
+  '我好掛住你',
+  '我想食蝦餃。',
+  '我愛你',
+  '拜拜！',
+  '新年快樂！',
+  '早唞！',
+  '未呀。',
+  '燒賣',
+  '爹哋',
+  '爺爺',
+  '爺爺嫲嫲',
+  '生日快樂！',
+  '細佬',
+  '蛋撻',
+  '蝦餃',
+  '記得保重呀，拜拜！',
+  '身體健康！',
+  '食咗喇！',
+  '食咗飯未呀？',
+  '飲茶',
+];
 const CHAP=[['c1','1 · Who\'s Who','#C2185B'],['c2','2 · Greetings','#2E8BC0'],['c3','3 · Kind Words','#3E9A52'],['c4','4 · Yum Cha','#B9471A'],['c5','5 · Numbers','#E0A800'],['c6','6 · Festivals','#8E3FA8'],['c7','7 · Phone Call','#4B2A6B']];
 setChapters(CHAP);
 SUBJ.canto=['🗣️ 廣東話 Cantonese','#C2185B'];
-const CHBG={};  /* painted scenes come later */
+/* painted scenes (img/canto/), full stage */
+const CHBG={c1:'who',c2:'greet',c4:'yumcha',c6:'cny',c7:'call'};
+const paint=(n,wash=0)=>`<image href="../img/canto/${n}.webp" width="640" height="400" preserveAspectRatio="xMidYMid slice"/>`+(wash?`<rect width="640" height="400" fill="#FFF8F2" opacity="${wash}"/>`:'');
 (function(){const st=document.createElement('style');st.textContent='.bubble i.py{font-style:normal;color:#8E1B4B;font-weight:700}.bubble i.py small{font-weight:400;color:#6b5a62}#ui button.opt{font-size:17px}.yuenote{flex-basis:100%;text-align:center;font-size:13px;color:#7a5a62;margin-top:4px}';document.head.appendChild(st)})();
 /* the English voice must never read Cantonese aloud: strip <i class="py">…</i> for read-to-me as well */
 const speak0=speak;speak=function(t){return speak0(String(t).replace(/<i class="py">.*?<\/i>/g,' '))};
 
 /* ---- Cantonese voice ---- */
-function yueVoice(){try{const vs=speechSynthesis.getVoices();return vs.find(v=>/^(zh[-_]HK|yue)/i.test(v.lang))||vs.find(v=>/cantonese|sinji|sin-ji|粵|廣東/i.test(v.name))||null}catch(e){return null}}
-let YUE_NOTE=false;
-function yue(t){try{if(typeof denStop==='function')denStop();speechSynthesis.cancel();const v=yueVoice();
-  const u=new SpeechSynthesisUtterance(String(t).replace(/[A-Za-z]+[0-9][A-Za-z0-9 ]*/g,' '));u.lang=v?v.lang.replace('_','-'):'zh-HK';if(v)u.voice=v;u.rate=.82;speechSynthesis.speak(u);
-  if(!v&&!YUE_NOTE){YUE_NOTE=true;const n=document.createElement('div');n.className='yuenote';n.textContent='This device has no Cantonese voice yet, so read the Jyutping (the letters and tone numbers) out loud.';const ui=document.getElementById('ui');if(ui)ui.appendChild(n)}}catch(e){}}
-try{speechSynthesis.getVoices()}catch(e){}
+/* yue() comes from <script id="yue-player"> (tools/yue-voices.py: Gemini clips, device zh-HK fallback).
+   Fallback for development only, until the player is injected: */
+if(!window.yue)window.yue=s=>{try{speechSynthesis.cancel();const v=speechSynthesis.getVoices().find(v=>/zh[-_]HK|yue/i.test(v.lang));const u=new SpeechSynthesisUtterance(String(s));u.lang='zh-HK';if(v)u.voice=v;u.rate=.85;speechSynthesis.speak(u)}catch(e){}};
 
 /* ---- who the child is talking to, and who the child is (saved on this device) ---- */
 const LS=(k,d)=>{try{return localStorage.getItem(k)||d}catch(e){return d}};
 const LSset=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 let GPK=LS('den-canto-gp','mum'),KID=LS('den-canto-kid','Megan'),AGE=+LS('den-canto-age',KID==='Willis'?'6':'8');
-const GPS={mum:{ma:['婆婆','po4 po2'],pa:['公公','gung4 gung1'],both:['公公婆婆','gung4 gung1 po4 po2'],side:'Mummy\'s parents'},
-           dad:{ma:['嫲嫲','maa4 maa4'],pa:['爺爺','je4 je2'],both:['爺爺嫲嫲','je4 je2 maa4 maa4'],side:'Daddy\'s parents'}};
+/* every spoken Cantonese line is a whole literal (one clip each), so each grandparent gets its own full sentences */
+const GPS={mum:{ma:['婆婆','po4 po2'],pa:['公公','gung4 gung1'],both:['公公婆婆','gung4 gung1 po4 po2'],side:'Mummy\'s parents',
+             morning:'婆婆，早晨！',miss:'婆婆好掛住你呀！',bye:'婆婆保重，拜拜！',call:{Megan:'喂，婆婆！我係Megan呀！',Willis:'喂，婆婆！我係Willis呀！',other:'喂，婆婆！係我呀！'}},
+           dad:{ma:['嫲嫲','maa4 maa4'],pa:['爺爺','je4 je2'],both:['爺爺嫲嫲','je4 je2 maa4 maa4'],side:'Daddy\'s parents',
+             morning:'嫲嫲，早晨！',miss:'嫲嫲好掛住你呀！',bye:'嫲嫲保重，拜拜！',call:{Megan:'喂，嫲嫲！我係Megan呀！',Willis:'喂，嫲嫲！我係Willis呀！',other:'喂，嫲嫲！係我呀！'}}};
+const AGEP={4:'我今年四歲。',5:'我今年五歲。',6:'我今年六歲。',7:'我今年七歲。',8:'我今年八歲。',9:'我今年九歲。'};
 const NUM=[null,['一','jat1'],['二','ji6'],['三','saam1'],['四','sei3'],['五','ng5'],['六','luk6'],['七','cat1'],['八','baat3'],['九','gau2'],['十','sap6']];
 
 /* a phrase: Traditional characters, Jyutping, English */
@@ -1002,13 +1073,14 @@ function ycard(ps,y=96){const h=ps.length>2?78:96,gap=10,tot=ps.length*h+(ps.len
    +T(320,yy+(ps.length>2?72:88),p.e,'mid','style="font-size:14px;font-style:italic;fill:#5b4a52"');});
  return G(s,'a-pop',.2)}
 const room=(c1='#FFE9D6',c2='#FFD3C2')=>`<defs><linearGradient id="yr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="640" height="400" fill="url(#yr)"/><rect y="330" width="640" height="70" fill="#E8B99A" opacity=".55"/>`;
+const bg=part=>CHBG[part]?paint(CHBG[part],.3):room();
 const hosts=(show=true)=>show?G(otter(560,392,.62,{wave:true})+wala(84,392,.62,{still:true}),'a-pop',.35):'';
 /* a phrase slide: card(s) + one 🔊 button per phrase */
 function phr(part,title,who,cap,ps,line,extra={}){const m=extra.mount;
- return story(part,title,who,cap,()=>room()+ycard(ps,ps.length>2?60:(ps.length>1?70:110))+hosts(ps.length<3),line,Object.assign({},extra,{mount:a=>{ps.forEach(p=>a.btn('🔊 '+p.c,()=>yue(p.c),'play'));if(m)m(a)}}))}
+ return story(part,title,who,cap,()=>bg(part)+ycard(ps,ps.length>2?60:(ps.length>1?70:110))+hosts(ps.length<3),line,Object.assign({},extra,{mount:a=>{ps.forEach(p=>a.btn('🔊 '+p.c,()=>yue(p.c),'play'));if(m)m(a)}}))}
 /* a Cantonese quiz in rounds: English question, Cantonese answer buttons; 🔊 plays the line being asked about */
 function yR(part,who,title,intro,R){const n=++CHN;return {part,title,who,say:CAST[who][1]+intro,_rounds:R.map(r=>r.answer),draw:()=>'<g class="play"></g>',
- mount:a=>{let r=0,busy=false;const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=room('#FFF4E8','#FFE3D0')+chStage(who,'canto',Q.q,(Q.art||'')+T(606,48,`${r+1} of ${R.length}`,'sm end mut'),n);a.ui.innerHTML='';
+ mount:a=>{let r=0,busy=false;const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=(CHBG[part]?'':room('#FFF4E8','#FFE3D0'))+chStage(who,'canto',Q.q,(Q.art||'')+T(606,48,`${r+1} of ${R.length}`,'sm end mut'),n);a.ui.innerHTML='';
    if(Q.hear)a.btn('🔊 Listen',()=>yue(Q.hear),'play');
    shuf2(Q.options).forEach(o=>a.btn(o,b=>{if(busy)return;if(o===Q.answer){busy=true;b.classList.add('ok');r++;if(r<R.length){a.confetti();a.as(who,CAST[who][1]+'<b>Yes!</b> '+Q.ok);a.later(show,2600)}else winCh(a,who,Q.ok)}else missCh(a,who,Q.hint,b)},'opt'))};
   show();a.as(who,CAST[who][1]+intro)}}}
@@ -1019,19 +1091,19 @@ const qart=(t)=>G(T(320,290,t,'mid','style="font-size:64px"'),'a-pop',.2);
 const S=[];
 function buildDeck(){CHN=0;S.length=0;const g=GPS[GPK],MA=P(g.ma[0],g.ma[1],'Grandma'),PA=P(g.pa[0],g.pa[1],'Grandpa');
  const me=KID==='Megan'||KID==='Willis'?KID:'';const n=NUM[AGE]||NUM[8];
- const iam=me?P(`喂，${MA.c}！我係${me}呀！`,`wai2, ${MA.j}! ngo5 hai6 ${me} aa3!`,`Hello, Grandma! It's ${me}!`):P(`喂，${MA.c}！係我呀！`,`wai2, ${MA.j}! hai6 ngo5 aa3!`,'Hello, Grandma! It\'s me!');
+ const iam=P(g.call[me||'other'],me?`wai2, ${MA.j}! ngo5 hai6 ${me} aa3!`:`wai2, ${MA.j}! hai6 ngo5 aa3!`,me?`Hello, Grandma! It’s ${me}!`:'Hello, Grandma! It\'s me!');
  S.push(
 /* ---------- 1: Who's Who ---------- */
 story('c1','Let\'s talk with Grandma and Grandpa!','otter','Grandma and Grandpa speak Cantonese, 廣東話. Let\'s learn some easy words to say to them. Tap 🔊 to hear each one, then say it out loud!',
- ()=>room()+ycard([P('廣東話','gwong2 dung1 waa2','Cantonese')],120)+hosts(),
+ ()=>bg('c1')+ycard([P('廣東話','gwong2 dung1 waa2','Cantonese')],120)+hosts(),
  'Hello, I\'m Chowdie! Grandma and Grandpa speak Cantonese. Let\'s learn some easy words to say to them. Every word has its Jyutping: letters with tone numbers that show how to say it. Tap the speaker to hear it, then say it out loud!',
  {mount:a=>a.btn('🔊 廣東話',()=>yue('廣東話'),'play')}),
 story('c1','Which grandparents?','otter','Are we talking to Mummy\'s parents or Daddy\'s parents? Tap one. (You can change it any time.)',
- ()=>room()+ycard([P('公公婆婆','gung4 gung1  po4 po2','Mummy\'s dad and mum'),P('爺爺嫲嫲','je4 je2  maa4 maa4','Daddy\'s dad and mum')],70),
+ ()=>bg('c1')+ycard([P('公公婆婆','gung4 gung1  po4 po2','Mummy\'s dad and mum'),P('爺爺嫲嫲','je4 je2  maa4 maa4','Daddy\'s dad and mum')],70),
  'In Cantonese, Mummy\'s parents and Daddy\'s parents have different names! Tap the grandparents you will talk to.',
  {mount:a=>['mum','dad'].forEach(k=>a.btn((GPK===k?'✅ ':'')+GPS[k].both[0]+' · '+GPS[k].side,()=>{GPK=k;LSset('den-canto-gp',k);const at=i;buildDeck();go(at)},'opt'))}),
 story('c1','Who are you?','wala','Who is learning today? Tap your name.',
- ()=>room()+hosts(),
+ ()=>bg('c1')+hosts(),
  'Who is learning Cantonese today? Tap your name!',
  {mount:a=>[['Megan',8],['Willis',6],['Someone else',8]].forEach(([nm,ag])=>a.btn((KID===nm?'✅ ':'')+nm,()=>{KID=nm;AGE=ag;LSset('den-canto-kid',nm);LSset('den-canto-age',String(ag));const at=i;buildDeck();go(at)},'opt'))}),
 phr('c1','Grandma and Grandpa','otter',`This is how you call your grandma and grandpa (${g.side}).`,[MA,PA],
@@ -1047,10 +1119,10 @@ yR('c1','otter','Who\'s who?','Tap the Cantonese word for each person.',[
  {q:'Which one means me?',art:qart('🙋'),options:['我 ngo5','你 nei5','媽咪 maa1 mi4','爹哋 de1 di4'],answer:'我 ngo5',ok:Y(P('我','ngo5'))+' means me.',hint:'It is just one short word.'}]),
 
 /* ---------- 2: Greetings ---------- */
-phr('c2','Good morning!','otter','In the morning, say good morning to Grandma. Hello works any time of day.',[P(`${MA.c}，早晨！`,`${MA.j}, zou2 san4!`,'Good morning, Grandma!'),P('你好','nei5 hou2','Hello')],
- `Good morning is `+Y(P('早晨','zou2 san4'))+` Say Grandma's name first: `+Y(P(`${MA.c}，早晨`,`${MA.j}, zou2 san4`))+` Hello is `+Y(P('你好','nei5 hou2'))),
+phr('c2','Good morning!','otter','In the morning, say good morning to Grandma. Hello works any time of day.',[P(g.morning,`${MA.j}, zou2 san4!`,'Good morning, Grandma!'),P('你好','nei5 hou2','Hello')],
+ `Good morning is `+Y(P('早晨','zou2 san4'))+` Say Grandma’s name first: `+Y(P(`${MA.c}，早晨`,`${MA.j}, zou2 san4`))+` Hello is `+Y(P('你好','nei5 hou2'))),
 phr('c2','"Have you eaten?"','otter','Grandparents often ask, "Have you eaten yet?" It is a kind way of saying "I care about you!" Here is how to answer.',[P('食咗飯未呀？','sik6 zo2 faan6 mei6 aa3?','Have you eaten yet?'),P('食咗喇！','sik6 zo2 laa3!','I have eaten!'),P('未呀。','mei6 aa3.','Not yet.')],
- `Grandma may ask `+Y(P('食咗飯未呀？','sik6 zo2 faan6 mei6 aa3'))+` That's "Have you eaten yet?" If you have, say `+Y(P('食咗喇！','sik6 zo2 laa3'))+` If not, say `+Y(P('未呀。','mei6 aa3'))),
+ `Grandma may ask `+Y(P('食咗飯未呀？','sik6 zo2 faan6 mei6 aa3'))+` That’s "Have you eaten yet?" If you have, say `+Y(P('食咗喇！','sik6 zo2 laa3'))+` If not, say `+Y(P('未呀。','mei6 aa3'))),
 phr('c2','Bye-bye and good night','wala','When you leave, say bye-bye. At bedtime, say good night.',[P('拜拜！','baai1 baai3!','Bye-bye!'),P('早唞！','zou2 tau2!','Good night!')],
  `Bye-bye is `+Y(P('拜拜','baai1 baai3'))+` Good night is `+Y(P('早唞','zou2 tau2'))),
 yR('c2','wala','What do you say?','What would you say to Grandma? Tap the right words.',[
@@ -1083,7 +1155,7 @@ phr('c4','Dim sum!','wala','Four favourite dim sum.',[P('蝦餃','haa1 gaau2','s
 phr('c4','"I want to eat…"','otter','Say what you would like, and tell Grandma it is yummy!',[P('我想食蝦餃。','ngo5 soeng2 sik6 haa1 gaau2.','I want to eat shrimp dumplings.'),P('好好食！','hou2 hou2 sik6!','So yummy!')],
  `I want to eat is `+Y(P('我想食','ngo5 soeng2 sik6'))+` So yummy is `+Y(P('好好食！','hou2 hou2 sik6'))),
 story('c4','A tea-time thank-you','otter','When someone pours tea for you, you can tap two fingers gently on the table. It is a quiet way to say thank you!',
- ()=>room()+G(T(320,200,'🫖 ☕','mid','style="font-size:80px"')+T(320,290,'tap, tap ✌️','mid','style="font-size:30px;fill:#7A1240;font-weight:800"'),'a-pop',.2)+hosts(),
+ ()=>paint('tea',.1)+G(T(320,200,'🫖 ☕','mid','style="font-size:80px"')+T(320,290,'tap, tap ✌️','mid','style="font-size:30px;fill:#7A1240;font-weight:800"'),'a-pop',.2)+hosts(),
  'When Grandma pours tea for you, gently tap two fingers on the table. It is a quiet way to say thank you, even when your mouth is full of dim sum!'),
 yR('c4','wala','Order the dim sum!','Tap the right dim sum.',[
  {q:'Which one is the egg tart?',art:qart('🥧'),options:['蛋撻 daan6 taat1','蝦餃 haa1 gaau2','燒賣 siu1 maai2','叉燒包 caa1 siu1 baau1'],answer:'蛋撻 daan6 taat1',ok:Y(P('蛋撻','daan6 taat1'))+' is egg tart.',hint:'It ends with taat1, like "tart".'},
@@ -1099,9 +1171,9 @@ phr('c5','Counting 1 to 5','otter','Let\'s count in Cantonese!',[P('一  二  �
 phr('c5','Counting 6 to 10','wala','Keep going!',[P('六  七','luk6  cat1','6  7'),P('八  九','baat3  gau2','8  9'),P('十','sap6','10')],
  `Six, seven, eight, nine, ten: `+Y(P('六 七 八 九 十','luk6 cat1 baat3 gau2 sap6'))),
 story('c5','How old are you?','otter','Grandma might ask how old you are. Tap your age to see how to answer.',
- ()=>room()+ycard([P('你今年幾多歲呀？','nei5 gam1 nin4 gei2 do1 seoi3 aa3?','How old are you this year?'),P(`我今年${n[0]}歲。`,`ngo5 gam1 nin4 ${n[1]} seoi3.`,`I am ${AGE} years old.`)],70),
+ ()=>room()+ycard([P('你今年幾多歲呀？','nei5 gam1 nin4 gei2 do1 seoi3 aa3?','How old are you this year?'),P(AGEP[AGE],`ngo5 gam1 nin4 ${n[1]} seoi3.`,`I am ${AGE} years old.`)],70),
  `Grandma may ask `+Y(P('你今年幾多歲呀？','nei5 gam1 nin4 gei2 do1 seoi3 aa3'))+` You answer `+Y(P(`我今年${n[0]}歲。`,`ngo5 gam1 nin4 ${n[1]} seoi3`))+` Tap your age!`,
- {mount:a=>{a.btn('🔊 你今年幾多歲呀？',()=>yue('你今年幾多歲呀？'),'play');a.btn(`🔊 我今年${n[0]}歲`,()=>yue(`我今年${n[0]}歲`),'play');
+ {mount:a=>{a.btn('🔊 你今年幾多歲呀？',()=>yue('你今年幾多歲呀？'),'play');a.btn('🔊 '+AGEP[AGE],()=>yue(AGEP[AGE]),'play');
    [4,5,6,7,8,9].forEach(ag=>a.btn((AGE===ag?'✅ ':'')+ag,()=>{AGE=ag;LSset('den-canto-age',String(ag));const at=i;buildDeck();go(at)},'opt'))}}),
 yR('c5','otter','Number quiz','Tap the Cantonese for each number.',[
  {q:'Which one is 3?',art:qart('3️⃣'),options:['三 saam1','八 baat3','六 luk6','十 sap6'],answer:'三 saam1',ok:Y(P('三','saam1'))+' is three.',hint:'It has three lines!'},
@@ -1127,10 +1199,10 @@ yR('c7','otter','Phone call with Grandma','Grandma is on the phone! Tap 🔊 to 
  {q:'Ring ring! Grandma answers the phone.',art:qline(P('喂？','wai2?'),'Grandma:'),hear:'喂？',options:[L(iam),'早唞！ zou2 tau2!','對唔住！ deoi3 m4 zyu6!'],answer:L(iam),ok:'Say hello and who you are!',hint:'Start with 喂 wai2 and say who you are.'},
  {q:'Grandma asks:',art:qline(P('乖孫，食咗飯未呀？','gwaai1 syun1, sik6 zo2 faan6 mei6 aa3?'),'Grandma:'),hear:'乖孫，食咗飯未呀？',options:['食咗喇！ sik6 zo2 laa3!','生日快樂！ saang1 jat6 faai3 lok6!','拜拜！ baai1 baai3!'],answer:'食咗喇！ sik6 zo2 laa3!',ok:Y(P('乖孫','gwaai1 syun1'))+' means "my good grandchild". She asked if you have eaten!',hint:'She asked "Have you eaten yet?"'},
  {q:'Grandma asks:',art:qline(P('你今日返學乖唔乖呀？','nei5 gam1 jat6 faan1 hok6 gwaai1 m4 gwaai1 aa3?'),'Grandma:'),hear:'你今日返學乖唔乖呀？',options:['好乖呀！ hou2 gwaai1 aa3!','好好食！ hou2 hou2 sik6!','恭喜發財！ gung1 hei2 faat3 coi4!'],answer:'好乖呀！ hou2 gwaai1 aa3!',ok:'She asked "Were you good at school today?" '+Y(P('好乖呀！','hou2 gwaai1 aa3'))+' means "I was very good!"',hint:'乖 gwaai1 means good and well-behaved.'},
- {q:'Grandma says:',art:qline(P(`${MA.c}好掛住你呀！`,`${MA.j} hou2 gwaa3 zyu6 nei5 aa3!`),'Grandma:'),hear:`${MA.c}好掛住你呀！`,options:['我都好掛住你！ ngo5 dou1 hou2 gwaa3 zyu6 nei5!','唔該！ m4 goi1!','我今年十歲！ ngo5 gam1 nin4 sap6 seoi3!'],answer:'我都好掛住你！ ngo5 dou1 hou2 gwaa3 zyu6 nei5!',ok:'Grandma misses you! '+Y(P('我都好掛住你！','ngo5 dou1 hou2 gwaa3 zyu6 nei5'))+' means "I miss you too!"',hint:'都 dou1 means "too".'},
+ {q:'Grandma says:',art:qline(P(g.miss,`${MA.j} hou2 gwaa3 zyu6 nei5 aa3!`),'Grandma:'),hear:g.miss,options:['我都好掛住你！ ngo5 dou1 hou2 gwaa3 zyu6 nei5!','唔該！ m4 goi1!','我今年十歲！ ngo5 gam1 nin4 sap6 seoi3!'],answer:'我都好掛住你！ ngo5 dou1 hou2 gwaa3 zyu6 nei5!',ok:'Grandma misses you! '+Y(P('我都好掛住你！','ngo5 dou1 hou2 gwaa3 zyu6 nei5'))+' means "I miss you too!"',hint:'都 dou1 means "too".'},
  {q:'Grandma says:',art:qline(P('記得保重呀，拜拜！','gei3 dak1 bou2 zung6 aa3, baai1 baai3!'),'Grandma:'),hear:'記得保重呀，拜拜！',options:[`${MA.c}保重，拜拜！ ${MA.j} bou2 zung6, baai1 baai3!`,'早晨！ zou2 san4!','對唔住！ deoi3 m4 zyu6!'],answer:`${MA.c}保重，拜拜！ ${MA.j} bou2 zung6, baai1 baai3!`,ok:'"Remember to take care, bye-bye!" Wish her well and say bye-bye too!',hint:'保重 bou2 zung6 means take care.'}]),
 story('c7','Well done!','wala','Now you can talk with Grandma and Grandpa in Cantonese! Try one new phrase every time you see them. They will be so happy!',
- ()=>room()+ycard([P('我愛你！','ngo5 oi3 nei5!','I love you!')],110)+hosts(),
+ ()=>bg('c7')+ycard([P('我愛你！','ngo5 oi3 nei5!','I love you!')],110)+hosts(),
  'Well done! Now you can talk with Grandma and Grandpa in Cantonese. Try one new phrase every time you see them. They will be so happy!',
  {mount:a=>{a.btn('🔊 我愛你',()=>yue('我愛你'),'play');a.later(()=>{a.confetti();a.win()},700)}}),
  );}
