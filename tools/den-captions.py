@@ -36,7 +36,7 @@ CSS = ("<style id=\"den-captions-css\">\n"
        ".capstrip p.vc{font-size:18px;text-align:center;background:#FFFDF6;border-radius:10px;padding:4px 8px}\n"
        ".capstrip p.vc cite{display:block;font-style:normal;font-size:13px;color:#58707D;text-align:right}\n"
        "@media (max-width:480px){.capstrip p{font-size:16px}.capstrip p.vc{font-size:16px}}\n"
-       "</style>\n")
+       "</style>")  # no newline: tools/den-polish.py looks for "</style></head>"
 
 
 def apply(p):

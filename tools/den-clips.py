@@ -61,6 +61,7 @@ CLIPS = {
     "bible/prodigal.html": {"../img/prodigal/run.webp": "../img/prodigal/v-run", "../img/prodigal/feast.webp": "../img/prodigal/v-feast"},
     "bible/children.html": {"../img/children/welcome.webp": "../img/children/v-welcome"},
     "bible/church.html": {"../img/church/pentecost.webp": "../img/church/v-pentecost", "../img/church/share.webp": "../img/church/v-share", "../img/church/grow.webp": "../img/church/v-grow"},
+    "chinese/cantonese.html": {"../img/canto/who.webp": "../img/canto/v-who", "../img/canto/greet.webp": "../img/canto/v-greet", "../img/canto/goodbye.webp": "../img/canto/v-goodbye", "../img/canto/yumcha.webp": "../img/canto/v-yumcha", "../img/canto/birthday.webp": "../img/canto/v-birthday", "../img/canto/cny.webp": "../img/canto/v-cny", "../img/canto/call.webp": "../img/canto/v-call", "../img/canto/tea.webp": "../img/canto/v-tea"},
 }
 
 JS = r"""<script id="den-clips">
