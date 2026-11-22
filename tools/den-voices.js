@@ -46,6 +46,12 @@ const CAST = {
   noah:   {voice: 'helios', pitch: 0.88, tempo: 0.92},  // Bible stories: Noah
   nehemiah:{voice: 'orion', pitch: 0.92, tempo: 0.95},  // Bible stories: Nehemiah
   shepherd:{voice: 'leo',   pitch: 0.94, tempo: 0.96},  // Bible stories: the shepherd in Jesus' story
+  jonah:  {voice: 'orion',  pitch: 1.0,  tempo: 0.97},  // Bible stories: Jonah
+  joseph: {voice: 'leo',    pitch: 1.02, tempo: 0.98},  // Bible stories: Joseph, a young man
+  jacob:  {voice: 'helios', pitch: 0.86, tempo: 0.9},   // Bible stories: old Jacob
+  pharaoh:{voice: 'atlas',  pitch: 0.92, tempo: 0.93},  // Bible stories: Pharaoh
+  daniel: {voice: 'leo',    pitch: 0.98, tempo: 0.97},  // Bible stories: Daniel
+  king:   {voice: 'atlas',  pitch: 0.9,  tempo: 0.93},  // Bible stories: a king (Nineveh, Babylon)
 };
 const FALLBACK = 'otter';
 
