@@ -826,7 +826,7 @@ const S=[
   +T(170,210,'✅ 6/8 neat','lab mid','style="fill:#2E7D46"')+G(rowCard([{beam:['8','8','8']},{beam:['8','8','8']}],{x:20,y:230,w:300,sp:10,time:'6/8',u:36}),'a-pop',.3)
   +T(470,210,'❌ 6/8 messy','lab mid','style="fill:#B3243A"')+G(rowCard([{beam:['8','8']},{beam:['8','8']},{beam:['8','8']}],{x:330,y:230,w:300,sp:10,time:'6/8',u:36}),'a-pop',.4)+T(470,370,'(that looks like 3/4!)','sm mid mut')},
 
-{part:'learn',title:'Rests that make sense',who:'flame',say:FL+'Rests follow the beats too. Start a new rest for each new beat, and don\'t hide the middle of a 4/4 bar. A whole bar of silence always gets a <b>semibreve rest</b>, in ANY time signature (that\'s a special rule!). In compound time, a whole beat of silence is a <b>dotted crotchet rest</b>.',
+{part:'learn',title:'Rests that make sense',who:'flame',say:FL+'Rests follow the beats too. Start a new rest for each new beat, and don\'t hide the middle of a 4/4 bar. A whole bar of silence always gets a <b>semibreve rest</b>, in almost every time signature (that\'s a special rule!). In compound time, a whole beat of silence is a <b>dotted crotchet rest</b>.',
  draw:()=>mroom()+[['3/4',['rw','||'],'A whole silent bar in 3/4'],['4/4',['q','rq','rh','||'],'Rests fit the beats'],['6/8',['q.','rq.','||'],'A whole beat of rest in 6/8'],['2/4',['8','r8','rq','||'],'Finish beat 1, then beat 2']]
   .map(([t,it,n],k)=>{const x=20+(k%2)*310,y=20+Math.floor(k/2)*180;return G(box(x,y,290,166,'#fff',16)+rowCard(it,{x:x+16,y:y+40,w:258,sp:10,time:t,end:false,u:k===1?40:56})+T(x+145,y+140,n,'sm mid','style="font-weight:800"'),'a-pop',.1+k*.15)}).join('')},
 

@@ -776,7 +776,7 @@ function keys(part,title,who,intro,R,o={}){const from=o.from||'C4',n=o.n||15;ret
 /* tap-to-hear: make every [data-play] element play its pitch list on click */
 const bindPlay=a=>a.qa('[data-play]').forEach(g=>g.addEventListener('click',()=>playSeq(g.dataset.play.split(' ').map(x=>[x.includes('+')?x.split('+'):x,+(g.dataset.b||1)]),+(g.dataset.bpm||100))));
 const mwrap=(t,max)=>{const W=t.replace(/<[^>]+>/g,'').split(' '),L=[];let c='';W.forEach(w=>{if((c+' '+w).trim().length>max&&c){L.push(c);c=w}else c=(c+' '+w).trim()});if(c)L.push(c);return L};
-/* ---- Mommy vs Baddie Daddy: he makes a claim. True or a lie? If a lie, pick the truth. ---- */
+/* ---- Baddie Daddy's yeast tricks: he makes a claim. True or a lie? If a lie, pick the truth. ---- */
 PARTS.boss='Mommy vs Daddy';
 const MTAUNT=['Ho ho ho! Fooled you!','Hmm-hmm. Are you SURE about that?','Ha! My top hat knows better.','Tsk tsk. Wrong, little one.'];
 function dclaim(title,{claim,truth,fix=[],answer,why,art='',play}){return {part:'boss',title,who:'daddy',say:DD+claim+' <i>True… or a lie?</i>',_ans:{truth,answer},
@@ -1091,7 +1091,7 @@ num('b4','flame','maths','How tall now?',{q:'Before rising, the dough was 8 cm t
 story('boss','Flat as a pancake','daddy','At the fair, Baddie Daddy\'s loaf was as flat as a pancake! He had rushed it with boiling water, and shouted at his helpers to hurry. "Hmph! My bread is PERFECT," he boomed. "And I know ALL about yeast!"',
  ()=>paint('field')+G(daddy(170,392,1.1,{point:true}),'a-drop',.2)+G(`<g transform="translate(330 330)"><ellipse rx="70" ry="12" fill="#C98B55" stroke="${C.ink}" stroke-width="3"/></g>`,'a-pop',.5)+G(baddie(470,392,.6,{still:true}),'a-wig',.3)+G(owl(580,392,.7,{still:true}),'a-pop',.4),
  'Surprise! The hidden boss is <b>Baddie Daddy</b>. Does he really know all about yeast?'),
-dboss('boss','Mommy vs Baddie Daddy',[
+dboss('boss','Baddie Daddy\'s yeast tricks',[
  {claim:'Boiling hot water makes yeast work faster!',truth:false,fix:['Very hot water kills yeast. Warm water wakes it up.','Ice-cold water is best for yeast.','Yeast does not need any water.'],answer:'Very hot water kills yeast. Warm water wakes it up.',why:'Boiling water <b>kills</b> yeast. That\'s why his loaf is flat!'},
  {claim:'Yeast is a plant, just like a tree.',truth:false,fix:['Yeast is a fungus, a tiny cousin of mushrooms.','Yeast is a kind of animal.','Yeast is a kind of rock.'],answer:'Yeast is a fungus, a tiny cousin of mushrooms.',why:'Yeast is a <b>fungus</b>, like a mushroom\'s tiny cousin.'},
  {claim:'The holes in bread are made by gas bubbles from the yeast.',truth:true,why:'Yes! He told the truth this time, to make us trust him…'},
