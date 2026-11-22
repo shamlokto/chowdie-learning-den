@@ -38,9 +38,9 @@ SPOTS = {
 }
 
 # Spots whose decks were refreshed recently: their labels carry a small "UPDATED" badge. Empty the set to remove them.
-UPDATED = {"abacus", "desk", "lantern", "microscope", "piano", "nest", "armchair", "kopi"}  # bible shows NEW (the two badges share a corner)
+UPDATED = {"abacus", "desk", "microscope", "piano", "nest", "armchair", "kopi"}  # bible shows NEW (the two badges share a corner)
 # Spots that are brand new: a "NEW!" badge (like the NEW! sticker on the hub cards) and a soft glow.
-NEW = {"bible"}
+NEW = {"bible", "lantern"}
 
 # Image sizes of the objects (width, height) so each art box keeps its shape before the picture loads
 SIZES = {"den/abacus": (440, 422), "den/desk": (340, 302), "den/microscope": (316, 363), "den/nest": (440, 355),
