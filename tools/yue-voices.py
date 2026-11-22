@@ -43,7 +43,7 @@ def key(s):
 def phrases(text):
     """Prefer the deck's explicit list (const YUE_PHRASES=[...]); otherwise scan quoted literals line by line."""
     out = set()
-    k = text.find('YUE_PHRASES=[')
+    k = max(text.find('YUE_PHRASES=['), text.find('YUE_LIST=['))
     if k != -1:
         text = text[k:text.index('];', k)]
     for m in LIT.finditer(text):

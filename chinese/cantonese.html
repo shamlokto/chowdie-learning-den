@@ -1066,19 +1066,26 @@ const P=(c,j,e)=>{const C=window.__yueCol;if(C&&c){const o=C.get(c);if(!o||(!o[2
 const L=p=>`${p.c} ${p.j}`;                                   // button label
 const Y=p=>`<i class="py">${p.c} <small>(${p.j})</small></i>`;  // in the speech bubble, never read by the English voice
 /* phrase card(s) on the stage */
-function ycard(ps,y=96){const h=ps.length>2?78:96,gap=10,tot=ps.length*h+(ps.length-1)*gap;let y0=y,s='';
- ps.forEach((p,k)=>{const yy=y0+k*(h+gap),big=ps.length>2?30:38;
-  s+=`<rect x="70" y="${yy}" width="500" height="${h}" rx="18" fill="#FFF8F2" stroke="#C2185B" stroke-width="3" opacity=".97"/>`
-   +T(320,yy+(ps.length>2?34:44),p.c,'mid',`style="font-size:${big}px;font-weight:800;fill:#7A1240"`)
-   +T(320,yy+(ps.length>2?56:70),p.j,'mid','style="font-size:17px;fill:#4B2A6B;font-weight:700"')
-   +T(320,yy+(ps.length>2?72:88),p.e,'mid','style="font-size:14px;font-style:italic;fill:#5b4a52"');});
+const YIMG={'蝦餃':'hagow','燒賣':'siumai','叉燒包':'charsiubao','蛋撻':'eggtart','飲茶':'teapot','利是':'redpacket'};
+/* compact cards in rows along the bottom, so the painting (and its clip) stays clear above them */
+function ycard(ps){const H=76,GAP=8,rows=[];let row=[];
+ ps.forEach(p=>{const wide=[...p.c].length>9||p.j.length>34;if(wide){if(row.length){rows.push(row);row=[]}rows.push([p])}else{row.push(p);if(row.length===2){rows.push(row);row=[]}}});if(row.length)rows.push(row);
+ let s='',y=400-8-rows.length*H-(rows.length-1)*GAP;
+ rows.forEach(r=>{const wide=r.length===1&&([...r[0].c].length>9||r[0].j.length>34),w=wide?616:304,x0=r.length===2?12:(640-w)/2;
+  r.forEach((p,k)=>{const x=x0+k*(w+GAP),im=YIMG[p.c],cx=x+w/2+(im?26:0),n=[...p.c].length,fs=wide?Math.min(30,Math.floor(560/n)):Math.min(30,Math.floor((im?215:280)/n));
+   s+=`<rect x="${x}" y="${y}" width="${w}" height="${H}" rx="16" fill="#FFF8F2" stroke="#C2185B" stroke-width="3" opacity=".96"/>`
+    +(im?`<image href="../img/canto/obj/${im}.webp" x="${x+8}" y="${y+8}" width="60" height="60" preserveAspectRatio="xMidYMid meet"/>`:'')
+    +T(cx,y+33,p.c,'mid',`style="font-size:${fs}px;font-weight:800;fill:#7A1240"`)
+    +T(cx,y+53,p.j,'mid','style="font-size:15px;fill:#4B2A6B;font-weight:700"')
+    +T(cx,y+69,p.e,'mid','style="font-size:12px;font-style:italic;fill:#5b4a52"')});
+  y+=H+GAP});
  return G(s,'a-pop',.2)}
 const room=(c1='#FFE9D6',c2='#FFD3C2')=>`<defs><linearGradient id="yr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="640" height="400" fill="url(#yr)"/><rect y="330" width="640" height="70" fill="#E8B99A" opacity=".55"/>`;
-const bg=part=>CHBG[part]?paint(CHBG[part],.3):room();
+const bg=part=>CHBG[part]?paint(CHBG[part]):room();
 const hosts=(show=true)=>show?G(otter(560,392,.62,{wave:true})+wala(84,392,.62,{still:true}),'a-pop',.35):'';
 /* a phrase slide: card(s) + one 🔊 button per phrase */
 function phr(part,title,who,cap,ps,line,extra={}){const m=extra.mount;
- return story(part,title,who,cap,()=>bg(part)+ycard(ps,ps.length>2?60:(ps.length>1?70:110))+hosts(ps.length<3),line,Object.assign({},extra,{mount:a=>{ps.forEach(p=>a.btn('🔊 '+p.c,()=>yue(p.c),'play'));if(m)m(a)}}))}
+ return story(part,title,who,cap,()=>bg(part)+ycard(ps),line,Object.assign({},extra,{mount:a=>{ps.forEach(p=>a.btn('🔊 '+p.c,()=>yue(p.c),'play'));if(m)m(a)}}))}
 /* a Cantonese quiz in rounds: English question, Cantonese answer buttons; 🔊 plays the line being asked about */
 function yR(part,who,title,intro,R){const n=++CHN;return {part,title,who,say:CAST[who][1]+intro,_rounds:R.map(r=>r.answer),draw:()=>'<g class="play"></g>',
  mount:a=>{let r=0,busy=false;const show=()=>{busy=false;const Q=R[r];a.q('.play').innerHTML=(CHBG[part]?'':room('#FFF4E8','#FFE3D0'))+chStage(who,'canto',Q.q,(Q.art||'')+T(606,48,`${r+1} of ${R.length}`,'sm end mut'),n);a.ui.innerHTML='';
@@ -1099,11 +1106,11 @@ function buildDeck(){CHN=0;S.length=0;const g=GPS[GPK],MA=P(g.ma[0],g.ma[1],'Gra
  S.push(
 /* ---------- 1: Who's Who ---------- */
 story('c1','Let\'s talk with Grandma and Grandpa!','otter','Grandma and Grandpa speak Cantonese, 廣東話. Let\'s learn some easy words to say to them. Tap 🔊 to hear each one, then say it out loud!',
- ()=>bg('c1')+ycard([P('廣東話','gwong2 dung1 waa2','Cantonese')],120)+hosts(),
+ ()=>bg('c1')+ycard([P('廣東話','gwong2 dung1 waa2','Cantonese')]),
  'Hello, I\'m Chowdie! Grandma and Grandpa speak Cantonese. Let\'s learn some easy words to say to them. Every word has its Jyutping: letters with tone numbers that show how to say it. Tap the speaker to hear it, then say it out loud!',
  {mount:a=>a.btn('🔊 廣東話',()=>yue('廣東話'),'play')}),
 story('c1','Which grandparents?','otter','Are we talking to Mummy\'s parents or Daddy\'s parents? Tap one. (You can change it any time.)',
- ()=>bg('c1')+ycard([P('公公婆婆','gung4 gung1  po4 po2','Mummy\'s dad and mum'),P('爺爺嫲嫲','je4 je2  maa4 maa4','Daddy\'s dad and mum')],70),
+ ()=>bg('c1')+ycard([P('公公婆婆','gung4 gung1  po4 po2','Mummy\'s dad and mum'),P('爺爺嫲嫲','je4 je2  maa4 maa4','Daddy\'s dad and mum')]),
  'In Cantonese, Mummy\'s parents and Daddy\'s parents have different names! Tap the grandparents you will talk to.',
  {mount:a=>['mum','dad'].forEach(k=>a.btn((GPK===k?'✅ ':'')+GPS[k].both[0]+' · '+GPS[k].side,()=>{GPK=k;LSset('den-canto-gp',k);const at=i;buildDeck();go(at)},'opt'))}),
 story('c1','Who are you?','wala','Who is learning today? Tap your name.',
@@ -1177,7 +1184,7 @@ phr('c5','Counting 1 to 5','otter','Let\'s count in Cantonese!',[P('一  二  �
 phr('c5','Counting 6 to 10','wala','Keep going!',[P('六  七','luk6  cat1','6  7'),P('八  九','baat3  gau2','8  9'),P('十','sap6','10')],
  `Six, seven, eight, nine, ten: `+Y(P('六 七 八 九 十','luk6 cat1 baat3 gau2 sap6'))),
 story('c5','How old are you?','otter','Grandma might ask how old you are. Tap your age to see how to answer.',
- ()=>bg('c5')+ycard([P('你今年幾多歲呀？','nei5 gam1 nin4 gei2 do1 seoi3 aa3?','How old are you this year?'),P(AGEP[AGE],`ngo5 gam1 nin4 ${n[1]} seoi3.`,`I am ${AGE} years old.`)],70),
+ ()=>bg('c5')+ycard([P('你今年幾多歲呀？','nei5 gam1 nin4 gei2 do1 seoi3 aa3?','How old are you this year?'),P(AGEP[AGE],`ngo5 gam1 nin4 ${n[1]} seoi3.`,`I am ${AGE} years old.`)]),
  `Grandma may ask `+Y(P('你今年幾多歲呀？','nei5 gam1 nin4 gei2 do1 seoi3 aa3'))+` You answer `+Y(P(`我今年${n[0]}歲。`,`ngo5 gam1 nin4 ${n[1]} seoi3`))+` Tap your age!`,
  {mount:a=>{a.btn('🔊 你今年幾多歲呀？',()=>yue('你今年幾多歲呀？'),'play');a.btn('🔊 '+AGEP[AGE],()=>yue(AGEP[AGE]),'play');
    [4,5,6,7,8,9].forEach(ag=>a.btn((AGE===ag?'✅ ':'')+ag,()=>{AGE=ag;LSset('den-canto-age',String(ag));const at=i;buildDeck();go(at)},'opt'))}}),
@@ -1208,7 +1215,7 @@ yR('c7','otter','Phone call with Grandma','Grandma is on the phone! Tap 🔊 to 
  {q:'Grandma says:',art:qline(P(g.miss,`${MA.j} hou2 gwaa3 zyu6 nei5 aa3!`,'Grandma misses you so much!'),'Grandma:'),hear:g.miss,options:['我都好掛住你！ ngo5 dou1 hou2 gwaa3 zyu6 nei5!','唔該！ m4 goi1!','我今年十歲！ ngo5 gam1 nin4 sap6 seoi3!'],answer:'我都好掛住你！ ngo5 dou1 hou2 gwaa3 zyu6 nei5!',ok:'Grandma misses you! '+Y(P('我都好掛住你！','ngo5 dou1 hou2 gwaa3 zyu6 nei5'))+' means "I miss you too!"',hint:'都 dou1 means "too".'},
  {q:'Grandma says:',art:qline(P('記得保重呀，拜拜！','gei3 dak1 bou2 zung6 aa3, baai1 baai3!','Remember to take care, bye-bye!'),'Grandma:'),hear:'記得保重呀，拜拜！',options:[`${MA.c}保重，拜拜！ ${MA.j} bou2 zung6, baai1 baai3!`,'早晨！ zou2 san4!','對唔住！ deoi3 m4 zyu6!'],answer:`${MA.c}保重，拜拜！ ${MA.j} bou2 zung6, baai1 baai3!`,ok:'"Remember to take care, bye-bye!" Wish her well and say bye-bye too!',hint:'保重 bou2 zung6 means take care.'}]),
 story('c7','Well done!','wala','Now you can talk with Grandma and Grandpa in Cantonese! Try one new phrase every time you see them. They will be so happy!',
- ()=>paint('goodbye',.3)+ycard([P('我愛你！','ngo5 oi3 nei5!','I love you!')],110)+hosts(),
+ ()=>paint('goodbye')+ycard([P('我愛你！','ngo5 oi3 nei5!','I love you!')]),
  'Well done! Now you can talk with Grandma and Grandpa in Cantonese. Try one new phrase every time you see them. They will be so happy!',
  {mount:a=>{a.btn('🔊 我愛你！',()=>yue('我愛你！'),'play');a.later(()=>{a.confetti();a.win()},700)}}),
  );}
@@ -1288,6 +1295,19 @@ render();
         el.addEventListener('animationend',()=>el.classList.remove(cls),{once:true}); } }
     last=i; return out; };
 })();
+</script>
+<script id="den-clips">
+/* Short painted clips over their stills (generated by tools/den-clips.py): muted, inline, looping; the poster is the fallback; reduced motion keeps the still */
+(()=>{const CLIPS={"../img/canto/who.webp": "../img/canto/v-who", "../img/canto/greet.webp": "../img/canto/v-greet", "../img/canto/goodbye.webp": "../img/canto/v-goodbye", "../img/canto/yumcha.webp": "../img/canto/v-yumcha", "../img/canto/birthday.webp": "../img/canto/v-birthday", "../img/canto/cny.webp": "../img/canto/v-cny", "../img/canto/call.webp": "../img/canto/v-call", "../img/canto/tea.webp": "../img/canto/v-tea"},svg=document.getElementById('stage');if(!svg||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const NS='http://www.w3.org/2000/svg',XH='http://www.w3.org/1999/xhtml';
+ function up(){svg.querySelectorAll('image').forEach(im=>{const c=CLIPS[im.getAttribute('href')];if(!c||im.dataset.clip)return;im.dataset.clip='1';
+  const fo=document.createElementNS(NS,'foreignObject');['x','y','width','height','clip-path','opacity','style','transform'].forEach(a=>{const v=im.getAttribute(a);if(v!==null)fo.setAttribute(a,v)});
+  if(!fo.getAttribute('x'))fo.setAttribute('x','0');if(!fo.getAttribute('y'))fo.setAttribute('y','0');fo.setAttribute('aria-hidden','true');
+  const v=document.createElementNS(XH,'video');v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload='metadata';
+  ['muted','playsinline','loop','autoplay'].forEach(a=>v.setAttribute(a,''));v.poster=c+'-poster.webp';v.src=c+'.mp4';
+  const fit=(im.getAttribute('preserveAspectRatio')||'').includes('slice')?'cover':'contain';
+  v.setAttribute('style',`width:100%;height:100%;object-fit:${fit};display:block`);fo.appendChild(v);im.after(fo);const p=v.play();if(p&&p.catch)p.catch(()=>{})})}
+ new MutationObserver(up).observe(svg,{childList:true,subtree:true});up();})();
 </script>
 <script id="den-buddy" src="../buddy.js" defer></script>
 <script src="../stars.js" defer></script>
