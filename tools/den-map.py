@@ -40,7 +40,7 @@ SPOTS = {
 # Spots whose decks were refreshed recently: their labels carry a small "UPDATED" badge. Empty the set to remove them.
 UPDATED = {"abacus", "desk", "lantern", "microscope", "hole"}
 # Spots that are brand new: a "NEW!" badge (like the NEW! sticker on the hub cards) and a soft glow.
-NEW = {"willis", "bible"}
+NEW = {"bible"}
 
 # Image sizes of the objects (width, height) so each art box keeps its shape before the picture loads
 SIZES = {"den/abacus": (440, 422), "den/desk": (340, 302), "den/microscope": (316, 363), "den/nest": (440, 355),
@@ -54,7 +54,7 @@ LAYOUT = {
                        ("album", 110, 284, 105, {"edge": "start"}), ("nest", 965, 218, 130, {"lab": "above"}), ("microscope", 1170, 195, 100, {"lab": "above", "edge": "end"}),
                        ("armchair", 255, 470, 215, {}), ("desk", 470, 610, 165, {}), ("chest", 640, 640, 150, {}),
                        ("piano", 1085, 470, 132, {}), ("hole", 940, 690, 170, {"lab": "above"}),
-                       ("willis", 280, 708, 104, {"lab": "above"}), ("bible", 965, 286, 124, {}), ("frame", 1175, 288, 82, {"edge": "end"}), ("magnifier", 776, 700, 64, {"lab": "above"})],
+                       ("bible", 965, 286, 124, {}), ("frame", 1175, 288, 82, {"edge": "end"}), ("magnifier", 776, 700, 64, {"lab": "above"})],
              "box": (50, 20, 1232, 718),  # the part that must stay on screen when the painting is scaled to cover it
              "motes": (500, 120, 280, 300),  # x, y, w, h of the sunbeam the dust floats in
              "lights": [[31,2],[1254,25],[48,26],[1234,47],[84,68],[1212,69],[712,69],[924,70],[554,71],[931,80],[726,83],[1184,88],[537,87],[119,93],[308,94],[738,93],[1155,101],[947,100],[289,103],[755,104],[1091,108],[1124,108],[149,110],[324,112],[964,113],[249,118],[181,119],[1021,119],[981,121],[215,123],[1001,124],[348,126],[827,128],[370,136],[440,144],[402,145]]},
@@ -65,7 +65,7 @@ LAYOUT = {
                        ("armchair", 215, 997, 160, {}), ("piano", 500, 995, 125, {}),
                        ("desk", 115, 1200, 130, {}), ("chest", 285, 1235, 120, {"lab": "above"}),
                        ("album", 470, 1215, 95, {}), ("hole", 625, 1168, 120, {"lab": "above", "edge": "end"}),
-                       ("willis", 62, 814, 90, {"hang": 24, "edge": "start"}), ("bible", 62, 642, 84, {"hang": 20, "edge": "start", "lab": "above", "img": "den/scroll"}), ("frame", 665, 562, 72, {"hang": 22, "edge": "end"}), ("magnifier", 640, 400, 52, {"hang": 24})],
+                       ("bible", 62, 642, 84, {"hang": 20, "edge": "start", "lab": "above", "img": "den/scroll"}), ("frame", 665, 562, 72, {"hang": 22, "edge": "end"}), ("magnifier", 640, 400, 52, {"hang": 24})],
              "box": (8, 290, 712, 1280),
              "motes": (40, 380, 640, 300),
              "lights": [[369,272],[357,275],[379,286],[336,294],[390,298],[314,308],[404,311],[290,320],[385,321],[425,324],[344,326],[264,328],[489,328],[445,330],[469,330],[240,331],[226,332],[330,332],[318,337],[410,340],[457,343],[240,343],[252,345],[436,345],[275,348],[206,539],[238,540],[355,542],[120,542],[137,541],[588,542],[334,552],[573,551],[228,555],[494,556],[418,558],[508,560],[554,559],[472,562],[530,563],[446,563],[306,564],[279,568],[353,570],[125,784],[337,787],[151,791],[245,792],[416,792],[492,793],[224,794],[318,794],[580,795],[510,796],[296,798],[271,799],[434,800],[477,800],[457,803],[524,804],[563,803],[543,807],[178,808]]},
