@@ -669,8 +669,8 @@ story('c1','The Wisdom Book','eagle','"This was my grandpa\'s Wisdom Book," said
  'My grandpa\'s Wisdom Book has ideas from two real people, <b>Warren Buffett</b> and <b>Charlie Munger</b>. Buffett\'s first rule: <b>never lose money</b>. Rule number two: never forget rule number one!'),
 num('c1','wala','maths','First day of sales',{q:'We sell each cup of lemonade for $2. On Saturday we sold 15 cups! How many dollars did we get?',answer:30,unit:'dollars',
  art:stand(410,370),why:'15 cups × $2 = <b>$30</b>. What a start!',hint:'Count in 2s fifteen times, or think 15 + 15.'}),
-mc('c1','otter','maths','What did we really earn?',{q:'But the lemons and sugar cost us $8.50. How much did we REALLY earn? (This is called profit!)',options:['$21.50','$22.50','$38.50','$21.05'],answer:'$21.50',
- art:pile(410,290,12)+T(410,340,'$30.00 − $8.50 = ?','h mid'),why:'$30.00 − $8.50 = <b>$21.50</b> of <b>profit</b>: the money left after paying for what you used.',hint:'$30 − $8 = $22. Then take away 50 cents more.'}),
+mc('c1','otter','maths','What did we really earn?',{q:'But the lemons and sugar cost us $10. How much did we REALLY earn? (This is called profit!)',options:['$20','$21','$40','$19'],answer:'$20',
+ art:pile(410,290,12)+T(410,340,'$30 − $10 = ?','h mid'),why:'$30 − $10 = <b>$20</b> of <b>profit</b>: the money left after paying for what you used.',hint:'Take the cost away from what we got: 3 tens take away 1 ten.'}),
 /* ---------- 2: The Golden Offer ---------- */
 story('c2','A very rich visitor','daddy','A shiny carriage stopped at the stand. Out stepped Baddie Daddy, with a top hat, a gold cane and a bag bulging with gold coins. Baddie Vampire scurried behind him. "Good afternoon, little sellers. I have a GOLDEN OFFER for you…"',
  ()=>market()+stand(200,330)+G(daddy(470,392,1.05,{point:true})+baddie(590,394,.6,{}),'a-drop',.3)+pile(390,388,10,.7),

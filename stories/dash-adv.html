@@ -1019,7 +1019,7 @@ story('d2','First practice','otter','At the first practice, Dash grabbed the lan
  ()=>paint('dawn')+G(owl(470,240,.8,{wave:true})+zoom(430,200,90),'a-drop',.2)+G(wala(150,392,.88,{still:true}),'a-wig',.3)+G(rlant(330,330,1.1,false),'a-drop',.6)+G(T(330,300,'SPLASH!','h mid','style="fill:#2E8BC0"'),'a-pop',.8)+G(otter(570,392,.62,{still:true}),'a-pop',.4),
  'Oh no! Dash rushed, and the lantern fell into the pond. Its light went out.'),
 mcR('d2','otter','english','Joining words','Chowdie wants to tell the story of the first practice. Help him pick the right joining word!',[
- {q:'Dash ran very fast, ___ he dropped the lantern.',options:['but','so','because','and then'],answer:'but',ok:'"Dash ran very fast, <b>but</b> he dropped the lantern." <b>But</b> joins two ideas that don\'t match: fast… yet he failed.',hint:'Running fast is good. Dropping the lantern is bad. Which word shows a surprise?'},
+ {q:'Dash ran very fast, ___ he dropped the lantern.',options:['but','because','or','if'],answer:'but',ok:'"Dash ran very fast, <b>but</b> he dropped the lantern." <b>But</b> joins two ideas that don\'t match: fast… yet he failed.',hint:'Running fast is good. Dropping the lantern is bad. Which word shows a surprise?'},
  {q:'Wala was not ready, ___ she could not catch the lantern.',options:['so','but','because','or'],answer:'so',ok:'"Wala was not ready, <b>so</b> she could not catch it." <b>So</b> tells us what happened next, as a result.',hint:'Being not ready made something happen. Which word shows the result?'},
  {q:'Wala felt sad ___ Dash left her behind.',options:['because','so','but','or'],answer:'because',ok:'"Wala felt sad <b>because</b> Dash left her behind." <b>Because</b> tells us WHY.',hint:'Which word tells us the reason why Wala felt sad?'}]),
 story('d2','欲速则不达','wala','Wala fished out the soggy lantern. "Dash, in 华文 we say 欲速则不达," she said gently. Dash blinked. He had read a thousand books… but he had never thought about that one.',
@@ -1083,7 +1083,7 @@ story('d5','The End','owl','"I used to say: if you want to go fast, go alone," s
  '<b>If you want to go far, go together.</b> THE END… but Dash has one more job for you. Tap Next!'),
 write('d5','owl','writing','A team recount',{q:'Write a recount of the Forest Relay as Wala, or of a time YOU worked in a team. Say when it happened, use order words (First, Then, Finally), and say how you felt.',
  checks:[CK.sentences(4),CK.has(TIMEW,'Says WHEN it happened'),CK.has(['first','then','next','after that','finally'],'Uses order words (First, Then, Finally)'),CK.has(['together','team','helped','help'],'Says how the team worked together'),CK.has(FEELW,'A feeling word'),CK.caps(),CK.stops()],
- example:'On Saturday morning, we ran the Forest Relay. First, Chowdie passed the lantern to me. Then I tripped, but Immortal Dash came back to help me. Finally, we crossed the finish line together. I felt proud of my team.'}),
+ example:'On Saturday morning, we ran the Forest Relay. First, Chowdie passed the lantern to Flamecharge, and she passed it to me. Then I tripped, but Immortal Dash came back to help me. Finally, we crossed the finish line together. I felt proud of my team.'}),
 ];
 
 render();

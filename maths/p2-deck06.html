@@ -364,7 +364,7 @@ const S=[
 
 {part:'check',title:'Star check 5',say:'Mei has 40 marbles in bags of 10. Zack has 40 marbles in bags of 5. Who has <b>more bags</b>?',
  draw:()=>G(T(160,70,'Mei: 40 ÷ 10','h mid')+[0,1,2,3].map(k=>bag(75+k*58,170,'10')).join(''),'a-fade',.1)+G(T(480,70,'Zack: 40 ÷ 5','h mid')+[...Array(8)].map((_,k)=>bag(395+(k%4)*58,170+Math.floor(k/4)*66,'5')).join(''),'a-fade',.5),
- quiz:{options:['Mei','Zack','The same'],answer:'Zack',why:'Mei: 40 ÷ 10 = 4 bags. Zack: 40 ÷ 5 = <b>8</b> bags. Smaller groups means more bags!',hint:'Work out both divisions.'}},
+ quiz:{options:['Mei','Zack','The same'],answer:'Zack',why:'Mei: 40 ÷ 10 = 4 bags. Zack: 40 ÷ 5 = <b>8</b> bags. Smaller groups mean more bags!',hint:'Work out both divisions.'}},
 
 {part:'check',title:'You did it!',say:'Fantastic! You can <b>share</b> and <b>group</b>, use the ÷ sign, and link division to multiplication with fact families. You can now add, subtract, multiply and divide!',
  draw:()=>otter(320,370,1.6,{wave:true})+G(star(140,110,36)+star(500,110,36)+T(120,230,'÷','mid','style="font-size:70px;font-weight:800;fill:#8E6BD8"')+T(520,230,'×','mid','style="font-size:70px;font-weight:800;fill:#4FAE63"'),'a-pop',.3)+T(320,60,'Division superstar!','h mid acc'),

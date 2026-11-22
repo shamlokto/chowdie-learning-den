@@ -826,7 +826,7 @@ const S=[
   +T(170,210,'✅ 6/8 neat','lab mid','style="fill:#2E7D46"')+G(rowCard([{beam:['8','8','8']},{beam:['8','8','8']}],{x:20,y:230,w:300,sp:10,time:'6/8',u:36}),'a-pop',.3)
   +T(470,210,'❌ 6/8 messy','lab mid','style="fill:#B3243A"')+G(rowCard([{beam:['8','8']},{beam:['8','8']},{beam:['8','8']}],{x:330,y:230,w:300,sp:10,time:'6/8',u:36}),'a-pop',.4)+T(470,370,'(that looks like 3/4!)','sm mid mut')},
 
-{part:'learn',title:'Rests that make sense',who:'flame',say:FL+'Rests follow the beats too. Start a new rest for each new beat, and don\'t hide the middle of a 4/4 bar. A whole bar of silence always gets a <b>semibreve rest</b>, in ANY time signature (that\'s a special rule!). In compound time, a whole beat of silence is a <b>dotted crotchet rest</b>.',
+{part:'learn',title:'Rests that make sense',who:'flame',say:FL+'Rests follow the beats too. Start a new rest for each new beat, and don\'t hide the middle of a 4/4 bar. A whole bar of silence always gets a <b>semibreve rest</b>, in almost every time signature (that\'s a special rule!). In compound time, a whole beat of silence is a <b>dotted crotchet rest</b>.',
  draw:()=>mroom()+[['3/4',['rw','||'],'A whole silent bar in 3/4'],['4/4',['q','rq','rh','||'],'Rests fit the beats'],['6/8',['q.','rq.','||'],'A whole beat of rest in 6/8'],['2/4',['8','r8','rq','||'],'Finish beat 1, then beat 2']]
   .map(([t,it,n],k)=>{const x=20+(k%2)*310,y=20+Math.floor(k/2)*180;return G(box(x,y,290,166,'#fff',16)+rowCard(it,{x:x+16,y:y+40,w:258,sp:10,time:t,end:false,u:k===1?40:56})+T(x+145,y+140,n,'sm mid','style="font-weight:800"'),'a-pop',.1+k*.15)}).join('')},
 
@@ -835,7 +835,7 @@ rounds('try','Name that time','mommy','Is it simple or compound? Duple, triple o
  options:[ans,...shf(ALLT.filter(x=>x!==ans)).slice(0,3)],answer:ans,ok:`<b>${t}</b> is <b>${ans.toLowerCase()}</b>.`,hint:'Top number 6, 9 or 12 → compound (divide by 3). Otherwise simple: 2 duple, 3 triple, 4 quadruple.'})),{cls:'opt'}),
 
 rounds('try','Which time signature?','flame','Look at the bar (and listen). Which time signature fits?',[
- [[{beam:['8','8','8']},{beam:['8','8','8']}],'6/8',['3/4','2/4','4/4']],[['q','q','q'],'3/4',['6/8','2/4','4/4']],[['h','q','q'],'4/4',['3/4','2/2','6/8']],[[{beam:['8','8','8']},{beam:['8','8','8']},{beam:['8','8','8']}],'9/8',['3/4','6/8','12/8']],
+ [[{beam:['8','8','8']},{beam:['8','8','8']}],'6/8',['3/4','2/4','4/4']],[['q','q','q'],'3/4',['6/8','2/4','4/4']],[['h','q','q'],'4/4',['3/4','3/2','6/8']],[[{beam:['8','8','8']},{beam:['8','8','8']},{beam:['8','8','8']}],'9/8',['3/4','6/8','12/8']],
  [['q','q','q','q','q'],'5/4',['4/4','6/4','3/4']],[[{beam:['8','8']},{beam:['8','8']},{beam:['8','8','8']}],'7/8',['6/8','4/4','9/8']],[['h.','h.'],'6/4',['3/4','4/4','6/8']]]
  .map(([it,t,w])=>({stage:()=>rowCard(it,{y:110,u:it.length>4?52:62}),options:[t,...w],answer:t,play:()=>rplay(it,90),ok:`It fits <b>${t}</b>.`,hint:'Add up the beats. Are they grouped in twos (simple) or in threes (compound)?'}))),
 
@@ -844,7 +844,7 @@ rounds('try','How many beats?','mommy','How many <b>crotchet beats</b> is this n
   options:[ans,...w],answer:ans,ok:`That\'s <b>${ans}</b> crotchet beats.`,hint:'The first dot adds half the note\'s value. A second dot adds half of THAT.'}))),
 
 rounds('try','Finish the bar','flame','This bar is missing something at the end. Which <b>rest</b> completes it?',[
- ['3/4',['h'],'crotchet rest'],['4/4',['h','q'],'crotchet rest'],['6/8',['q.'],'dotted crotchet rest'],['2/4',['q','8'],'quaver rest'],['4/4',['q'],'crotchet rest'],['9/8',['q.','q.'],'dotted crotchet rest'],['3/8',[{beam:['8','8']}],'quaver rest']]
+ ['3/4',['h'],'crotchet rest'],['4/4',['h','q'],'crotchet rest'],['6/8',['q.'],'dotted crotchet rest'],['2/4',['q','8'],'quaver rest'],['4/4',['h'],'minim rest'],['9/8',['q.','q.'],'dotted crotchet rest'],['3/8',[{beam:['8','8']}],'quaver rest']]
  .map(([t,it,ans])=>({stage:()=>rowCard([...it],{x:150,w:340,y:110,time:t,u:56})+`<rect x="${t==='3/8'||t==='2/4'?380:400}" y="96" width="70" height="80" rx="10" fill="none" stroke="${C.berry}" stroke-width="3" stroke-dasharray="6 6"/>`+T(t==='3/8'||t==='2/4'?415:435,145,'?','h mid','style="fill:'+C.berry+'"'),
   options:shf(['crotchet rest','quaver rest','dotted crotchet rest','minim rest']),answer:ans,ok:`A <b>${ans}</b> fills it up.`,hint:'Count the beats in the bar so far, then what\'s missing?'})),{cls:'opt'}),
 
