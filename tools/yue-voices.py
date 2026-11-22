@@ -167,8 +167,9 @@ def main(decks):
         p = ROOT / rel; t = p.read_text(encoding='utf-8')
         ph = sorted(set(phrases(t)) | set(runtime_phrases(rel))); print(rel, len(ph), 'phrases')
         for s in ph: want[key(s)] = s
-        if '<script id="yue-player">' not in t:
-            t = t.replace('</head>', PLAYER + '</head>', 1); p.write_text(t, encoding='utf-8')
+        if 'window.yueKey=' not in t:
+            k = t.index('>', t.index('<head')) + 1  # top of <head>: den-polish needs '</style></head>' untouched
+            t = t[:k] + '\n' + PLAYER + t[k:]; p.write_text(t, encoding='utf-8')
     todo = {k: s for k, s in want.items() if os.environ.get('FORCE') or not (OUT / f'{k}.mp3').exists()}
     print(len(todo), 'new clips', sum(len(s) for s in todo.values()), 'chars')
     if os.environ.get('DRY'):

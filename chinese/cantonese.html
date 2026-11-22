@@ -1,5 +1,15 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head>
+<script src="../audio/yue.js"></script>
+<script id="yue-player">
+/* Cantonese clips made by tools/yue-voices.py (Gemini TTS); falls back to the device zh-HK voice */
+window.yueKey=function(s){var h=0x811c9dc5;for(var c of String(s)){h^=c.codePointAt(0);h=Math.imul(h,16777619)>>>0}return h.toString(36)};
+window.yueDev=function(s){try{var v=speechSynthesis.getVoices().find(function(v){return /zh[-_]HK|yue/i.test(v.lang)});var u=new SpeechSynthesisUtterance(s);u.lang='zh-HK';if(v)u.voice=v;u.rate=.85;speechSynthesis.speak(u)}catch(e){}};
+window.yue=function(s){s=String(s).trim();try{speechSynthesis.cancel();if(window.denStop)denStop()}catch(e){}
+ var f=window.YUE_AUDIO&&window.YUE_AUDIO[yueKey(s)];if(!f){yueDev(s);return}
+ var a=window.__yueA||(window.__yueA=new Audio());a.pause();a.src='../audio/yue/'+f;var p=a.play();if(p&&p.catch)p.catch(function(){yueDev(s)})};
+</script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cantonese with Grandma and Grandpa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
