@@ -263,8 +263,8 @@ const crust=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy}" r="${r+9}" fill="#E8B36A" 
 
 /* Deck 7: Fraction of a whole */
 const S=[
-/*maths-around-us*/{part:'learn',title:'Maths around us',say:'The pizza is cut into <b>4 equal slices</b>. Each slice is <b>one quarter</b> of the pizza! Today we learn <b>fractions</b> of a whole.',
- draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m07.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'4 equal slices','lab mid acc'),'a-fade',.6)},
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'The pizza is cut into <b>equal slices</b>. Every slice is the same size, so everyone gets a fair share. Equal parts of a whole are called <b>fractions</b>!',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m07.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Equal slices','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Equal parts',say:'Chowdie wants to share a cake fairly with 3 friends. He cuts it into <b>4 equal parts</b>. Every piece is the <b>same size</b>. Fractions only work with <b>equal</b> parts!',
  draw:()=>G(pie(190,200,120,4,0,C.sun),'a-pop',.1)+G(`<g>${pie(190,200,120,4,4,'#FFE7A3')}</g>`,'a-fade',.6)+
   G(T(190,360,'4 equal parts ✓','lab mid acc'),'a-fade',1)+
