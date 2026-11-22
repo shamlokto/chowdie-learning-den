@@ -364,7 +364,7 @@ function denSay(s,who,device){
   if(window.__denCap) parts.forEach(p=>window.__denCap.push({who,s:p}));
   const clips=window.DEN_AUDIO, ks=parts.map(p=>denKey(who,p));
   if(!clips||!ks.every(k=>clips.has(k))) return device();
-  try{VTOK++;speechSynthesis.cancel()}catch(e){}
+  try{VTOK++;speechSynthesis.cancel();denStop()}catch(e){}
   if(!DEN_A) DEN_A=new Audio();
   const tok=DEN_T; let n=0;
   const next=()=>{if(tok!==DEN_T||n>=ks.length) return; DEN_A.src=window.DEN_AUDIO_DIR+ks[n++]+'.mp3'; const p=DEN_A.play(); if(p&&p.catch) p.catch(()=>{if(n===1&&tok===DEN_T) device()})};
@@ -982,7 +982,7 @@ page('k1','A happy place','wala','We had so much fun at our school! When somethi
 picker('k2','wala','My favourite memories','What do you remember about kindergarten? Tap your favourite memories. There are no wrong answers!',MEM,
  {cols:4,y0:30,w:136,h:150,gap:14,bg:'memories',btn:'These are my favourites! ⭐',done:L=>`What lovely memories: <b>${listText(L)}</b>! You can tell Ms Chua about them in your card.`}),
 picker('k2','otter','How do you feel?','How do you feel about saying goodbye? Tap all the feelings that fit. You can pick more than one!',FEEL,
- {cols:4,y0:70,w:136,h:190,gap:14,bg:'goodbye',btn:'That is how I feel 💛',done:L=>L.length>1?`You feel <b>${listText(L).toLowerCase()}</b>. You can feel happy AND sad at the same time. All your feelings are OK.`:`You feel <b>${L[0].toLowerCase()}</b>. Thank you for telling us. All feelings are OK.`}),
+ {cols:4,y0:70,w:136,h:190,gap:14,bg:'goodbye',btn:'That is how I feel 💛',done:L=>L.length>1?`You feel <b>${listText(L).toLowerCase().replace(/\bi\b/g,'I')}</b>. You can feel happy AND sad at the same time. All your feelings are OK.`:`You feel <b>${L[0].toLowerCase().replace(/\bi\b/g,'I')}</b>. Thank you for telling us. All feelings are OK.`}),
 page('k2','Ms Chua takes care of us','otter','Ms Chua is the <b>principal</b>. She takes care of the whole school: every child and every teacher. She welcomes us every morning.',
  ()=>paint('hug')+big(320,374,'A principal takes care of us 💛',28)),
 multi('k2','otter','kind','What does a principal do?',{q:'What does Ms Chua do? Tap ALL the kind things. Two are silly!',options:['Keeps us safe','Cares for everyone','Says "Good morning!"','Helps our teachers','Eats all our snacks','Sleeps all day'],correct:['Keeps us safe','Cares for everyone','Says "Good morning!"','Helps our teachers'],zh:false,
