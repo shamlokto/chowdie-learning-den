@@ -49,6 +49,19 @@ def phrases(text):
     return sorted(out)
 
 
+def runtime_phrases(rel):
+    """Ask the deck itself (window.YUE_PHRASES) for every phrase yue() can be called with, in every configuration."""
+    js = r"""const {chromium}=require('/opt/node-tools/node_modules/playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage();
+     await p.route('https://script.google.com/**',r=>r.abort());await p.goto('file://'+process.argv[1]);await p.waitForTimeout(600);
+     const out=await p.evaluate(()=>window.YUE_PHRASES?window.YUE_PHRASES():null);console.log(JSON.stringify(out));await b.close()})();"""
+    r = subprocess.run(['node', '-e', js, str(ROOT / rel)], capture_output=True, text=True, timeout=120)
+    try:
+        data = json.loads(r.stdout.strip().splitlines()[-1])
+    except Exception:
+        return []
+    return [(d[0] if isinstance(d, list) else d).strip() for d in (data or []) if d]
+
+
 def tts(s, dst):
     body = {"contents": [{"parts": [{"text": "用廣東話讀出嚟（Read aloud in Cantonese, warm and gentle, for a young child）： " + s}]}],
             "generationConfig": {"responseModalities": ["AUDIO"],
@@ -79,7 +92,7 @@ def main(decks):
     want = {}
     for rel in decks:
         p = ROOT / rel; t = p.read_text(encoding='utf-8')
-        ph = phrases(t); print(rel, len(ph), 'phrases')
+        ph = sorted(set(phrases(t)) | set(runtime_phrases(rel))); print(rel, len(ph), 'phrases')
         for s in ph: want[key(s)] = s
         if 'id="yue-player"' not in t:
             t = t.replace('</head>', PLAYER + '</head>', 1); p.write_text(t, encoding='utf-8')
