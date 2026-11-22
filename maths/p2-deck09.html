@@ -263,6 +263,8 @@ const row=(list,y,gap,d0=.1,x0=null)=>{const w=(list.length-1)*gap,start=x0??320
 
 const po=(n,x,y,w,h,ex='')=>`<image href="../img/obj/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" ${ex}/>`;
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Zack is buying noodles at the school canteen. He needs to pay with the right <b>coins</b>. Today we learn about <b>dollars and cents</b>!',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m09.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Paying at the canteen','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Our coins and notes',say:'In Singapore we use these <b>coins</b>: 5 cents, 10 cents, 20 cents, 50 cents and <b>1 dollar</b>. We also use <b>notes</b> like $2, $5 and $10. 100 cents make <b>1 dollar</b>.',
  draw:()=>T(30,48,'Coins','h')+row([5,10,20,50,100],110,95,.1,120)+T(30,208,'Notes','h')+row([200,500,1000],270,160,1.3,160)+
   G(box(440,20,180,50,C.sun,25)+T(530,53,'100¢ = $1','lab mid'),'a-pop',2.1)},

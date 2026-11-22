@@ -292,6 +292,8 @@ const bag=(x,y,n)=>`<g transform="translate(${x} ${y})"><image href="../img/obj/
 const factFam=(x,y,a,b,hi=-1)=>{const L=[`${a} × ${b} = ${a*b}`,`${b} × ${a} = ${a*b}`,`${a*b} ÷ ${a} = ${b}`,`${a*b} ÷ ${b} = ${a}`];return box(x,y,230,160,'#fff',16)+L.map((t,k)=>(k===hi?`<rect x="${x+10}" y="${y+16+k*36}" width="210" height="30" rx="8" fill="${C.sun}"/>`:'')+T(x+115,y+38+k*36,t,'lab mid')).join('')};
 
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Sharing is caring! When we share kueh, everyone should get the <b>same</b> number. Today we learn <b>sharing</b> and <b>grouping</b>.',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m06.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Share fairly!','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Sharing fairly',say:'Hi! Chowdie has <b>12 cookies</b> to share with <b>3 friends</b> equally. One for you, one for you, one for you... Each friend gets <b>4</b>. We write <b>12 ÷ 3 = 4</b>. The ÷ sign means "divided by" or "shared into".',
  draw:()=>G([...Array(12)].map((_,k)=>cookieI(60+(k%6)*30,60+Math.floor(k/6)*30)).join(''),'a-fade',.1)+G(T(135,140,'12 cookies','lab mid mut'),'a-fade',.3)+
   [0,1,2].map(k=>G(kid(330+k*110,200,[C.sky,C.berry,C.leaf][k])+plate(330+k*110,250,4,cookieI,80),'a-pop',.8+k*.4)).join('')+

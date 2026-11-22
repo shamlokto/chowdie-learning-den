@@ -280,6 +280,8 @@ const sumLabels=(rows,scale,{x=30,y=60,rowH=62,lw=110,gap=46,d=1})=>rows.map(([n
 const fruit=[['apples',5,'apple'],['bananas',3,'banana'],['oranges',6,'orange'],['pears',2,'pear']];
 
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Mei and Zack are counting butterflies and birds in the school garden. A <b>picture graph</b> helps us show what we counted!',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m13.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Count and show!','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Picture graphs',say:'A <b>picture graph</b> uses pictures to show how many. In Primary 1, <b>each picture stood for 1</b>. Mei read <b>4 books</b>, Arjun read <b>2</b>, and Hana read <b>5</b>.',
  draw:()=>T(320,34,'Books we read','h mid')+pgraph([['Mei',4],['Arjun',2],['Hana',5]],{x:100,y:70,rowH:80})+G(otter(580,395,.6),'a-fade',.3)},
 

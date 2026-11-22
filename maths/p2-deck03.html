@@ -283,6 +283,8 @@ function column(x,y,a,b,op,ans,{carry=[],borrow=[],d0=0,showAns=true,hi=null}={}
 const bubbleR=(x,y,w,h,txt,cls='lab')=>`<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="#fff" stroke="${C.ink}" stroke-width="3"/><path d="M${x+30} ${y+h} l-6 18 l22 -18z" fill="#fff" stroke="${C.ink}" stroke-width="3"/><rect x="${x+25}" y="${y+h-3}" width="22" height="6" fill="#fff"/>${T(x+w/2,y+h/2+7,txt,cls+' mid')}</g>`;
 
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Mei and Zack are collecting seashells. If Mei has <b>125</b> and Zack has <b>243</b>, how many do they have altogether? Today we <b>add</b> and <b>subtract</b> big numbers!',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m03.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'How many shells altogether?','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Adding big numbers',say:'Hi! Let\'s add <b>243 + 125</b>. Line up the places: hundreds under hundreds, tens under tens, ones under ones. Then add from the <b>right</b>: ones first. 3 + 5 = 8, 4 + 2 = 6, 2 + 1 = 3. The answer is <b>368</b>.',
  draw:()=>column(80,60,243,125,'+',368,{d0:.6})+blocks(300,70,2,4,3,6,false)+blocks(300,150,1,2,5,6,false)+`<line x1="300" y1="225" x2="620" y2="225" stroke="${C.ink}" stroke-width="3"/>`+G(blocks(300,240,3,6,8,6,false),'a-fade',1.4)+
   G(bubbleR(330,330,250,44,'Start with the ones!','sm'),'a-fade',.2)},

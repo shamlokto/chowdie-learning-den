@@ -271,6 +271,8 @@ function eqn(cx,y,items,size=44,d0=0,step=.25){ // items: [n,d] fraction, string
 }
 
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'This watermelon has <b>8 equal slices</b>. If Mei eats 1 slice and Zack eats 2, together they eat <b>3 eighths</b>! Today we <b>add fractions</b>.',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m08.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'8 equal slices','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Like fractions',say:'<b>Like fractions</b> have the <b>same bottom number</b>. 2/8 and 3/8 are like fractions, because both are cut into <b>8 equal parts</b>. Their pieces are the same size, so we can add them easily!',
  draw:()=>G(crust(150,170,85)+pie(150,170,85,8,2,C.berry),'a-pop',.1)+G(frac(150,310,2,8,40),'a-fade',.4)+
   G(crust(490,170,85)+pie(490,170,85,8,3,C.sky),'a-pop',.6)+G(frac(490,310,3,8,40),'a-fade',.9)+

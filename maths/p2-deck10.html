@@ -297,6 +297,8 @@ const clip=(x,y)=>`<path d="M${x} ${y} v-34 a8 8 0 0 1 16 0 v28 a5 5 0 0 1 -10 0
 
 const po=(n,x,y,w,h,ex='')=>`<image href="../img/obj/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" ${ex}/>`;
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Baking needs measuring! We <b>weigh</b> the flour and <b>pour</b> the milk to the right line. Today we learn about <b>length</b>, <b>mass</b> and <b>volume</b>.',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m10.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Weigh it, pour it!','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Hello, measuring!',say:'Hi, I\'m <b>Chowdie the otter</b>! Today we measure three things: <b>how long</b>, <b>how heavy</b>, and <b>how much water</b>. Each one has its own tool.',
  draw:()=>otter(110,370,1.5,{wave:true})+
   G(`${ruler(250,70,330,10,false)}${T(415,145,'How long?','h mid')}`,'a-pop',.2)+

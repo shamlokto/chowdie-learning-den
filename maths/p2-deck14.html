@@ -259,6 +259,8 @@ const answerPill=(txt,d=1.8,y=332)=>G(box(140,y,360,58,C.sun,29)+T(320,y+40,txt,
 
 const po=(n,x,y,w,h,ex='')=>`<image href="../img/obj/${n}.webp" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" ${ex}/>`;
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Every maths word problem is a little mystery. Let\'s be <b>maths detectives</b>: find the clues and solve it!',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m14.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Detectives at work','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Be a maths detective',say:'Word problems are like little mysteries. A good detective follows <b>4 steps</b>: <b>Read</b> the story, <b>Draw</b> a model, <b>Solve</b> it, then <b>Check</b> the answer.',
  draw:()=>[['Read','find the clues',`<circle cx="0" cy="-6" r="22" fill="#DDF1FA" stroke="${C.ink}" stroke-width="4"/><path d="M15 10 l18 18" stroke="${C.ink}" stroke-width="8" stroke-linecap="round"/>`],
   ['Draw','a bar model',`<rect x="-34" y="-14" width="40" height="26" fill="${C.berry}" stroke="${C.ink}" stroke-width="3"/><rect x="6" y="-14" width="28" height="26" fill="${C.sky}" stroke="${C.ink}" stroke-width="3"/>`],

@@ -274,6 +274,8 @@ const numCard=(x,y,n,fill='#fff',w=120,h=70)=>box(x,y,w,h,fill,14)+T(x+w/2,y+h*.
 function pairBlocks(x,y,n,s=7){const h=Math.floor(n/100),t=Math.floor(n/10)%10,o=n%10;return blocks(x,y,h,t,o,s,false)}
 
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Look! The giraffe is <b>taller</b> than the tortoise, and the tortoise is <b>shorter</b>. Today we compare and order numbers: which is <b>bigger</b>, and which is <b>smaller</b>?',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m02.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Taller or shorter?','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Meet the hungry crocodile',say:'Hi again! To <b>compare</b> two numbers we use these signs: <b>&gt;</b> greater than, <b>&lt;</b> less than, <b>=</b> equal to. The crocodile is hungry, so its open mouth always eats the <b>bigger</b> number!',
  draw:()=>G(numCard(30,150,'7',C.sun,100)+croc(185,185,1,false)+numCard(240,150,'3','#fff',100),'a-pop',.2)+G(T(185,270,'7 > 3','h mid acc')+T(185,296,'7 is greater than 3','sm mid mut'),'a-fade',.8)+
   G(numCard(370,150,'2',C.sun,100)+croc(525,185,1,true)+numCard(530,150,'9','#fff',100),'a-pop',.6)+G(T(500,270,'2 < 9','h mid acc')+T(500,296,'2 is less than 9','sm mid mut'),'a-fade',1.2)+

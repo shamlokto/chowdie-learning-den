@@ -272,6 +272,8 @@ function bars(x,y,mins,unit=4.2,anim=true){ // 60-min sky bar(s) + leftover sun 
 }
 
 const S=[
+/*maths-around-us*/{part:'learn',title:'Maths around us',say:'Tick tock! The clock tells us when it is time to get ready for school. Today we learn to <b>tell the time</b>.',
+ draw:()=>G(`<defs><clipPath id="mau"><rect x="40" y="22" width="560" height="315" rx="18"/></clipPath></defs><image href="../img/maths/m11.webp" x="40" y="22" width="560" height="315" preserveAspectRatio="xMidYMid slice" clip-path="url(#mau)"/><rect x="40" y="22" width="560" height="315" rx="18" fill="none" stroke="${C.ink}" stroke-width="3"/>`,'a-pop',.1)+G(T(320,372,'Time for school!','lab mid acc'),'a-fade',.6)},
 {part:'learn',title:'Meet the clock',say:'A clock has two hands. The <b>short</b> hand is the <b>hour hand</b>. The <b>long</b> hand is the <b>minute hand</b>. Watch them move to <b>3 o\'clock</b>.',
  draw:()=>clock(250,215,140,3,0,{anim:true})+
   G(`<path d="M420 120 q-40 0 -70 50" stroke="${C.ink}" stroke-width="3" fill="none" stroke-dasharray="5 5"/>`+box(420,80,190,70,'#FFEFF3',16)+T(515,110,'minute hand','lab mid')+T(515,136,'long, pink','sm mid mut'),'a-fade',1.3)+
