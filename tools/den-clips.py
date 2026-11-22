@@ -51,6 +51,16 @@ CLIPS = {
     "maths/p2-deck12.html": {"../img/maths/m12.webp": "../img/maths/v-m12"},
     "maths/p2-deck13.html": {"../img/maths/m13.webp": "../img/maths/v-m13"},
     "maths/p2-deck14.html": {"../img/maths/m14.webp": "../img/maths/v-m14"},
+    "bible/noah.html": {"../img/noah/rain.webp": "../img/noah/v-rain", "../img/noah/dove.webp": "../img/noah/v-dove", "../img/noah/rainbow.webp": "../img/noah/v-rainbow"},
+    "bible/builders.html": {"../img/builders/stormrock.webp": "../img/builders/v-stormrock", "../img/builders/stormsand.webp": "../img/builders/v-stormsand", "../img/builders/firm.webp": "../img/builders/v-firm"},
+    "bible/nehemiah.html": {"../img/nehemiah/together.webp": "../img/nehemiah/v-together", "../img/nehemiah/done.webp": "../img/nehemiah/v-done", "../img/nehemiah/praise.webp": "../img/nehemiah/v-praise"},
+    "bible/sheep.html": {"../img/sheep/search.webp": "../img/sheep/v-search", "../img/sheep/waters.webp": "../img/sheep/v-waters", "../img/sheep/stars.webp": "../img/sheep/v-stars"},
+    "bible/jonah.html": {"../img/jonah/storm.webp": "../img/jonah/v-storm", "../img/jonah/fish.webp": "../img/jonah/v-fish", "../img/jonah/vine.webp": "../img/jonah/v-vine"},
+    "bible/joseph.html": {"../img/joseph/caravan.webp": "../img/joseph/v-caravan", "../img/joseph/grain.webp": "../img/joseph/v-grain", "../img/joseph/forgive.webp": "../img/joseph/v-forgive"},
+    "bible/daniel.html": {"../img/daniel/furnace.webp": "../img/daniel/v-furnace", "../img/daniel/praying.webp": "../img/daniel/v-praying", "../img/daniel/lions.webp": "../img/daniel/v-lions"},
+    "bible/prodigal.html": {"../img/prodigal/run.webp": "../img/prodigal/v-run", "../img/prodigal/feast.webp": "../img/prodigal/v-feast"},
+    "bible/children.html": {"../img/children/welcome.webp": "../img/children/v-welcome"},
+    "bible/church.html": {"../img/church/pentecost.webp": "../img/church/v-pentecost", "../img/church/share.webp": "../img/church/v-share", "../img/church/grow.webp": "../img/church/v-grow"},
 }
 
 JS = r"""<script id="den-clips">
