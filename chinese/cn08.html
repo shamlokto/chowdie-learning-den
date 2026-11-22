@@ -485,7 +485,7 @@ const S=[
   .map(([a,ap,b,bp],k)=>{const y=16+k*120;return G(box(20,y,250,104,'#F3F8F1',14)+zhw(145,y+52,a,ap,'',24)+arrow(280,y+52,316,y+52,C.accent)+box(326,y,294,104,'#E6F6EA',14)+zhw(473,y+52,b,bp,'',24),'a-pop',.1+k*.35)}).join('')+G(T(320,384,'Good + 得很… = better!','lab mid acc'),'a-fade',1.3)},
 
 {part:'learn',title:'Reading aloud 朗读',who:'wala',say:WL+'In the oral exam you also <b>朗读</b> <i class="py">lǎngdú</i>: read a passage aloud. Tips: read <b>clearly and loudly</b>, pause a little at <b>，</b> and a bit longer at <b>。</b>, make your voice go up for <b>？</b> and sound excited for <b>！</b>. Practise with 🔊 Read to me!',
- draw:()=>[['声音响亮','shēngyīn xiǎngliàng','loud and clear','📣'],['停一停','tíng yì tíng','pause at ， and 。','⏸'],['有感情','yǒu gǎnqíng','with feeling for ？ and ！','😊'],['不要太快','búyào tài kuài','not too fast','🐢']]
+ draw:()=>[['声音响亮','shēngyīn xiǎngliàng','loud and clear','📣'],['停一停','tíng yi tíng','pause at ， and 。','⏸'],['有感情','yǒu gǎnqíng','with feeling for ？ and ！','😊'],['不要太快','búyào tài kuài','not too fast','🐢']]
   .map(([z,p,e,em],k)=>{const x=20+(k%2)*304,y=16+Math.floor(k/2)*186;return G(box(x,y,292,174,'#fff',16)+T(x+56,y+100,em,'h mid','style="font-size:44px"')+zhw(x+186,y+76,z,p,e,26),'a-pop',.1+k*.2)}).join('')},
 
 {part:'try',title:'Five questions game 五个问题',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
@@ -497,7 +497,7 @@ const S=[
   draw();a.say(CH+'These pictures are mixed up! Tap them in the right order.')}},
 
 {part:'try',title:'Which punctuation? 标点符号',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
- mount:a=>rounds(a,[['你叫什么名字','？'],['我今天很开心','。'],['哇，风筝飞得好高啊','！'],['星期六早上','，']].map(([z,m])=>({stage:()=>G(box(60,90,520,110,'#FFF4D6',18)+T(320,160,z+'＿','zh mid','style="font-size:34px"'),'a-pop')+T(320,260,'Which mark goes at the end?','lab mid acc')+G(wala(560,392,.8,{still:true}),''),options:['，','。','？','！'],answer:m,hear:z,ok:z+m,hint:'Is it a question? An excited shout? The end? Or just a pause?'})),WL+'Pick the right punctuation mark!','wala')},
+ mount:a=>rounds(a,[['你叫什么名字','？'],['我是一年级的学生','。'],['哇，风筝飞得好高啊','！'],['星期六早上','，']].map(([z,m])=>({stage:()=>G(box(60,90,520,110,'#FFF4D6',18)+T(320,160,z+'＿','zh mid','style="font-size:34px"'),'a-pop')+T(320,260,'Which mark goes at the end?','lab mid acc')+G(wala(560,392,.8,{still:true}),''),options:['，','。','？','！'],answer:m,hear:z,ok:z+m,hint:'Is it a question? An excited shout? The end? Or just a pause?'})),WL+'Pick the right punctuation mark!','wala')},
 
 {part:'try',title:'Build a sentence 排一排',who:'wala',say:'',draw:()=>`<g class="play"></g>`,
  mount:a=>tiles(a,[{w:['星期六早上','，','小美','在','公园里','放风筝','。'],en:'On Saturday morning, Xiaomei flies a kite in the park.',hint:'When → ， → who → 在 → where → doing what → 。'},{w:['风筝','飞得','很','高','。'],en:'The kite flies very high.',hint:'风筝 → 飞得 → 很高.'}],WL+'Build a great 看图说话 sentence!')},
