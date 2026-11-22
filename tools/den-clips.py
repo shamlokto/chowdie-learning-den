@@ -44,7 +44,6 @@ CLIPS = {
     "maths/p2-deck04.html": {"../img/maths/m04.webp": "../img/maths/v-m04"},
     "maths/p2-deck05.html": {"../img/maths/m05.webp": "../img/maths/v-m05"},
     "maths/p2-deck06.html": {"../img/maths/m06.webp": "../img/maths/v-m06"},
-    "maths/p2-deck07.html": {"../img/maths/m07.webp": "../img/maths/v-m07"},
     "maths/p2-deck08.html": {"../img/maths/m08.webp": "../img/maths/v-m08"},
     "maths/p2-deck09.html": {"../img/maths/m09.webp": "../img/maths/v-m09"},
     "maths/p2-deck10.html": {"../img/maths/m10.webp": "../img/maths/v-m10"},
