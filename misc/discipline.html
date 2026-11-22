@@ -190,7 +190,7 @@ const bullet=(x,y,txt,max=36)=>`<rect x="${x}" y="${y-8}" width="6" height="6" f
 const S=[
 /* ===== HISTORY ===== */
 {part:'learn',title:'The disciplined life',say:`Self-discipline is one of the oldest projects in human thought. This short course moves from Odysseus to modern habit research, spends real time on the single most useful tool, the <b>if-then plan</b>, and ends with exercises you can use tonight. Use Next or the arrow keys.`,
- draw:()=>kicker(32,52,"Poor Richard's Almanack, 1755")+T(32,104,'Who is powerful?','big')+T(32,150,'He that governs','big acc')+T(32,194,'his Passions.','big acc')+
+ draw:()=>kicker(32,52,"Benjamin Franklin, Poor Richard's Almanack")+T(32,104,'Who is powerful?','big')+T(32,150,'He that governs','big acc')+T(32,194,'his Passions.','big acc')+
   wr(32,244,'Franklin wrote that in his almanac. This course is about how people have tried to do it, and what actually works.',40,'sm mut',19)+rule(338,40,338,360)+
   kicker(366,52,'In this course')+[['A short history','from Odysseus to the monks'],["Franklin's method",'13 virtues and a little book'],['What research says','habits, willpower, temptation'],['If-then plans','the most useful single tool'],['Order and defences','routines, addictions, getting help'],['Practise and reflect','exercises you can use tonight']]
   .map(([a,b],k)=>G(T(366,92+k*46,String(k+1).padStart(2,'0'),'lab och')+T(398,92+k*46,a,'lab')+T(398,111+k*46,b,'sm mut'),'a-fade',.1+k*.08)).join('')},
