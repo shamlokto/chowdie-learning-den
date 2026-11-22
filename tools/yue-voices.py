@@ -71,6 +71,9 @@ SAME = str.maketrans('餵啊吖啦妳祢着裏囉嘛', '喂呀呀喇你你著裡
 MODELS = os.environ.get('GM', 'gemini-3.8-flash-lite-tts,gemini-3.1-flash-tts-preview').split(',')
 JUDGE = os.environ.get('GJ', 'gemini-3.5-flash')
 REVIEW = []
+# characters the voice model misreads, replaced by same-sound characters in the text sent to it (the deck still shows
+# the proper ones): 嫲 maa4 was read as 媽 maa1; 唞 tau2 was read as 晨
+SAY = str.maketrans({'嫲': '麻', '唞': '抖'})
 
 
 def _api(model, body, timeout=180):
@@ -117,7 +120,8 @@ def speak(model, s, dst, carrier=None):
     Short words are said twice as a list ("十， 十。") and the last one is kept: pauses in a list are reliable.
     Returns what a listening model hears in the WHOLE recording (tiny clips are too short to transcribe), or None."""
     short = len(_norm(s)) <= 4 and not re.search(r'[，、\s]', s.strip())
-    text = (carrier or CARRIERS[0]) + (s.rstrip('。！？!?') + '， ' + s if short else s)
+    t = s.translate(SAY)
+    text = (carrier or CARRIERS[0]) + (t.rstrip('。！？!?') + '， ' + t if short else t)
     d = _api(model, {"contents": [{"parts": [{"text": text}]}],
                      "generationConfig": {"responseModalities": ["AUDIO"],
                                           "speechConfig": {"languageCode": "yue-HK", "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": VOICE}}}}})
@@ -154,7 +158,7 @@ def tts(s, dst):
         if h is None:
             note = 'no pause after the carrier'; continue
         d = _dur(dst)
-        if _norm(h).endswith(_norm(s)) and max(0.15, 0.17 * n) <= d <= 0.6 * n + 1.2:  # too short = cut inside the phrase
+        if _norm(h).translate(SAY).endswith(_norm(s).translate(SAY)) and max(0.15, 0.17 * n) <= d <= 0.6 * n + 1.2:  # too short = cut inside the phrase
             print('ok  ', s, f'{d:.2f}s', model.split('-')[2]); return True
         note = f'{d:.2f}s, whole recording heard as "{h}"'
     REVIEW.append((s, note)); print('REVIEW', s, note); return dst.exists()
