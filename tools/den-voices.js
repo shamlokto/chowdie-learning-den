@@ -52,6 +52,10 @@ const CAST = {
   pharaoh:{voice: 'atlas',  pitch: 0.92, tempo: 0.93},  // Bible stories: Pharaoh
   daniel: {voice: 'leo',    pitch: 0.98, tempo: 0.97},  // Bible stories: Daniel
   king:   {voice: 'atlas',  pitch: 0.9,  tempo: 0.93},  // Bible stories: a king (Nineveh, Babylon)
+  father: {voice: 'orion',  pitch: 0.9,  tempo: 0.94},  // Bible stories: the loving father (the Prodigal Son)
+  son:    {voice: 'leo',    pitch: 1.04, tempo: 1.0},   // Bible stories: the younger son
+  jesus:  {voice: 'helios', pitch: 0.97, tempo: 0.93},  // Bible stories: Jesus, warm and gentle
+  peter:  {voice: 'atlas',  pitch: 1.0,  tempo: 0.97},  // Bible stories: Peter
 };
 const FALLBACK = 'otter';
 
