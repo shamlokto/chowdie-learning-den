@@ -43,6 +43,10 @@ const CAST = {
   samuel: {voice: 'helios', pitch: 0.84, tempo: 0.9},   // Bible stories: the prophet Samuel
   david:  {voice: 'leo',    pitch: 1.12, tempo: 1.04},  // Bible stories: young David
   saul:   {voice: 'zagan',  pitch: 0.94, tempo: 0.95},  // Bible stories: King Saul
+  father: {voice: 'orion',  pitch: 0.9,  tempo: 0.94},  // Bible stories: the loving father (the Prodigal Son)
+  son:    {voice: 'leo',    pitch: 1.04, tempo: 1.0},   // Bible stories: the younger son
+  jesus:  {voice: 'helios', pitch: 0.97, tempo: 0.93},  // Bible stories: Jesus, warm and gentle
+  peter:  {voice: 'atlas',  pitch: 1.0,  tempo: 0.97},  // Bible stories: Peter
 };
 const FALLBACK = 'otter';
 
