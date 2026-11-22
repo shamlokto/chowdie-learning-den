@@ -38,7 +38,7 @@ SPOTS = {
 }
 
 # Spots whose decks were refreshed recently: their labels carry a small "UPDATED" badge. Empty the set to remove them.
-UPDATED = {"abacus", "desk", "lantern", "microscope", "piano", "nest", "armchair"}  # bible shows NEW (the two badges share a corner)
+UPDATED = {"abacus", "desk", "lantern", "microscope", "piano", "nest", "armchair", "kopi"}  # bible shows NEW (the two badges share a corner)
 # Spots that are brand new: a "NEW!" badge (like the NEW! sticker on the hub cards) and a soft glow.
 NEW = {"bible"}
 
